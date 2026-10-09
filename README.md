@@ -72,10 +72,19 @@ folders are needed only for updates, not for hosting or using the published site
 
 ## Implementation
 
-Static HTML and CSS, with no application framework, database, account system or
-analytics. Course navigation and download format menus work without JavaScript.
-Interactive materials retain their own scripts. The hub uses system fonts; some
-older materials request optional web fonts and fall back to local fonts offline.
+Each course index is a complete HTML5 file with inline layout styles and SVG icons.
+Tailwind CSS 4.3.3 loads from the jsDelivr CDN. The inline styles also cover the layout
+when that CDN is unavailable. There is no application framework, database, account
+system or analytics. All file formats are exposed as ordinary links and downloads,
+and all navigation works without JavaScript. A small inline script highlights the
+current week in the sidebar as students scroll. Interactive lesson materials retain
+their own scripts.
+
+The hub self-hosts Inter and JetBrains Mono with their OFL licenses in `assets/fonts/`.
+The fonts fall back to system fonts. Some older lesson materials request optional web
+fonts and fall back to local fonts offline. Edit `assets/style.css` and
+`assets/navigation.js` to update the inline layout and week-highlighting script; the
+builder embeds them in every index. The course and file URL paths stay unchanged.
 
 The builder uses Python's standard library. ZIP metadata is deterministic, and
 `docs/checksums.json` records the SHA-256 of every published file except itself.

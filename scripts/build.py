@@ -20,11 +20,12 @@ ESC = html.escape
 
 ICONS = {
     'book': '<path d="M12 5c-3-2-7-2-10-1v15c3-1 7-1 10 1 3-2 7-2 10-1V4c-3-1-7-1-10 1Z"/><path d="M12 5v15"/>',
-    'slides': '<path d="M14 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9Z"/><path d="M14 2v7h7"/>',
+    'slides': '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/>',
     'sheet': '<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 7h8M8 11h8M8 15h6"/>',
     'down': '<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>',
     'arrow': '<path d="M4 12h16m-6-6 6 6-6 6"/>',
     'folder': '<path d="M3 6V4h6l2 3h10v13H3Z"/>',
+    'external': '<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>',
 }
 
 def icon(name):
@@ -143,57 +144,100 @@ def link(path, label, download=False, css='', aria=None):
 
 def resource(week, kind, title, symbol, prefix):
     names = week['_names']
-    name = names[kind]
-    path = prefix + week['_directory'] + '/' + name
-    is_pdf = name.endswith('.pdf')
+    path = prefix + week['_directory'] + '/' + names[kind]
+    is_pdf = names[kind].endswith('.pdf')
     pdf = names.get(kind + '_pdf')
     context = f"{title}, week {week['number']}"
-    format_label = 'PDF' if is_pdf else ('HTML + PDF' if pdf else ('Interactive HTML' if kind == 'slides' else 'HTML'))
-    opener = link(path, 'Open ' + icon('arrow'), aria=f'Open {context}')
+    format_label = 'PDF document' if is_pdf else ('HTML + PDF' if pdf else 'Interactive HTML')
+    open_label = 'Open PDF' if is_pdf else 'Open web'
+    save_label = 'Get PDF' if is_pdf else 'Get HTML'
+    actions = link(path, open_label + icon('external'), css='pill pill-open', aria=f'Open {context}')
+    actions += link(path, icon('down') + save_label, True, 'pill', f'Download {context}')
     if pdf:
         pdf_path = prefix + week['_directory'] + '/' + pdf
-        downloader = f'<details class="download-menu"><summary>{icon("down")} Download</summary><div class="download-options">{link(path,"HTML file",True,aria=f"Download {context} HTML")}{link(pdf_path,"PDF file",True,aria=f"Download {context} PDF")}</div></details>'
-        pdf_open = link(pdf_path, 'PDF', css='pdf-open', aria=f'Open {context} PDF')
-    else:
-        downloader = link(path, icon('down') + 'Download', True, aria=f'Download {context}')
-        pdf_open = ''
-    return f'<div class="resource"><span class="resource-icon">{icon(symbol)}</span><div><h4>{title}</h4><p class="format">{format_label}</p><div class="actions">{opener}<span class="separator" aria-hidden="true"></span>{downloader}{pdf_open}</div></div></div>'
+        actions += link(pdf_path, 'Open PDF' + icon('external'), css='pill', aria=f'Open {context} PDF')
+        actions += link(pdf_path, icon('down') + 'Get PDF', True, 'pill', f'Download {context} PDF')
+    return f'''<div class="resource-row flex flex-wrap items-center justify-between gap-4">
+      <div class="resource-label flex items-center gap-3"><span class="resource-icon">{icon(symbol)}</span>
+        <div><h4>{title}</h4><p>{format_label}</p></div>
+      </div><div class="resource-actions flex flex-wrap gap-2" role="group" aria-label="{ESC(context)} files">{actions}</div>
+    </div>'''
+
 
 def week_panel(course, week, prefix):
     number = f"{week['number']:02}"
-    download = link(prefix+week['_zip'], icon('down') + 'Download week ZIP', True, 'button', f"Download {course['code']} week {number} ZIP")
-    items = ''.join(resource(week,*args,prefix) for args in [('slides','Slides','slides'),('guide','Study guide','book'),('sheet','Practice sheet','sheet')])
-    extra = ''
+    download = link(prefix + week['_zip'], icon('down') + 'Download week ZIP', True, 'button button-secondary', f"Download {course['code']} week {number} ZIP")
+    items = ''.join(resource(week, *args, prefix) for args in [('slides','Interactive slides','slides'),('guide','Study guide','book'),('sheet','Practice sheet','sheet')])
+    extras = ''
     if week.get('_starter_zip'):
-        starters = ''.join(link(prefix + week['_directory'] + '/starter-files/' + Path(s).name, ESC(Path(s).name), True) for s in week['starters'])
-        extra += f'<details class="starter-list"><summary>{icon("folder")} Starter files</summary><div class="starter-downloads">{link(prefix+week["_starter_zip"],"Download starter ZIP",True)}{starters}</div></details>'
+        starters = ''.join(link(prefix + week['_directory'] + '/starter-files/' + Path(s).name, ESC(Path(s).name), True, 'file-link') for s in week['starters'])
+        starter_zip = link(prefix + week['_starter_zip'], icon('down') + 'Starter ZIP', True, 'pill')
+        extras += f'<div class="starter-heading"><span>{icon("folder")} Starter files</span>{starter_zip}</div><div class="starter-files">{starters}</div>'
     for entry, name in week['_extras']:
         path = prefix + week['_directory'] + '/' + name
-        extra += f'<span class="extra-file">{link(path,ESC(entry["label"]))}{link(path,icon("down"),True,aria="Download "+entry["label"])}</span>'
-    if extra:
-        extra = f'<div class="extras">{extra}</div>'
-    return f'<article class="week" id="week-{number}"><div class="week-header"><div><a class="week-number" href="#week-{number}">Week {number}</a><h3>{ESC(week["title"])}</h3><p>{ESC(week["description"])}</p></div>{download}</div><div class="resources">{items}</div>{extra}</article>'
+        extras += f'<div class="extra-row"><span>{icon("sheet")}{ESC(entry["label"])}</span><div class="resource-actions">{link(path,"Open PDF" + icon("external"),css="pill",aria="Open "+entry["label"])}{link(path,icon("down")+"Get PDF",True,"pill","Download "+entry["label"])}</div></div>'
+    if extras:
+        extras = f'<div class="extras">{extras}</div>'
+    return f'''<article class="week-card grid" id="week-{number}" aria-labelledby="title-{number}">
+      <div class="week-context"><a class="week-badge" href="#week-{number}">Week {number}</a>
+        <h3 id="title-{number}">{ESC(week['title'])}</h3><p>{ESC(week['description'])}</p>{download}
+      </div>
+      <div class="week-resources">{items}{extras}</div>
+    </article>'''
+
 
 def page(course, nested=True):
     prefix = '../' if nested else ''
-    cards = ''
+    course_links = ''
     for c in CATALOG['courses']:
         selected = ' aria-current="page"' if c['id'] == course['id'] else ''
-        count = len(c['weeks'])
-        cards += f'<a class="course-card" href="{prefix}{c["id"]}/"{selected}><strong>{c["code"]}</strong><span>{ESC(c["title"])}</span><small>{ESC(c["language"])} · {count} {"week" if count == 1 else "weeks"}</small></a>'
-    panels = ''.join(week_panel(course,w,prefix) for w in sorted(course['weeks'],key=lambda w:w['number'],reverse=True))
-    course_zip = link(prefix+f'downloads/{course["code"]}-All-weeks.zip',icon('down')+'Download course ZIP',True,'course-download')
+        course_links += f'<a class="course-link" href="{prefix}{c["id"]}/"{selected} aria-label="{ESC(c["code"]+": "+c["title"])}">{c["code"]}</a>'
+    weeks = sorted(course['weeks'], key=lambda w: w['number'], reverse=True)
+    panels = ''.join(week_panel(course, week, prefix) for week in weeks)
+    week_links = ''.join(f'<a class="toc-link" href="#week-{w["number"]:02}"><span>Week {w["number"]:02}</span><small>{ESC(w["title"])}</small></a>' for w in weeks)
+    count = len(weeks)
+    course_zip = link(prefix + f'downloads/{course["code"]}-All-weeks.zip', icon('down') + 'Download Course ZIP', True, 'button button-primary')
+    styles = (ROOT / 'assets/style.css').read_text().replace('url("fonts/', 'url("' + prefix + 'assets/fonts/')
+    scroll_script = (ROOT / 'assets/navigation.js').read_text()
     return f'''<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="{ESC(course['title'])} lab slides, study guides and practice sheets. Ahmed Tolan, 2026/2027 semester 1.">
-<meta name="theme-color" content="#10263f"><title>{course['code']} | Ahmed Tolan · Teaching resources</title>
-<link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{prefix}assets/style.css"></head>
-<body><a class="skip-link" href="#weeks">Skip to weekly materials</a><div class="container">
-<header class="site-header"><a class="brand" href="{prefix}index.html">{icon('book')}<span><b>Ahmed Tolan</b><small>Teaching resources</small></span></a><p>2026 / 2027 · Semester 1</p></header>
-<main><section class="intro" aria-labelledby="page-title"><h1 id="page-title">Your lab, week by week.</h1><p>Slides, guides and practice sheets. Open online or download for later.</p></section>
-<nav class="courses" aria-label="Choose your course">{cards}</nav>
-<section id="weeks" aria-labelledby="course-title"><div class="section-heading"><div><h2 id="course-title">{ESC(course['title'])}</h2><p>Choose a week to get started.</p></div>{course_zip}</div>{panels}</section>
-</main><footer><p>Keep this link. New weeks appear here.</p><p>Ahmed Tolan · 2026 / 2027</p></footer></div></body></html>'''
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="{ESC(course['title'])} lab slides, study guides and practice sheets. Ahmed Tolan, 2026/2027 semester 1.">
+  <meta name="theme-color" content="#f8fafc">
+  <title>{course['code']} | Ahmed Tolan · Teaching resources</title>
+  <link rel="icon" href="{prefix}assets/favicon.svg" type="image/svg+xml">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script>
+  <style>{styles}</style>
+</head>
+<body>
+  <a class="skip-link" href="#weeks">Skip to weekly materials</a>
+  <header class="site-header sticky top-0 z-50">
+    <div class="nav-container mx-auto flex items-center justify-between gap-6">
+      <a class="brand flex items-center gap-3" href="{prefix}index.html">{icon('book')}<span><b>Ahmed Tolan</b><small>Teaching resources</small></span></a>
+      <nav class="course-switcher flex items-center gap-1" aria-label="Choose your course">{course_links}</nav>
+      <p class="term">2026 / 2027<span>Semester 1</span></p>
+    </div>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-inner mx-auto">
+        <div class="hero-meta flex items-center gap-3"><span class="course-badge">{course['code']}</span><span>{ESC(course['language'])} <span aria-hidden="true">·</span> {count} {'week' if count == 1 else 'weeks'}</span></div>
+        <h1 id="page-title">{ESC(course['title'])}</h1>
+        <div class="hero-bottom flex flex-wrap items-center justify-between gap-6"><p>Slides, guides and practice sheets.<br>Everything you need for the next lab.</p>{course_zip}</div>
+      </div>
+    </section>
+    <div class="materials-layout mx-auto grid" id="weeks">
+      <aside class="week-sidebar" aria-label="Weekly table of contents">
+        <nav class="week-nav sticky" aria-label="Jump to a week"><h2>On this page</h2>{week_links}<p>New weeks appear here.<br>Keep this link handy.</p></nav>
+      </aside>
+      <section class="weekly-materials" aria-labelledby="materials-title"><div class="materials-heading flex items-center justify-between gap-4"><h2 id="materials-title">Weekly materials</h2><span>Newest first</span></div>{panels}</section>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="footer-inner mx-auto flex flex-wrap items-center justify-between gap-3"><span>Ahmed Tolan <span aria-hidden="true">·</span> Teaching resources</span><span>2026 / 2027 <span aria-hidden="true">·</span> Semester 1</span></div></footer>
+  <script>{scroll_script}</script>
+</body>
+</html>'''
 
 class Links(HTMLParser):
     def __init__(self):
