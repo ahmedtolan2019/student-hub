@@ -1,0 +1,1855 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>REPLACE: Two To Four Words</title><!-- a name, not a summary -->
+<meta name="description" content="REPLACE: one sentence saying what the student will be able to do.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  /* surfaces and ink: pick a neutral with a slight bias toward the accent */
+  --bg: #f4f6f9; --surface: #ffffff; --surface-2: #eef1f6; --surface-3: #e2e7ee;
+  --ink: #111821; --ink-2: #435061; --ink-3: #5f6b7c;
+  --rule: #d9dfe7; --rule-strong: #b9c2ce;
+  /* accent: interactive things only */
+  --accent: #0f6e78; --accent-strong: #0b555d; --accent-soft: #e0f0f2; --on-accent: #ffffff;
+  /* semantic pair: the thing under study vs its background class. Rename per subject. */
+  --hot: #b4531f; --hot-ink: #93411a; --hot-soft: #fbeade;
+  --cool: #8894a5; --cool-soft: #e9edf2;
+  --good: #1b7446; --good-soft: #e0f2e7;
+  --warn-ink: #7f4d00; --warn-soft: #fff1d6; --warn-line: #e0a126;
+  --mark: #111821;           /* outline used as a second channel beside colour */
+  --dim: 0.16;               /* opacity for "not counted" marks */
+  --code-bg: #f6f8fb; --code-ink: #1b2430;
+  --tok-key: #0b555d; --tok-str: #1b7446; --tok-num: #93411a; --tok-com: #6b7684; --tok-fn: #6a3ab2; --tok-pre: #a2337a;
+  --shadow: 0 1px 2px rgba(17,24,33,.05), 0 6px 20px rgba(17,24,33,.06);
+  --radius: 6px; --radius-sm: 4px;
+  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-alt: "IBM Plex Sans Arabic", system-ui, sans-serif; /* second-language callouts */
+  --top: env(safe-area-inset-top, 0px);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --cool: #5e6a7b; --cool-soft: #222b37;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412; --warn-line: #b88419;
+  --mark: #e8ecf2; --dim: 0.2;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-fn: #c3a6f5; --tok-pre: #f09ccd;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --cool: #5e6a7b; --cool-soft: #222b37;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412; --warn-line: #b88419;
+  --mark: #e8ecf2; --dim: 0.2;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-fn: #c3a6f5; --tok-pre: #f09ccd;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--top) + 72px); -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.62 var(--font-body); text-rendering: optimizeLegibility; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-strong); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+code, kbd, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+p code, li code, td code, figcaption code, .callout code, h3 code, summary code, label code, .quiz .opts button code {
+  background: var(--surface-2); border: 1px solid var(--rule); border-radius: 3px; padding: 0.04em 0.32em;
+  /* not nowrap: a long path or statement would push the whole page sideways on a phone */
+  overflow-wrap: break-word;
+}
+strong { font-weight: 650; }
+.num { font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- top bar and chapter navigation ---------- */
+.topbar { position: sticky; top: var(--top); z-index: 30; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--rule); }
+.topbar-inner { max-width: 1320px; margin: 0 auto; padding-block: 10px; padding-inline: 16px; display: flex; align-items: center; gap: 16px; }
+.wordmark { display: flex; align-items: baseline; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 17px; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.wordmark small { font-family: var(--font-mono); font-weight: 500; font-size: 11.5px; letter-spacing: 0.06em; color: var(--ink-3); text-transform: uppercase; }
+.topbar .spacer { flex: 1; }
+.chipnav { display: none; }
+@media (max-width: 1099px) {
+  .chipnav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-block: 0 10px; padding-inline: 16px; max-width: 1320px; margin: 0 auto; }
+  .chipnav::-webkit-scrollbar { display: none; }
+  .chipnav a { flex: none; font-size: 13.5px; text-decoration: none; color: var(--ink-2); border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: var(--surface); }
+  .chipnav a.on { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+  .wordmark small { display: none; }
+}
+
+/* ---------- controls ---------- */
+.btn { appearance: none; font: 600 14.5px/1 var(--font-body); display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: var(--radius-sm); border: 1px solid var(--rule-strong); background: var(--surface); color: var(--ink); cursor: pointer; text-decoration: none; white-space: nowrap; }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--on-accent); }
+.btn.small { padding: 6px 10px; font-size: 13px; }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); }
+.seg button { appearance: none; border: 0; background: transparent; color: var(--ink-2); font: 600 14px/1.2 var(--font-body); padding: 8px 13px; cursor: pointer; border-right: 1px solid var(--rule); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.seg button:hover:not([aria-pressed="true"]) { background: var(--accent-soft); color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { appearance: none; font: 500 14px/1.25 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 6px 10px; cursor: pointer; text-align: left; }
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+input[type="range"] { width: 100%; accent-color: var(--accent); height: 28px; margin: 0; }
+.field-row { display: grid; gap: 4px; }
+.field-row label { font-size: 14px; color: var(--ink-2); display: flex; justify-content: space-between; gap: 12px; }
+.field-row label output { font-family: var(--font-mono); color: var(--ink); font-weight: 600; }
+input[type="text"] { width: 100%; font: 400 15px/1.4 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 9px 11px; }
+input[type="text"]:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+
+/* ---------- layout ---------- */
+.shell { max-width: 1320px; margin: 0 auto; padding-inline: 16px; }
+@media (min-width: 1100px) { .shell { display: grid; grid-template-columns: 212px minmax(0, 1fr); gap: 56px; padding-inline: 32px; } }
+.rail { display: none; }
+@media (min-width: 1100px) { .rail { display: block; } .rail nav { position: sticky; top: calc(var(--top) + 80px); padding-block: 8px 24px; } }
+.rail ol { list-style: none; margin: 0; padding: 0; position: relative; }
+.rail ol::before { content: ""; position: absolute; left: 7px; top: 12px; bottom: 12px; width: 1px; background: var(--rule-strong); }
+.rail li a { position: relative; display: grid; grid-template-columns: 15px 1fr; gap: 12px; align-items: baseline; padding: 6px 0; text-decoration: none; color: var(--ink-2); font-size: 14.5px; line-height: 1.3; }
+.rail li a::before { content: ""; width: 9px; height: 9px; margin-left: 3px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--rule-strong); transform: translateY(1px); }
+.rail li a span.k { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); display: block; letter-spacing: 0.04em; }
+.rail li a:hover { color: var(--ink); }
+.rail li a.on { color: var(--ink); font-weight: 600; }
+.rail li a.on::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.rail .rail-foot { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule); display: grid; gap: 10px; }
+.rail .rail-foot p { margin: 0; font-size: 13px; color: var(--ink-3); line-height: 1.45; }
+main { min-width: 0; padding-block: 8px 80px; }
+.prose { max-width: 700px; }
+p { margin: 0 0 1em; }
+ul, ol { margin: 0 0 1em; padding-left: 1.3em; }
+li { margin: 0.25em 0; }
+li::marker { color: var(--ink-3); }
+h1, h2, h3, h4 { font-family: var(--font-display); color: var(--ink); text-wrap: balance; margin: 0; }
+h3 { font-size: 22px; font-weight: 700; line-height: 1.25; margin: 2.2em 0 0.55em; }
+h3 .step { font-family: var(--font-mono); font-weight: 500; font-size: 13px; color: var(--ink-3); letter-spacing: 0.04em; display: block; margin-bottom: 4px; }
+h4 { font-size: 17px; font-weight: 700; margin: 1.4em 0 0.4em; }
+.lede { font-size: 19.5px; line-height: 1.55; color: var(--ink-2); }
+.muted { color: var(--ink-3); }
+.small { font-size: 14.5px; }
+
+/* ---------- hero and chapter heads ---------- */
+.hero { padding-block: 44px 20px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
+.hero h1 { font-size: clamp(34px, 5.2vw, 56px); line-height: 1.04; letter-spacing: -0.025em; font-weight: 800; max-width: 16ch; margin-bottom: 18px; }
+.hero .lede { max-width: 640px; }
+.specimen { display: inline-flex; align-items: center; gap: 0.35em; font-family: var(--font-mono); font-weight: 600; font-size: 0.88em; color: var(--ink); background: var(--hot-soft); border-radius: 3px; padding: 0 0.35em; white-space: nowrap; }
+.specimen::before { content: ""; width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--hot); }
+.startrow { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin: 28px 0 8px; }
+.startrow > div { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; }
+.startrow h4 { margin: 0 0 4px; font-size: 15px; }
+.startrow p { margin: 0 0 10px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; }
+.startrow p:last-child { margin-bottom: 0; }
+.chapter { padding-top: 56px; margin-top: 40px; border-top: 1px solid var(--rule); }
+.ch-head { margin-bottom: 26px; }
+.ch-num { font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+.ch-head h2 { font-size: clamp(30px, 4vw, 42px); line-height: 1.08; letter-spacing: -0.02em; font-weight: 800; margin-bottom: 12px; }
+.ch-goal { font-size: 17.5px; color: var(--ink-2); max-width: 660px; margin: 0; }
+/* "you are here" strip: JS fills it from data-stage (see STAGES in the script) */
+.where { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 16px; font-family: var(--font-mono); font-size: 12px; }
+.where span { padding: 3px 8px; border: 1px solid var(--rule); border-radius: 3px; color: var(--ink-3); background: var(--surface); }
+.where i { color: var(--rule-strong); font-style: normal; }
+.where span.on { border-color: var(--accent); background: var(--accent); color: var(--on-accent); font-weight: 600; }
+
+/* ---------- figures ---------- */
+.fig { margin: 26px 0 30px; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px; }
+.fig.flat { background: transparent; border: 0; padding: 0; }
+.fig figcaption { margin-top: 12px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; max-width: 700px; }
+.fig figcaption strong { color: var(--ink); }
+.fig .controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-bottom: 14px; }
+.fig .controls .lbl { font-size: 13.5px; color: var(--ink-3); }
+.fig details.more { margin: 14px 0 0; }
+.fig details.more > summary { font-size: 14.5px; padding: 8px 12px; }
+.svgbox { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+.svgbox svg { display: block; width: 100%; height: auto; }
+.svgbox.wide svg { min-width: 680px; }   /* keeps diagram text legible on phones */
+.scrollhint { display: none; font-size: 12.5px; color: var(--ink-3); margin: 6px 0 0; }
+@media (max-width: 760px) { .svgbox.wide + .scrollhint { display: block; } }
+svg text { font-family: var(--font-body); }
+svg .mono { font-family: var(--font-mono); }
+.t-ink { fill: var(--ink); } .t-ink2 { fill: var(--ink-2); } .t-ink3 { fill: var(--ink-3); }
+.t-acc { fill: var(--accent); } .t-hot { fill: var(--hot-ink); } .t-good { fill: var(--good); }
+.s-rule { stroke: var(--rule-strong); } .s-ink { stroke: var(--ink); } .s-ink3 { stroke: var(--ink-3); } .s-acc { stroke: var(--accent); }
+.f-surface { fill: var(--surface); } .f-surface2 { fill: var(--surface-2); } .f-acc-soft { fill: var(--accent-soft); }
+.f-hot { fill: var(--hot); } .f-hot-soft { fill: var(--hot-soft); } .f-cool { fill: var(--cool); } .f-cool-soft { fill: var(--cool-soft); }
+.f-good-soft { fill: var(--good-soft); } .f-acc { fill: var(--accent); } .f-ink { fill: var(--ink); } .f-none { fill: none; }
+
+/* ---------- callouts ---------- */
+.callout { margin: 22px 0; padding: 14px 16px 12px; border-radius: var(--radius); background: var(--surface-2); max-width: 700px; }
+.callout > .tag { display: inline-block; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 6px; color: var(--ink-2); }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout.key { background: var(--accent-soft); } .callout.key > .tag { color: var(--accent); }
+.callout.watch { background: var(--warn-soft); } .callout.watch > .tag { color: var(--warn-ink); }
+.callout.fact { background: var(--surface); border: 1px solid var(--rule); }
+.callout.fact > .tag { color: var(--good); } .callout.fact > .tag::before { content: "\2713\00a0"; }
+.callout.alt { direction: rtl; text-align: right; font-family: var(--font-alt); font-size: 17px; line-height: 1.85; background: var(--surface); border: 1px dashed var(--rule-strong); }
+.callout.alt > .tag { font-family: var(--font-alt); letter-spacing: 0; text-transform: none; font-size: 13px; color: var(--ink-3); }
+.callout.alt code, .callout.alt .ltr { direction: ltr; unicode-bidi: isolate; font-family: var(--font-mono); font-size: 0.85em; }
+
+/* ---------- code ---------- */
+.code { margin: 18px 0 22px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--code-bg); overflow: hidden; }
+.code-head { display: flex; align-items: center; gap: 10px; padding: 7px 8px 7px 12px; border-bottom: 1px solid var(--rule); font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3); background: var(--surface); }
+.code-head .ttl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.code-head .copy { margin-left: auto; }
+.code pre { margin: 0; padding: 12px 14px 14px; overflow-x: auto; font: 400 13.6px/1.62 var(--font-mono); color: var(--code-ink); tab-size: 4; }
+.code pre .ln { display: inline-block; width: 2.2em; margin-left: -0.4em; color: var(--ink-3); opacity: 0.55; user-select: none; text-align: right; padding-right: 1em; }
+.tk-k { color: var(--tok-key); } .tk-s { color: var(--tok-str); } .tk-n { color: var(--tok-num); } .tk-c { color: var(--tok-com); font-style: italic; } .tk-f { color: var(--tok-fn); }
+.hl-line, .chg-line, .add-line, .del-line { display: inline-block; width: calc(100% + 28px); margin-left: -14px; padding-left: 14px; }
+.hl-line { background: var(--hot-soft); } .chg-line { background: var(--accent-soft); }
+.add-line { background: var(--good-soft); } .del-line { background: var(--hot-soft); }
+.dg { display: inline-block; width: 1.4em; margin-left: -0.3em; color: var(--ink-3); user-select: none; }
+.add-line .dg { color: var(--good); font-weight: 600; } .del-line .dg { color: var(--hot-ink); font-weight: 600; }
+.copy-status { font-family: var(--font-body); font-size: 12.5px; color: var(--good); }
+/* numbered notes that explain a code block or figure line by line */
+.notes { display: grid; gap: 10px; margin: 0 0 22px; padding: 0; list-style: none; max-width: 700px; }
+.notes li { display: grid; grid-template-columns: auto 1fr; gap: 10px; margin: 0; font-size: 15.5px; line-height: 1.55; }
+.notes li code { white-space: normal; }
+.notes .n { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 50%; width: 22px; height: 22px; display: grid; place-items: center; margin-top: 1px; }
+.expect { font-family: var(--font-mono); font-size: 13.5px; background: var(--surface); border: 1px dashed var(--rule-strong); border-radius: var(--radius-sm); padding: 10px 12px; margin: -8px 0 22px; color: var(--ink-2); white-space: pre-wrap; max-width: 700px; }
+.expect b { font-family: var(--font-body); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: 4px; }
+
+/* ---------- tables ---------- */
+.tablewrap { overflow-x: auto; margin: 18px 0 24px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 650; font-size: 13px; color: var(--ink-2); background: var(--surface-2); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- self-check ---------- */
+.quiz { margin: 26px 0; padding: 16px 18px; border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--surface); max-width: 700px; }
+.quiz .q-tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+.quiz .q { font-weight: 600; margin: 0 0 12px; }
+.quiz .opts { display: grid; gap: 8px; }
+.quiz .opts button { appearance: none; text-align: left; font: 400 15.5px/1.45 var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 9px 12px; cursor: pointer; display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+.quiz .opts button:hover { border-color: var(--accent); }
+.quiz .opts button .mk { font-family: var(--font-mono); font-size: 13px; color: var(--ink-3); padding-top: 1px; }
+.quiz .opts button.right { border-color: var(--good); background: var(--good-soft); }
+.quiz .opts button.wrong { border-color: var(--hot); background: var(--hot-soft); }
+.quiz .fb { margin: 12px 0 0; font-size: 15.5px; line-height: 1.55; }
+.quiz .fb:empty { display: none; }
+.quiz .fb .verdict { font-weight: 700; }
+.quiz .fb.ok .verdict { color: var(--good); } .quiz .fb.no .verdict { color: var(--hot-ink); }
+
+/* ---------- disclosure, panels, boards, lists ---------- */
+details.more { margin: 22px 0; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+details.more > summary { cursor: pointer; padding: 12px 16px; font-weight: 650; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::before { content: "+"; font-family: var(--font-mono); font-weight: 600; color: var(--accent); width: 14px; }
+details.more[open] > summary::before { content: "\2212"; }
+details.more > summary .muted { font-weight: 400; font-size: 14px; }
+details.more > .inner { padding: 0 16px 16px; }
+.grid2 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid3 { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; }
+.panel h4 { margin: 0 0 6px; font-size: 15.5px; }
+.panel p:not(.label-cap) { font-size: 15px; color: var(--ink-2); margin: 0 0 8px; line-height: 1.5; }
+.panel p:last-child { margin-bottom: 0; }
+.label-cap { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; }
+.dot.hot { background: var(--hot); } .dot.cool { background: var(--cool); }
+.dot.ring { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 3px var(--mark); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--ink-2); margin: 10px 0 0; }
+.legend > span { display: inline-block; }
+.badge { display: inline-block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 3px; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--rule); }
+.badge.hot { background: var(--hot-soft); color: var(--hot-ink); border-color: transparent; }
+.badge.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+/* decided vs open board: say the state of the world once, instead of hedging every sentence */
+.board { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 24px; }
+.board .dcard { flex: 1 1 220px; }
+.board .dcard { border: 1px solid var(--rule); border-radius: var(--radius); padding: 12px 14px; background: var(--surface); }
+.board .dcard .st { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.board .dcard.done .st { color: var(--good); } .board .dcard.open .st { color: var(--warn-ink); }
+.board .dcard.open { border-style: dashed; border-color: var(--rule-strong); }
+.board .dcard.done { flex-basis: 100%; }
+.board .dcard h4 { margin: 4px 0 6px; font-size: 16px; }
+.board .dcard p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+.checklist { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 8px; max-width: 760px; }
+.checklist li { margin: 0; }
+.checklist label { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); cursor: pointer; }
+.checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); }
+.checklist .t { font-weight: 650; display: block; }
+.checklist .d { font-size: 14.5px; color: var(--ink-2); display: block; margin-top: 2px; line-height: 1.5; }
+.checklist input:checked + span .t { text-decoration: line-through; text-decoration-color: var(--ink-3); color: var(--ink-3); }
+.tree { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.7; background: var(--code-bg); border: 1px solid var(--rule); border-radius: var(--radius); padding: 12px 16px; overflow-x: auto; white-space: pre; margin: 16px 0 24px; }
+.tree .c { color: var(--ink-3); }
+/* stat cards: one card per quantity, tap to explain (see wireUp in the script) */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; margin-top: 16px; }
+.scard { appearance: none; text-align: left; font: inherit; color: inherit; cursor: pointer; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 11px 12px 12px; display: grid; gap: 3px; align-content: start; }
+.scard:hover, .scard[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.scard .s-name { font-weight: 700; font-size: 15px; }
+.scard .s-val { font-family: var(--font-mono); font-weight: 600; font-size: 21px; }
+.scard .s-q { font-size: 13.5px; color: var(--ink-2); line-height: 1.4; }
+.scard .s-f { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3); overflow-wrap: anywhere; }
+.readout { font-size: 15px; margin: 12px 0 0; min-height: 3em; }
+
+footer.sources { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-2); }
+footer.sources h2 { font-size: 20px; margin-bottom: 10px; }
+footer.sources li { margin: 0.35em 0; }
+footer.sources code { white-space: normal; overflow-wrap: anywhere; }
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: var(--radius); font-size: 14.5px; box-shadow: var(--shadow); z-index: 50; max-width: calc(100vw - 32px); }
+@media print { .topbar, .rail, .chipnav, .btn, .seg { display: none !important; } .svgbox { overflow: visible !important; } .svgbox.wide svg { min-width: 0 !important; } .scrollhint { display: none !important; } .shell { display: block; } details.more > .inner { display: block; } .chapter { break-before: page; } }
+
+/* ---------- additions for this guide ---------- */
+/* preprocessor directives: #include must not render as a comment */
+.tk-p { color: var(--tok-pre); font-weight: 600; }
+
+/* a console, because half of this guide is about what lands on one */
+.console { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.6; background: #14181d; color: #e6ebf1;
+  border: 1px solid var(--rule-strong); border-radius: var(--radius); padding: 0; margin: 18px 0 22px; overflow: hidden; max-width: 700px; }
+.console .bar { display: flex; align-items: center; gap: 7px; padding: 7px 11px; background: #1e242c; border-bottom: 1px solid #2c333d; }
+.console .bar i { width: 10px; height: 10px; border-radius: 50%; background: #3d4651; display: block; }
+.console .bar span { font-size: 11.5px; letter-spacing: 0.05em; color: #8d98a6; margin-left: 4px; text-transform: uppercase; }
+.console pre { margin: 0; padding: 12px 14px; white-space: pre; overflow-x: auto; font: inherit; color: inherit; }
+.console pre b { color: #8de0a6; font-weight: 400; }          /* the value the chapter is about */
+.console pre i { color: #f0a271; font-style: normal; }        /* the wrong value */
+
+/* a space you can see: used where the spaces inside a string literal are the lesson */
+.ws { display: inline-block; width: 1ch; text-align: center; color: var(--ink-3); opacity: 0.5; }
+.ws::before { content: "\00b7"; }
+.starline { font-family: var(--font-mono); font-size: 14px; line-height: 1.5; white-space: pre; }
+.starline b { color: var(--hot-ink); font-weight: 600; }
+
+/* side-by-side "what a calculator says / what C++ says" */
+.pg { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin: 14px 0 0; }
+.pg .pgcard { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 12px 14px; }
+.pg .pgcard.hot { border-color: var(--hot); box-shadow: inset 3px 0 0 var(--hot); }
+.pg .pgcard.good { border-color: var(--good); box-shadow: inset 3px 0 0 var(--good); }
+.pg .pgcard .k { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.pg .pgcard .v { font-family: var(--font-mono); font-size: 23px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }
+.pg .pgcard .n { font-size: 13.5px; color: var(--ink-2); margin: 6px 0 0; line-height: 1.45; }
+.verdictline { margin: 12px 0 0; font-size: 15px; line-height: 1.55; }
+.verdictline .tagv { font-weight: 700; }
+.verdictline.agree .tagv { color: var(--good); }
+.verdictline.differ .tagv { color: var(--hot-ink); }
+
+/* small row of buttons under a widget */
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 0; }
+.tty { font-family: var(--font-mono); font-size: 14px; background: var(--surface-2); border: 1px solid var(--rule);
+  border-radius: var(--radius-sm); padding: 9px 12px; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 2.6em; margin: 12px 0 0; }
+.kbd { font-family: var(--font-mono); font-size: 12.5px; border: 1px solid var(--rule-strong); border-bottom-width: 2px;
+  border-radius: 4px; padding: 1px 6px; background: var(--surface); white-space: nowrap; }
+.q-table td.mono, .q-table th.mono { font-family: var(--font-mono); font-size: 13.5px; }
+.callout.alt p { margin-bottom: 0.5em; }
+.callout.alt p:last-child { margin-bottom: 0; }
+/* the name builder and checker (chapter 1) */
+.nb-fields { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: end; }
+.nb-fields label { display: grid; gap: 5px; font-size: 13.5px; color: var(--ink-2); }
+.nb-fields label.grow { flex: 1 1 260px; }
+.nb-fields input { font: 600 16px/1.2 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 6px; padding: 8px 10px; width: 9ch; }
+.nb-fields label.grow input { width: 100%; box-sizing: border-box; }
+.nb-fields input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.nb-out { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 14px; }
+.nb-out > div { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface-2); padding: 10px 12px; }
+.nb-out .k { margin: 0; font-size: 12.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; }
+.nb-out .v { margin: 4px 0 0; font: 700 18px/1.3 var(--font-mono); color: var(--ink); overflow-wrap: anywhere; }
+
+@media print {
+  html, body {background:#fff!important; color:#111!important;font-size:10.5pt!important;}
+  .shell, main {margin:0!important;padding:0!important;max-width:none!important;width:auto!important;}
+  .hero {padding:0!important;margin:0 0 24px!important;}
+  .chapter {break-before:auto!important;margin:24px 0 0!important;padding-top:18px!important;}
+  .ch-head {break-inside:avoid;break-after:avoid;margin-bottom:16px!important;}
+  h1 {font-size:27pt!important;max-width:none!important;}
+  h2 {font-size:20pt!important;} h3 {font-size:13pt!important;break-after:avoid!important;}
+  h3 {break-inside:avoid!important;} h4, summary {break-after:avoid;} p, li {orphans:3;widows:3;}
+  p,.prose p {line-height:1.5!important;}
+  .lede {font-size:12pt!important;max-width:none!important;}
+  .prose {max-width:none!important;}
+  figure,.fig,.code,.console,.quiz,.callout,.startrow > div,.checklist li {break-inside:avoid!important;}
+  .fig {margin:14px 0!important;padding:12px!important;}
+  .startrow {display:block!important;} .startrow > div {margin:8px 0!important;padding:8px!important;}
+  .sources {break-inside:avoid;margin-top:24px!important;}
+  .trace-lines {font-size:9pt!important;} .trace-lines li {padding:3px!important;}
+  .chip,.controls,.nb-fields,.lab-fields,.btnrow {display:none!important;}
+  .code pre,.code code {font-size:9pt!important;}
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="wordmark" href="#top">Programs that ask <small>GEN 241 · week 02</small></a>
+    <span class="spacer"></span>
+    <button class="btn small primary companion-save" type="button">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v8.2M4.6 6.6 8 10l3.4-3.4M2.5 11.5v2h11v-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Worksheet
+    </button>
+  </div>
+  <nav class="chipnav" aria-label="Chapters">
+    <a href="#top" data-for="top">Map</a>
+    <a href="#ch1" data-for="ch1">1 Names</a>
+    <a href="#ch2" data-for="ch2">2 cin</a>
+    <a href="#ch3" data-for="ch3">3 Types</a>
+    <a href="#ch4" data-for="ch4">4 Operators</a>
+    <a href="#ch5" data-for="ch5">5 Conversions</a>
+    <a href="#ch6" data-for="ch6">6 Plan to code</a>
+    <a href="#ch7" data-for="ch7">7 Hand it in</a>
+  </nav>
+</header>
+
+<div class="shell">
+  <aside class="rail" aria-label="Chapters">
+    <nav>
+      <ol>
+        <li><a href="#top" data-for="top"><span><span class="k">START</span>The map</span></a></li>
+        <li><a href="#ch1" data-for="ch1"><span><span class="k">CH 1</span>Name it, save it</span></a></li>
+        <li><a href="#ch2" data-for="ch2"><span><span class="k">CH 2</span>cin waits for you</span></a></li>
+        <li><a href="#ch3" data-for="ch3"><span><span class="k">CH 3</span>How much a box holds</span></a></li>
+        <li><a href="#ch4" data-for="ch4">
+          <span><span class="k">CH 4</span>/ and % do different jobs</span></a></li>
+        <li><a href="#ch5" data-for="ch5"><span><span class="k">CH 5</span>Where the decimal point goes</span></a></li>
+        <li><a href="#ch6" data-for="ch6"><span><span class="k">CH 6</span>From words to code</span></a></li>
+        <li><a href="#ch7" data-for="ch7"><span><span class="k">CH 7</span>This week, and handing in</span></a></li>
+      </ol>
+      <div class="rail-foot">
+        <p>The worksheet is one <code>.cpp</code> file with every step in it.</p>
+        <button class="btn small companion-save" type="button">Save worksheet</button>
+        <p>Every output on this page was produced by compiling and running the code, 4 October 2026.</p>
+      </div>
+    </nav>
+  </aside>
+
+<main id="top">
+  <section class="hero" data-chapter="top">
+    <p class="eyebrow">GEN 241 · Electrical Power and Machines · Sheet 02 · lab week 02</p>
+    <h1>A program that asks you for its numbers can still give the wrong answer quietly</h1>
+    <p class="lede">Sheet 2's question 8 asks what a car trip costs in fuel. You type the distance,
+    the car's consumption and the price; the program prints the cost. With <b>250 km</b>,
+    <b>8 liters per 100 km</b> and <b>20 pounds a liter</b> the answer is <b>400 pounds</b> - unless
+    one variable is an <code>int</code>, and then the same program prints <b>320</b> without a
+    single warning. This guide follows that trip from the file name to the zip you hand in.</p>
+
+    <figure class="fig" aria-labelledby="spine-cap">
+      <div class="controls">
+        <span class="lbl" id="spine-lbl">How the distance is stored and divided</span>
+        <div class="seg" role="group" aria-labelledby="spine-lbl" id="spine-seg">
+          <button type="button" data-v="a" aria-pressed="true">double, / 100.0</button>
+          <button type="button" data-v="b" aria-pressed="false">int, / 100</button>
+        </div>
+      </div>
+      <div class="svgbox wide">
+        <svg id="spine" data-v="a" viewBox="0 36 900 182" role="img" aria-label="The trip program as a flow. You type 250, 8 and 20 on the keyboard; cin puts them into distance, efficiency and price; the conversion box works out the liters; the cost is liters times price; cout prints the cost. The control changes only the conversion box: with a double distance divided by 100.0 the liters are 20 and the cost 400 pounds; with an int distance divided by 100 the liters are 16 and the cost 320 pounds.">
+          <defs>
+            <marker id="sp-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker>
+          </defs>
+          <rect x="10" y="70" width="130" height="80" rx="6" class="f-surface2" style="stroke: var(--rule-strong); stroke-width: 1.5"/>
+          <text x="75" y="100" text-anchor="middle" class="t-ink" style="font-size: 15px; font-weight: 600">you type</text>
+          <text x="75" y="128" text-anchor="middle" class="t-ink mono" style="font-size: 15px">250 8 20</text>
+          <line x1="142" y1="110" x2="172" y2="110" style="stroke: var(--ink-3); stroke-width: 1.6" marker-end="url(#sp-ah)"/>
+          <text x="157" y="100" text-anchor="middle" class="t-acc mono" style="font-size: 12px">cin</text>
+          <rect x="176" y="60" width="150" height="100" rx="6" class="f-surface" style="stroke: var(--rule-strong); stroke-width: 1.5"/>
+          <text x="251" y="88" text-anchor="middle" class="t-ink" style="font-size: 14px; font-weight: 600">three boxes</text>
+          <text x="251" y="112" text-anchor="middle" class="t-ink mono" style="font-size: 13px">distance = 250</text>
+          <text x="251" y="130" text-anchor="middle" class="t-ink mono" style="font-size: 13px">efficiency = 8</text>
+          <text x="251" y="148" text-anchor="middle" class="t-ink mono" style="font-size: 13px">price = 20</text>
+          <line x1="328" y1="110" x2="358" y2="110" style="stroke: var(--ink-3); stroke-width: 1.6" marker-end="url(#sp-ah)"/>
+          <rect id="sp-swap" x="362" y="54" width="190" height="112" rx="6" class="f-surface2" style="stroke: var(--rule-strong); stroke-width: 1.5"/>
+          <text x="457" y="80" text-anchor="middle" class="t-ink" style="font-size: 14px; font-weight: 600">convert: km to liters</text>
+          <text x="457" y="108" text-anchor="middle" class="t-ink mono" style="font-size: 14px" id="sp-conv">250 / 100.0 * 8</text>
+          <text x="457" y="136" text-anchor="middle" class="t-ink mono" style="font-size: 15px; font-weight: 700" id="sp-lit">liters = 20</text>
+          <g class="ov ov-b"><text x="457" y="157" text-anchor="middle" style="font-size: 12px; fill: var(--hot-ink)">250 / 100 gives 2, not 2.5</text></g>
+          <line x1="554" y1="110" x2="582" y2="110" style="stroke: var(--ink-3); stroke-width: 1.6" marker-end="url(#sp-ah)"/>
+          <rect x="586" y="70" width="126" height="80" rx="6" class="f-surface" style="stroke: var(--rule-strong); stroke-width: 1.5"/>
+          <text x="649" y="102" text-anchor="middle" class="t-ink" style="font-size: 14px; font-weight: 600">relate</text>
+          <text x="649" y="126" text-anchor="middle" class="t-ink mono" style="font-size: 13px">liters * price</text>
+          <line x1="714" y1="110" x2="740" y2="110" style="stroke: var(--ink-3); stroke-width: 1.6" marker-end="url(#sp-ah)"/>
+          <text x="727" y="100" text-anchor="middle" class="t-acc mono" style="font-size: 12px">cout</text>
+          <rect x="744" y="62" width="150" height="96" rx="6" style="fill: #14181d; stroke: var(--rule-strong); stroke-width: 1.5"/>
+          <text x="819" y="104" text-anchor="middle" class="mono" style="font-size: 12.5px; fill: #e6ebf1" id="sp-out">Cost: 400 pounds</text>
+          <text x="819" y="132" text-anchor="middle" class="mono" style="font-size: 11px; fill: #8d98a6">no warning</text>
+          <text x="75" y="200" text-anchor="middle" style="font-size: 12.5px; fill: var(--ink-2)">ch 2</text>
+          <text x="251" y="200" text-anchor="middle" style="font-size: 12.5px; fill: var(--ink-2)">ch 3</text>
+          <text x="457" y="200" text-anchor="middle" style="font-size: 12.5px; fill: var(--ink-2)">ch 4, 5</text>
+          <text x="649" y="200" text-anchor="middle" style="font-size: 12.5px; fill: var(--ink-2)">ch 6</text>
+          <text x="819" y="200" text-anchor="middle" style="font-size: 12.5px; fill: var(--ink-2)">ch 7: test, hand in</text>
+        </svg>
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <div class="readout" aria-live="polite">
+        <p><b>What changes:</b> <span id="sp-change"></span></p>
+        <p><b>What stays the same:</b> <span id="sp-same"></span></p>
+        <p><b>The question it answers:</b> <span id="sp-q"></span></p>
+      </div>
+      <figcaption id="spine-cap"><strong>One box decides whether the answer is right.</strong> Everything you type, and everything printed, is identical in both settings. The numbers in the drawing are computed by this page from the same rule C++ uses; the compiled program prints 400 and 320.</figcaption>
+    </figure>
+
+    <div class="startrow">
+      <div><h4>Read it after the lab</h4><p>Chapters follow the trip from left to right. Every number on the page was produced by compiling the code, on 4 October 2026.</p></div>
+      <div><h4>The worksheet</h4><p>One <code>.cpp</code> file with a step per chapter and the exercises left blank. Save it from the button at the top.</p></div>
+      <div><h4>This week's questions</h4><p>Sheet 2, Q1-Q6, Q8 and Q12 - the ones with no <code>if</code>. The other ten are next week's lab.</p></div>
+    </div>
+  </section>
+  <section class="chapter" id="ch1" data-chapter="ch1">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 1</p>
+      <h2>Name it, save it: the professor's rules</h2>
+      <p class="ch-goal">After this chapter you can make the sheet folder and every question file with exactly the names the professor specifies, on a lab PC, without help.</p>
+      <div class="where" data-stage="name,hand"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">1.1</span>Five rules to check before submission</h3>
+      <p>Follow the professor's file and folder naming instructions for every sheet. The rules, from the note the professor sent to every student:</p>
+      <ol>
+        <li><strong>No Arabic and no spaces</strong> in any file or folder name. English letters, digits and underscores only.</li>
+        <li><strong>One folder per sheet</strong>, named <code>XXX_Sheet_N</code>. <code>XXX</code> is your number on the class list, always three digits.</li>
+        <li><strong>One file per question</strong>, named <code>Q_SSQQ.cpp</code>: two digits for the sheet, two for the question. Underscores, never dashes.</li>
+        <li><strong>Delete the <code>.exe</code> files</strong> before you send. Dev-C++ makes one next to every <code>.cpp</code> you run.</li>
+        <li><strong>Archive the whole folder</strong> into one file with the folder's name, and upload it at the link the professor announces. ZIP and RAR are both allowed; this guide uses Windows ZIP.</li>
+      </ol>
+      <p>Consistent names let the marker identify your class-list number, sheet and question without opening each program. Do not substitute your university ID for your number on the class list.</p>
+
+      <h3><span class="step">1.2</span>Your names, worked out</h3>
+      <p>Type your number on the class list - not your university ID, not the PC's number. The page builds the names the way the rules say.</p>
+    </div>
+
+    <figure class="fig">
+      <div class="nb-fields">
+        <label>Your number on the list <input type="number" id="nb-num" value="34" min="1" max="999"></label>
+        <label>Sheet <input type="number" id="nb-sheet" value="2" min="1" max="99"></label>
+        <label>Question <input type="number" id="nb-q" value="1" min="1" max="99"></label>
+      </div>
+      <div class="nb-out">
+        <div><p class="k">Folder</p><p class="v" id="nb-folder"></p></div>
+        <div><p class="k">File</p><p class="v" id="nb-file"></p></div>
+        <div><p class="k">Zip to send</p><p class="v" id="nb-zip"></p></div>
+      </div>
+      <p class="readout" id="nb-readout" aria-live="polite"></p>
+      <figcaption><strong>The padding is the part people get wrong.</strong> Number 7 is <code>007</code>, question 1 is <code>01</code>. The names are computed by this page from the rules, as you type.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">1.3</span>Check a name before you trust it</h3>
+      <p>Type any file or folder name, or press one of the examples. Each one is a mistake that really happens in the lab.</p>
+    </div>
+
+    <figure class="fig">
+      <div class="nb-fields"><label class="grow">A file or folder name <input type="text" id="nc-in" value="034_Sheet_2" spellcheck="false" autocomplete="off"></label></div>
+      <div class="chips" style="margin-top:10px" id="nc-presets">
+        <button type="button" class="chip" data-e="34_Sheet_2">34_Sheet_2</button>
+        <button type="button" class="chip" data-e="034-Sheet-2">034-Sheet-2</button>
+        <button type="button" class="chip" data-e="034 Sheet 2">034 Sheet 2</button>
+        <button type="button" class="chip" data-e="Q_201.cpp">Q_201.cpp</button>
+        <button type="button" class="chip" data-e="Q_0201.cpp.txt">Q_0201.cpp.txt</button>
+        <button type="button" class="chip" data-e="Q_0201.exe">Q_0201.exe</button>
+        <button type="button" class="chip" data-e="Q_0201.cpp">Q_0201.cpp</button>
+      </div>
+      <p class="verdictline" id="nc-readout" aria-live="polite"></p>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">1.4</span>On a lab PC, step by step</h3><p>The pictures are annotated illustrations of Windows 10. Windows 11 has the menu path given below.</p>
+      <ol>
+        <li>Open <code>Desktop › GEN241</code> - the folder from week 1. If it is not there, make it: right-click the desktop, <em>New › Folder</em>, type <code>GEN241</code>.</li>
+        <li>Inside it, right-click an empty space, <em>New › Folder</em>, and type your folder name, e.g. <code>034_Sheet_2</code>. Press Enter.</li>
+        <li>Make sure <em>File name extensions</em> are switched on (Windows 10: <em>View › File name extensions</em>; Windows 11: <em>View › Show › File name extensions</em>), or <code>Q_0201.cpp.txt</code> looks like <code>Q_0201.cpp</code>.</li>
+        <li>In Dev-C++: <em>File › New › Source File</em>, then save it <strong>before typing</strong>: <em>File › Save</em>, go into your sheet folder, type <code>Q_0201.cpp</code>, and check that <em>Save as type</em> says C++.</li>
+      </ol>
+    </div>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+<!-- FIG:folder:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="File Explorer open at Desktop, GEN241, which holds hello.cpp. One: the address bar shows Desktop, GEN241. Two: right-click an empty space, New, Folder. Three: the new folder is named 034_Sheet_2. On the right: number 7 becomes 007_Sheet_2, 34 becomes 034_Sheet_2, 105 becomes 105_Sheet_2. Always three digits, underscores only, no spaces, no dashes, no Arabic letters."><rect x="10" y="14" width="640" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="638.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">GEN241</text><text x="580" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="22" y="54" width="616" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="34" y="73" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     Desktop  ›  GEN241</text><text x="34" y="112" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Name</text><line x1="26" y1="120" x2="634" y2="120" style="stroke: #e3e3e3; stroke-width: 1"/><path d="M36 129 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="151" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="70" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">hello.cpp</text><rect x="26" y="160" width="300" height="30" rx="3" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><path d="M36 168.3 h8.8 l2.75 2.75 h11.55 v13.750000000000002 h-23.1 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="172.15" width="23.1" height="13.200000000000001" rx="2" style="fill: #f8cd5a"/><text x="70" y="181" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b"></text><rect x="70" y="163" width="170" height="25" rx="2" style="fill: #ffffff; stroke: #0067c0; stroke-width: 1.6"/><text x="78" y="181" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">034_Sheet_2</text><line x1="176" y1="167" x2="176" y2="185" style="stroke: #1b1b1b; stroke-width: 1.5"/><rect x="303" y="200" width="220" height="142" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="300" y="196" width="220" height="142" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="314" y="220" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">View</text><text x="508" y="220" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><text x="314" y="249" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Sort by</text><text x="508" y="249" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><line x1="310" y1="262.5" x2="510" y2="262.5" style="stroke: #e0e0e0; stroke-width: 1"/><rect x="304" y="268" width="212" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="314" y="287" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">New</text><text x="508" y="287" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><line x1="310" y1="300.5" x2="510" y2="300.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="314" y="325" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Properties</text><rect x="523" y="271" width="200" height="104" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="520" y="267" width="200" height="104" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="524" y="272" width="192" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="534" y="291" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Folder</text><text x="534" y="320" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Shortcut</text><line x1="530" y1="333.5" x2="710" y2="333.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="534" y="358" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Text Document</text><circle cx="36" cy="69" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="36" y="75" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">1</text><circle cx="286" cy="212" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="286" y="218" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">2</text><circle cx="258" cy="175" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="258" y="181" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">3</text><rect x="668" y="14" width="322" height="392" rx="8" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 2"/><text x="684" y="44" text-anchor="start" xml:space="preserve" style="font-size: 16px; font-weight: 600; fill: var(--ink)">Your number on the class list:</text><text x="700" y="88" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 600; fill: var(--ink-2)">7</text><text x="752" y="88" text-anchor="start" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-3)">→</text><text x="790" y="88" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--accent)">007_Sheet_2</text><text x="700" y="134" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 600; fill: var(--ink-2)">34</text><text x="752" y="134" text-anchor="start" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-3)">→</text><text x="790" y="134" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--accent)">034_Sheet_2</text><text x="700" y="180" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 600; fill: var(--ink-2)">105</text><text x="752" y="180" text-anchor="start" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-3)">→</text><text x="790" y="180" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--accent)">105_Sheet_2</text><text x="684" y="246" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">Always three digits: add 0s in front.</text><text x="684" y="276" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: var(--ink)">Underscores _ only. No spaces,</text><text x="684" y="300" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: var(--ink)">no dashes, no Arabic letters.</text><text x="684" y="344" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: var(--ink-2)">1  open Desktop › GEN241 (make it if missing)</text><text x="684" y="366" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: var(--ink-2)">2  right-click empty space › New › Folder</text><text x="684" y="388" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: var(--ink-2)">3  type YOUR number + _Sheet_2, Enter</text></svg>
+<!-- FIG:folder:end -->
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>The folder goes inside GEN241, named with your own number.</strong> Not 034 unless you are 034 on the list.</figcaption>
+    </figure>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+<!-- FIG:saveas:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="Dev-C++: one, File, New, Source File. In the Save As dialog: two, the address is Desktop, GEN241, 034_Sheet_2; three, the file name is Q_0201.cpp; four, Save as type is C++ source files. The name breaks into Q_, 02 for the sheet, 01 for the question, and .cpp."><rect x="10" y="14" width="415" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="413.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Dev-C++</text><text x="355" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="15" y="48" width="38.4" height="24" rx="3" style="fill: #cce4f7; stroke: none; stroke-width: 1.5"/><text x="22" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">File</text><text x="68.4" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Edit</text><text x="114.80000000000001" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Search</text><text x="180.4" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">View</text><text x="233.4" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Project</text><text x="298.6" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Execute</text><rect x="25" y="80" width="205" height="133" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="22" y="76" width="205" height="133" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="26" y="81" width="197" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="36" y="100" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">New</text><text x="215" y="100" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><text x="36" y="129" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Open...</text><text x="215" y="129" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Ctrl+O</text><line x1="32" y1="142.5" x2="217" y2="142.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="36" y="167" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Save</text><text x="215" y="167" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Ctrl+S</text><text x="36" y="196" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Save As...</text><rect x="230" y="84" width="190" height="66" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="227" y="80" width="190" height="66" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="231" y="85" width="182" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="241" y="104" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Source File</text><text x="405" y="104" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Ctrl+N</text><text x="241" y="133" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Project...</text><rect x="30" y="268" width="44" height="40" rx="6" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6"/><text x="52.0" y="295" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">Q_</text><text x="52.0" y="330" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--ink-2)">always</text><rect x="82" y="268" width="44" height="40" rx="6" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6"/><text x="104.0" y="295" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">02</text><text x="104.0" y="330" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--ink-2)">sheet</text><rect x="134" y="268" width="44" height="40" rx="6" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6"/><text x="156.0" y="295" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">01</text><text x="156.0" y="330" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--ink-2)">question</text><rect x="186" y="268" width="70" height="40" rx="6" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6"/><text x="221.0" y="295" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">.cpp</text><text x="221.0" y="330" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--ink-2)">C++ file</text><text x="30" y="370" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: var(--ink-2)">Two-digit sheet, two-digit question.</text><text x="30" y="392" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: var(--ink-2)">Question 1 is 01, question 13 is 13.</text><rect x="440" y="14" width="548" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="440.75" y="14.75" width="546.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="452" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Save As</text><text x="918" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="452" y="56" width="524" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="464" y="75" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     Desktop  ›  GEN241  ›  034_Sheet_2</text><rect x="450" y="102" width="132" height="26" rx="4" style="fill: #cce4f7; stroke: none; stroke-width: 1.5"/><text x="462" y="120" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">Desktop</text><text x="462" y="150" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">Documents</text><text x="462" y="180" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">Downloads</text><text x="462" y="210" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">This PC</text><line x1="590" y1="96" x2="590" y2="304" style="stroke: #e3e3e3; stroke-width: 1"/><text x="790" y="204" text-anchor="middle" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #5c5c5c">This folder is empty.</text><text x="460" y="330" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">File name:</text><rect x="558" y="312" width="410" height="28" rx="3" style="fill: #ffffff; stroke: #0067c0; stroke-width: 1.6"/><text x="568" y="332" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 600; fill: #1b1b1b">Q_0201.cpp</text><text x="460" y="366" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">Save as type:</text><rect x="558" y="348" width="410" height="28" rx="3" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="568" y="367" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">C++ source files (*.cpp ...)</text><rect x="770" y="380" width="92" height="22" rx="4" style="fill: #0067c0; stroke: none; stroke-width: 1.5"/><text x="816" y="396" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: #ffffff">Save</text><rect x="872" y="380" width="92" height="22" rx="4" style="fill: #f3f3f3; stroke: #c4c4c4; stroke-width: 1.5"/><text x="918" y="396" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Cancel</text><circle cx="437" cy="95" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="437" y="101" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">1</text><circle cx="840" cy="71" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="840" y="77" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">2</text><circle cx="980" cy="326" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="980" y="332" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">3</text><circle cx="980" cy="362" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="980" y="368" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">4</text></svg>
+<!-- FIG:saveas:end -->
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>Save before you type.</strong> The file then lives in the sheet folder from its first line, with the name the professor specifies.</figcaption>
+    </figure>
+
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>الرقم في الاسم هو رقمك في الكشف، دايمًا 3 أرقام: <span class="ltr">7</span> تبقى <span class="ltr">007</span>. وسؤال <span class="ltr">1</span> في شيت <span class="ltr">2</span> يبقى <span class="ltr">Q_0201.cpp</span>. مفيش عربي ولا مسافات ولا شرطة.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>The wrong number.</strong> Your university ID, the PC's number or your partner's number all make a valid-looking name that is still wrong.</li>
+        <li><strong>Hidden extensions.</strong> With extensions hidden, Windows shows <code>Q_0201.cpp.txt</code> as <code>Q_0201.cpp</code>. Switch them on once and it stays on.</li>
+        <li><strong>Working inside Downloads.</strong> A file opened from a WhatsApp download saves back to Downloads. Save it into your sheet folder first.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">You are number 105 on the list. Which is the file for sheet 2, question 8?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="The question needs two digits: 8 is 08. Sheet 2 question 8 is 0208.">Q_028.cpp</button>
+        <button type="button" data-ok="0" data-fb="Your list number goes on the folder, not the file. The file only names the sheet and question.">105_Q_0208.cpp</button>
+        <button type="button" data-ok="1" data-fb="Q_, sheet 02, question 08, .cpp - inside the folder 105_Sheet_2.">Q_0208.cpp</button>
+        <button type="button" data-ok="0" data-fb="Dashes are not allowed; the rule is underscores.">Q-0208.cpp</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <div class="prose">
+      <p class="small muted">Back to the sheet: make <code>XXX_Sheet_2</code> now, and save every question into it as you go. Sheet 1 is handed in the same way: <code>XXX_Sheet_1</code> with <code>Q_0101.cpp</code> to <code>Q_0112.cpp</code>.</p>
+    </div>
+  </section>
+  <section class="chapter" id="ch2" data-chapter="ch2">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 2</p>
+      <h2>cin: the program waits for you</h2>
+      <p class="ch-goal">After this chapter you can write a prompt and a <code>cin</code> for every input a question gives, and run the program with numbers you type.</p>
+      <div class="where" data-stage="read"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">2.1</span>A prompt asks, cin reads</h3>
+      <p>Every program on sheet 2 reads its numbers from the keyboard. Each input takes two lines: a <code>cout</code> that <strong>asks</strong> - it only prints text - and a <code>cin</code> that <strong>reads</strong>. When the program reaches <code>cin</code>, it stops and waits. Nothing happens until you type a number and press Enter.</p>
+    </div>
+
+<script type="text/x-code" data-lang="cpp" data-show data-ln data-title="sheet-02/Q_0208.cpp - the input part">    double distance, efficiency, price, liters, cost;
+
+    cout << "Enter the distance to drive (km): ";
+    cin >> distance;
+    cout << "Enter the fuel efficiency (liters per 100 km): ";
+    cin >> efficiency;
+    cout << "Enter the price (pounds per liter): ";
+    cin >> price;</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>console - what you see, typing 250, 8, 20</span></div><pre>Enter the distance to drive (km): <b>250</b>
+Enter the fuel efficiency (liters per 100 km): <b>8</b>
+Enter the price (pounds per liter): <b>20</b>
+The fuel cost of the trip is 400 pounds</pre></div>
+
+    <ol class="notes">
+      <li><span class="n">1</span><span>The bold numbers are what you typed. The rest was printed by the program. A program that only asks never gets an answer until you press Enter.</span></li>
+      <li><span class="n">2</span><span><code>cin &gt;&gt; distance;</code> reads a number and puts it in the box called <code>distance</code>. The arrows point the way the number travels: from the keyboard into the variable.</span></li>
+      <li><span class="n">3</span><span>The prompt says the unit. A user who does not know the program wants kilometers will type miles.</span></li>
+    </ol>
+
+    <div class="prose">
+      <h3><span class="step">2.2</span>Several numbers, one cin</h3>
+      <p>One <code>cin</code> can read several numbers, in order: <code>cin &gt;&gt; distance &gt;&gt; efficiency &gt;&gt; price;</code>. You can type them on one line separated by spaces, or press Enter after each - cin does not care, it skips spaces and line breaks and takes the next number each time. This is how the lecture reads two values in its examples.</p>
+      <p>The order is the only thing that matters. Type <code>8 250 20</code> into the line above and the program believes the trip is 8 km and the car burns 250 liters per 100 km.</p>
+    </div>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p><code>cin</code> fills the variables in the order you wrote them, from whatever you type next, whatever the prompt said.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>الـ <span class="ltr">cout</span> بتسأل بس، والـ <span class="ltr">cin</span> هي اللي بتقرا. البرنامج بيقف عند الـ <span class="ltr">cin</span> ويستنى لحد ما تكتب رقم وتدوس <span class="ltr">Enter</span>.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>"The program is frozen."</strong> A console that just sits there after a prompt is waiting for you, not broken.</li>
+        <li><strong>Commas.</strong> Type <code>4 5</code>, not <code>4, 5</code> or <code>(4, 5)</code>. The sheet writes points with brackets; cin does not want them.</li>
+        <li><strong><code>cin &lt;&lt; x</code>.</strong> The arrows point from the keyboard into the variable: <code>cin &gt;&gt; x</code>. The wrong way round does not compile.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">The program runs <code>cin &gt;&gt; distance &gt;&gt; efficiency &gt;&gt; price;</code> and you type <code>250 8 20</code> on one line, then Enter. What happens?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="cin reads one number per variable, in order, and spaces separate them. All three variables are filled.">Only distance is filled; the other two wait for more typing</button>
+        <button type="button" data-ok="1" data-fb="distance gets 250, efficiency 8, price 20 - one number each, in order.">distance = 250, efficiency = 8, price = 20</button>
+        <button type="button" data-ok="0" data-fb="Spaces are what separate the numbers; you do not need one Enter per number.">An error - each number needs its own line</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <div class="prose">
+      <p class="small muted">Back to the sheet: every week 2 question starts here. Q1 reads one number; Q4, Q5 and Q12 read points as pairs of numbers.</p>
+    </div>
+  </section>
+  <section class="chapter" id="ch3" data-chapter="ch3">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 3</p>
+      <h2>How much a box holds: int and double</h2>
+      <p class="ch-goal">After this chapter you can choose <code>int</code> or <code>double</code> for every quantity in a question, and say what goes wrong if you choose badly.</p>
+      <div class="where" data-stage="read,compute"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">3.1</span>Whole numbers and numbers with a fraction</h3>
+      <p>A variable is a box with a type, and the type decides what fits. An <code>int</code> holds whole numbers only. A <code>double</code> holds numbers with a fraction. Put 2.5 into an <code>int</code> and the .5 is simply dropped - no error, no warning on most compilers (lecture 3, page 8).</p>
+      <p>The question to ask for every quantity in a sheet question: <strong>can it have a fraction?</strong> A distance, a price, a temperature, a radius: yes, so <code>double</code>. A number of days, sides, people: no, so <code>int</code> - and then every division with it needs care (chapter 4).</p>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q-table">
+        <thead><tr><th>Type</th><th>Holds</th><th>Size, lab PCs (Dev-C++)</th><th>Size, a Mac (clang)</th><th>Use it for</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">int</td><td>whole numbers, about ±2.1 billion</td><td class="mono">4 bytes</td><td class="mono">4 bytes</td><td>counts: days, sides, digits</td></tr>
+          <tr><td class="mono">long</td><td>whole numbers, at least as big as int</td><td class="mono">4 bytes</td><td class="mono">8 bytes</td><td>seconds since 1970 (Q16)</td></tr>
+          <tr><td class="mono">float</td><td>fractions, about 7 digits</td><td class="mono">4 bytes</td><td class="mono">4 bytes</td><td>rarely - lecture 3 says prefer double</td></tr>
+          <tr><td class="mono">double</td><td>fractions, about 15 digits</td><td class="mono">8 bytes</td><td class="mono">8 bytes</td><td>almost every measured quantity</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout fact">
+      <span class="tag">Checked by compiling it</span>
+      <p>The Mac column was printed by <code>sizeof</code> with clang++ on 4 October 2026: 2, 4, 8, 8, 4, 8 bytes for short, int, long, long long, float, double. The lab column for <code>long</code> is the 4 bytes lecture 3's own screenshot shows (Ex_0302). <code>INT_MAX</code> printed 2147483647. Lecture 3's table says long is 8 bytes and its screenshot says 4: both are true, on different compilers. Run Ex_0302 on a lab PC to see your own.</p>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">3.2</span>The trip, typed</h3>
+      <p>Distance, consumption and price can all have a fraction, so the trip uses <code>double</code> for every one of them. The spine at the top of the page shows the price of getting this wrong: make <code>distance</code> an <code>int</code>, divide it by <code>100</code>, and 250 km becomes 2 hundreds of km instead of 2.5. The fix is not a bigger type; it is the right one.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>اسأل على كل كمية: ممكن يكون فيها كسر؟ لو آه يبقى <span class="ltr">double</span>، لو لأ يبقى <span class="ltr">int</span>. والـ <span class="ltr">int</span> لو حطيت فيه كسر بيشيله من غير ما يقولك.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>"A bigger type fixes it."</strong> <code>long</code> is still a whole number. 2.5 in a <code>long</code> is 2.</li>
+        <li><strong>Copying <code>float</code> from a reference.</strong> Some reference solutions use <code>float</code>. It works, with about 7 correct digits instead of 15; prefer <code>double</code>, as the lecture says.</li>
+        <li><strong>Memorising sizes.</strong> The sizes depend on the compiler. What does not change: <code>int</code> has no fraction, <code>double</code> does.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">Sheet 2, Q6: the number of sides of a polygon and the length of a side. Which types?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="A side length can be 6.5. An int would drop the .5 and the area would be wrong.">int sides, int side length</button>
+        <button type="button" data-ok="1" data-fb="A polygon has a whole number of sides; a length can have a fraction.">int sides, double side length</button>
+        <button type="button" data-ok="0" data-fb="It would work, but a polygon cannot have 5.5 sides - int says so, and the solution file uses it.">double sides, double side length</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <div class="prose">
+      <p class="small muted">Back to the sheet: Q2 (radius, length), Q4 and Q5 (coordinates) and Q8 are all <code>double</code>. Q3 (a number of days) is the one <code>int</code> question this week.</p>
+    </div>
+  </section>
+  <section class="chapter" id="ch4" data-chapter="ch4">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 4</p>
+      <h2>/ and % do different jobs</h2>
+      <p class="ch-goal">After this chapter you can predict what any expression on sheet 2 prints before you run it, including every division and remainder.</p>
+      <div class="where" data-stage="compute"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">4.1</span>Two whole numbers, two answers</h3>
+      <p>When both sides of <code>/</code> are whole numbers, C++ answers with a whole number: the quotient, with the fraction thrown away. <code>%</code> gives what was left over. Together they take a number apart, as lecture 3 does with 500 seconds: <code>500 / 60</code> is 8 whole minutes, <code>500 % 60</code> is the 20 seconds left.</p>
+      <p>Lecture 3's list, all checked by compiling them: <code>5 / 2</code> is 2, <code>-5 / 2</code> is -2 (toward zero, not down), <code>5.0 / 2</code> is 2.5, <code>26 % 8</code> is 2, <code>20 % 13</code> is 7, <code>12 % 4</code> is 0. When the left number is smaller, all of it is the remainder: <code>3 % 7</code> is 3.</p>
+
+      <h3><span class="step">4.2</span>Shortcuts that change a variable</h3>
+      <p><code>i += 2</code> means <code>i = i + 2</code>; the same works for <code>-=</code>, <code>*=</code>, <code>/=</code> and <code>%=</code>. <code>i++</code> adds one, <code>i--</code> subtracts one. Starting from <code>k = 10</code>: <code>k -= 4</code> gives 6, then <code>k *= 3</code> gives 18, then <code>k /= 4</code> gives 4 (whole numbers!), then <code>k %= 3</code> gives 1.</p>
+
+      <h3><span class="step">4.3</span>Try it: the calculator and C++ side by side</h3>
+      <p>Type an expression, or press a preset. The left panel does every division the way a calculator does; the right one follows C++'s rule. When they differ, the page says exactly which division lost what. Predict before you press.</p>
+    </div>
+
+    <figure class="fig" id="pg-fig">
+      <div class="field-row"><label style="flex:1">Expression <input type="text" id="pg-in" value="250 / 100 * 8" spellcheck="false" autocomplete="off" style="width:100%"></label></div>
+      <div class="chips" style="margin-top:10px" id="pg-presets">
+        <button type="button" class="chip" data-e="250 / 100 * 8" aria-pressed="true">the trip, int way</button>
+        <button type="button" class="chip" data-e="250 / 100.0 * 8">the trip, fixed</button>
+        <button type="button" class="chip" data-e="9 / 5 * 100 + 32">Q1, 9 / 5</button>
+        <button type="button" class="chip" data-e="9.0 / 5 * 100 + 32">Q1, 9.0 / 5</button>
+        <button type="button" class="chip" data-e="150 / 60 * 4.5 * 15.5">generator, 150 / 60</button>
+        <button type="button" class="chip" data-e="500 % 60">500 % 60</button>
+        <button type="button" class="chip" data-e="3 % 7">3 % 7</button>
+        <button type="button" class="chip" data-e="static_cast<int>(3.9)">static_cast&lt;int&gt;(3.9)</button>
+      </div>
+      <div class="pg">
+        <div class="pgcard"><p class="k">A calculator says</p><p class="v" id="pg-real"></p></div>
+        <div class="pgcard" id="pg-cppcard"><p class="k">C++ prints</p><p class="v" id="pg-cpp"></p><p class="n" id="pg-type"></p></div>
+      </div>
+      <p class="verdictline" id="pg-verdict" aria-live="polite"></p>
+      <figcaption><strong>Both columns are computed by this page as you type</strong>, the right one following C++'s rules for int and double, <code>%</code> and <code>static_cast</code>. Every preset was also compiled and run; the page and the compiler agree.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">4.4</span>Brackets decide the order</h3>
+      <p>Inside an expression, <code>*</code>, <code>/</code> and <code>%</code> happen before <code>+</code> and <code>-</code> (lecture 3, operator precedence). So <code>y2 - y1 / x2 - x1</code> divides first. A fraction on the sheet needs brackets around its whole top and its whole bottom: Q5's slope is <code>(y2 - y1) / (x2 - x1)</code>, and Q6's area is <code>(n * s * s) / (4 * tan(PI / n))</code>.</p>
+    </div>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p>Look at each <code>/</code> on its own: if both sides are whole numbers, the fraction is gone before anything else happens.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>الـ <span class="ltr">/</span> بين رقمين صحاح بتدّي الخارج بس، والـ <span class="ltr">%</span> بتدّي الباقي. <span class="ltr">500 / 60</span> يبقى 8 دقايق، و <span class="ltr">500 % 60</span> يبقى 20 ثانية.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>"It rounds."</strong> It never rounds: <code>9 / 5</code> is 1, not 2, and <code>-5 / 2</code> is -2.</li>
+        <li><strong>A tidy answer.</strong> 320, 132, 139.5: when a messy question gives a round-looking answer, check every division.</li>
+        <li><strong><code>%</code> with a fraction.</strong> <code>7.5 % 2</code> does not compile; <code>%</code> is for whole numbers only.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">Q3 turns days into years: <code>numberOfDays / 365</code>, then <code>numberOfDays % 365</code>. For 500 days, what are the two results?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="1.369 would need real division. Both are int, so the quotient is whole.">1.36986 and 135</button>
+        <button type="button" data-ok="1" data-fb="500 = 1 x 365 + 135: one whole year, 135 days left over.">1 and 135</button>
+        <button type="button" data-ok="0" data-fb="% gives what is left after taking out whole years, not the year count again.">1 and 1</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <div class="prose">
+      <p class="small muted">Back to the sheet: Q3 is all <code>/</code> and <code>%</code>; Q5 and Q6 are all brackets.</p>
+    </div>
+  </section>
+  <section class="chapter" id="ch5" data-chapter="ch5">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 5</p>
+      <h2>Where the decimal point has to go</h2>
+      <p class="ch-goal">After this chapter you can fix an integer division in the one place that fixes it, with a <code>.0</code> or a <code>static_cast</code>, and explain why storing the result in a <code>double</code> is too late.</p>
+      <div class="where" data-stage="compute"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">5.1</span>A double box does not save a whole-number division</h3>
+      <p>Lecture 3's Ex_0307 averages 150 points over 16 items. It stores the answer in a <code>double</code> - and still prints 9:</p>
+    </div>
+
+<script type="text/x-code" data-lang="cpp" data-show data-ln data-title="lecture 3, Ex_0307 - the part that matters">    int total_points = 150, items = 16;
+
+    double bad_avg = total_points / items;                        // 9
+    double good_avg = static_cast<double>(total_points) / items;  // 9.375</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>output</span></div><pre>Without cast: <b>9</b>
+With static_cast: <b>9.375</b></pre></div>
+
+    <ol class="notes">
+      <li><span class="n">1</span><span>C++ works out the right-hand side first. <code>150 / 16</code> is two whole numbers, so the answer is 9 - and only then is 9 put into the double box. The box can hold 9.375; it never receives it.</span></li>
+      <li><span class="n">2</span><span><code>static_cast&lt;double&gt;(total_points)</code> turns 150 into 150.0 <strong>before</strong> the division, so the division is real.</span></li>
+      <li><span class="n">3</span><span>Too late is still too late: <code>static_cast&lt;double&gt;(total_points / items)</code> casts the 9 after it was made, and prints 9.</span></li>
+    </ol>
+
+    <div class="prose">
+      <h3><span class="step">5.2</span>The same trap, in Q1</h3>
+      <p>Q1's formula is <code>fahrenheit = (9 / 5) * celsius + 32</code>, copied from the sheet. With <code>celsius = 100</code> it prints <b>132</b>, not 212: <code>9 / 5</code> is 1. The fix goes inside the division, where the fraction is lost: <code>9.0 / 5</code>. Test it with numbers you can check: 100 must give 212 and 37 must give 98.6.</p>
+
+      <h3><span class="step">5.3</span>The other way: double into int</h3>
+      <p>Lecture 3 page 8: putting a double into an <code>int</code> drops the fraction, it does not round. <code>static_cast&lt;int&gt;(3.9)</code> is 3, and <code>static_cast&lt;int&gt;(-3.9)</code> is -3. That is what you want for "how many whole years" and never what you want for a price.</p>
+    </div>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p>Put the decimal point, or the cast, on a number <strong>inside</strong> the division. Afterwards is too late.</p>
+    </div>
+
+    <div class="callout fact">
+      <span class="tag">Checked by compiling it</span>
+      <p>9, 9.375 and 9 again for the late cast; 132 and 212 for Q1; 3 and -3 for the casts to int. clang++ -std=c++17 -Wall -Wextra, 4 October 2026. clang warns about <code>int i = 34.7;</code> (lecture 3's own example); Dev-C++ may compile it silently - the value is 34 either way.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>الصندوق الـ <span class="ltr">double</span> مش هينقذ قسمة صحيحة: الـ C++ بتحسب الأول وبعدين تحط النتيجة. حط الـ <span class="ltr">.0</span> جوه القسمة نفسها.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>"The variable is double, so it is fine."</strong> The type of the box on the left never reaches back into the division on the right.</li>
+        <li><strong>Fixing one division of two.</strong> <code>15 + 30.0/60 + 30/3600</code> is still wrong: every <code>/</code> needs its own check.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">With <code>int minutes = 150;</code>, which line gives 2.5 hours?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="The division happens first, between two ints: 2. The double box gets 2.">double hours = minutes / 60;</button>
+        <button type="button" data-ok="0" data-fb="The cast comes after the division has already made 2.">double hours = static_cast&lt;double&gt;(minutes / 60);</button>
+        <button type="button" data-ok="1" data-fb="60.0 makes the division real: 150 / 60.0 = 2.5.">double hours = minutes / 60.0;</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <div class="prose">
+      <p class="small muted">Back to the sheet: Q1 is this chapter. Check the division in Q8 too: the solution writes <code>distance / 100.0</code>.</p>
+    </div>
+  </section>
+  <section class="chapter" id="ch6" data-chapter="ch6">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 6</p>
+      <h2>From the sheet's words to a program</h2>
+      <p class="ch-goal">After this chapter you can turn a paragraph like Q8 into five plan lines, a flowchart and a program whose every block comes from a plan line - and test it with a number you worked out first.</p>
+      <div class="where" data-stage="read,compute,print"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">6.1</span>Five lines before the keyboard</h3>
+      <p>Q8: <em>read the distance to drive, the fuel efficiency of the car, and the price per liter, and display the fuel cost of the trip. Small cars are 6 to 12.</em> The sheet calls the efficiency "100 km per liter", but 6 to 12 only makes sense as <strong>liters per 100 km</strong> - 600 km on one liter is not a car - so that is how the solution reads it.</p>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q-table">
+        <tbody>
+          <tr><td class="mono">WANT</td><td>the fuel cost of the trip, in pounds</td></tr>
+          <tr><td class="mono">HAVE</td><td>distance in km · efficiency in liters per 100 km · price in pounds per liter</td></tr>
+          <tr><td class="mono">CONVERT</td><td>km to liters: <code>liters = distance / 100.0 * efficiency</code></td></tr>
+          <tr><td class="mono">RELATE</td><td><code>cost = liters * price</code></td></tr>
+          <tr><td class="mono">CHECK</td><td>300 km at 8 L per 100 km is 24 L; at 20 pounds that is 480</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">6.2</span>The same plan as a flowchart</h3>
+      <p>Lecture 3 draws programs with four shapes: an oval to start and end, a parallelogram for input and output, a rectangle for a calculation, and arrows for the order. Q8 has no decision, so its flowchart is one straight line - and each shape is one plan line.</p>
+    </div>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+        <svg viewBox="0 0 900 150" role="img" aria-label="Q8 as a flowchart, left to right: Start (oval); input distance, efficiency, price (parallelogram, the HAVE line); liters = distance / 100.0 * efficiency (rectangle, CONVERT); cost = liters * price (rectangle, RELATE); output cost (parallelogram, WANT); End (oval).">
+          <defs><marker id="fc-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker></defs>
+          <rect x="6" y="40" width="80" height="44" rx="22" class="f-surface" style="stroke: var(--rule-strong); stroke-width: 1.5"/>
+          <text x="46" y="67" text-anchor="middle" class="t-ink" style="font-size: 14px; font-weight: 600">Start</text>
+          <line x1="88" y1="62" x2="110" y2="62" style="stroke: var(--ink-3); stroke-width: 1.6" marker-end="url(#fc-ah)"/>
+          <path d="M126 36 L266 36 L250 88 L110 88 Z" class="f-surface" style="stroke: var(--accent); stroke-width: 1.8"/>
+          <text x="188" y="58" text-anchor="middle" class="t-ink" style="font-size: 13px; font-weight: 600">input distance,</text>
+          <text x="188" y="76" text-anchor="middle" class="t-ink" style="font-size: 13px; font-weight: 600">efficiency, price</text>
+          <line x1="262" y1="62" x2="284" y2="62" style="stroke: var(--ink-3); stroke-width: 1.6" marker-end="url(#fc-ah)"/>
+          <rect x="288" y="36" width="200" height="52" rx="3" class="f-surface" style="stroke: var(--accent); stroke-width: 1.8"/>
+          <text x="388" y="58" text-anchor="middle" class="t-ink mono" style="font-size: 12.5px">liters = distance</text>
+          <text x="388" y="76" text-anchor="middle" class="t-ink mono" style="font-size: 12.5px">/ 100.0 * efficiency</text>
+          <line x1="490" y1="62" x2="512" y2="62" style="stroke: var(--ink-3); stroke-width: 1.6" marker-end="url(#fc-ah)"/>
+          <rect x="516" y="36" width="150" height="52" rx="3" class="f-surface" style="stroke: var(--accent); stroke-width: 1.8"/>
+          <text x="591" y="58" text-anchor="middle" class="t-ink mono" style="font-size: 12.5px">cost =</text>
+          <text x="591" y="76" text-anchor="middle" class="t-ink mono" style="font-size: 12.5px">liters * price</text>
+          <line x1="668" y1="62" x2="690" y2="62" style="stroke: var(--ink-3); stroke-width: 1.6" marker-end="url(#fc-ah)"/>
+          <path d="M706 36 L806 36 L790 88 L690 88 Z" class="f-surface" style="stroke: var(--accent); stroke-width: 1.8"/>
+          <text x="748" y="67" text-anchor="middle" class="t-ink" style="font-size: 13px; font-weight: 600">output cost</text>
+          <line x1="802" y1="62" x2="818" y2="62" style="stroke: var(--ink-3); stroke-width: 1.6" marker-end="url(#fc-ah)"/>
+          <rect x="820" y="40" width="74" height="44" rx="22" class="f-surface" style="stroke: var(--rule-strong); stroke-width: 1.5"/>
+          <text x="857" y="67" text-anchor="middle" class="t-ink" style="font-size: 14px; font-weight: 600">End</text>
+          <text x="188" y="118" text-anchor="middle" class="t-acc mono" style="font-size: 12px; font-weight: 700">HAVE</text>
+          <text x="388" y="118" text-anchor="middle" class="t-acc mono" style="font-size: 12px; font-weight: 700">CONVERT</text>
+          <text x="591" y="118" text-anchor="middle" class="t-acc mono" style="font-size: 12px; font-weight: 700">RELATE</text>
+          <text x="748" y="118" text-anchor="middle" class="t-acc mono" style="font-size: 12px; font-weight: 700">WANT</text>
+        </svg>
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>Every shape is one plan line.</strong> The parallelograms are where the program talks to a person: <code>cin</code> in, <code>cout</code> out. CHECK is not a shape: it is the number you test with afterwards.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">6.3</span>The program, block by block</h3>
+    </div>
+
+<script type="text/x-code" data-lang="cpp" data-show data-ln data-title="sheet-02/Q_0208.cpp - the body of main, plan lines marked">    double distance, efficiency, price, liters, cost;          // HAVE
+
+    cout << "Enter the distance to drive (km): ";
+    cin >> distance;
+    cout << "Enter the fuel efficiency (liters per 100 km): ";
+    cin >> efficiency;
+    cout << "Enter the price (pounds per liter): ";
+    cin >> price;
+
+    // 1. how much fuel the trip uses
+    liters = distance / 100.0 * efficiency;                     // CONVERT
+
+    // 2. what that fuel costs
+    cost = liters * price;                                      // RELATE
+
+    cout << "The fuel cost of the trip is " << cost << " pounds" << endl;   // WANT</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>two tests - the second catches what the first cannot</span></div><pre>300 8 20  ->  The fuel cost of the trip is <b>480</b> pounds
+250 8 20  ->  The fuel cost of the trip is <b>400</b> pounds</pre></div>
+
+    <ol class="notes">
+      <li><span class="n">1</span><span>480 is the CHECK line: the program agrees with the number you worked out by hand.</span></li>
+      <li><span class="n">2</span><span>300 cannot catch an integer division (300 / 100 is exactly 3). 250 can: written the int way it gives 320. Choose a test whose answer would change if the program were wrong.</span></li>
+    </ol>
+
+    <div class="prose">
+      <h3><span class="step">6.4</span>Your turn: plan one alone</h3>
+      <p>Not on the sheet: <em>a generator burns 4.5 liters of diesel per hour. It runs for 150 minutes. Diesel costs 15.5 pounds per liter. What does the run cost?</em> Write the five lines in your notebook first, without looking below. Then open the answer.</p>
+    </div>
+
+    <details class="more">
+      <summary>The five lines, and the trap <span class="muted">· open after you have written yours</span></summary>
+      <div class="inner">
+        <p><b>WANT</b> the cost of the run, in pounds. <b>HAVE</b> 4.5 L per hour, 150 minutes, 15.5 pounds per liter. <b>CONVERT</b> minutes to hours: <code>150 / 60.0</code> = 2.5 hours. <b>RELATE</b> liters = 4.5 × 2.5 = 11.25; cost = liters × 15.5. <b>CHECK</b> between the 2-hour and the 3-hour cost.</p>
+        <p>The program prints <b>174.375</b>. Written as <code>150 / 60</code> it prints <b>139.5</b>: two whole numbers, so 2 hours, and nothing warns you. Both numbers come from compiling it.</p>
+      </div>
+    </details>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>كل شكل في الـ <span class="ltr">flowchart</span> هو سطر من الخطة، وكل جزء في الكود جه من سطر في الخطة. والـ <span class="ltr">CHECK</span> هو الرقم اللي تجرّب بيه البرنامج بعد ما يخلص.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>Testing with friendly numbers.</strong> 300 km, 60 minutes, 100 Celsius hide integer division. Test once with a number that does not divide evenly.</li>
+        <li><strong>Skipping CHECK.</strong> Without a number worked out first, 320 looks as believable as 400.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">Which test input would catch <code>int distance</code> with <code>distance / 100</code> in Q8?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="200 / 100 is exactly 2, so the int way gives the right answer too and the bug hides.">200 km</button>
+        <button type="button" data-ok="0" data-fb="300 / 100 is exactly 3: the same answer both ways.">300 km</button>
+        <button type="button" data-ok="1" data-fb="150 / 100 is 1 the int way and 1.5 the real way: the answers differ, so the bug shows.">150 km</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <div class="prose">
+      <p class="small muted">Back to the sheet: Q8 is this chapter. Q12 is the same method with more steps: three distances (Q4's formula), then one area.</p>
+    </div>
+  </section>
+  <section class="chapter" id="ch7" data-chapter="ch7">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 7</p>
+      <h2>This week's questions, and handing them in</h2><p>The professor allows ZIP or RAR. We use Windows ZIP here. Two weeks from the 4 October message gives 18 October 2026; this is inferred, so follow the final announced deadline and upload link.</p>
+      <p class="ch-goal">After this chapter you can test each of this week's questions against a known output and hand in a zip the professor's rules accept.</p>
+      <div class="where" data-stage="print,hand"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">7.1</span>Test every program with numbers you can check</h3>
+      <p>Type the input in the third column. If your output differs, compare it with the right-hand column digit by digit before you change anything. The prompts may be worded differently in your program; the numbers may not.</p>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q-table">
+        <thead><tr><th>Q</th><th>What it is testing</th><th>Type in</th><th class="mono">It prints</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1</td><td>cin, and <code>9.0 / 5</code> (ch 2, 5)</td><td class="mono">100 · then 37</td><td class="mono">212 · then 98.6</td></tr>
+          <tr><td class="mono">2</td><td>a named constant PI (ch 3)</td><td class="mono">5.5 12</td><td class="mono">area 95.0331 · volume 1140.4</td></tr>
+          <tr><td class="mono">3</td><td><code>/</code> and <code>%</code> on days (ch 4)</td><td class="mono">500</td><td class="mono">1 years, 4 months and 15 days</td></tr>
+          <tr><td class="mono">4</td><td><code>pow(x, 0.5)</code> as a square root</td><td class="mono">1.5 -3.4 · 4 5</td><td class="mono">8.76413</td></tr>
+          <tr><td class="mono">5</td><td>brackets around a fraction (ch 4)</td><td class="mono">4.5 -5.5 · 6.6 -6.9</td><td class="mono">-0.666667</td></tr>
+          <tr><td class="mono">6</td><td><code>int</code> sides, <code>tan</code> in radians</td><td class="mono">4 · 2</td><td class="mono">4 (a 2 × 2 square)</td></tr>
+          <tr><td class="mono">8</td><td>the trip: plan, convert, test (ch 6)</td><td class="mono">250 · 8 · 20</td><td class="mono">400 pounds</td></tr>
+          <tr><td class="mono">12</td><td>Q4 three times, then one area</td><td class="mono">0 0 4 0 0 3</td><td class="mono">6</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout fact">
+      <span class="tag">Checked by compiling it</span>
+      <p>Every output in the table was printed by the solution files, compiled with clang++ -std=c++17 -Wall -Wextra on 4 October 2026 and run with exactly that input. Q6 with 4 sides of 2 is a square, so 4 is checkable by hand; Q12's points make a right triangle with sides 3 and 4, so 6 is too.</p>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">7.2</span>Where things stand</h3>
+    </div>
+
+    <div class="board">
+      <div class="dcard done">
+        <p class="st">Settled</p>
+        <h4>The language behaviour in chapters 2 to 6</h4>
+        <p>Integer division, <code>%</code>, the casts and cin's order are defined by C++ and behave the same in Dev-C++ on the lab PCs and clang++ on a Mac. Only the sizes in chapter 3 differ between compilers.</p>
+      </div>
+      <div class="dcard open">
+        <p class="st">Open · Q3</p>
+        <h4>Months or weeks</h4>
+        <p>The sheet asks for years, months and days but gives no month length. This guide uses 30-day months. <strong>What it changes:</strong> two lines. Your TA will confirm with the professor.</p>
+      </div>
+      <div class="dcard open">
+        <p class="st">Read this way · Q8</p>
+        <h4>Liters per 100 km</h4>
+        <p>The sheet's words say "100 km per liter", its numbers (6 to 12) say liters per 100 km, and so does the professor's own solution. <strong>What it changes:</strong> the formula, completely.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">7.3</span>Before you zip it</h3>
+      <p>Ticks are kept in this browser only. Zip at the very end: a zip is a copy of the folder at that moment, and editing a <code>.cpp</code> afterwards does not change it.</p>
+    </div>
+
+    <ul class="checklist" id="checklist">
+      <li><label><input type="checkbox" data-k="folder"><span><span class="t">The folder is your number, three digits, _Sheet_2</span><span class="d">034_Sheet_2, inside Desktop › GEN241. Chapter 1's builder makes it for you.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="names"><span><span class="t">Every file is Q_02 + two digits + .cpp</span><span class="d">Q_0201.cpp, Q_0208.cpp, Q_0212.cpp. Extensions switched on, so .cpp.txt cannot hide.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="compile"><span><span class="t">Every file compiles after your last edit</span><span class="d">Compile each one again. "It worked yesterday" is not a test.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="tested"><span><span class="t">Every program matches the table in 7.1</span><span class="d">Same input, same numbers.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="divisions"><span><span class="t">Every division checked on its own</span><span class="d">Both sides whole numbers? Did you mean that?</span></span></label></li>
+      <li><label><input type="checkbox" data-k="exe"><span><span class="t">The .exe files are deleted</span><span class="d">Close the black window first. Delete only names ending .exe.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="zip"><span><span class="t">The zip holds one folder, named like the zip</span><span class="d">Zip from GEN241, not from inside the folder. Open the zip and look.</span></span></label></li>
+    </ul>
+
+    <div class="prose">
+      <h3><span class="step">7.4</span>Packaging on a lab PC, picture by picture</h3>
+      <p>Windows 11: right-click the folder, then Show more options › Send to › Compressed (zipped) folder. Windows 10 uses Send to directly. Do this at the very end, after the last test run. The same three moves package sheet 1 into <code>XXX_Sheet_1</code>.</p>
+    </div>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+<!-- FIG:delexe:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="File Explorer in Desktop, GEN241, 034_Sheet_2, with Q_0201.cpp, Q_0201.exe, Q_0208.cpp and Q_0208.exe. One: close the black console window first, because a running .exe cannot be deleted. Two: Ctrl+click only the names ending .exe. Three: right-click, Delete. Running a program again makes its .exe again, so delete them at the very end."><rect x="10" y="14" width="640" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="638.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">034_Sheet_2</text><text x="580" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="22" y="54" width="616" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="34" y="73" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     Desktop  ›  GEN241  ›  034_Sheet_2</text><text x="34" y="112" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Name</text><text x="394" y="112" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Type</text><line x1="26" y1="120" x2="634" y2="120" style="stroke: #e3e3e3; stroke-width: 1"/><path d="M36 129 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="151" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="70" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Q_0201.cpp</text><text x="394" y="147" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">CPP File</text><rect x="26" y="162" width="380" height="30" rx="3" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><path d="M36 165 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="187" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #a33">EXE</text><text x="70" y="183" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Q_0201.exe</text><text x="394" y="183" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Application</text><path d="M36 201 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="223" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="70" y="219" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Q_0208.cpp</text><text x="394" y="219" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">CPP File</text><rect x="26" y="234" width="380" height="30" rx="3" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><path d="M36 237 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="259" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #a33">EXE</text><text x="70" y="255" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Q_0208.exe</text><text x="394" y="255" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Application</text><rect x="423" y="172" width="200" height="171" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="420" y="168" width="200" height="171" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="434" y="192" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Open</text><line x1="430" y1="205.5" x2="610" y2="205.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="434" y="230" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Cut</text><text x="434" y="259" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Copy</text><line x1="430" y1="272.5" x2="610" y2="272.5" style="stroke: #e0e0e0; stroke-width: 1"/><rect x="424" y="278" width="192" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="434" y="297" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Delete</text><text x="434" y="326" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Rename</text><rect x="660" y="30" width="330" height="150" rx="6" style="fill: #0c0c0c; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="660.75" y="30.75" width="328.5" height="26" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="672" y="49" text-anchor="start" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #1b1b1b">...\034_Sheet_2\Q_0208.exe</text><text x="966" y="49" text-anchor="middle" xml:space="preserve" style="font-size: 15px; font-weight: 700; fill: #c42b1c">✕</text><text x="676" y="86" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #f2f2f2">The fuel cost of the trip is 480</text><text x="676" y="112" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #bdbdbd">Press any key to continue . . .</text><circle cx="990" cy="42" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="990" y="48" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">1</text><circle cx="18" cy="177" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="18" y="183" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">2</text><circle cx="612" cy="352" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="612" y="358" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">3</text><text x="664" y="214" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">1  close the black window first</text><text x="664" y="238" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: var(--ink-2)">    (a running .exe cannot be deleted)</text><text x="664" y="276" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">2  Ctrl+click only names ending .exe</text><text x="664" y="314" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">3  right-click › Delete</text><text x="664" y="362" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--hot-ink)">Run it again and the .exe comes back:</text><text x="664" y="384" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--hot-ink)">delete them at the very end.</text></svg>
+<!-- FIG:delexe:end -->
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>Close the black window first.</strong> Windows will not delete an <code>.exe</code> that is still running. Delete only the names ending in <code>.exe</code>.</figcaption>
+    </figure>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+<!-- FIG:zip:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="File Explorer in Desktop, GEN241. One: go up to GEN241, not inside the sheet folder. Two: right-click the folder 034_Sheet_2 itself. Three: Send to, Compressed (zipped) folder. Four: a new file 034_Sheet_2.zip appears, with the same name as the folder."><rect x="10" y="14" width="780" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="778.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">GEN241</text><text x="720" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="22" y="54" width="756" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="34" y="73" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     Desktop  ›  GEN241</text><text x="34" y="112" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Name</text><line x1="26" y1="120" x2="774" y2="120" style="stroke: #e3e3e3; stroke-width: 1"/><path d="M36 129 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="151" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="70" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">hello.cpp</text><rect x="26" y="160" width="300" height="30" rx="3" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><path d="M36 168.3 h8.8 l2.75 2.75 h11.55 v13.750000000000002 h-23.1 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="172.15" width="23.1" height="13.200000000000001" rx="2" style="fill: #f8cd5a"/><text x="70" y="181" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">034_Sheet_2</text><path d="M36 339.72 h9.92 l3.1 3.1 h13.02 v15.5 h-26.04 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="344.06" width="26.04" height="14.879999999999999" rx="2" style="fill: #f8cd5a"/><rect x="47" y="345" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="348" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="351" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="354" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="357" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><text x="70" y="351" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">034_Sheet_2.zip</text><rect x="253" y="154" width="230" height="200" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="250" y="150" width="230" height="200" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="264" y="174" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Open</text><text x="264" y="203" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Open in new window</text><line x1="260" y1="216.5" x2="470" y2="216.5" style="stroke: #e0e0e0; stroke-width: 1"/><rect x="254" y="222" width="222" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="264" y="241" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Send to</text><text x="468" y="241" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><line x1="260" y1="254.5" x2="470" y2="254.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="264" y="279" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Copy</text><text x="264" y="308" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Delete</text><text x="264" y="337" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Rename</text><rect x="483" y="225" width="290" height="95" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="480" y="221" width="290" height="95" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="484" y="226" width="282" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="494" y="245" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Compressed (zipped) folder</text><text x="494" y="274" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Desktop (create shortcut)</text><text x="494" y="303" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Documents</text><circle cx="36" cy="69" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="36" y="75" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">1</text><circle cx="18" cy="175" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="18" y="181" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">2</text><circle cx="792" cy="236" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="792" y="242" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">3</text><circle cx="18" cy="345" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="18" y="351" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">4</text><text x="800" y="300" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 600; fill: var(--ink)">4  a new file appears:</text><text x="800" y="322" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: var(--ink-2)">same name, ending .zip</text></svg>
+<!-- FIG:zip:end -->
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>Zip the folder, from one level up.</strong> Zipping the files inside it gives a zip with no folder in it.</figcaption>
+    </figure>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+<!-- FIG:zipcheck:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="Double-click 034_Sheet_2.zip: it holds one folder, 034_Sheet_2. Inside it: Q_0201.cpp and Q_0208.cpp, and nothing else. Check: one folder named like the zip; only .cpp files, no .exe; every file is Q_02, two digits, .cpp."><rect x="10" y="14" width="470" height="250" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="468.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">034_Sheet_2.zip</text><text x="410" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="22" y="54" width="446" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="34" y="73" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     GEN241  ›  034_Sheet_2.zip</text><text x="34" y="112" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Name</text><line x1="26" y1="120" x2="464" y2="120" style="stroke: #e3e3e3; stroke-width: 1"/><path d="M36 134.3 h8.8 l2.75 2.75 h11.55 v13.750000000000002 h-23.1 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="138.15" width="23.1" height="13.200000000000001" rx="2" style="fill: #f8cd5a"/><text x="70" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">034_Sheet_2</text><rect x="520" y="14" width="470" height="250" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="520.75" y="14.75" width="468.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="532" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">034_Sheet_2</text><text x="920" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="532" y="54" width="446" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="544" y="73" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     034_Sheet_2.zip  ›  034_Sheet_2</text><text x="544" y="112" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Name</text><line x1="536" y1="120" x2="974" y2="120" style="stroke: #e3e3e3; stroke-width: 1"/><path d="M546 129 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="557" y="151" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="580" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Q_0201.cpp</text><path d="M546 163 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="557" y="185" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="580" y="181" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Q_0208.cpp</text><line x1="482" y1="140" x2="516" y2="140" style="stroke: var(--ink-3); stroke-width: 2"/><text x="30" y="312" text-anchor="start" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--good)">✓</text><text x="60" y="312" text-anchor="start" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">the zip holds ONE folder, named like the zip</text><text x="30" y="346" text-anchor="start" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--good)">✓</text><text x="60" y="346" text-anchor="start" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">inside it: only .cpp files, no .exe</text><text x="30" y="380" text-anchor="start" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--good)">✓</text><text x="60" y="380" text-anchor="start" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">every file is Q_02 + two digits + .cpp</text></svg>
+<!-- FIG:zipcheck:end -->
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>Open your own zip before you upload it.</strong> One folder, named like the zip, holding only <code>.cpp</code> files with correct names.</figcaption>
+    </figure>
+
+    <details class="more">
+      <summary>Next week <span class="muted">· lab 3, when selection syntax is taught</span></summary>
+      <div class="inner">
+        <p>The other ten questions - Q7, Q9-Q11 and Q13-Q18 - make decisions: is the triangle valid, is the point inside the circle, which BMI class. They need <code>if</code> and <code>else</code>, introduced at the end of lecture 3 and developed further in Liang chapter 3. Sheet 2 is due two weeks after it was given, so both labs count toward it. Keep everything in the same <code>XXX_Sheet_2</code> folder.</p>
+      </div>
+    </details>
+  </section>
+  <!-- The worksheet, assembled from these blocks in data-order. It must
+       compile as it stands: markdown blocks become // comments, code blocks
+       are copied verbatim. Save it from the running page and compile it
+       before you ship. -->
+<script type="text/x-companion" data-kind="markdown" data-order="1">============================================================
+ GEN 241 - Computer Language and Applications
+ Week 02 worksheet: input, types and arithmetic
+
+ HOW TO USE THIS FILE
+   1. Compile and run it before you change anything.
+   2. Work through the steps in order, in the guide and here.
+   3. Where a step says YOUR TURN, write the code yourself.
+
+ This is practice, not a sheet answer: your sheet answers are
+ one file per question, Q_0201.cpp ... , in your XXX_Sheet_2 folder.
+
+   Dev-C++ on Windows: open this file and press F11
+   VS Code on a Mac : open this file and press Cmd+Shift+B
+============================================================</script>
+
+<script type="text/x-companion" data-kind="code" data-order="10">#include <iostream>
+using namespace std;
+
+int main()
+{</script>
+
+<script type="text/x-companion" data-kind="code" data-order="20">    // ---------------------------------------------------------
+    // Step 1  (guide 4.1) - / and % on whole numbers
+    // Predict each line on paper before you run it.
+    // ---------------------------------------------------------
+    {
+        cout << "--- Step 1 ---" << endl;
+        cout << "7 % 3 = " << 7 % 3 << ",  3 % 7 = " << 3 % 7 << endl;
+        cout << "500 / 60 = " << 500 / 60 << ",  500 % 60 = " << 500 % 60 << endl;
+
+        // YOUR TURN (Sheet Q3): print 1000 days as years (365 days)
+        // and the days left over, with / and %.
+    }
+    cout << endl;</script>
+
+<script type="text/x-companion" data-kind="code" data-order="30">    // ---------------------------------------------------------
+    // Step 2  (guide: the map at the top, and 3.2) - the trip, two ways
+    // ---------------------------------------------------------
+    {
+        cout << "--- Step 2 ---" << endl;
+        int    distanceInt = 250;
+        double distance = 250, efficiency = 8, price = 20;
+
+        cout << "int way:    " << distanceInt / 100 * efficiency * price << " pounds" << endl;
+        cout << "double way: " << distance / 100.0 * efficiency * price << " pounds" << endl;
+
+        // YOUR TURN: change 250 to 300 in both lines. Why do the two
+        // answers agree now? Which test would you trust?
+    }
+    cout << endl;</script>
+
+<script type="text/x-companion" data-kind="code" data-order="40">    // ---------------------------------------------------------
+    // Step 3  (guide 5.2) - Q1's formula
+    // ---------------------------------------------------------
+    {
+        cout << "--- Step 3 ---" << endl;
+        double celsius = 100;
+        cout << "(9 / 5)   : " << (9 / 5) * celsius + 32 << endl;
+        cout << "(9.0 / 5) : " << (9.0 / 5) * celsius + 32 << endl;
+
+        // YOUR TURN (Sheet Q1): with celsius = 37, which line gives 98.6?
+    }
+    cout << endl;</script>
+
+<script type="text/x-companion" data-kind="code" data-order="50">    // ---------------------------------------------------------
+    // Step 4  (guide 6.4) - plan first, then code
+    // A generator burns 4.5 liters of diesel per hour and runs for
+    // 150 minutes. Diesel costs 15.5 pounds per liter.
+    // ---------------------------------------------------------
+    {
+        cout << "--- Step 4 ---" << endl;
+        int minutes = 150;
+        double rate = 4.5, price = 15.5;
+
+        // YOUR TURN: write the five plan lines as comments here, then
+        // compute the hours, the liters and the cost, and print the cost.
+        // CHECK: it must lie between the 2-hour and the 3-hour cost.
+        cout << "minutes = " << minutes << ", rate = " << rate << ", price = " << price << endl;
+    }
+    cout << endl;</script>
+
+<script type="text/x-companion" data-kind="code" data-order="99">    return 0;
+}</script>
+
+  <footer class="sources">
+    <h2>Sources and checks</h2>
+    <ul>
+      <li><strong>Sheet (2)</strong>, Computer Languages &amp; Applications, Prof. Mahmoud M. Khater: 18 questions, due two weeks after 4 October 2026. Q1-Q6, Q8 and Q12 are this guide's; the rest are week 3's.</li>
+      <li><strong>Lecture 3</strong> (GEN_241_03, 4 October 2026): numeric types and sizes, <code>/</code> and <code>%</code>, <code>pow</code>, precedence, augmented assignment, <code>++</code>/<code>--</code>, conversions and <code>static_cast</code>, flowcharts. Ex_0302 and Ex_0307 are quoted from it.</li>
+      <li><strong>The professor's file and folder rules</strong>, sent to students as "File and Folder Names" (PDF).</li>
+      <li><strong>Every output on this page was produced by compiling and running code</strong> with clang++ -std=c++17 -Wall -Wextra on a Mac, 4 October 2026. Sizes on the lab PCs come from lecture 3's own screenshot.</li>
+      <li>The trip's numbers are the solution file's own tests; the generator problem was written for teaching and is not on the sheet.</li>
+    </ul>
+    <p class="muted">For GEN 241 students after the week 2 lab. It covers the questions with no <code>if</code>; selection is week 3.</p>
+  </footer>
+</main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var NS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function pct(x, d) { return (x * 100).toFixed(d == null ? 1 : d) + "%"; }
+  function fmt(n) { return Number(n).toLocaleString("en-US"); }
+  function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $("#toast");
+    if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 4200);
+  }
+
+  /* =======================================================================
+     A model of how C++ prints a double, and how it evaluates the small
+     expressions on this sheet. Used by every widget on the page so that no
+     number here is typed in by hand.
+     ======================================================================= */
+
+  function stripZeros(s) {
+    if (s.indexOf(".") < 0) return s;
+    return s.replace(/0+$/, "").replace(/\.$/, "");
+  }
+  /* operator<< for a double: default precision 6, %g-style, or fixed notation. */
+  function coutDouble(v, precision, fixedMode) {
+    if (precision == null) precision = 6;
+    if (typeof v !== "number" || !isFinite(v)) return v > 0 ? "inf" : (v < 0 ? "-inf" : "nan");
+    if (fixedMode) return v.toFixed(Math.min(20, Math.max(0, precision)));
+    var P = precision === 0 ? 1 : precision;
+    if (v === 0) return "0";
+    var X = parseInt(v.toExponential(Math.min(20, P - 1)).split("e")[1], 10);
+    if (X < -4 || X >= P) {
+      var parts = v.toExponential(Math.min(20, P - 1)).split("e");
+      var e = parseInt(parts[1], 10), ae = Math.abs(e);
+      return stripZeros(parts[0]) + "e" + (e < 0 ? "-" : "+") + (ae < 10 ? "0" + ae : String(ae));
+    }
+    return stripZeros(v.toFixed(Math.min(20, Math.max(0, P - 1 - X))));
+  }
+  /* operator<< for anything: ints print exactly, doubles go through the above. */
+  function coutValue(val, precision, fixedMode) {
+    return val.isInt ? String(val.v) : coutDouble(val.v, precision, fixedMode);
+  }
+
+  /* --- expression evaluator with C++'s int/double rules --- */
+  var NUMRE = /^(?:\d+\.\d*(?:[eE][+-]?\d+)?|\.\d+(?:[eE][+-]?\d+)?|\d+(?:[eE][+-]?\d+)?)/;
+  function lex(src) {
+    var out = [], i = 0;
+    while (i < src.length) {
+      var c = src[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if ("+-*/()%".indexOf(c) >= 0) { out.push({ t: c }); i++; continue; }
+      var cm = /^static_cast\s*<\s*(int|double)\s*>/.exec(src.slice(i));
+      if (cm) { out.push({ t: "cast", to: cm[1] }); i += cm[0].length; continue; }
+      var m = NUMRE.exec(src.slice(i));
+      if (!m) throw new Error("I don't understand the character " + JSON.stringify(c) + ".");
+      var txt = m[0];
+      out.push({ t: "num", txt: txt, v: parseFloat(txt), isInt: !/[.eE]/.test(txt) });
+      i += txt.length;
+    }
+    return out;
+  }
+  /* mode "cpp" follows C++; mode "real" does every division for real. */
+  function evaluate(src, mode) {
+    var ts = lex(src), p = 0, truncations = [], sawIntDiv = false;
+    function peek() { return ts[p]; }
+    function eat(t) { if (ts[p] && ts[p].t === t) { return ts[p++]; } return null; }
+    function expr() {
+      var a = term();
+      for (;;) {
+        var op = eat("+") || eat("-");
+        if (!op) return a;
+        var b = term();
+        a = { v: op.t === "+" ? a.v + b.v : a.v - b.v, isInt: a.isInt && b.isInt };
+      }
+    }
+    function term() {
+      var a = unary();
+      for (;;) {
+        var op = eat("*") || eat("/") || eat("%");
+        if (!op) return a;
+        var b = unary();
+        if (op.t === "*") { a = { v: a.v * b.v, isInt: a.isInt && b.isInt }; continue; }
+        var bothInt = a.isInt && b.isInt;
+        if (bothInt && op.t === "/") sawIntDiv = true;   /* % is a remainder, not a division */
+        if (op.t === "%") {
+          if (!bothInt) throw new Error("% only works between whole numbers in C++.");
+          if (b.v === 0) throw new Error("Remainder by zero. This crashes the program.");
+          a = { v: a.v % b.v, isInt: true };
+          continue;
+        }
+        if (bothInt && mode === "cpp") {
+          if (b.v === 0) throw new Error("Whole-number division by zero. This crashes the program, it does not print infinity.");
+          var exact = a.v / b.v, cut = Math.trunc(exact);
+          if (exact !== cut) truncations.push({ a: a.v, b: b.v, exact: exact, cut: cut });
+          a = { v: cut, isInt: true };
+        } else {
+          a = { v: a.v / b.v, isInt: false };
+        }
+      }
+    }
+    function unary() {
+      var c = eat("cast");
+      if (c) {
+        if (!eat("(")) throw new Error("static_cast needs brackets: static_cast<int>(3.9).");
+        var inner = expr();
+        if (!eat(")")) throw new Error("A closing bracket is missing.");
+        return c.to === "int" ? { v: Math.trunc(inner.v), isInt: true } : { v: inner.v, isInt: false };
+      }
+      if (eat("+")) return unary();
+      if (eat("-")) { var u = unary(); return { v: -u.v, isInt: u.isInt }; }
+      return primary();
+    }
+    function primary() {
+      var n = eat("num");
+      if (n) return { v: n.v, isInt: n.isInt };
+      if (eat("(")) { var e = expr(); if (!eat(")")) throw new Error("A closing bracket is missing."); return e; }
+      throw new Error(p >= ts.length ? "The expression stops early - something is missing at the end." : "I did not expect " + JSON.stringify(ts[p].t) + " here.");
+    }
+    if (!ts.length) throw new Error("Type an expression above.");
+    var val = expr();
+    if (p < ts.length) throw new Error("There is something left over after the expression: " + JSON.stringify(ts[p].txt || ts[p].t) + ".");
+    return { val: val, truncations: truncations, sawIntDiv: sawIntDiv };
+  }
+
+  /* ---------- code blocks: highlighting, line numbers, diffs, copy ---------- */
+  var KEYWORDS = {
+    python: "False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield",
+    cfamily: "auto bool break case catch char class const continue default delete do double else enum export extern false float for function goto if import inline int let long namespace new null nullptr private protected public return short signed sizeof static struct switch template this throw true try typedef typeof union unsigned using var void volatile while",
+    sql: "select from where group by having order limit join inner left right outer on as insert into values update set delete create table alter drop index distinct union all case when then else end",
+    plain: ""
+  };
+  var BUILTINS = "print len range sum sorted dict list open round float int zip enumerate repr min max isinstance set tuple str console log cout cin cerr endl fixed scientific setprecision setw main";
+  function langKey(lang) {
+    lang = (lang || "plain").toLowerCase();
+    if (lang === "python" || lang === "py") return "python";
+    if (lang === "sql") return "sql";
+    if (["js","javascript","ts","typescript","c","cpp","c++","java","go","rust","json","css"].indexOf(lang) >= 0) return "cfamily";
+    return "plain";
+  }
+  function tokenize(code, lang) {
+    var key = langKey(lang);
+    var re = key === "python"
+      ? /(#[^\n]*)|((?:[rRfFbB]{1,2})?(?:'''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"))|(\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)/g
+      /* cfamily: note the preprocessor group. #include must not render as a comment. */
+      : /(\/\*[\s\S]*?\*\/|\/\/[^\n]*|--[^\n]*)|('(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"|`(?:\\.|[^`\\])*`|<[A-Za-z_][A-Za-z0-9_+./]*>)|(\b0x[0-9a-fA-F]+\b|\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)|(#[A-Za-z_]+)/g;
+    var kw = (KEYWORDS[key] || "").split(" "), bi = BUILTINS.split(" ");
+    var segs = [], last = 0, m;
+    while ((m = re.exec(code))) {
+      if (m.index > last) segs.push(["", code.slice(last, m.index)]);
+      var t = m[0], cls = "";
+      if (m[1]) cls = "tk-c";
+      else if (m[2]) cls = "tk-s";
+      else if (m[3]) cls = "tk-n";
+      else if (m[5]) cls = "tk-p";
+      else if (m[4]) {
+        if (kw.indexOf(t) >= 0 || kw.indexOf(t.toLowerCase()) >= 0) cls = "tk-k";
+        else if (bi.indexOf(t) >= 0) cls = "tk-f";
+        else if (/^\s*\(/.test(code.slice(re.lastIndex, re.lastIndex + 2))) cls = "tk-f";
+      }
+      segs.push([cls, t]);
+      last = re.lastIndex;
+    }
+    if (last < code.length) segs.push(["", code.slice(last)]);
+    return segs;
+  }
+  function highlightLines(code, lang) {
+    var lines = [""];
+    tokenize(code, lang).forEach(function (seg) {
+      seg[1].split("\n").forEach(function (p, i) {
+        if (i > 0) lines.push("");
+        if (p) lines[lines.length - 1] += seg[0] ? '<span class="' + seg[0] + '">' + esc(p) + "</span>" : esc(p);
+      });
+    });
+    return lines;
+  }
+  function copyText(text, statusEl, preEl) {
+    function done(msg) { statusEl.textContent = msg; setTimeout(function () { statusEl.textContent = ""; }, 2200); }
+    function fallback() {
+      try {
+        var sel = window.getSelection(), range = document.createRange();
+        range.selectNodeContents(preEl); sel.removeAllRanges(); sel.addRange(range);
+        if (document.execCommand && document.execCommand("copy")) { sel.removeAllRanges(); done("Copied"); }
+        else done("Selected. Press Ctrl+C or Cmd+C");
+      } catch (e) { done("Select the code and copy it"); }
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done("Copied"); }, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  }
+  $$('script[data-show]').forEach(function (s) {
+    var lang = s.getAttribute("data-lang") || "plain";
+    var raw = s.textContent.replace(/^\n/, "").replace(/\s+$/, "");
+    var shown = raw;
+    var isDiff = s.hasAttribute("data-diff");
+    var lineNums = s.hasAttribute("data-ln");
+    var hl = (s.getAttribute("data-hl") || "").split(",").filter(Boolean).map(Number);
+    var hlClass = s.getAttribute("data-hl-kind") === "change" ? "chg-line" : "hl-line";
+    var markers = null, text = shown;
+    if (isDiff) {
+      var src = shown.split("\n");
+      markers = src.map(function (l) { return l.charAt(0) || " "; });
+      text = src.map(function (l) { return l.slice(2); }).join("\n");
+    }
+    var html = highlightLines(text, lang).map(function (h, i) {
+      if (isDiff) {
+        var mk = markers[i], cls = mk === "+" ? "add-line" : mk === "-" ? "del-line" : "";
+        var g = '<span class="dg">' + (mk === " " ? " " : esc(mk)) + "</span>";
+        return cls ? '<span class="' + cls + '">' + g + h + "</span>" : g + h;
+      }
+      var ln = lineNums ? '<span class="ln">' + (i + 1) + "</span>" : "";
+      return hl.indexOf(i + 1) >= 0 ? '<span class="' + hlClass + '">' + ln + (h || " ") + "</span>" : ln + h;
+    }).join("\n");
+    var box = document.createElement("div");
+    box.className = "code";
+    box.innerHTML = '<div class="code-head"><span class="ttl">' + esc(s.getAttribute("data-title") || lang) +
+      '</span><span class="copy-status" aria-live="polite"></span><button type="button" class="btn small copy">Copy</button></div><pre><code>' + html + "</code></pre>";
+    s.parentNode.insertBefore(box, s);
+    box.querySelector(".copy").addEventListener("click", function () { copyText(isDiff ? text : raw, box.querySelector(".copy-status"), box.querySelector("pre")); });
+  });
+
+  /* ---------- "you are here" strips ---------- */
+  var STAGES = [["name", "Name it"], ["read", "Read"], ["compute", "Compute"], ["print", "Print"], ["hand", "Hand in"]];
+  $$(".where").forEach(function (el) {
+    var on = (el.getAttribute("data-stage") || "").split(",");
+    el.innerHTML = STAGES.map(function (s) { return '<span class="' + (on.indexOf(s[0]) >= 0 ? "on" : "") + '">' + s[1] + "</span>"; }).join('<i aria-hidden="true">›</i>');
+    el.setAttribute("role", "img");
+    el.setAttribute("aria-label", "Stage: " + STAGES.filter(function (s) { return on.indexOf(s[0]) >= 0; }).map(function (s) { return s[1]; }).join(", "));
+  });
+
+  /* =======================================================================
+     THIS WEEK'S RUNNING EXAMPLE.
+
+     Work it out ONCE here and use these values in every widget, so the page
+     can never disagree with itself. Compile the real thing first and check
+     these match - see ../../CLAUDE.md.
+     ======================================================================= */
+  var EXAMPLE = {
+    /* Sheet 2, Q8: the trip. Checked against the compiled program on 4 October 2026:
+       300, 8, 20 -> 480 ; 250, 8, 20 -> 400 ; with int distance and / 100, 250 -> 320 */
+    distance: 250, efficiency: 8, price: 20
+  };
+  function tripLiters(distance, intWay) {
+    return intWay ? Math.trunc(distance / 100) * EXAMPLE.efficiency : distance / 100.0 * EXAMPLE.efficiency;
+  }
+
+  /* ---------- the spine: one control, exactly one box changes ----------
+     Markup lives in part-02-hero.html. Give the changing box id="sp-swap"
+     and put anything that only appears in variant b inside <g class="ov ov-b">.
+     Delete this whole block if the week has no spine worth switching. */
+  var VARIANTS = {
+    a: ["Only the conversion box: distance is a double and the division is by 100.0, so 250 / 100.0 is 2.5.",
+        "The same keyboard, the same three numbers typed (250, 8, 20), the same cout.",
+        "What does the trip really cost? 400 pounds."],
+    b: ["Only the conversion box: distance is an int and the division is by 100, so 250 / 100 is 2 - the half is thrown away.",
+        "The same keyboard, the same three numbers typed (250, 8, 20), the same cout.",
+        "What does a program print when it is wrong without any error? 320 pounds, and it still compiles."]
+  };
+  /* Repaint anything in the drawing that carries a value. Leave it empty if
+     the CSS swap below says everything you need. */
+  function paintSpine(v) {
+    var intWay = v === "b", L = tripLiters(EXAMPLE.distance, intWay);
+    if ($("#sp-conv")) $("#sp-conv").textContent = intWay ? "250 / 100 * 8" : "250 / 100.0 * 8";
+    if ($("#sp-lit")) $("#sp-lit").textContent = "liters = " + coutDouble(L);
+    if ($("#sp-out")) $("#sp-out").textContent = "Cost: " + coutDouble(L * EXAMPLE.price) + " pounds";
+  }
+
+  var spine = $("#spine");
+  if (spine) {
+    var sstyle = document.createElement("style");
+    sstyle.textContent = "#spine .ov { display: none; } #spine[data-v='b'] .ov-b { display: inline; }" +
+      "#spine[data-v='b'] #sp-swap { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2; }";
+    document.head.appendChild(sstyle);
+    var setVariant = function (v) {
+      spine.setAttribute("data-v", v);
+      $$("#spine-seg button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === v)); });
+      if ($("#sp-change")) $("#sp-change").textContent = VARIANTS[v][0];
+      if ($("#sp-same")) $("#sp-same").textContent = VARIANTS[v][1];
+      if ($("#sp-q")) $("#sp-q").textContent = VARIANTS[v][2];
+      paintSpine(v);
+    };
+    $$("#spine-seg button").forEach(function (b) { b.addEventListener("click", function () { setVariant(b.getAttribute("data-v")); }); });
+    setVariant("a");
+  }
+
+  /* ---------- 4.3 the int / double playground ---------- */
+  var pgIn = $("#pg-in");
+  if (pgIn) {
+    function pgRender() {
+      var src = pgIn.value;
+      var realR, cppR;
+      try {
+        realR = evaluate(src, "real");
+        cppR = evaluate(src, "cpp");
+      } catch (err) {
+        $("#pg-real").textContent = "-";
+        $("#pg-cpp").textContent = "-";
+        $("#pg-type").textContent = "";
+        $("#pg-cppcard").className = "pgcard";
+        var v = $("#pg-verdict");
+        v.className = "verdictline differ";
+        v.innerHTML = '<span class="tagv">Not an expression yet.</span> ' + esc(err.message);
+        return;
+      }
+      var realTxt = coutDouble(realR.val.v);
+      var cppTxt = coutValue(cppR.val);
+      $("#pg-real").textContent = realTxt;
+      $("#pg-cpp").textContent = cppTxt;
+      $("#pg-type").textContent = cppR.val.isInt
+        ? "Every operand was a whole number, so the result is an int and prints with no decimal part."
+        : "At least one operand carried a decimal point, so the result is a double and prints with six significant digits.";
+      var same = realTxt === cppTxt;
+      $("#pg-cppcard").className = "pgcard " + (same ? "good" : "hot");
+      var vv = $("#pg-verdict");
+      if (same) {
+        vv.className = "verdictline agree";
+        vv.innerHTML = '<span class="tagv">They agree.</span> ' + (
+          cppR.sawIntDiv
+            ? "There is a whole-number division in here, but it happens to come out exactly, so nothing was lost this time. That is luck, not safety."
+            : "No whole-number division was involved, so there was nothing to lose."
+        );
+      } else {
+        var t = cppR.truncations[0];
+        vv.className = "verdictline differ";
+        vv.innerHTML = '<span class="tagv">They differ.</span> ' +
+          (t ? "C++ reached <code>" + esc(t.a + "/" + t.b) + "</code>, found two whole numbers, and answered <code>" + t.cut +
+               "</code> instead of <code>" + esc(coutDouble(t.exact)) + "</code>" +
+               (cppR.truncations.length > 1 ? ", and it did the same thing " + (cppR.truncations.length - 1) + " more time" + (cppR.truncations.length > 2 ? "s" : "") : "") +
+               ". Give one operand a decimal point to fix it."
+             : "The results differ because the whole expression stayed in whole-number arithmetic.");
+      }
+    }
+    pgIn.addEventListener("input", pgRender);
+    $$("#pg-presets .chip").forEach(function (c) {
+      c.addEventListener("click", function () {
+        pgIn.value = c.getAttribute("data-e");
+        $$("#pg-presets .chip").forEach(function (o) { o.setAttribute("aria-pressed", String(o === c)); });
+        pgRender();
+      });
+    });
+    pgRender();
+  }
+
+  /* ---------- 6.2 the precision dial ---------- */
+  var prN = $("#pr-n");
+  if (prN) {
+    var PRVALS = [
+      { name: "average  ", v: AVG_RIGHT, what: "the stall's rate" },
+      { name: "people   ", v: 118058996, what: "Q12's starting population" },
+      { name: "increase ", v: (226.625 - 70.583) * 24 * 365, what: "Q12's yearly increase" }
+    ];
+    var fxMode = "default";
+    function prRender() {
+      var n = +prN.value, fixedMode = fxMode === "fixed";
+      $("#pr-n-out").textContent = "setprecision(" + n + ")";
+      $$("#fx-seg button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === fxMode)); });
+      $("#pr-code").innerHTML = (fixedMode ? '<span class="tk-f">fixed</span> &lt;&lt; ' : "") +
+        '<span class="tk-f">setprecision</span>(<span class="tk-n">' + n + "</span>) &lt;&lt; value";
+      $("#pr-out").innerHTML = PRVALS.map(function (p) {
+        return esc(p.name) + " : " + "<b>" + esc(coutDouble(p.v, n, fixedMode)) + "</b>";
+      }).join("\n");
+      var sample = coutDouble(118058996, n, fixedMode);
+      $("#pr-readout").textContent = fixedMode
+        ? "With fixed in force, setprecision(" + n + ") means " + n + " digit" + (n === 1 ? "" : "s") + " after the decimal point, and scientific notation is never used. The population prints as " + sample + "."
+        : "Without fixed, setprecision(" + n + ") means " + (n === 0 ? "1 significant digit, because C++ treats 0 as 1 here" : n + " significant digit" + (n === 1 ? "" : "s") + " in total") +
+          ", counted from the first non-zero digit. cout switches to scientific notation when the number is too big to show at that precision, which is why the population prints as " + sample + ".";
+    }
+    prN.addEventListener("input", prRender);
+    $$("#fx-seg button").forEach(function (b) { b.addEventListener("click", function () { fxMode = b.getAttribute("data-v"); prRender(); }); });
+    prRender();
+  }
+
+  /* =======================================================================
+     THIS WEEK'S WIDGETS GO HERE.
+
+     Every widget guards on its own markup, so anything you leave out simply
+     does not run. The pattern that keeps a widget honest:
+
+       var el = $("#my-thing");
+       if (el) {
+         function render() {
+           // recompute from the controls - never from a stored picture,
+           // and never from a number typed in by hand
+           $("#my-readout").textContent = "At ... the result is " + coutDouble(v) + ".";
+         }
+         $("#my-control").addEventListener("input", render);
+         render();                       // the first frame must already teach
+       }
+
+     Use coutDouble() / coutValue() / evaluate() above for anything numeric so
+     the page agrees with the compiler. Check a handful of values against real
+     compiled output before you ship - see ../../CLAUDE.md.
+     ======================================================================= */
+
+  /* ---------- 1.2 the name builder: the professor's rules, computed ---------- */
+  var nbNum = $("#nb-num");
+  if (nbNum) {
+    var pad = function (n, w) { n = String(n); while (n.length < w) n = "0" + n; return n; };
+    var nbRender = function () {
+      var num = Number(nbNum.value), sh = Number($("#nb-sheet").value), q = Number($("#nb-q").value);
+      if (![num, sh, q].every(Number.isInteger) || !(num >= 1 && num <= 999) || !(sh >= 1 && sh <= 99) || !(q >= 1 && q <= 99)) {
+        $("#nb-folder").textContent = "-"; $("#nb-file").textContent = "-"; $("#nb-zip").textContent = "-";
+        $("#nb-readout").textContent = "Type your number on the class list (1 to 999), the sheet and the question.";
+        return;
+      }
+      var folder = pad(num, 3) + "_Sheet_" + sh, file = "Q_" + pad(sh, 2) + pad(q, 2) + ".cpp";
+      $("#nb-folder").textContent = folder; $("#nb-file").textContent = file; $("#nb-zip").textContent = folder + ".zip";
+      $("#nb-readout").textContent = "Number " + num + " becomes " + pad(num, 3) + " (always three digits). Sheet " + sh + ", question " + q +
+        " becomes " + pad(sh, 2) + pad(q, 2) + " (two digits each). The full path is Desktop\\GEN241\\" + folder + "\\" + file + ".";
+    };
+    ["#nb-num", "#nb-sheet", "#nb-q"].forEach(function (id) { $(id).addEventListener("input", nbRender); });
+    nbRender();
+  }
+  var ncIn = $("#nc-in");
+  if (ncIn) {
+    var ncRender = function () {
+      var n = ncIn.value, out = [];
+      if (!n) { $("#nc-readout").className = "verdictline"; $("#nc-readout").textContent = "Type a file or folder name to check it."; return; }
+      if (/[\u0600-\u06FF]/.test(n)) out.push("it has Arabic letters or digits; use English ones");
+      if (/\s/.test(n)) out.push("it has a space");
+      if (/-/.test(n)) out.push("it uses a dash; the rule is underscores");
+      var isZip = /\.(zip|rar)$/i.test(n), isFolder = !/\./.test(n), kind;
+      if (isFolder || isZip) {
+        kind = isZip ? "A correct archive name." : "A correct sheet folder name.";
+        var stem = isZip ? n.replace(/\.(zip|rar)$/i, "") : n, m = /^(\d+)_Sheet_\d+$/i.exec(stem);
+        if (isZip && !/\.(zip|rar)$/.test(n)) out.push("end it in .zip or .rar, small letters");
+        if (m && m[1].length !== 3) out.push("the number needs exactly three digits: 7 is 007, 34 is 034");
+        else if (m && !/_Sheet_/.test(stem)) out.push("write Sheet with a capital S, as the rules do");
+        else if (!m && !out.length) out.push("a sheet folder looks like 007_Sheet_2: three digits, _Sheet_, the sheet number");
+      } else {
+        kind = "A correct question file name.";
+        if (/\.exe$/i.test(n)) out.push("that is the program Dev-C++ made; you send the .cpp");
+        else if (/\.cpp\.txt$/i.test(n)) out.push("it is a text file pretending to be C++; rename it to end in .cpp");
+        else if (/^Q_\d{4}\.cpp$/i.test(n) && !/\.cpp$/.test(n)) out.push("end it in .cpp, small letters");
+        else if (/^Q_\d{3}\.cpp$/i.test(n)) out.push("one digit is missing: two for the sheet and two for the question, so Q_0201, not Q_201");
+        else if (!/^Q_\d{4}\.cpp$/.test(n) && !out.length) out.push("a question file looks like Q_0201.cpp: Q_, two digits of sheet, two of question, .cpp");
+      }
+      if (/^0{3}_Sheet_/.test(n) || /_Sheet_0(?:\.|$)/.test(n)) out.push("the list number and sheet number must be positive");
+      if (/^Q_/.test(n) && (/^Q_00/.test(n) || /^Q_\d{2}00/.test(n))) out.push("sheet and question numbering start at 1");
+      var el = $("#nc-readout"), msg = out.join("; ");
+      el.className = "verdictline " + (out.length ? "differ" : "agree");
+      el.innerHTML = out.length ? '<span class="tagv">Not yet.</span> ' + esc(msg.charAt(0).toUpperCase() + msg.slice(1)) + "." :
+        '<span class="tagv">Follows the rules.</span> ' + kind;
+    };
+    ncIn.addEventListener("input", ncRender);
+    $$("#nc-presets .chip").forEach(function (c) { c.addEventListener("click", function () { ncIn.value = c.getAttribute("data-e"); ncRender(); }); });
+    ncRender();
+  }
+
+  /* ---------- self-checks ---------- */
+  $$("[data-quiz]").forEach(function (q) {
+    var fb = $(".fb", q), btns = $$(".opts button", q);
+    btns.forEach(function (b, i) {
+      b.innerHTML = '<span class="mk">' + "ABCD".charAt(i) + "</span><span>" + b.innerHTML + "</span>";
+      b.addEventListener("click", function () {
+        var ok = b.getAttribute("data-ok") === "1";
+        btns.forEach(function (x) { x.classList.remove("right", "wrong"); });
+        b.classList.add(ok ? "right" : "wrong");
+        fb.className = "fb " + (ok ? "ok" : "no");
+        fb.innerHTML = '<span class="verdict">' + (ok ? "Right." : "Not quite.") + "</span> " + b.getAttribute("data-fb");
+      });
+    });
+  });
+
+  /* ---------- checklist, remembered in this browser only ---------- */
+  var CK_KEY = "gen241-w02-checklist-v1", ck = {};   // REPLACE if you did not scaffold with new-week.sh, so weeks do not share ticks
+  try { ck = JSON.parse(localStorage.getItem(CK_KEY) || "{}") || {}; } catch (e) { ck = {}; }
+  $$(".checklist input").forEach(function (box) {
+    box.checked = !!ck[box.getAttribute("data-k")];
+    box.addEventListener("change", function () {
+      ck[box.getAttribute("data-k")] = box.checked;
+      try { localStorage.setItem(CK_KEY, JSON.stringify(ck)); } catch (e) { /* private window: ticks last for this visit */ }
+    });
+  });
+
+  /* ---------- chapter highlighting ---------- */
+  var navLinks = $$(".rail a[data-for], .chipnav a[data-for]"), chipnav = $(".chipnav");
+  function markChapter(id) {
+    navLinks.forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-for") === id); });
+    var chip = chipnav && chipnav.querySelector('a[data-for="' + id + '"]');
+    if (chip && getComputedStyle(chipnav).display !== "none") {
+      chipnav.scrollTo({ left: chip.offsetLeft - chipnav.clientWidth / 2 + chip.clientWidth / 2, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) markChapter(e.target.getAttribute("data-chapter")); });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    $$("[data-chapter]").forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- companion file: one compilable .cpp, built from the blocks above ---------- */
+  var COMPANION = "gen241-week02-worksheet.cpp";   // set by new-week.sh
+  function companionBlocks() {
+    return $$("script[data-companion], script[data-kind]").map(function (s) {
+      var kind = s.getAttribute("data-kind") || "code";
+      return { order: parseFloat(s.getAttribute("data-order") || "0"), kind: kind, src: s.textContent.replace(/^\n/, "").replace(/\s+$/, "") };
+    }).sort(function (a, b) { return a.order - b.order; });
+  }
+  function buildCompanion() {
+    var blocks = companionBlocks();
+    if (/\.(cpp|cc|c|h|hpp)$/.test(COMPANION)) {
+      /* prose becomes comments so the saved file compiles as it stands */
+      return blocks.map(function (c) {
+        return c.kind === "markdown"
+          ? c.src.split("\n").map(function (l) { return l.length ? "// " + l : "//"; }).join("\n")
+          : c.src;
+      }).join("\n\n") + "\n";
+    }
+    if (/\.ipynb$/.test(COMPANION)) {
+      var cells = blocks.map(function (c, i) {
+        var lines = c.src.split("\n"), source = lines.map(function (l, j) { return j < lines.length - 1 ? l + "\n" : l; });
+        var cell = { cell_type: c.kind === "markdown" ? "markdown" : "code", id: "cell-" + (i + 1), metadata: {}, source: source };
+        if (cell.cell_type === "code") { cell.execution_count = null; cell.outputs = []; }
+        return cell;
+      });
+      return JSON.stringify({ nbformat: 4, nbformat_minor: 5, metadata: {}, cells: cells }, null, 1) + "\n";
+    }
+    return blocks.map(function (c) { return c.kind === "markdown" ? c.src : "```\n" + c.src + "\n```"; }).join("\n\n") + "\n";
+  }
+  var CRC = (function () { var t = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(buf) { var c = 0xFFFFFFFF; for (var i = 0; i < buf.length; i++) c = CRC[(c ^ buf[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function zipOne(name, data) {
+    var nb = new TextEncoder().encode(name), crc = crc32(data), d = new Date();
+    var time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+    var date = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    var loc = new Uint8Array(30 + nb.length), lv = new DataView(loc.buffer);
+    lv.setUint32(0, 0x04034b50, true); lv.setUint16(4, 20, true); lv.setUint16(6, 0x0800, true);
+    lv.setUint16(10, time, true); lv.setUint16(12, date, true); lv.setUint32(14, crc, true);
+    lv.setUint32(18, data.length, true); lv.setUint32(22, data.length, true); lv.setUint16(26, nb.length, true);
+    loc.set(nb, 30);
+    var cen = new Uint8Array(46 + nb.length), cv = new DataView(cen.buffer);
+    cv.setUint32(0, 0x02014b50, true); cv.setUint16(4, 20, true); cv.setUint16(6, 20, true); cv.setUint16(8, 0x0800, true);
+    cv.setUint16(12, time, true); cv.setUint16(14, date, true); cv.setUint32(16, crc, true);
+    cv.setUint32(20, data.length, true); cv.setUint32(24, data.length, true); cv.setUint16(28, nb.length, true);
+    cen.set(nb, 46);
+    var end = new Uint8Array(22), ev = new DataView(end.buffer);
+    ev.setUint32(0, 0x06054b50, true); ev.setUint16(8, 1, true); ev.setUint16(10, 1, true);
+    ev.setUint32(12, cen.length, true); ev.setUint32(16, loc.length + data.length, true);
+    var out = new Uint8Array(loc.length + data.length + cen.length + end.length);
+    out.set(loc, 0); out.set(data, loc.length); out.set(cen, loc.length + data.length); out.set(end, loc.length + data.length + cen.length);
+    return out;
+  }
+  function saveCompanion() {
+    var text = buildCompanion();
+    var host = window.claude && typeof window.claude.use === "function";
+    if (!host) {
+      var url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
+      var a = document.createElement("a"); a.href = url; a.download = COMPANION;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 3000);
+      toast("Saving " + COMPANION + ".");
+      return;
+    }
+    window.claude.use("downloads").then(function (dl) {
+      if (!dl) { toast("Saving isn't available in this view."); return; }
+      var ext = COMPANION.split(".").pop().toLowerCase();
+      var allowed = ["txt", "json", "md", "csv", "html", "svg", "pdf", "zip", "png", "jpg", "jpeg", "webp", "gif", "mp4", "webm", "docx", "pptx", "xlsx", "epub", "ttf"];
+      var bytes = new TextEncoder().encode(text);
+      var req = allowed.indexOf(ext) >= 0 ? { filename: COMPANION, data: text } : { filename: COMPANION.replace(/\.[^.]+$/, "") + ".zip", data: zipOne(COMPANION, bytes) };
+      return dl.save(req).then(function () { toast("Saved."); }, function (err) {
+        var code = err && err.code;
+        toast(code === "declined" ? "Save cancelled." : code === "rate_limited" ? "A save prompt is already open." : "Saving isn't available in this view.");
+      });
+    }, function () { toast("Saving isn't available in this view."); });
+  }
+  $$(".companion-save").forEach(function (b) { b.addEventListener("click", saveCompanion); });
+
+  /* Exposed for automated checks. */
+  window.guideKit = {
+    $: $, $$: $$, svgEl: svgEl, esc: esc, pct: pct, fmt: fmt, mulberry32: mulberry32, toast: toast,
+    buildCompanion: buildCompanion, zipOne: zipOne,
+    coutDouble: coutDouble, coutValue: coutValue, evaluate: evaluate
+  };
+})();
+</script>
+</body>
+</html>

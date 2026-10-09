@@ -1,0 +1,1692 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why Data Structures</title>
+<meta name="description" content="Data Structures and Algorithms, lab 1: why the same records arranged differently cost different work, the Python you need, and your first algorithm - linear search - planned, traced, written and tested.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  /* surfaces and ink: pick a neutral with a slight bias toward the accent */
+  --bg: #f4f6f9; --surface: #ffffff; --surface-2: #eef1f6; --surface-3: #e2e7ee;
+  --ink: #111821; --ink-2: #435061; --ink-3: #5f6b7c;
+  --rule: #d9dfe7; --rule-strong: #b9c2ce;
+  /* accent: interactive things only */
+  --accent: #0f6e78; --accent-strong: #0b555d; --accent-soft: #e0f0f2; --on-accent: #ffffff;
+  /* semantic pair: the thing under study vs its background class. Rename per subject. */
+  --hot: #b4531f; --hot-ink: #93411a; --hot-soft: #fbeade;
+  --cool: #8894a5; --cool-soft: #e9edf2;
+  --good: #1b7446; --good-soft: #e0f2e7;
+  --warn-ink: #7f4d00; --warn-soft: #fff1d6; --warn-line: #e0a126;
+  --mark: #111821;           /* outline used as a second channel beside colour */
+  --dim: 0.16;               /* opacity for "not counted" marks */
+  --code-bg: #f6f8fb; --code-ink: #1b2430;
+  --tok-key: #0b555d; --tok-str: #1b7446; --tok-num: #93411a; --tok-com: #6b7684; --tok-fn: #6a3ab2; --tok-pre: #a2337a;
+  --shadow: 0 1px 2px rgba(17,24,33,.05), 0 6px 20px rgba(17,24,33,.06);
+  --radius: 6px; --radius-sm: 4px;
+  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-alt: "IBM Plex Sans Arabic", system-ui, sans-serif; /* second-language callouts */
+  --top: env(safe-area-inset-top, 0px);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --cool: #5e6a7b; --cool-soft: #222b37;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412; --warn-line: #b88419;
+  --mark: #e8ecf2; --dim: 0.2;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-fn: #c3a6f5; --tok-pre: #f09ccd;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --cool: #5e6a7b; --cool-soft: #222b37;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412; --warn-line: #b88419;
+  --mark: #e8ecf2; --dim: 0.2;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-fn: #c3a6f5; --tok-pre: #f09ccd;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--top) + 72px); -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.62 var(--font-body); text-rendering: optimizeLegibility; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-strong); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+code, kbd, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+p code, li code, td code, figcaption code, .callout code, h3 code, summary code, label code, .quiz .opts button code {
+  background: var(--surface-2); border: 1px solid var(--rule); border-radius: 3px; padding: 0.04em 0.32em;
+  /* not nowrap: a long path or statement would push the whole page sideways on a phone */
+  overflow-wrap: break-word;
+}
+strong { font-weight: 650; }
+.num { font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- top bar and chapter navigation ---------- */
+.topbar { position: sticky; top: var(--top); z-index: 30; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--rule); }
+.topbar-inner { max-width: 1320px; margin: 0 auto; padding-block: 10px; padding-inline: 16px; display: flex; align-items: center; gap: 16px; }
+.wordmark { display: flex; align-items: baseline; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 17px; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.wordmark small { font-family: var(--font-mono); font-weight: 500; font-size: 11.5px; letter-spacing: 0.06em; color: var(--ink-3); text-transform: uppercase; }
+.topbar .spacer { flex: 1; }
+.chipnav { display: none; }
+@media (max-width: 1099px) {
+  .chipnav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-block: 0 10px; padding-inline: 16px; max-width: 1320px; margin: 0 auto; }
+  .chipnav::-webkit-scrollbar { display: none; }
+  .chipnav a { flex: none; font-size: 13.5px; text-decoration: none; color: var(--ink-2); border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: var(--surface); }
+  .chipnav a.on { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+  .wordmark small { display: none; }
+}
+
+/* ---------- controls ---------- */
+.btn { appearance: none; font: 600 14.5px/1 var(--font-body); display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: var(--radius-sm); border: 1px solid var(--rule-strong); background: var(--surface); color: var(--ink); cursor: pointer; text-decoration: none; white-space: nowrap; }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--on-accent); }
+.btn.small { padding: 6px 10px; font-size: 13px; }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); }
+.seg button { appearance: none; border: 0; background: transparent; color: var(--ink-2); font: 600 14px/1.2 var(--font-body); padding: 8px 13px; cursor: pointer; border-right: 1px solid var(--rule); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.seg button:hover:not([aria-pressed="true"]) { background: var(--accent-soft); color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { appearance: none; font: 500 14px/1.25 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 6px 10px; cursor: pointer; text-align: left; }
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+input[type="range"] { width: 100%; accent-color: var(--accent); height: 28px; margin: 0; }
+.field-row { display: grid; gap: 4px; }
+.field-row label { font-size: 14px; color: var(--ink-2); display: flex; justify-content: space-between; gap: 12px; }
+.field-row label output { font-family: var(--font-mono); color: var(--ink); font-weight: 600; }
+input[type="text"] { width: 100%; font: 400 15px/1.4 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 9px 11px; }
+input[type="text"]:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+
+/* ---------- layout ---------- */
+.shell { max-width: 1320px; margin: 0 auto; padding-inline: 16px; }
+@media (min-width: 1100px) { .shell { display: grid; grid-template-columns: 212px minmax(0, 1fr); gap: 56px; padding-inline: 32px; } }
+.rail { display: none; }
+@media (min-width: 1100px) { .rail { display: block; } .rail nav { position: sticky; top: calc(var(--top) + 80px); padding-block: 8px 24px; } }
+.rail ol { list-style: none; margin: 0; padding: 0; position: relative; }
+.rail ol::before { content: ""; position: absolute; left: 7px; top: 12px; bottom: 12px; width: 1px; background: var(--rule-strong); }
+.rail li a { position: relative; display: grid; grid-template-columns: 15px 1fr; gap: 12px; align-items: baseline; padding: 6px 0; text-decoration: none; color: var(--ink-2); font-size: 14.5px; line-height: 1.3; }
+.rail li a::before { content: ""; width: 9px; height: 9px; margin-left: 3px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--rule-strong); transform: translateY(1px); }
+.rail li a span.k { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); display: block; letter-spacing: 0.04em; }
+.rail li a:hover { color: var(--ink); }
+.rail li a.on { color: var(--ink); font-weight: 600; }
+.rail li a.on::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.rail .rail-foot { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule); display: grid; gap: 10px; }
+.rail .rail-foot p { margin: 0; font-size: 13px; color: var(--ink-3); line-height: 1.45; }
+main { min-width: 0; padding-block: 8px 80px; }
+.prose { max-width: 700px; }
+p { margin: 0 0 1em; }
+ul, ol { margin: 0 0 1em; padding-left: 1.3em; }
+li { margin: 0.25em 0; }
+li::marker { color: var(--ink-3); }
+h1, h2, h3, h4 { font-family: var(--font-display); color: var(--ink); text-wrap: balance; margin: 0; }
+h3 { font-size: 22px; font-weight: 700; line-height: 1.25; margin: 2.2em 0 0.55em; }
+h3 .step { font-family: var(--font-mono); font-weight: 500; font-size: 13px; color: var(--ink-3); letter-spacing: 0.04em; display: block; margin-bottom: 4px; }
+h4 { font-size: 17px; font-weight: 700; margin: 1.4em 0 0.4em; }
+.lede { font-size: 19.5px; line-height: 1.55; color: var(--ink-2); }
+.muted { color: var(--ink-3); }
+.small { font-size: 14.5px; }
+
+/* ---------- hero and chapter heads ---------- */
+.hero { padding-block: 44px 20px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
+.hero h1 { font-size: clamp(34px, 5.2vw, 56px); line-height: 1.04; letter-spacing: -0.025em; font-weight: 800; max-width: 16ch; margin-bottom: 18px; }
+.hero .lede { max-width: 640px; }
+.specimen { display: inline-flex; align-items: center; gap: 0.35em; font-family: var(--font-mono); font-weight: 600; font-size: 0.88em; color: var(--ink); background: var(--hot-soft); border-radius: 3px; padding: 0 0.35em; white-space: nowrap; }
+.specimen::before { content: ""; width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--hot); }
+.startrow { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin: 28px 0 8px; }
+.startrow > div { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; }
+.startrow h4 { margin: 0 0 4px; font-size: 15px; }
+.startrow p { margin: 0 0 10px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; }
+.startrow p:last-child { margin-bottom: 0; }
+.chapter { padding-top: 56px; margin-top: 40px; border-top: 1px solid var(--rule); }
+.ch-head { margin-bottom: 26px; }
+.ch-num { font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+.ch-head h2 { font-size: clamp(30px, 4vw, 42px); line-height: 1.08; letter-spacing: -0.02em; font-weight: 800; margin-bottom: 12px; }
+.ch-goal { font-size: 17.5px; color: var(--ink-2); max-width: 660px; margin: 0; }
+/* "you are here" strip: JS fills it from data-stage (see STAGES in the script) */
+.where { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 16px; font-family: var(--font-mono); font-size: 12px; }
+.where span { padding: 3px 8px; border: 1px solid var(--rule); border-radius: 3px; color: var(--ink-3); background: var(--surface); }
+.where i { color: var(--rule-strong); font-style: normal; }
+.where span.on { border-color: var(--accent); background: var(--accent); color: var(--on-accent); font-weight: 600; }
+
+/* ---------- figures ---------- */
+.fig { margin: 26px 0 30px; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px; }
+.fig.flat { background: transparent; border: 0; padding: 0; }
+.fig figcaption { margin-top: 12px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; max-width: 700px; }
+.fig figcaption strong { color: var(--ink); }
+.fig .controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-bottom: 14px; }
+.fig .controls .lbl { font-size: 13.5px; color: var(--ink-3); }
+.fig details.more { margin: 14px 0 0; }
+.fig details.more > summary { font-size: 14.5px; padding: 8px 12px; }
+.svgbox { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+.svgbox svg { display: block; width: 100%; height: auto; }
+.svgbox.wide svg { min-width: 680px; }   /* keeps diagram text legible on phones */
+.scrollhint { display: none; font-size: 12.5px; color: var(--ink-3); margin: 6px 0 0; }
+@media (max-width: 760px) { .svgbox.wide + .scrollhint { display: block; } }
+svg text { font-family: var(--font-body); }
+svg .mono { font-family: var(--font-mono); }
+.t-ink { fill: var(--ink); } .t-ink2 { fill: var(--ink-2); } .t-ink3 { fill: var(--ink-3); }
+.t-acc { fill: var(--accent); } .t-hot { fill: var(--hot-ink); } .t-good { fill: var(--good); }
+.s-rule { stroke: var(--rule-strong); } .s-ink { stroke: var(--ink); } .s-ink3 { stroke: var(--ink-3); } .s-acc { stroke: var(--accent); }
+.f-surface { fill: var(--surface); } .f-surface2 { fill: var(--surface-2); } .f-acc-soft { fill: var(--accent-soft); }
+.f-hot { fill: var(--hot); } .f-hot-soft { fill: var(--hot-soft); } .f-cool { fill: var(--cool); } .f-cool-soft { fill: var(--cool-soft); }
+.f-good-soft { fill: var(--good-soft); } .f-acc { fill: var(--accent); } .f-ink { fill: var(--ink); } .f-none { fill: none; }
+
+/* ---------- callouts ---------- */
+.callout { margin: 22px 0; padding: 14px 16px 12px; border-radius: var(--radius); background: var(--surface-2); max-width: 700px; }
+.callout > .tag { display: inline-block; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 6px; color: var(--ink-2); }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout.key { background: var(--accent-soft); } .callout.key > .tag { color: var(--accent); }
+.callout.watch { background: var(--warn-soft); } .callout.watch > .tag { color: var(--warn-ink); }
+.callout.fact { background: var(--surface); border: 1px solid var(--rule); }
+.callout.fact > .tag { color: var(--good); } .callout.fact > .tag::before { content: "\2713\00a0"; }
+.callout.alt { direction: rtl; text-align: right; font-family: var(--font-alt); font-size: 17px; line-height: 1.85; background: var(--surface); border: 1px dashed var(--rule-strong); }
+.callout.alt > .tag { font-family: var(--font-alt); letter-spacing: 0; text-transform: none; font-size: 13px; color: var(--ink-3); }
+.callout.alt code, .callout.alt .ltr { direction: ltr; unicode-bidi: isolate; font-family: var(--font-mono); font-size: 0.85em; }
+
+/* ---------- code ---------- */
+.code { margin: 18px 0 22px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--code-bg); overflow: hidden; }
+.code-head { display: flex; align-items: center; gap: 10px; padding: 7px 8px 7px 12px; border-bottom: 1px solid var(--rule); font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3); background: var(--surface); }
+.code-head .ttl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.code-head .copy { margin-left: auto; }
+.code pre { margin: 0; padding: 12px 14px 14px; overflow-x: auto; font: 400 13.6px/1.62 var(--font-mono); color: var(--code-ink); tab-size: 4; }
+.code pre .ln { display: inline-block; width: 2.2em; margin-left: -0.4em; color: var(--ink-3); opacity: 0.55; user-select: none; text-align: right; padding-right: 1em; }
+.tk-k { color: var(--tok-key); } .tk-s { color: var(--tok-str); } .tk-n { color: var(--tok-num); } .tk-c { color: var(--tok-com); font-style: italic; } .tk-f { color: var(--tok-fn); }
+.hl-line, .chg-line, .add-line, .del-line { display: inline-block; width: calc(100% + 28px); margin-left: -14px; padding-left: 14px; }
+.hl-line { background: var(--hot-soft); } .chg-line { background: var(--accent-soft); }
+.add-line { background: var(--good-soft); } .del-line { background: var(--hot-soft); }
+.dg { display: inline-block; width: 1.4em; margin-left: -0.3em; color: var(--ink-3); user-select: none; }
+.add-line .dg { color: var(--good); font-weight: 600; } .del-line .dg { color: var(--hot-ink); font-weight: 600; }
+.copy-status { font-family: var(--font-body); font-size: 12.5px; color: var(--good); }
+/* numbered notes that explain a code block or figure line by line */
+.notes { display: grid; gap: 10px; margin: 0 0 22px; padding: 0; list-style: none; max-width: 700px; }
+.notes li { display: grid; grid-template-columns: auto 1fr; gap: 10px; margin: 0; font-size: 15.5px; line-height: 1.55; }
+.notes li code { white-space: normal; }
+.notes .n { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 50%; width: 22px; height: 22px; display: grid; place-items: center; margin-top: 1px; }
+.expect { font-family: var(--font-mono); font-size: 13.5px; background: var(--surface); border: 1px dashed var(--rule-strong); border-radius: var(--radius-sm); padding: 10px 12px; margin: -8px 0 22px; color: var(--ink-2); white-space: pre-wrap; max-width: 700px; }
+.expect b { font-family: var(--font-body); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: 4px; }
+
+/* ---------- tables ---------- */
+.tablewrap { overflow-x: auto; margin: 18px 0 24px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 650; font-size: 13px; color: var(--ink-2); background: var(--surface-2); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- self-check ---------- */
+.quiz { margin: 26px 0; padding: 16px 18px; border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--surface); max-width: 700px; }
+.quiz .q-tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+.quiz .q { font-weight: 600; margin: 0 0 12px; }
+.quiz .opts { display: grid; gap: 8px; }
+.quiz .opts button { appearance: none; text-align: left; font: 400 15.5px/1.45 var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 9px 12px; cursor: pointer; display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+.quiz .opts button:hover { border-color: var(--accent); }
+.quiz .opts button .mk { font-family: var(--font-mono); font-size: 13px; color: var(--ink-3); padding-top: 1px; }
+.quiz .opts button.right { border-color: var(--good); background: var(--good-soft); }
+.quiz .opts button.wrong { border-color: var(--hot); background: var(--hot-soft); }
+.quiz .fb { margin: 12px 0 0; font-size: 15.5px; line-height: 1.55; }
+.quiz .fb:empty { display: none; }
+.quiz .fb .verdict { font-weight: 700; }
+.quiz .fb.ok .verdict { color: var(--good); } .quiz .fb.no .verdict { color: var(--hot-ink); }
+
+/* ---------- disclosure, panels, boards, lists ---------- */
+details.more { margin: 22px 0; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+details.more > summary { cursor: pointer; padding: 12px 16px; font-weight: 650; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::before { content: "+"; font-family: var(--font-mono); font-weight: 600; color: var(--accent); width: 14px; }
+details.more[open] > summary::before { content: "\2212"; }
+details.more > summary .muted { font-weight: 400; font-size: 14px; }
+details.more > .inner { padding: 0 16px 16px; }
+.grid2 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid3 { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; }
+.panel h4 { margin: 0 0 6px; font-size: 15.5px; }
+.panel p:not(.label-cap) { font-size: 15px; color: var(--ink-2); margin: 0 0 8px; line-height: 1.5; }
+.panel p:last-child { margin-bottom: 0; }
+.label-cap { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; }
+.dot.hot { background: var(--hot); } .dot.cool { background: var(--cool); }
+.dot.ring { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 3px var(--mark); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--ink-2); margin: 10px 0 0; }
+.legend > span { display: inline-block; }
+.badge { display: inline-block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 3px; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--rule); }
+.badge.hot { background: var(--hot-soft); color: var(--hot-ink); border-color: transparent; }
+.badge.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+/* decided vs open board: say the state of the world once, instead of hedging every sentence */
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 18px 0 24px; }
+.board .dcard { border: 1px solid var(--rule); border-radius: var(--radius); padding: 12px 14px; background: var(--surface); }
+.board .dcard .st { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.board .dcard.done .st { color: var(--good); } .board .dcard.open .st { color: var(--warn-ink); }
+.board .dcard.open { border-style: dashed; border-color: var(--rule-strong); }
+.board .dcard.done { grid-column: 1 / -1; }
+.board .dcard h4 { margin: 4px 0 6px; font-size: 16px; }
+.board .dcard p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+.checklist { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 8px; max-width: 760px; }
+.checklist li { margin: 0; }
+.checklist label { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); cursor: pointer; }
+.checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); }
+.checklist .t { font-weight: 650; display: block; }
+.checklist .d { font-size: 14.5px; color: var(--ink-2); display: block; margin-top: 2px; line-height: 1.5; }
+.checklist input:checked + span .t { text-decoration: line-through; text-decoration-color: var(--ink-3); color: var(--ink-3); }
+.tree { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.7; background: var(--code-bg); border: 1px solid var(--rule); border-radius: var(--radius); padding: 12px 16px; overflow-x: auto; white-space: pre; margin: 16px 0 24px; }
+.tree .c { color: var(--ink-3); }
+/* stat cards: one card per quantity, tap to explain (see wireUp in the script) */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; margin-top: 16px; }
+.scard { appearance: none; text-align: left; font: inherit; color: inherit; cursor: pointer; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 11px 12px 12px; display: grid; gap: 3px; align-content: start; }
+.scard:hover, .scard[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.scard .s-name { font-weight: 700; font-size: 15px; }
+.scard .s-val { font-family: var(--font-mono); font-weight: 600; font-size: 21px; }
+.scard .s-q { font-size: 13.5px; color: var(--ink-2); line-height: 1.4; }
+.scard .s-f { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3); overflow-wrap: anywhere; }
+.readout { font-size: 15px; margin: 12px 0 0; min-height: 3em; }
+
+footer.sources { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-2); }
+footer.sources h2 { font-size: 20px; margin-bottom: 10px; }
+footer.sources li { margin: 0.35em 0; }
+footer.sources code { white-space: normal; overflow-wrap: anywhere; }
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: var(--radius); font-size: 14.5px; box-shadow: var(--shadow); z-index: 50; max-width: calc(100vw - 32px); }
+@media print { .topbar, .rail, .chipnav, .btn, .seg { display: none !important; } .shell { display: block; } details.more > .inner { display: block; } .chapter { break-before: page; } }
+
+/* ---------- additions for this guide ---------- */
+/* preprocessor directives: #include must not render as a comment */
+.tk-p { color: var(--tok-pre); font-weight: 600; }
+
+/* a console, because half of this guide is about what lands on one */
+.console { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.6; background: #14181d; color: #e6ebf1;
+  border: 1px solid var(--rule-strong); border-radius: var(--radius); padding: 0; margin: 18px 0 22px; overflow: hidden; max-width: 700px; }
+.console .bar { display: flex; align-items: center; gap: 7px; padding: 7px 11px; background: #1e242c; border-bottom: 1px solid #2c333d; }
+.console .bar i { width: 10px; height: 10px; border-radius: 50%; background: #3d4651; display: block; }
+.console .bar span { font-size: 11.5px; letter-spacing: 0.05em; color: #8d98a6; margin-left: 4px; text-transform: uppercase; }
+.console pre { margin: 0; padding: 12px 14px; white-space: pre; overflow-x: auto; font: inherit; color: inherit; }
+.console pre b { color: #8de0a6; font-weight: 400; }          /* the value the chapter is about */
+.console pre i { color: #f0a271; font-style: normal; }        /* the wrong value */
+
+/* a space you can see: used where the spaces inside a string literal are the lesson */
+.ws { display: inline-block; width: 1ch; text-align: center; color: var(--ink-3); opacity: 0.5; }
+.ws::before { content: "\00b7"; }
+.starline { font-family: var(--font-mono); font-size: 14px; line-height: 1.5; white-space: pre; }
+.starline b { color: var(--hot-ink); font-weight: 600; }
+
+/* side-by-side result cards, used by the conversion and text widgets */
+.pg { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin: 14px 0 0; }
+.pg .pgcard { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 12px 14px; }
+.pg .pgcard.hot { border-color: var(--hot); box-shadow: inset 3px 0 0 var(--hot); }
+.pg .pgcard.good { border-color: var(--good); box-shadow: inset 3px 0 0 var(--good); }
+.pg .pgcard .k { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.pg .pgcard .v { font-family: var(--font-mono); font-size: 23px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }
+.pg .pgcard .n { font-size: 13.5px; color: var(--ink-2); margin: 6px 0 0; line-height: 1.45; }
+.verdictline { margin: 12px 0 0; font-size: 15px; line-height: 1.55; }
+.verdictline .tagv { font-weight: 700; }
+.verdictline.agree .tagv { color: var(--good); }
+.verdictline.differ .tagv { color: var(--hot-ink); }
+
+/* small row of buttons under a widget */
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 0; }
+.tty { font-family: var(--font-mono); font-size: 14px; background: var(--surface-2); border: 1px solid var(--rule);
+  border-radius: var(--radius-sm); padding: 9px 12px; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 2.6em; margin: 12px 0 0; }
+.kbd { font-family: var(--font-mono); font-size: 12.5px; border: 1px solid var(--rule-strong); border-bottom-width: 2px;
+  border-radius: 4px; padding: 1px 6px; background: var(--surface); white-space: nowrap; }
+.q-table td.mono, .q-table th.mono { font-family: var(--font-mono); font-size: 13.5px; }
+.callout.alt p { margin-bottom: 0.5em; }
+.callout.alt p:last-child { margin-bottom: 0; }
+/* a card label that is code keeps its case: Python is case-sensitive */
+.pg .pgcard .k.code { text-transform: none; letter-spacing: 0; font-size: 12.5px; }
+/* the smallest phones: the title and the Worksheet button must share 320px */
+@media (max-width: 360px) { .wm-extra { display: none; } .topbar .btn { flex: none; } }
+
+/* ---------- DSA lab 1 additions ---------- */
+/* a program run one line at a time, from frames Python recorded */
+.gtrace { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 14px; margin: 14px 0 0; }
+.gt-top { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; }
+.gt-name { font: 700 15px/1 var(--font-mono); color: var(--accent); padding-bottom: 12px; margin-right: 2px; }
+.gt-cell { display: grid; justify-items: center; gap: 3px; }
+.gt-cell .ix { font: 600 12px/1 var(--font-mono); color: var(--ink-3); }
+.gt-box { min-width: 62px; padding: 9px 8px; text-align: center; font: 600 17px/1 var(--font-mono); background: var(--surface);
+  border: 2px solid var(--rule-strong); border-radius: 6px; }
+.gt-cell.active .gt-box { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 3px var(--accent-soft); }
+.gt-cell.active .ix { color: var(--accent); }
+.gt-cell.done .gt-box { opacity: .5; border-style: dashed; }
+.gt-cell.found .gt-box { border-color: var(--good); background: var(--good-soft); }
+.gt-target { margin-left: auto; text-align: right; font: 600 11.5px/1.2 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.gt-target b { display: block; font-size: 18px; color: var(--hot-ink); letter-spacing: 0; margin-top: 3px; }
+.gt-mid { display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 10px; margin: 12px 0 0; align-items: start; }
+@media (max-width: 640px) { .gt-mid { grid-template-columns: 1fr; } }
+.gt-code { margin: 0; background: var(--code-bg); color: var(--code-ink); border: 1px solid var(--rule); border-radius: var(--radius-sm);
+  padding: 6px 0; font: 400 14px/1.6 var(--font-mono); white-space: pre; overflow-x: auto; }
+.gt-code .ln { display: block; padding: 0 12px 0 26px; position: relative; border-left: 4px solid transparent; }
+.gt-code .ln.on { background: var(--accent-soft); border-left-color: var(--accent); }
+.gt-code .ln.on::before { content: "\25B6"; position: absolute; left: 8px; color: var(--accent); font-size: 10px; top: 4px; }
+.gt-state { display: grid; gap: 6px; }
+.gt-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; border: 1px solid var(--rule); border-radius: var(--radius-sm); padding: 5px 10px; background: var(--surface-2); }
+.gt-row .k { font: 500 12.5px/1.2 var(--font-mono); color: var(--ink-2); }
+.gt-row .v { font: 700 17px/1.2 var(--font-mono); white-space: pre; text-align: right; }
+.gt-row.out { display: grid; }
+.gt-row.out .v { text-align: left; font-size: 14px; min-height: 1.2em; }
+.gt-note { font-size: 12px; color: var(--ink-3); margin: 0; }
+.gt-cap { margin: 12px 0 0; font-size: 15px; line-height: 1.55; background: var(--surface-2); border-left: 4px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 8px 12px; min-height: 3.2em; }
+.gt-cap.ret { border-left-color: var(--good); }
+.gt-count { font: 500 12.5px/1 var(--font-mono); color: var(--ink-3); }
+/* two big counts side by side, with a bar each on a log scale */
+.duel { display: grid; gap: 10px; margin: 14px 0 0; }
+.duel .row { display: grid; grid-template-columns: 150px minmax(0, 1fr) 120px; gap: 10px; align-items: center; }
+@media (max-width: 560px) { .duel .row { grid-template-columns: 1fr auto; } .duel .bar { grid-column: 1 / -1; grid-row: 2; } }
+.duel .name { font-weight: 600; font-size: 14.5px; line-height: 1.3; }
+.duel .name small { display: block; font-weight: 400; color: var(--ink-3); font-size: 12.5px; }
+.duel .bar { height: 16px; background: var(--surface-2); border-radius: 99px; overflow: hidden; border: 1px solid var(--rule); }
+.duel .bar i { display: block; height: 100%; border-radius: 99px; }
+.duel .bar.hot i { background: var(--hot); } .duel .bar.good i { background: var(--good); }
+.duel .num { font: 700 20px/1 var(--font-mono); text-align: right; }
+.duel .num.hot { color: var(--hot-ink); } .duel .num.good { color: var(--good); }
+.duel-scale { font-size: 12.5px; color: var(--ink-3); margin: 6px 0 0; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+.qcards { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); margin: 14px 0; }
+.qcards div { border: 1px solid var(--rule); border-top: 3px solid var(--accent); border-radius: var(--radius-sm); background: var(--surface); padding: 10px 12px; }
+.qcards b { display: block; font-family: var(--font-display); font-size: 16px; margin-bottom: 4px; }
+.qcards span { font-size: 13.5px; color: var(--ink-2); line-height: 1.45; display: block; }
+.planbox { display: grid; grid-template-columns: 72px 1fr; gap: 6px 12px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 12px 14px; margin: 14px 0; font-size: 15px; line-height: 1.5; }
+.planbox b { font-family: var(--font-mono); color: var(--accent); font-size: 13.5px; padding-top: 2px; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="wordmark" href="#top"><span><span class="wm-extra">Why </span>Data Structures</span> <small>DSA · lab 1</small></a>
+    <span class="spacer"></span>
+    <button class="btn small primary companion-save" type="button">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v8.2M4.6 6.6 8 10l3.4-3.4M2.5 11.5v2h11v-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Worksheet
+    </button>
+  </div>
+  <nav class="chipnav" aria-label="Chapters">
+    <a href="#top" data-for="top">Map</a>
+    <a href="#ch1" data-for="ch1">1 Why</a>
+    <a href="#ch2" data-for="ch2">2 AI and growth</a>
+    <a href="#ch3" data-for="ch3">3 PyCharm</a>
+    <a href="#ch4" data-for="ch4">4 Lists</a>
+    <a href="#ch5" data-for="ch5">5 Loops</a>
+    <a href="#ch6" data-for="ch6">6 Functions</a>
+    <a href="#ch7" data-for="ch7">7 Search</a>
+    <a href="#ch8" data-for="ch8">8 The sheet</a>
+  </nav>
+</header>
+
+<div class="shell">
+  <aside class="rail" aria-label="Chapters">
+    <nav>
+      <ol>
+        <li><a href="#top" data-for="top"><span><span class="k">START</span>The map</span></a></li>
+        <li><a href="#ch1" data-for="ch1"><span><span class="k">CH 1</span>Same records, different work</span></a></li>
+        <li><a href="#ch2" data-for="ch2"><span><span class="k">CH 2</span>AI agents, and how work grows</span></a></li>
+        <li><a href="#ch3" data-for="ch3"><span><span class="k">CH 3</span>PyCharm and your folder</span></a></li>
+        <li><a href="#ch4" data-for="ch4"><span><span class="k">CH 4</span>Lists and indexes</span></a></li>
+        <li><a href="#ch5" data-for="ch5"><span><span class="k">CH 5</span>Loops and counting</span></a></li>
+        <li><a href="#ch6" data-for="ch6"><span><span class="k">CH 6</span>Functions and return</span></a></li>
+        <li><a href="#ch7" data-for="ch7"><span><span class="k">CH 7</span>Linear search</span></a></li>
+        <li><a href="#ch8" data-for="ch8"><span><span class="k">CH 8</span>Starting sheet 1</span></a></li>
+      </ol>
+      <div class="rail-foot">
+        <p>The worksheet is one <code>.py</code> file with every step in it, ready to run in PyCharm.</p>
+        <button class="btn small companion-save" type="button">Save worksheet</button>
+        <p>Every output on this page came from running the code with Python 3.14, the version on the lab PCs.</p>
+      </div>
+    </nav>
+  </aside>
+
+<main id="top">
+  <section class="hero" data-chapter="top">
+    <p class="eyebrow">Data Structures and Algorithms · lab 1 · read it after the lab</p>
+    <h1>Same records. Different arrangement. Different amount of work.</h1>
+    <p class="lede">A results website holds one record per seat number, and you type <span class="specimen">4127</span>. If the records sit in no order, the only safe way to answer is to look at them one by one. If they are sorted, you can open the middle, throw away the half that cannot hold 4127, and repeat. That single difference - how the data is arranged - is what this whole course is about. This guide follows seat number 4127 from the idea to a Python function you write and test yourself.</p>
+
+    <figure class="fig" aria-labelledby="hero-cap">
+      <div class="field-row">
+        <label for="hero-n">How many records? <output id="hero-n-out"></output></label>
+        <input type="range" id="hero-n" min="0" max="100" step="1" value="50">
+      </div>
+      <div class="chips" style="margin-top:10px" id="hero-presets">
+        <button type="button" class="chip" data-n="6">6</button>
+        <button type="button" class="chip" data-n="1000">1,000</button>
+        <button type="button" class="chip" data-n="100000">100,000</button>
+        <button type="button" class="chip" data-n="1000000">1,000,000</button>
+        <button type="button" class="chip" data-n="10000000">10,000,000</button>
+      </div>
+      <div class="duel" id="hero-duel"></div>
+      <p class="duel-scale">Bars on a log scale: each step to the right is ten times more.</p>
+      <p class="verdictline" id="hero-verdict" aria-live="polite"></p>
+      <figcaption id="hero-cap"><strong>Records inspected in the worst case, computed by this page as you move the slider</strong> with the same counting that was checked against Python on over 4,000 cases. Unsorted means a left-to-right scan; sorted means check the middle and drop half.</figcaption>
+    </figure>
+
+    <div class="startrow">
+      <div><h4>Read it in order once</h4><p>Chapters 1-2 are why the course exists. 3 is PyCharm. 4-6 are the only Python you need this week. 7 puts them together into your first algorithm, and 8 is how to start the sheet.</p></div>
+      <div><h4>The worksheet</h4><p>One <code>.py</code> file with every step and the exercises left for you. Save it into your <code>sheet01</code> folder and run it.</p><p><button class="btn small primary companion-save" type="button">Save worksheet</button></p></div>
+      <div><h4>What you need</h4><p>PyCharm with Python 3.14 (on the lab PCs, free at home), about 90 minutes, and no memory of C++ at all - this starts from zero.</p></div>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 1 ============================ -->
+  <section class="chapter" id="ch1" data-chapter="ch1">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 1</p>
+      <h2>Same records, different work</h2>
+      <p class="ch-goal">After this chapter you can say what a data structure and an algorithm are, and explain why sorting made it safe to ignore half of the records.</p>
+      <div class="where" data-stage="why"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">1.1</span>Looking for 4127 in an unsorted pile</h3>
+      <p>Six exam records, one per seat number, in no particular order. You have turned over three of them: 2268, 6420 and 3051. None is 4127.</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c1a-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 170" role="img" aria-label="Six unsorted records. Three are face up, already inspected: 2268, 6420 and 3051. Three are still face down. You are seeking 4127."><text x="500" y="30" text-anchor="middle" xml:space="preserve" style="font-size: 24px; font-weight: 700; fill: var(--ink)">Seeking 4127  ·  six records, unsorted</text><rect x="40" y="52" width="136" height="110" rx="10" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 3"/><text x="108.0" y="118.0" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 30px; font-weight: 700; fill: var(--ink)">2268</text><rect x="197" y="52" width="136" height="110" rx="10" style="fill: var(--surface-3); stroke: var(--rule-strong); stroke-width: 2"/><text x="265.0" y="119.0" text-anchor="middle" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--ink-3)">?</text><rect x="354" y="52" width="136" height="110" rx="10" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 3"/><text x="422.0" y="118.0" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 30px; font-weight: 700; fill: var(--ink)">6420</text><rect x="511" y="52" width="136" height="110" rx="10" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 3"/><text x="579.0" y="118.0" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 30px; font-weight: 700; fill: var(--ink)">3051</text><rect x="668" y="52" width="136" height="110" rx="10" style="fill: var(--surface-3); stroke: var(--rule-strong); stroke-width: 2"/><text x="736.0" y="119.0" text-anchor="middle" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--ink-3)">?</text><rect x="825" y="52" width="136" height="110" rx="10" style="fill: var(--surface-3); stroke: var(--rule-strong); stroke-width: 2"/><text x="893.0" y="119.0" text-anchor="middle" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--ink-3)">?</text></svg></div>
+      <figcaption id="c1a-cap"><strong>What you have seen says nothing about what you have not.</strong> In an unsorted pile, 4127 may be under any of the three face-down records - or missing altogether.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>So what can you conclude? Only that 4127 <em>may</em> be one of the other three. To be <strong>sure</strong> it is not there, you have to look at all six. That is the worst case for an unsorted pile: <strong>every record</strong>. With a million records, a million looks.</p>
+      <h3><span class="step">1.2</span>Sorted: one look rules out half</h3>
+      <p>Now the same six records are sorted from smallest to largest, and you look at the fourth. It is 5310.</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c1b-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 252" role="img" aria-label="The same six records, sorted from smallest to largest, all face down except the fourth, which you inspect: it is 5310. You are seeking 4127."><defs><marker id="ahS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker></defs><text x="500" y="30" text-anchor="middle" xml:space="preserve" style="font-size: 24px; font-weight: 700; fill: var(--ink)">Seeking 4127  ·  the same six records, sorted</text><rect x="40" y="52" width="136" height="110" rx="10" style="fill: var(--surface-3); stroke: var(--rule-strong); stroke-width: 2"/><text x="108.0" y="119.0" text-anchor="middle" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--ink-3)">?</text><rect x="197" y="52" width="136" height="110" rx="10" style="fill: var(--surface-3); stroke: var(--rule-strong); stroke-width: 2"/><text x="265.0" y="119.0" text-anchor="middle" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--ink-3)">?</text><rect x="354" y="52" width="136" height="110" rx="10" style="fill: var(--surface-3); stroke: var(--rule-strong); stroke-width: 2"/><text x="422.0" y="119.0" text-anchor="middle" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--ink-3)">?</text><rect x="511" y="52" width="136" height="110" rx="10" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 3"/><text x="579.0" y="118.0" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 30px; font-weight: 700; fill: var(--ink)">5310</text><rect x="668" y="52" width="136" height="110" rx="10" style="fill: var(--surface-3); stroke: var(--rule-strong); stroke-width: 2"/><text x="736.0" y="119.0" text-anchor="middle" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--ink-3)">?</text><rect x="825" y="52" width="136" height="110" rx="10" style="fill: var(--surface-3); stroke: var(--rule-strong); stroke-width: 2"/><text x="893.0" y="119.0" text-anchor="middle" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--ink-3)">?</text><text x="579" y="194" text-anchor="middle" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--accent)">you inspect this one</text><line x1="40" y1="214" x2="961" y2="214" style="stroke: var(--ink-3); stroke-width: 2.5" marker-end="url(#ahS)"/><text x="40" y="244" text-anchor="start" xml:space="preserve" style="font-size: 21px; font-weight: 600; fill: var(--ink-3)">smallest</text><text x="961" y="244" text-anchor="end" xml:space="preserve" style="font-size: 21px; font-weight: 600; fill: var(--ink-3)">largest</text></svg></div>
+      <figcaption id="c1b-cap"><strong>The order is what makes it safe to ignore records.</strong> 4127 is smaller than 5310, and everything to the right of 5310 is larger still, so if 4127 is here at all it is somewhere to the left.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>Read that carefully: <em>if</em> 4127 is here, it is to the left. The order tells you <strong>where it would be</strong>, not <strong>whether it exists</strong>. One look ruled out the fourth record and everything after it. Do it again on what is left - look at the middle, drop the half that cannot hold it - and the pile shrinks by half every time.</p>
+      <h3><span class="step">1.3</span>Counting the looks</h3>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c1c-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 320" role="img" aria-label="Records inspected in the worst case. Unsorted, checking one by one: 6, 1,000 and 1,000,000 for 6, 1,000 and 1,000,000 records. Sorted, checking the middle and dropping half: 3, 10 and 20. A prepared index, like a textbook&#x27;s, comes later in the course."><text x="30" y="40" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--ink-2)">Records inspected, worst case</text><text x="370" y="40" text-anchor="middle" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--ink-2)">6 records</text><text x="590" y="40" text-anchor="middle" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--ink-2)">1,000 records</text><text x="810" y="40" text-anchor="middle" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--ink-2)">1,000,000 records</text><rect x="20" y="62" width="960" height="78" rx="10" style="fill: var(--surface); stroke: var(--rule); stroke-width: 1.5"/><text x="40" y="96" text-anchor="start" xml:space="preserve" style="font-size: 23px; font-weight: 700; fill: var(--ink)">Unsorted</text><text x="40" y="122" text-anchor="start" xml:space="preserve" style="font-size: 17px; font-weight: 400; fill: var(--ink-2)">check one by one</text><text x="370" y="112" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--hot-ink)">6</text><text x="590" y="112" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--hot-ink)">1,000</text><text x="810" y="112" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--hot-ink)">1,000,000</text><rect x="20" y="154" width="960" height="78" rx="10" style="fill: var(--surface); stroke: var(--rule); stroke-width: 1.5"/><text x="40" y="188" text-anchor="start" xml:space="preserve" style="font-size: 23px; font-weight: 700; fill: var(--ink)">Sorted</text><text x="40" y="214" text-anchor="start" xml:space="preserve" style="font-size: 17px; font-weight: 400; fill: var(--ink-2)">check the middle, drop half</text><text x="370" y="204" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--good)">3</text><text x="590" y="204" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--good)">10</text><text x="810" y="204" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 34px; font-weight: 700; fill: var(--good)">20</text><rect x="20" y="246" width="960" height="70" rx="10" style="fill: var(--surface-2); stroke: var(--rule); stroke-width: 1.5" stroke-dasharray="6 5"/><text x="40" y="276" text-anchor="start" xml:space="preserve" style="font-size: 23px; font-weight: 700; fill: var(--ink-2)">Prepared index</text><text x="40" y="301" text-anchor="start" xml:space="preserve" style="font-size: 17px; font-weight: 400; fill: var(--ink-3)">like the index at the back of a textbook</text><text x="590" y="290" text-anchor="middle" xml:space="preserve" style="font-size: 22px; font-weight: 600; fill: var(--ink-3)">later in the course</text></svg></div>
+      <figcaption id="c1c-cap"><strong>A million records: a million looks, or twenty.</strong> Worst cases, counted in Python by running both searches on every present and absent target. The slider at the top of this page draws the same comparison for any size.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>Two things this table does <em>not</em> say. First, sorting is work too: somebody has to arrange a million records before anyone can halve them. That work pays off because the same sorted list is searched by <strong>many</strong> people - every student looking themselves up. For one question, asked once, just scanning is cheaper than sorting first. Second, the third row - a prepared index, like the one at the back of a textbook - is a different idea again, and it comes later in the course.</p>
+      <h3><span class="step">1.4</span>What this course is</h3>
+      <p>A <strong>data structure</strong> stores and organises data. An <strong>algorithm</strong> is the exact steps for a task. We choose them together, to get correct results within our limits of time and memory. Almost every topic this term answers one of five questions:</p>
+    </div>
+
+    <div class="qcards">
+      <div><b>Where is it?</b><span>searching · hashing</span></div>
+      <div><b>In what order?</b><span>sorting</span></div>
+      <div><b>Which comes next?</b><span>stacks · queues · priority queues</span></div>
+      <div><b>How is it connected?</b><span>trees · graphs</span></div>
+      <div><b>How much work?</b><span>counting steps · growth</span></div>
+    </div>
+
+    <div class="prose">
+      <p>The lectures decide the order you meet them in. And these are engineering questions, not puzzles:</p>
+      <ul>
+        <li><strong>Sensor window.</strong> The average of the last 60 readings, every second. Do you add all 60 again each time, or add the new reading and drop the oldest?</li>
+        <li><strong>Packet buffer.</strong> Packets arrive faster than a link can send them. Which one leaves next, and what happens when the buffer is full?</li>
+        <li><strong>Event scheduler.</strong> A simulator holds thousands of future events. Which one happens next?</li>
+        <li><strong>Route finding.</strong> The fastest path across a road map or a network: which point connects to which?</li>
+      </ul>
+      <p>Each is a question plus the operations it needs. That pair is what picks the data structure.</p>
+    </div>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p>The same data, arranged differently, costs a different amount of work to use. You choose the arrangement for the questions you will ask of it, and how often.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>نفس البيانات، ترتيب مختلف، شغل مختلف تمامًا. الترتيب هو اللي خلاني أقدر أرمي نص الكروت من غير ما أبص عليهم.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>"Sorted is always better."</strong> Only once the sorting is paid for by many searches. One lookup, then throw the list away: just scan.</li>
+        <li><strong>"It is not in the three I checked, so it is not there."</strong> In an unsorted pile you may only say <em>not found</em> after checking every record. Chapter 7 turns this sentence into a line of Python.</li>
+        <li><strong>Halving on an unsorted pile.</strong> Looking at the middle of an unsorted pile tells you nothing about either half. The trick needs the order.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">Sorted records, smallest to largest. You seek 4127 and inspect a record that holds 5310. What follows?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="The direction is right, but 'definitely' is not: the order says where 4127 would be, not whether it is there.">4127 is definitely to the left</button>
+        <button type="button" data-ok="1" data-fb="Right. Everything to the right of 5310 is larger than 5310, so it cannot be 4127. If 4127 is here, it is to the left.">If 4127 is here, it is to the left</button>
+        <button type="button" data-ok="0" data-fb="Reversed. In a list sorted smallest to largest, smaller numbers sit on the left.">If 4127 is here, it is to the right</button>
+        <button type="button" data-ok="0" data-fb="One record that differs says nothing about the others - but the order tells you which part you may ignore.">4127 is not here</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 2 ============================ -->
+  <section class="chapter" id="ch2" data-chapter="ch2">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 2</p>
+      <h2>AI agents, and how work grows</h2>
+      <p class="ch-goal">After this chapter you can explain why a program that passes a small test may still be unfit for the real data, and choose a test that would show it.</p>
+      <div class="where" data-stage="why"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">2.1</span>What an agent does, and what it leaves to you</h3>
+      <p>Today you can describe a task in plain words and an AI agent writes the program, runs it, and fixes its own errors. That is real, and you will use it. But the requirements have to be stated - the real size of the data, how fast the answer must come, how much memory there is - and the evidence that they are met has to be checked. An agent can help with both; you are the one who has to know what to ask for and what a convincing test looks like.</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c2a-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 210" role="img" aria-label="Working with an AI code agent: you describe the task, the agent writes the code, it passes a small test with 10 IDs, then the real data has 100,000 IDs. Whether it is fast enough and still right is your job. A passing small test does not show it meets the real requirement."><defs><marker id="ahA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker></defs><rect x="10" y="40" width="220" height="100" rx="12" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 2"/><text x="120" y="82" text-anchor="middle" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink)">You describe</text><text x="120" y="112" text-anchor="middle" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-2)">the task in words</text><line x1="234" y1="90" x2="266" y2="90" style="stroke: var(--ink-3); stroke-width: 2.5" marker-end="url(#ahA)"/><rect x="260" y="40" width="220" height="100" rx="12" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 2"/><text x="370" y="82" text-anchor="middle" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink)">The agent writes</text><text x="370" y="112" text-anchor="middle" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-2)">the code</text><line x1="484" y1="90" x2="516" y2="90" style="stroke: var(--ink-3); stroke-width: 2.5" marker-end="url(#ahA)"/><rect x="510" y="40" width="220" height="100" rx="12" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 2"/><text x="620" y="82" text-anchor="middle" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink)">It passes</text><text x="620" y="112" text-anchor="middle" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-2)">a small test: 10 IDs</text><line x1="734" y1="90" x2="766" y2="90" style="stroke: var(--ink-3); stroke-width: 2.5" marker-end="url(#ahA)"/><rect x="760" y="40" width="220" height="100" rx="12" style="fill: var(--hot-soft); stroke: var(--hot); stroke-width: 2.5"/><text x="870" y="82" text-anchor="middle" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--hot-ink)">Real data</text><text x="870" y="112" text-anchor="middle" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-2)">100,000 IDs</text><text x="885" y="172" text-anchor="middle" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--hot-ink)">Fast enough? Still right?</text><text x="885" y="198" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 400; fill: var(--ink-2)">this part is your job</text><text x="385" y="185" text-anchor="middle" xml:space="preserve" style="font-size: 18px; font-weight: 500; fill: var(--ink-2)">A passing small test does not show it meets the real requirement.</text></svg></div>
+      <figcaption id="c2a-cap"><strong>A passing small test does not show the program meets the real requirement.</strong> The last box is the engineer's job, whoever wrote the code.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">2.2</span>A duplicate check that compares every pair</h3>
+      <p>Suppose the agent writes a check for duplicate student IDs that compares <strong>every pair of IDs once</strong> and stops as soon as it finds two the same. With 10 IDs there are 45 pairs; it passes in an instant. The question is what happens at the real size.</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c2b-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 250" role="img" aria-label="Four IDs, A to D, have 6 pairs to compare, drawn as arcs. The table: 10 IDs give 45 pairs, 100 IDs give 4,950 pairs, 1,000 IDs give 499,500 pairs, 10,000 IDs give 49,995,000 pairs, 100,000 IDs give 4,999,950,000 pairs. Each ten times more IDs gives about a hundred times more pairs."><path d="M 60 120 Q 105.0 30.39999999999999 150 120" style="fill: none; stroke: var(--accent); stroke-width: 2.5"/><path d="M 60 120 Q 150.0 -17.599999999999994 240 120" style="fill: none; stroke: var(--accent); stroke-width: 2.5"/><path d="M 60 120 Q 195.0 -65.60000000000002 330 120" style="fill: none; stroke: var(--accent); stroke-width: 2.5"/><path d="M 150 120 Q 195.0 30.39999999999999 240 120" style="fill: none; stroke: var(--accent); stroke-width: 2.5"/><path d="M 150 120 Q 240.0 -17.599999999999994 330 120" style="fill: none; stroke: var(--accent); stroke-width: 2.5"/><path d="M 240 120 Q 285.0 30.39999999999999 330 120" style="fill: none; stroke: var(--accent); stroke-width: 2.5"/><circle cx="60" cy="132" r="20" style="fill: var(--surface); stroke: var(--ink-2); stroke-width: 2.5"/><text x="60" y="139" text-anchor="middle" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--ink)">A</text><circle cx="150" cy="132" r="20" style="fill: var(--surface); stroke: var(--ink-2); stroke-width: 2.5"/><text x="150" y="139" text-anchor="middle" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--ink)">B</text><circle cx="240" cy="132" r="20" style="fill: var(--surface); stroke: var(--ink-2); stroke-width: 2.5"/><text x="240" y="139" text-anchor="middle" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--ink)">C</text><circle cx="330" cy="132" r="20" style="fill: var(--surface); stroke: var(--ink-2); stroke-width: 2.5"/><text x="330" y="139" text-anchor="middle" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--ink)">D</text><text x="195" y="190" text-anchor="middle" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">4 IDs  →  6 pairs to compare</text><text x="195" y="216" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 400; fill: var(--ink-2)">compare each pair once</text><text x="560" y="30" text-anchor="end" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--ink-3)">IDs</text><text x="900" y="30" text-anchor="end" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--ink-3)">pairs to compare</text><text x="560" y="64" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 600; fill: var(--ink)">10</text><text x="900" y="64" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--ink)">45</text><text x="560" y="102" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 600; fill: var(--ink)">100</text><text x="900" y="102" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--ink)">4,950</text><text x="930" y="86" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: var(--ink-3)">×110</text><text x="560" y="140" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 600; fill: var(--ink)">1,000</text><text x="900" y="140" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--ink)">499,500</text><text x="930" y="124" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: var(--ink-3)">×101</text><text x="560" y="178" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 600; fill: var(--ink)">10,000</text><text x="900" y="178" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--ink)">49,995,000</text><text x="930" y="162" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: var(--ink-3)">×100</text><text x="560" y="216" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 600; fill: var(--ink)">100,000</text><text x="900" y="216" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--hot-ink)">4,999,950,000</text><text x="930" y="200" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: var(--ink-3)">×100</text><line x1="440" y1="40" x2="440" y2="240" style="stroke: var(--rule); stroke-width: 1.5"/></svg></div>
+      <figcaption id="c2b-cap"><strong>Ten times the IDs, about a hundred times the pairs.</strong> The 10 to 10,000 rows were counted by a loop in Python; the 100,000 row uses the formula that the loop was checked against.</figcaption>
+    </figure>
+
+    <figure class="fig" aria-labelledby="c2c-cap">
+      <div class="field-row">
+        <label for="pr-n">How many different IDs? <output id="pr-n-out"></output></label>
+        <input type="range" id="pr-n" min="0" max="100" step="1" value="40">
+      </div>
+      <div class="pg" id="pr-cards"></div>
+      <p class="verdictline" id="pr-verdict" aria-live="polite"></p>
+      <figcaption id="c2c-cap"><strong>Pairs to compare when no two IDs match</strong> - the case where the check cannot stop early. Computed as you move the slider, with the count checked against a real loop in Python.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">2.3</span>Which test would have caught it?</h3>
+      <p>Running the 10-ID test again, or on a faster computer, proves the small case again. A large list where every ID is the <em>same</em> sounds harsh, but the first two IDs already match and the check stops after one comparison. The test that shows the slow case is a large list where every ID is <strong>different</strong>: no early stop, every pair compared. That is the worst case - and real data can hit it.</p>
+      <p>A different duplicate check exists that trades some memory for far fewer comparisons, and it is part of this course. The point for now is narrower: <strong>you can only judge what you can count.</strong></p>
+    </div>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p>Data structures and algorithms are how you describe a requirement, compare what an agent suggests, and test whether it holds at the real size of the data.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>الـ<span class="ltr">AI</span> بيكتب كود بسرعة، بس الكود اللي عدّى اختبار صغير ممكن يقع مع الداتا الحقيقية. مين هيعرف؟ اللي فاهم المادة دي.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>"It passed the test."</strong> Which test? A small one proves the small case.</li>
+        <li><strong>"Computers are fast."</strong> A faster computer can cut the time; it does not change how many comparisons this check makes, or how that number grows.</li>
+        <li><strong>"Correct means good enough."</strong> A correct program that needs billions of comparisons may still miss the deadline it was written for.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">The duplicate check compares every pair and stops at the first duplicate. Which test best shows whether it is too slow for 100,000 students?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="Repeating a small test proves the small case again. Slowness hides in size.">The 10-ID test, many times</button>
+        <button type="button" data-ok="0" data-fb="It sounds demanding, but the first two IDs match and it stops after one comparison.">100,000 copies of the same ID</button>
+        <button type="button" data-ok="1" data-fb="Right. No duplicate, no early stop: every pair is compared. That is the worst case.">100,000 different IDs</button>
+        <button type="button" data-ok="0" data-fb="A faster machine changes the seconds, not how the work grows.">The 10-ID test on a faster PC</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 3 ============================ -->
+  <section class="chapter" id="ch3" data-chapter="ch3">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 3</p>
+      <h2>PyCharm and your folder</h2>
+      <p class="ch-goal">After this chapter you can make the DSA project, put each file where you will find it again, run the file you are looking at, and read a red error from its last line.</p>
+      <div class="where" data-stage="tools"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">3.1</span>One folder for the whole term</h3>
+      <p>Decide where your work lives once, today, and never think about it again. One PyCharm project on the Desktop called <code>DSA</code>; inside it, one folder per sheet; inside that, one file per question, named by its number.</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c3a-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 330" role="img" aria-label="Desktop contains the folder DSA, one PyCharm project for the whole term. Inside it, one folder per sheet: sheet01 holds q00_hello.py, q05_find_index.py and q07_count.py, one file per question. sheet02 comes next week."><defs><marker id="ahF" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--accent)"/></marker></defs><text x="40" y="36" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink)">Desktop</text><line x1="58" y1="46" x2="58" y2="74" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="58" y1="74" x2="78" y2="74" style="stroke: var(--rule-strong); stroke-width: 2"/><text x="84" y="80" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink)">DSA</text><line x1="430" y1="73" x2="510" y2="73" style="stroke: var(--accent); stroke-width: 2" marker-end="url(#ahF)"/><text x="522" y="80" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--accent)">one PyCharm project for the whole term</text><line x1="102" y1="90" x2="102" y2="118" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="102" y1="118" x2="122" y2="118" style="stroke: var(--rule-strong); stroke-width: 2"/><text x="128" y="124" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink)">sheet01</text><line x1="430" y1="117" x2="510" y2="117" style="stroke: var(--accent); stroke-width: 2" marker-end="url(#ahF)"/><text x="522" y="124" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--accent)">one folder per sheet</text><line x1="146" y1="134" x2="146" y2="162" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="146" y1="162" x2="166" y2="162" style="stroke: var(--rule-strong); stroke-width: 2"/><text x="172" y="168" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 500; fill: var(--ink)">q00_hello.py</text><line x1="430" y1="161" x2="510" y2="161" style="stroke: var(--accent); stroke-width: 2" marker-end="url(#ahF)"/><text x="522" y="168" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--accent)">one file per question</text><line x1="146" y1="178" x2="146" y2="206" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="146" y1="206" x2="166" y2="206" style="stroke: var(--rule-strong); stroke-width: 2"/><text x="172" y="212" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 500; fill: var(--ink)">q05_find_index.py</text><line x1="146" y1="222" x2="146" y2="250" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="146" y1="250" x2="166" y2="250" style="stroke: var(--rule-strong); stroke-width: 2"/><text x="172" y="256" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 500; fill: var(--ink)">q07_count.py</text><line x1="102" y1="266" x2="102" y2="294" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="102" y1="294" x2="122" y2="294" style="stroke: var(--rule-strong); stroke-width: 2"/><text x="128" y="300" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink-3)">sheet02</text><line x1="430" y1="293" x2="510" y2="293" style="stroke: var(--accent); stroke-width: 2" marker-end="url(#ahF)"/><text x="522" y="300" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink-3)">next week</text></svg></div>
+      <figcaption id="c3a-cap"><strong>If you cannot find a file in ten seconds, it is in the wrong place.</strong> Two-digit question numbers (<code>q05</code>, not <code>q5</code>) keep the files in order; underscores, not spaces.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">3.2</span>Make the project</h3>
+      <ol>
+        <li>Open <strong>PyCharm</strong>. If it asks about a trial, an account or signing in, choose the free option and skip signing in.</li>
+        <li>Click <strong>New Project</strong>. Name: <code>DSA</code>. Location: your <strong>Desktop</strong>.</li>
+        <li>Interpreter type: <strong>Custom environment</strong> → <strong>Select existing</strong> → Python path <code>C:\Program Files\Python314\python.exe</code> on the lab PCs. Untick the welcome script. <strong>Create</strong>.</li>
+        <li>In the Project panel, right-click <code>DSA</code> → New → Directory → <code>sheet01</code>. Right-click <code>sheet01</code> → New → Python File → <code>q00_hello</code>. PyCharm adds <code>.py</code>.</li>
+      </ol>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c3b-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 440" role="img" aria-label="A simplified New Project window. 1: Name DSA. 2: Location, your Desktop. Create a welcome script left unticked. 3: Interpreter type, Custom environment. 4: Environment, Select existing. 5: Python path, C:\Program Files\Python314\python.exe. 6: the Create button."><rect x="120" y="4" width="760" height="432" rx="10" style="fill: #2b2d30; stroke: #4e5157; stroke-width: 1.5"/><text x="140" y="34" text-anchor="start" xml:space="preserve" style="font-size: 16px; font-weight: 700; fill: #dfe1e5">New Project</text><text x="160" y="78" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Name:</text><rect x="330" y="58" width="380" height="30" rx="5" style="fill: #1e1f22; stroke: #3574f0; stroke-width: 2"/><text x="342" y="78" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">DSA</text><text x="160" y="120" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Location:</text><rect x="330" y="100" width="380" height="30" rx="5" style="fill: #1e1f22; stroke: #3574f0; stroke-width: 2"/><text x="342" y="120" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">C:\Users\&lt;you&gt;\Desktop</text><rect x="160" y="146" width="16" height="16" rx="3" style="fill: #1e1f22; stroke: #4e5157; stroke-width: 1.2"/><text x="186" y="159" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">Create Git repository</text><rect x="160" y="174" width="16" height="16" rx="3" style="fill: #1e1f22; stroke: #e8894f; stroke-width: 2"/><text x="186" y="187" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #dfe1e5">Create a welcome script</text><text x="400" y="187" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 700; fill: #f0a271">← leave unticked</text><line x1="140" y1="208" x2="860" y2="208" style="stroke: #393b40; stroke-width: 1.2"/><text x="160" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Interpreter type:</text><circle cx="337" cy="233" r="7" style="fill: #1e1f22; stroke: #6f737a; stroke-width: 1.5"/><text x="350" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">Project venv</text><circle cx="459" cy="233" r="7" style="fill: #1e1f22; stroke: #6f737a; stroke-width: 1.5"/><text x="472" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">uv</text><circle cx="507" cy="233" r="7" style="fill: #1e1f22; stroke: #6f737a; stroke-width: 1.5"/><text x="520" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">Base conda</text><circle cx="617" cy="233" r="7" style="fill: #3574f0; stroke: #3574f0; stroke-width: 1.5"/><text x="630" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 700; fill: #dfe1e5">Custom environment</text><text x="160" y="276" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Environment:</text><circle cx="337" cy="271" r="7" style="fill: #1e1f22; stroke: #6f737a; stroke-width: 1.5"/><text x="350" y="276" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">Generate new</text><circle cx="477" cy="271" r="7" style="fill: #3574f0; stroke: #3574f0; stroke-width: 1.5"/><text x="490" y="276" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 700; fill: #dfe1e5">Select existing</text><text x="160" y="316" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Type:</text><rect x="330" y="296" width="380" height="30" rx="5" style="fill: #1e1f22; stroke: #4e5157; stroke-width: 1.2"/><text x="342" y="316" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">Python ▾</text><text x="160" y="358" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Python path:</text><rect x="330" y="338" width="380" height="30" rx="5" style="fill: #1e1f22; stroke: #3574f0; stroke-width: 2"/><text x="342" y="358" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">C:\Program Files\Python314\python.exe</text><rect x="760" y="392" width="100" height="32" rx="6" style="fill: #3574f0; stroke: none; stroke-width: 0"/><text x="810" y="413" text-anchor="middle" xml:space="preserve" style="font-size: 15px; font-weight: 700; fill: #ffffff">Create</text><circle cx="102" cy="73" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="79" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">1</text><circle cx="102" cy="115" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="121" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">2</text><circle cx="102" cy="233" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="239" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">3</text><circle cx="102" cy="271" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="277" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">4</text><circle cx="102" cy="353" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="359" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">5</text><circle cx="742" cy="408" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="742" y="414" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">6</text></svg></div>
+      <figcaption id="c3b-cap"><strong>The six places that matter</strong> in the New Project window: name, Desktop, Custom environment, Select existing, the lab's Python, Create. A simplified drawing; your screen has more buttons.</figcaption>
+    </figure>
+
+    <figure class="fig flat" aria-labelledby="c3c-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 472" role="img" aria-label="A simplified PyCharm window. 1: the Project panel on the left shows DSA, the folder sheet01 and the files q00_hello.py and q05_find_index.py. 2: the editor in the middle, where you type the code. 3: the green Run triangle at the top. 4: the Run window at the bottom, where the output 2 appears, followed by Process finished with exit code 0."><rect x="0" y="0" width="1000" height="472" rx="10" style="fill: #1e1f22; stroke: #4e5157; stroke-width: 1.5"/><rect x="1" y="1" width="998" height="40" rx="9" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><text x="22" y="27" text-anchor="start" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: #dfe1e5">☰</text><rect x="52" y="10" width="30" height="22" rx="5" style="fill: #3574f0; stroke: none; stroke-width: 0"/><text x="67" y="26" text-anchor="middle" xml:space="preserve" style="font-size: 12px; font-weight: 700; fill: #ffffff">DS</text><text x="92" y="27" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #dfe1e5">DSA ▾</text><rect x="630" y="8" width="180" height="26" rx="6" style="fill: #393b40; stroke: none; stroke-width: 0"/><text x="642" y="26" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">q05_find_index ▾</text><path d="M 826 13 L 842 21 L 826 29 Z" style="fill: #5fb865"/><text x="866" y="27" text-anchor="start" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: #8c8f94">⚙</text><rect x="1" y="42" width="38" height="300" rx="0" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><rect x="40" y="42" width="250" height="300" rx="0" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><text x="52" y="66" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #dfe1e5">Project ▾</text><text x="54" y="96" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #dfe1e5">▾ DSA</text><text x="110" y="96" text-anchor="start" xml:space="preserve" style="font-size: 11.5px; font-weight: 400; fill: #8c8f94">C:\...\Desktop\DSA</text><text x="72" y="122" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #dfe1e5">▾ sheet01</text><text x="90" y="148" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #dfe1e5">q00_hello.py</text><rect x="42" y="156" width="246" height="25" rx="3" style="fill: #2e436e; stroke: none; stroke-width: 0"/><text x="90" y="174" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #dfe1e5">q05_find_index.py</text><text x="54" y="204" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #dfe1e5">▸ External Libraries</text><rect x="292" y="42" width="707" height="30" rx="0" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><rect x="300" y="46" width="180" height="26" rx="4" style="fill: #1e1f22; stroke: none; stroke-width: 0"/><text x="312" y="64" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 500; fill: #dfe1e5">q05_find_index.py ×</text><text x="318" y="100" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">1</text><text x="334" y="100" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #cf8e6d">def </tspan><tspan style="fill: #56a8f5">find_index</tspan><tspan style="fill: #dfe1e5">(seats, target):</tspan></text><text x="318" y="126" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">2</text><text x="334" y="126" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #cf8e6d">    for </tspan><tspan style="fill: #dfe1e5">i </tspan><tspan style="fill: #cf8e6d">in </tspan><tspan style="fill: #56a8f5">range</tspan><tspan style="fill: #dfe1e5">(</tspan><tspan style="fill: #56a8f5">len</tspan><tspan style="fill: #dfe1e5">(seats)):</tspan></text><text x="318" y="152" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">3</text><text x="334" y="152" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #cf8e6d">        if </tspan><tspan style="fill: #dfe1e5">seats[i] == target:</tspan></text><text x="318" y="178" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">4</text><text x="334" y="178" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #cf8e6d">            return </tspan><tspan style="fill: #dfe1e5">i</tspan></text><text x="318" y="204" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">5</text><text x="334" y="204" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #cf8e6d">    return </tspan><tspan style="fill: #dfe1e5">-</tspan><tspan style="fill: #2aacb8">1</tspan></text><text x="318" y="230" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">6</text><text x="318" y="256" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">7</text><text x="334" y="256" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #56a8f5">print</tspan><tspan style="fill: #dfe1e5">(find_index([</tspan><tspan style="fill: #2aacb8">4127</tspan><tspan style="fill: #dfe1e5">, </tspan><tspan style="fill: #2aacb8">3051</tspan><tspan style="fill: #dfe1e5">, </tspan><tspan style="fill: #2aacb8">5310</tspan><tspan style="fill: #dfe1e5">], </tspan><tspan style="fill: #2aacb8">5310</tspan><tspan style="fill: #dfe1e5">))</tspan></text><rect x="1" y="344" width="998" height="127" rx="0" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><line x1="1" y1="344" x2="999" y2="344" style="stroke: #393b40; stroke-width: 1.5"/><text x="16" y="366" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 700; fill: #dfe1e5">Run</text><text x="52" y="366" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 500; fill: #dfe1e5">q05_find_index ×</text><text x="16" y="392" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 12.5px; font-weight: 400; fill: #8c8f94">C:\Program Files\Python314\python.exe C:\...\DSA\sheet01\q05_find_index.py</text><text x="16" y="416" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #dfe1e5">2</text><text x="16" y="446" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 12.5px; font-weight: 400; fill: #8c8f94">Process finished with exit code 0</text><circle cx="270" cy="70" r="15" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="270" y="76" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">1</text><circle cx="970" cy="110" r="15" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="970" y="116" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">2</text><circle cx="832" cy="58" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="832" y="64" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">3</text><circle cx="970" cy="372" r="15" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="970" y="378" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">4</text></svg></div>
+      <figcaption id="c3c-cap"><strong>Four parts are all you need:</strong> 1 your files, 2 the editor, 3 Run, 4 the Run window where output appears.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">3.3</span>Run the file you are looking at</h3>
+      <p>Type <code>print('Hello from DSA')</code> yourself - text copied from a PDF brings curly quotes that Python refuses - and press <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">F10</span>, or right-click in the code → <strong>Run</strong>. The green ▶ at the top runs whatever name is written next to it, which may be an older file. PyCharm saves by itself; there is no Save to forget.</p>
+      <h3><span class="step">3.4</span>Read red text from the bottom</h3>
+      <p>Change <code>print</code> to <code>Print</code> and run it again.</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c3d-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 240" role="img" aria-label="Two Run windows. It worked: Hello from DSA, then Process finished with exit code 0. It crashed: red text. Marker 1 is the line number, line 1. Marker 2 is the last red line, NameError: name &#x27;Print&#x27; is not defined. Did you mean: &#x27;print&#x27;? It says what went wrong. Exit code 1."><text x="10" y="20" text-anchor="start" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--good)">It worked</text><rect x="0" y="30" width="480" height="200" rx="8" style="fill: #2b2d30; stroke: var(--good); stroke-width: 2.5"/><text x="16" y="54" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 700; fill: #dfe1e5">Run   q00_hello</text><text x="16" y="88" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #dfe1e5">Hello from DSA</text><text x="16" y="120" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #8c8f94">Process finished with exit code 0</text><text x="520" y="20" text-anchor="start" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--hot-ink)">It crashed</text><rect x="510" y="30" width="490" height="200" rx="8" style="fill: #2b2d30; stroke: var(--hot); stroke-width: 2.5"/><text x="526" y="54" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 700; fill: #dfe1e5">Run   q00_hello</text><text x="526" y="84" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #f75464">Traceback (most recent call last):</text><text x="526" y="105" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 700; fill: #f75464">  File &quot;...\q00_hello.py&quot;, line 1, in &lt;module&gt;</text><text x="526" y="126" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #f75464">    Print(&#x27;Hello from DSA&#x27;)</text><text x="526" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #f75464">    ^^^^^</text><text x="526" y="168" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 700; fill: #f75464">NameError: name &#x27;Print&#x27; is not defined.</text><text x="526" y="189" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 700; fill: #f75464">Did you mean: &#x27;print&#x27;?</text><text x="526" y="214" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #8c8f94">Process finished with exit code 1</text><circle cx="990" cy="105" r="13" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="990" y="111" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">1</text><circle cx="990" cy="168" r="13" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="990" y="174" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">2</text></svg></div>
+      <figcaption id="c3d-cap"><strong>The last red line says what went wrong; the line number says where.</strong> Captured from Python 3.14. Python is case-sensitive: <code>Print</code> is a name it has never heard of - and it even suggests the fix.</figcaption>
+    </figure>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>لو ظهر كلام أحمر، اقرا آخر سطر الأول: هو اللي بيقولك إيه اللي حصل. وبعدين رقم السطر: هو اللي بيقولك فين.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>A file next to <code>sheet01</code>, not inside it.</strong> Inside means indented under it in the Project panel. Drag it on if not.</li>
+        <li><strong>A new project every week.</strong> One project all term: next week, PyCharm → Open → <code>DSA</code>, and add <code>sheet02</code>.</li>
+        <li><strong>The lab PC forgets.</strong> Copy the whole <code>DSA</code> folder to a flash drive, or zip it and send it to yourself, before you leave.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 4 ============================ -->
+  <section class="chapter" id="ch4" data-chapter="ch4">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 4</p>
+      <h2>Lists and indexes</h2>
+      <p class="ch-goal">After this chapter you can create and print a list, read any value out of it by its index, say what <code>len</code> gives, and predict when Python stops with an <code>IndexError</code>.</p>
+      <div class="where" data-stage="list"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">4.1</span>The same cards, now in Python</h3>
+      <p>A class register or a results sheet is already a familiar list. In the opening activity you searched seat-number cards by hand. Here we write three of those numbers as a Python <code>list</code>, keeping them together in order.</p>
+      <p>If this is your first Python session, the notation will be new. Today you will create a list, print it and read a value from it. You do not need to know how it is stored in memory yet. How data structures work inside is part of this course later.</p>
+      <p>In <code>q00_hello.py</code>, replace the hello line with these two lines. The square brackets <code>[]</code> group the values; commas separate them. The <code>=</code> gives this list the name <code>seats</code>. On the next line, <code>print(seats)</code> uses that name, without quotes.</p>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="type your first list">
+seats = [4127, 3051, 5310]
+print(seats)</script>
+
+    <div class="prose">
+      <p>Before running: do you expect one seat number or all three? Make your prediction, then press <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">F10</span>. Compare your Run window with this output:</p>
+    </div>
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run · Python 3.14</span></div><pre>[4127, 3051, 5310]</pre></div>
+    <div class="prose">
+      <p>Change <code>5310</code> to <code>6000</code> in the first line. Predict what will change, then run again. You should see <code>[4127, 3051, 6000]</code>. Restore <code>5310</code> and run once more. You have now used a list. Next, we will read just one value from it.</p>
+    </div>
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>أول مرة تكتب Python؟ طبيعي إن شكل السطر يبقى جديد. دي أرقام الجلوس اللي اشتغلنا بيها، جمعناها تحت اسم واحد. هنكتبها ونطبعها، وبعدها نقرا رقم منها. إزاي الـ data structures بتشتغل من جوّه، هنتعلّمه بعدين في المادة.</p>
+    </div>
+    <div class="prose">
+      <h3><span class="step">4.2</span>Read one value by its index</h3>
+      <p>We have printed the whole list. An <strong>index</strong> tells Python which position to read when we want just one value.</p>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="a list of seat numbers">
+seats = [4127, 3051, 5310]
+print(seats[1])
+print(len(seats))</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run · Python 3.14</span></div><pre>3051
+3</pre></div>
+
+    <figure class="fig flat" aria-labelledby="c4a-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 220" role="img" aria-label="The list seats drawn as three boxes. Index 0 holds 4127, index 1 holds 3051, index 2 holds 5310. len(seats) is 3. The first index is 0, so the last is 2."><defs><marker id="ahL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker></defs><text x="180" y="118.0" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 26px; font-weight: 700; fill: var(--accent)">seats</text><text x="275.0" y="56" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--ink-3)">0</text><rect x="200" y="70" width="150" height="76" rx="6" style="fill: var(--surface); stroke: var(--ink-2); stroke-width: 2.5"/><text x="275.0" y="119.0" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 30px; font-weight: 600; fill: var(--ink)">4127</text><text x="435.0" y="56" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--ink-3)">1</text><rect x="360" y="70" width="150" height="76" rx="6" style="fill: var(--surface); stroke: var(--ink-2); stroke-width: 2.5"/><text x="435.0" y="119.0" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 30px; font-weight: 600; fill: var(--ink)">3051</text><text x="595.0" y="56" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--ink-3)">2</text><rect x="520" y="70" width="150" height="76" rx="6" style="fill: var(--surface); stroke: var(--ink-2); stroke-width: 2.5"/><text x="595.0" y="119.0" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 30px; font-weight: 600; fill: var(--ink)">5310</text><text x="180" y="46" text-anchor="end" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink-3)">index</text><text x="180" y="180" text-anchor="end" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink-3)">value</text><line x1="186" y1="172" x2="238" y2="150" style="stroke: var(--ink-3); stroke-width: 1.5" marker-end="url(#ahL)"/><text x="740" y="88" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 24px; font-weight: 700; fill: var(--ink)">len(seats)  is  3</text><text x="740" y="122" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 500; fill: var(--ink-2)">seats[0]  is  4127</text><text x="740" y="154" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 500; fill: var(--ink-2)">seats[2]  is  5310</text><text x="200" y="210" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 500; fill: var(--ink-2)">The first index is 0, so the last is len - 1 = 2.</text></svg></div>
+      <figcaption id="c4a-cap"><strong>The index is where; the value is what is there.</strong> Counting starts at 0, so the last index is one less than <code>len</code>.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p><code>seats[1]</code> is <strong>3051</strong>, not 4127 - index 1 is the second position, because the first is 0. And <code>len(seats)</code> is 3: how many values, which is one more than the last index.</p>
+      <h3><span class="step">4.3</span>Past the end</h3>
+      <p>Three values means indexes 0, 1 and 2. Ask for <code>seats[3]</code> and Python does not guess or print nothing - it stops:</p>
+    </div>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run · Python 3.14</span></div><pre>Traceback (most recent call last):
+  File "...\q00_hello.py", line 2, in &lt;module&gt;
+    print(seats[3])
+          ~~~~~^^^
+IndexError: list index out of range</pre></div>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p>An index is a position, counted from 0. Counting from the front, the indexes of a list that is not empty run from <code>0</code> to <code>len - 1</code>.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>الـ<span class="ltr">index</span> هو مكان الرقم، مش الرقم نفسه. والعد بيبدأ من صفر، فآخر مكان هو <span class="ltr">len - 1</span>.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>Counting from 1.</strong> The first value is <code>seats[0]</code>. Everyone gets this wrong at first; say "index zero" out loud until it sticks.</li>
+        <li><strong>Index versus value.</strong> In <code>seats[1]</code> the 1 is where to look. What comes back is what sits there.</li>
+        <li><strong><code>seats[-1]</code> is not an error.</strong> A negative index counts from the end, so it is the last value, 5310. Remember that in chapter 7, where -1 means something else.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q"><code>seats = [4127, 3051, 5310]</code>. What does <code>print(seats[1])</code> show?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="That is counting from 1. 4127 is seats[0].">4127</button>
+        <button type="button" data-ok="0" data-fb="The 1 is where to look. The brackets hand back what is there.">1</button>
+        <button type="button" data-ok="1" data-fb="Right. Index 0 is 4127, index 1 is 3051.">3051</button>
+        <button type="button" data-ok="0" data-fb="Index 1 exists in a list of three values, so there is no error.">An error</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 5 ============================ -->
+  <section class="chapter" id="ch5" data-chapter="ch5">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 5</p>
+      <h2>Loops and counting</h2>
+      <p class="ch-goal">After this chapter you can visit every position of a list with <code>for i in range(len(...))</code>, run a line only when an <code>if</code> is true, and keep a count across the loop.</p>
+      <div class="where" data-stage="loop"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">5.1</span>Every index, in order</h3>
+      <p><code>range(len(seats))</code> produces exactly the indexes that exist: for three values, 0, 1 and 2. A <code>for</code> hands them to <code>i</code> one at a time and runs the indented lines once for each.</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c5a-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 110" role="img" aria-label="range(len(seats)) is range(3), which gives 0, 1 and 2, and stops before 3: one index for every value in the list."><defs><marker id="ahR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker></defs><text x="40" y="50" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 26px; font-weight: 700; fill: var(--ink)">range(len(seats))</text><line x1="310" y1="42" x2="360" y2="42" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#ahR)"/><text x="372" y="50" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 26px; font-weight: 700; fill: var(--ink)">range(3)</text><line x1="500" y1="42" x2="550" y2="42" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#ahR)"/><rect x="566" y="16" width="64" height="50" rx="8" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5"/><text x="598" y="50" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 26px; font-weight: 700; fill: var(--ink)">0</text><rect x="646" y="16" width="64" height="50" rx="8" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5"/><text x="678" y="50" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 26px; font-weight: 700; fill: var(--ink)">1</text><rect x="726" y="16" width="64" height="50" rx="8" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.5"/><text x="758" y="50" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 26px; font-weight: 700; fill: var(--ink)">2</text><rect x="806" y="16" width="64" height="50" rx="8" style="fill: none; stroke: var(--rule-strong); stroke-width: 2" stroke-dasharray="5 5"/><text x="838" y="50" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 26px; font-weight: 600; fill: var(--ink-3)">3</text><text x="838" y="92" text-anchor="middle" xml:space="preserve" style="font-size: 16px; font-weight: 600; fill: var(--ink-3)">not included</text><text x="40" y="100" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 500; fill: var(--ink-2)">One index for every value in the list - exactly the ones that exist.</text></svg></div>
+      <figcaption id="c5a-cap"><strong><code>range</code> stops before its number</strong> - which is exactly right for indexes that start at 0.</figcaption>
+    </figure>
+
+    <figure class="fig" aria-labelledby="c5b-cap">
+      <div class="gtrace" data-trace="walk"></div>
+      <figcaption id="c5b-cap"><strong>The loop, one line at a time.</strong> Before each click, say what <code>i</code> will be and what will print. Every frame was recorded by running this code in Python 3.14, line by line.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>Three rules if you remember some C++, and simply rules if you do not:</p>
+      <ul>
+        <li><code>=</code> stores a value; <code>==</code> asks <em>are these equal?</em></li>
+        <li>The <strong>indented</strong> lines belong to the <code>for</code> (or the <code>if</code>). No braces; the colon <code>:</code> opens the block, and four spaces mark what is inside it.</li>
+        <li><code>range(3)</code> is 0, 1, 2 - the end is not included.</li>
+      </ul>
+      <h3><span class="step">5.2</span>Counting with a loop and an if</h3>
+      <p>How many students got a 7? Visit every position; when the value is 7, add one to a counter. The counter starts at 0 <strong>before</strong> the loop, so it is set once and then grows.</p>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="count the sevens">
+grades = [7, 10, 7]
+count = 0
+for i in range(len(grades)):
+    if grades[i] == 7:
+        count = count + 1
+print(count)</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run · Python 3.14</span></div><pre>2</pre></div>
+
+    <div class="prose">
+      <p>The loop runs three times, but <code>count</code> goes up only twice: at index 0 and index 2. Not 3 (every trip round the loop), not 14 (adding the sevens up), not 1 (nothing stops the loop early). Sheet 1 Q7 asks you to turn this into a function that returns the count.</p>
+    </div>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p>Visit every index with <code>for i in range(len(values))</code>; decide with <code>if</code>; remember across the loop with a variable set before it.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>كل لفة في الـ<span class="ltr">for</span> بتدي <span class="ltr">i</span> القيمة اللي بعدها، والسطور المزقوقة لجوه بتتنفذ مرة في كل لفة. العداد بيبدأ بره اللوب.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong><code>count = 0</code> inside the loop.</strong> Then it is reset on every trip, and the answer is at most 1.</li>
+        <li><strong><code>if grades[i] = 7:</code></strong> with one <code>=</code> is a <code>SyntaxError</code>, and Python 3.14 even asks: <i>Maybe you meant '==' instead of '='?</i></li>
+        <li><strong>Mixed indentation.</strong> Use the Tab key in PyCharm - it inserts four spaces - and never mix in spaces by hand.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">With <code>grades = [7, 10, 7, 9, 7, 4]</code>, the same loop counting sevens prints what?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="That counts every trip round the loop. The if lets only the sevens through.">6</button>
+        <button type="button" data-ok="1" data-fb="Right: index 0, 2 and 4. Sheet 1 Q7 expects 3 for exactly this list.">3</button>
+        <button type="button" data-ok="0" data-fb="That adds the sevens up. count = count + 1 adds one per match.">21</button>
+        <button type="button" data-ok="0" data-fb="Nothing stops the loop at the first seven; it visits every position.">1</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 6 ============================ -->
+  <section class="chapter" id="ch6" data-chapter="ch6">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 6</p>
+      <h2>Functions and return</h2>
+      <p class="ch-goal">After this chapter you can write a function that takes inputs and hands back a result, and say the difference between <code>return</code> and <code>print</code>.</p>
+      <div class="where" data-stage="func"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">6.1</span>A named recipe</h3>
+      <p><code>def</code> gives a recipe a name and lists its inputs in brackets. Nothing inside it runs until somebody <strong>calls</strong> it. <code>return</code> hands a value back to the line that called, <strong>and ends the function at once</strong>.</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="c6a-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 195" role="img" aria-label="def double(x): return x * 2, then result = double(21). One: the call sends 21 in, so x is 21. Two: return hands back x times 2, which is 42. Three: 42 lands in result. return hands a value back to the calling line; print only shows it."><defs><marker id="ahD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker></defs><rect x="20" y="20" width="420" height="120" rx="8" style="fill: var(--code-bg); stroke: var(--rule); stroke-width: 1.5"/><text x="40" y="60" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 500; fill: var(--ink)">def double(x):</text><text x="40" y="94" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 500; fill: var(--ink)">    return x * 2</text><text x="40" y="128" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 500; fill: var(--ink)">result = double(21)</text><rect x="520" y="20" width="460" height="120" rx="10" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 2"/><text x="545" y="55" text-anchor="start" xml:space="preserve" style="font-size: 20px; font-weight: 500; fill: var(--ink)">1  double(21) sends 21 in:  x = 21</text><text x="545" y="88" text-anchor="start" xml:space="preserve" style="font-size: 20px; font-weight: 500; fill: var(--ink)">2  return hands back x * 2  →  42</text><text x="545" y="121" text-anchor="start" xml:space="preserve" style="font-size: 20px; font-weight: 500; fill: var(--ink)">3  the 42 lands in result</text><line x1="445" y1="80" x2="512" y2="80" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#ahD)"/><text x="20" y="178" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--accent)">return hands a value back to the line that called. print only shows it on the screen.</text></svg></div>
+      <figcaption id="c6a-cap"><strong>In, work, back.</strong> The call sends 21 in; <code>return</code> sends 42 back; it lands in <code>result</code>.</figcaption>
+    </figure>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="return, then print">
+def bump(x):
+    return x + 1
+
+answer = bump(4)
+print(answer)</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run · Python 3.14</span></div><pre>5</pre></div>
+
+    <div class="prose">
+      <p>The function itself prints nothing. It hands 5 back; the calling line stores it in <code>answer</code>; the last line prints it. Python needs no <code>int</code> in front of the name, as C++ would - it does not require you to declare types.</p>
+      <h3><span class="step">6.2</span>Why return matters for searching</h3>
+      <p>Because <code>return</code> ends the function immediately, a function can <strong>stop searching as soon as it has its answer</strong>. That is the whole trick of chapter 7.</p>
+    </div>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p><code>return</code> hands a value back and stops the function. <code>print</code> only shows something on the screen; the program cannot use what was printed.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>Printing instead of returning.</strong> A function that prints its answer shows it once; one that returns it lets the rest of the program use it.</li>
+        <li><strong>A function that reaches its end without a return</strong> hands back <code>None</code>. You will meet that in sheet 1 Q9.</li>
+        <li><strong>Lines after a <code>return</code></strong> in the same block never run.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">What does this print? <code>def double(x): return x * 2</code> then <code>print(double(double(3)))</code></p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="That is one call. The inner double(3) gives 6, and that 6 goes into the outer call.">6</button>
+        <button type="button" data-ok="1" data-fb="Right. double(3) returns 6; double(6) returns 12; print shows it.">12</button>
+        <button type="button" data-ok="0" data-fb="Nothing is printed inside double. Only the outer print shows anything, once.">6, then 12</button>
+        <button type="button" data-ok="0" data-fb="Calling a function with another call inside is fine: the inner one runs first.">An error</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 7 ============================ -->
+  <section class="chapter" id="ch7" data-chapter="ch7">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 7</p>
+      <h2>Linear search: your first algorithm</h2>
+      <p class="ch-goal">After this chapter you can plan, write and test <code>find_index</code>, and explain why <code>return -1</code> belongs after the loop.</p>
+      <div class="where" data-stage="list,loop,func,search"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">7.1</span>Plan before you type</h3>
+      <p>The task: give back the position of <code>target</code> in the list <code>seats</code>, or <code>-1</code> if it is not there. Before any code, five lines - the same five you can use whenever you cannot see how to start.</p>
+    </div>
+
+    <div class="planbox">
+      <b>HAVE</b><span>a list <code>seats</code> - unsorted, may be empty, may repeat - and a <code>target</code></span>
+      <b>WANT</b><span>the index of the <strong>first</strong> match; <code>-1</code> if it is not there; the list unchanged</span>
+      <b>TRY</b><span><code>[4127, 3051, 5310]</code>, target 3051: 4127? no. 3051? yes → <strong>1</strong></span>
+      <b>STEPS</b><span>visit each index left to right; on a match, return that index; <strong>only after the loop</strong>, return -1</span>
+      <b>CHECK</b><span>first, middle, last, absent, empty list, repeated target</span>
+    </div>
+
+    <div class="prose">
+      <p>TRY is the line people skip, and it is the one that writes the rest. Do it with your hands on paper, then describe what your hands did: that description <em>is</em> STEPS.</p>
+      <h3><span class="step">7.2</span>The code, with each part named</h3>
+      <p>The plan goes into the file as comments, above the code. Each group of lines then gets a comment naming what it is <em>for</em>.</p>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="sheet01/q05_find_index.py">
+# Sheet (1), Q #05 - find_index: the first position of a seat number
+#
+# PLAN
+#   HAVE   a list of seat numbers (unsorted, may be empty, may repeat) and a target
+#   WANT   the index of the FIRST match; -1 if it is not there; the list unchanged
+#   TRY    [4127, 3051, 5310], target 3051: look at 4127 (no), 3051 (yes) -> 1
+#   STEPS  visit each index from left to right; if that value is the target,
+#          return the index; only after the loop ends, return -1
+#   CHECK  first, middle, last, absent, empty list, repeated target
+
+
+def find_index(seats, target):
+    # 1. visit every position, left to right
+    for i in range(len(seats)):
+        # 2. recognise a match - stop at the first one
+        if seats[i] == target:
+            return i
+    # 3. report absence - only once every position has been checked
+    return -1
+
+
+seats = [4127, 3051, 5310, 2268, 4890]
+print(find_index(seats, 5310))
+print(find_index(seats, 9999))</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run · Python 3.14</span></div><pre>2
+-1</pre></div>
+
+    <div class="prose">
+      <p>Look at the two <code>return</code> lines. <code>return i</code> is inside the <code>if</code>, inside the loop: it runs the moment a match is found, and the function stops. <code>return -1</code> is at the level of the <code>for</code>, after it: Python reaches it only once the loop has run out of indexes - once every position has been checked. <code>-1</code> is just this function's signal for <em>not found</em>; it is never a real position here, because indexes start at 0.</p>
+      <h3><span class="step">7.3</span>Watch it run</h3>
+    </div>
+
+    <figure class="fig" aria-labelledby="c7a-cap">
+      <div class="controls">
+        <span class="lbl" id="tr-lbl">Target</span>
+        <div class="seg" role="group" aria-labelledby="tr-lbl" id="tr-seg">
+          <button type="button" data-v="found" aria-pressed="true">5310 · found</button>
+          <button type="button" data-v="absent" aria-pressed="false">9999 · not found</button>
+        </div>
+      </div>
+      <div class="gtrace" data-trace="found" id="tr-search"></div>
+      <figcaption id="c7a-cap"><strong>find_index, one line at a time.</strong> Every frame was recorded by running the function above in Python 3.14 under a line tracer. Predict each step before you click. The <code>checks</code> row is counted by the display, not by the code.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>Found: three checks, it returns 2, and 2268 and 4890 are never looked at. Not found: five checks - every record - and only then <code>return -1</code>. That is the worst case from chapter 1, now in your own code.</p>
+      <h3><span class="step">7.4</span>The bug a small test misses</h3>
+      <p>Here is a version an AI agent could easily offer. It runs without an error.</p>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="a hypothetical AI draft - do not copy">
+def find_index_draft(seats, target):
+    for i in range(len(seats)):
+        if seats[i] == target:
+            return i
+        else:
+            return -1
+
+print(find_index_draft([4127, 3051, 5310], 4127))
+print(find_index_draft([4127, 3051, 5310], 5310))</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run · Python 3.14</span></div><pre>0
+-1</pre></div>
+
+    <div class="prose">
+      <p>At <code>i = 0</code>, if the first record is not the target, the <code>else</code> returns -1 - after <strong>one</strong> check. So it passes a test for the first seat number, <em>and</em> a test for a seat number that is not there at all. It fails whenever the target is present but not first - and on an empty list it returns neither an index nor -1. It says <em>not found</em> before checking every position, which is exactly the sentence chapter 1 warned about. That is why a handful of tests can miss it. Sheet 1 Q9 asks you to take it apart.</p>
+    </div>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p>Searching an unsorted list left to right, you can only say "not found" after checking every position. So <code>return -1</code> goes after the loop, not inside it.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>في ليستة مش مترتبة، مقدرش أقول "مش موجود" غير لما أشوف كل الأماكن. علشان كده <span class="ltr">return -1</span> بره اللوب، و <span class="ltr">return i</span> جوه الـ<span class="ltr">if</span>.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>Testing only one case.</strong> Test the first, middle and last positions, an absent target, an empty list and a repeated target. Each one catches a different mistake.</li>
+        <li><strong>Using the result as an index without checking.</strong> <code>seats[find_index(seats, 9999)]</code> is <code>seats[-1]</code>, the last value - no error, just a wrong answer. Check for -1 first.</li>
+        <li><strong>Returning <code>seats[i]</code> instead of <code>i</code>.</strong> The task wants the position, not the value you already had.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">For <code>find_index([3051, 4127, 3051], 3051)</code>, what comes back?</p>
+      <div class="opts">
+        <button type="button" data-ok="1" data-fb="Right. return i fires at the first match, index 0, and the function stops there.">0</button>
+        <button type="button" data-ok="0" data-fb="That is the last match. The function stops at the first one.">2</button>
+        <button type="button" data-ok="0" data-fb="The function returns a position, not a count of matches.">2 matches</button>
+        <button type="button" data-ok="0" data-fb="3051 is there - twice. -1 means not found.">-1</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 8 ============================ -->
+  <section class="chapter" id="ch8" data-chapter="ch8">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 8</p>
+      <h2>Starting sheet 1</h2>
+      <p class="ch-goal">After this chapter you know where to begin on every sheet question, and what to hand in.</p>
+      <div class="where" data-stage="tools,list,loop,func,search"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">8.1</span>How to start each question</h3>
+      <p>No answers here - these are the first move for each question, and the chapter that covers it. By-hand answers go in the file as <code>#</code> comments, written before you run anything.</p>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q-table">
+        <thead><tr><th>Q</th><th>First move</th><th>Where</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1</td><td>Make the file inside <code>sheet01</code>, run it, then close and reopen the project and find it again.</td><td>Ch 3</td></tr>
+          <tr><td class="mono">2</td><td>Write your four predictions as comments <em>first</em>. Then run. A wrong prediction is the useful part.</td><td>Ch 4</td></tr>
+          <tr><td class="mono">3</td><td>One row per comparison. Use the trace in 7.3 to check your first rows, then do 2268 on your own.</td><td>Ch 7</td></tr>
+          <tr><td class="mono">4</td><td>Start with the <code>def</code> line - it is the only one at the left edge that is not a call. Then ask what each indentation depth belongs to.</td><td>Ch 5, 7</td></tr>
+          <tr><td class="mono">5</td><td>The five plan lines as comments, then the function. Do not copy 7.2 - write it from your plan, and compare after.</td><td>Ch 7</td></tr>
+          <tr><td class="mono">6</td><td>For each case, name one mistake this test could expose. The same mistake may be caught by several tests - that is fine.</td><td>Ch 7</td></tr>
+          <tr><td class="mono">7</td><td>Plan it. It is the sevens loop from 5.2 turned into a function: where does the counter start, and where does the <code>return</code> go?</td><td>Ch 5, 6</td></tr>
+          <tr><td class="mono">8</td><td>A counter again, this time inside <code>find_index</code>. Where must it go up so it counts each comparison once? The sheet gives the three calls for the longer lists.</td><td>Ch 5, 7</td></tr>
+          <tr><td class="mono">9</td><td>Run the draft on a target that is first, then on one that is last. Trace the second by hand.</td><td>Ch 7.4</td></tr>
+          <tr><td class="mono">10</td><td>Optional. TRY <code>[-8, -3, -12]</code> by hand, starting from 0, and see what goes wrong.</td><td>Ch 5</td></tr>
+          <tr><td class="mono">11</td><td>Optional. For five values, how many neighbour pairs are there? That is how many times the loop runs.</td><td>Ch 5</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="board">
+      <div class="dcard done">
+        <p class="st">Required</p>
+        <h4>Q1-Q9</h4>
+        <p>Everything you need is in chapters 3-7. Two small new pieces are explained on the sheet itself: <code>list(range(n))</code> in Q8, and the hint in Q9(e).</p>
+      </div>
+      <div class="dcard open">
+        <p class="st">Optional</p>
+        <h4>Q10-Q11</h4>
+        <p>Each adds one new idea, named on the sheet. Try them if Q1-Q9 went well.</p>
+      </div>
+      <div class="dcard done">
+        <p class="st">Hand in</p>
+        <h4>A zip of <code>sheet01</code></h4>
+        <p>Named <code>sheet01_&lt;your ID&gt;.zip</code>: the <code>.py</code> files, not screenshots, sent the way your TA announces by the start of lab 2.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">8.2</span>Before you hand it in</h3>
+      <p>Ticks are kept in this browser only.</p>
+    </div>
+
+    <ul class="checklist" id="checklist">
+      <li><label><input type="checkbox" data-k="place"><span><span class="t">Every file is inside <code>DSA/sheet01</code></span><span class="d">Named as on the sheet: <code>q05_find_index.py</code>, two-digit number, no spaces.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="plans"><span><span class="t">Five plan lines above Q5, Q7 and Q8</span><span class="d">HAVE, WANT, TRY, STEPS, CHECK - as comments.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="hand"><span><span class="t">By-hand answers for Q2, Q3 and Q9 written as comments</span><span class="d">Predictions first, then run.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="tested"><span><span class="t">Every program run, and every result matches the sheet</span><span class="d">Including the absent target and the empty list.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="builtins"><span><span class="t">No <code>max()</code>, <code>.index()</code>, <code>.count()</code>, <code>sorted()</code> or <code>target in values</code></span><span class="d">The loops are the exercise. The <code>in</code> of a <code>for</code> is fine.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="copied"><span><span class="t">The DSA folder copied off the lab PC</span><span class="d">Flash drive, or zipped and sent to yourself.</span></span></label></li>
+    </ul>
+
+    <details class="more">
+      <summary>What comes next <span class="muted">· optional</span></summary>
+      <div class="inner">
+        <p>Lab 2 starts from one question: <em>why is <code>return -1</code> outside the loop?</em> If you can answer it in one sentence, you are ready. Later in the term, Python classes will let you build your own data structures; you do not need them yet, and you will be taught them from scratch when you do.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ COMPANION FILE: one runnable .py, built from these blocks ============ -->
+<script type="text/x-companion" data-kind="markdown" data-order="1">============================================================
+ Data Structures and Algorithms
+ Lab 1 worksheet: lists, loops and your first search
+
+ Saved from the guide "Why Data Structures".
+ Every step below matches a step number in the guide.
+
+ HOW TO USE THIS FILE
+   1. Put it in DSA/sheet01 as q00_worksheet.py.
+   2. Run it before you change anything (Ctrl+Shift+F10).
+      It asks nothing and prints a banner for each step.
+   3. Work through the steps in order, in the guide and here.
+      Where a step says YOUR TURN, write the code yourself
+      and run again. Keep it running at every stage.
+============================================================</script>
+
+<script type="text/x-companion" data-kind="code" data-order="20"># ---------------------------------------------------------
+# Step 1  (guide 3.3) - the smallest program that does something
+# ---------------------------------------------------------
+print("--- Step 1 ---")
+print('Hello from DSA')
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="30"># ---------------------------------------------------------
+# Step 2  (guide 4.1) - a list, an index, len
+# Predict each line before you run it.
+# ---------------------------------------------------------
+print("--- Step 2 ---")
+seats = [4127, 3051, 5310]
+print(seats[0])
+print(seats[1])
+print(len(seats))
+
+# YOUR TURN: print the LAST value using len(seats), not the number 2.
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="40"># ---------------------------------------------------------
+# Step 3  (guide 5.1) - visit every index
+# ---------------------------------------------------------
+print("--- Step 3 ---")
+for i in range(len(seats)):
+    print(i, seats[i])
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="50"># ---------------------------------------------------------
+# Step 4  (guide 5.2) - count with a loop and an if
+# ---------------------------------------------------------
+print("--- Step 4 ---")
+grades = [7, 10, 7, 9, 7, 4]
+count = 0
+for i in range(len(grades)):
+    if grades[i] == 7:
+        count = count + 1
+print('sevens:', count)
+
+# YOUR TURN: count the grades that are 9 OR MORE (use >=).
+# For this list you should get 2.
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="60"># ---------------------------------------------------------
+# Step 5  (guide 6.1) - a function hands a value back
+# ---------------------------------------------------------
+print("--- Step 5 ---")
+def bump(x):
+    return x + 1
+
+answer = bump(4)
+print(answer)
+
+# YOUR TURN: write triple(x) that returns x * 3,
+# then print(triple(bump(4))). You should see 15.
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="70"># ---------------------------------------------------------
+# Step 6  (guide 7.1, 7.2) - find_index, from your own plan
+# YOUR TURN: write the five plan lines here as comments,
+# then replace the body below. It runs now, but wrongly:
+# it always says -1.
+#
+# HAVE
+# WANT
+# TRY
+# STEPS
+# CHECK
+# ---------------------------------------------------------
+print("--- Step 6 ---")
+def find_index(seats, target):
+    return -1        # replace this line with the real search
+
+
+seats = [4127, 3051, 5310, 2268, 4890]
+print(find_index(seats, 5310), 'expected 2')
+print(find_index(seats, 9999), 'expected -1')
+print(find_index([], 4127), 'expected -1')
+print(find_index([3051, 4127, 3051], 3051), 'expected 0')
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="80"># ---------------------------------------------------------
+# Step 7  (guide 7.4) - the bug a small test misses
+# Run it. Which of the two lines is right?
+# ---------------------------------------------------------
+print("--- Step 7 ---")
+def find_index_draft(seats, target):
+    for i in range(len(seats)):
+        if seats[i] == target:
+            return i
+        else:
+            return -1
+
+print(find_index_draft([4127, 3051, 5310], 4127), 'expected 0')
+print(find_index_draft([4127, 3051, 5310], 5310), 'expected 2')</script>
+
+  <footer class="sources">
+    <h2>Sources and checks</h2>
+    <ul>
+      <li><strong>No lecture or sheet was supplied for lab 1.</strong> This guide, the lab slides and sheet 1 were written for the lab by the teaching assistant, September 2026. The lectures decide the order of topics after this week.</li>
+      <li><strong>Every output on this page was produced by running code with Python 3.14.6</strong>, the version on the lab PCs, on 30 September 2026 - including the error messages, which were captured from Python, not typed.</li>
+      <li><strong>The step-by-step traces</strong> in chapters 5 and 7 were recorded by running the code under Python's line tracer (<code>sys.settrace</code>); the page only replays them.</li>
+      <li><strong>The records and pairs counts</strong> come from running a real scan, a real halving search over every present and absent target, and a real loop over pairs. The sliders use the same counts, checked against those runs on over 4,000 cases with no difference.</li>
+      <li><strong>PyCharm</strong> drawings are simplified, based on JetBrains' documentation for PyCharm 2026.2, the version on the lab PCs.</li>
+    </ul>
+    <p class="muted">Written for students of Data Structures and Algorithms after lab 1, and for the teaching assistant running it. It covers lab 1 only: lists, indexes, one loop form, if, functions and linear search.</p>
+  </footer>
+</main>
+</div>
+<script>
+/* The counts the guide's widgets show. check-model.py runs these same
+   functions in node and compares them with Python doing the work for real
+   (a left-to-right scan, a halving search, a loop over every pair).
+   Keep it tiny: anything added here needs a Python twin in check-model.py. */
+var DSAModel = (function () {
+  "use strict";
+  /* records a left-to-right scan inspects when the target is absent */
+  function scanWorst(n) { return n; }
+  /* most records a "check the middle, drop half" search inspects on a
+     sorted list of n - the number of times n can be halved until 0 */
+  function halvingWorst(n) {
+    var k = 0;
+    while (n > 0) { n = Math.floor(n / 2); k++; }
+    return k;
+  }
+  /* pairs of n different IDs, each pair compared once (exact below 2^53) */
+  function pairs(n) { return n * (n - 1) / 2; }
+  return { scanWorst: scanWorst, halvingWorst: halvingWorst, pairs: pairs };
+})();
+if (typeof module !== "undefined") module.exports = DSAModel;
+</script>
+<script type="application/json" id="trace-data">{"walk": {"kind": "walk", "code": ["for i in range(len(seats)):", "    print(i, seats[i])"], "array": [4127, 3051, 5310], "target": null, "labels": ["i", "seats[i]", "printed"], "labels_ar": ["i", "seats[i]", "اتطبع"], "frames": [{"line": -1, "active": -1, "done": [], "found": -1, "vals": ["-", "-", ""], "cap": "<code>seats<\/code> holds 3 values. <code>range(len(seats))<\/code> is <code>range(3)<\/code>: the indexes 0, 1, 2.", "cap_ar": "<code>seats<\/code> فيها 3 قيم. <code>range(len(seats))<\/code> هي <code>range(3)<\/code>: يعني الـ indexes <code>0, 1, 2<\/code>.", "out": "", "result": null}, {"line": 0, "active": 0, "done": [], "found": -1, "vals": ["0", "4127", ""], "out": "", "cap": "The <code>for<\/code> gives <code>i<\/code> the next index: <b>i = 0<\/b>.", "cap_ar": "الـ <code>for<\/code> بتدّي <code>i<\/code> الـ index اللي بعده: <code>i = 0<\/code>.", "result": null}, {"line": 1, "active": 0, "done": [], "found": -1, "vals": ["0", "4127", ""], "out": "0 4127\n", "cap": "The indented line runs with <b>i = 0<\/b>: it prints <code>0 4127<\/code>.", "cap_ar": "السطر المزقوق بيتنفذ و<code>i = 0<\/code>: بيطبع <code>0 4127<\/code>.", "result": null}, {"line": 0, "active": 1, "done": [], "found": -1, "vals": ["1", "3051", ""], "out": "0 4127\n", "cap": "The <code>for<\/code> gives <code>i<\/code> the next index: <b>i = 1<\/b>.", "cap_ar": "الـ <code>for<\/code> بتدّي <code>i<\/code> الـ index اللي بعده: <code>i = 1<\/code>.", "result": null}, {"line": 1, "active": 1, "done": [], "found": -1, "vals": ["1", "3051", ""], "out": "0 4127\n1 3051\n", "cap": "The indented line runs with <b>i = 1<\/b>: it prints <code>1 3051<\/code>.", "cap_ar": "السطر المزقوق بيتنفذ و<code>i = 1<\/code>: بيطبع <code>1 3051<\/code>.", "result": null}, {"line": 0, "active": 2, "done": [], "found": -1, "vals": ["2", "5310", ""], "out": "0 4127\n1 3051\n", "cap": "The <code>for<\/code> gives <code>i<\/code> the next index: <b>i = 2<\/b>.", "cap_ar": "الـ <code>for<\/code> بتدّي <code>i<\/code> الـ index اللي بعده: <code>i = 2<\/code>.", "result": null}, {"line": 1, "active": 2, "done": [], "found": -1, "vals": ["2", "5310", ""], "out": "0 4127\n1 3051\n2 5310\n", "cap": "The indented line runs with <b>i = 2<\/b>: it prints <code>2 5310<\/code>.", "cap_ar": "السطر المزقوق بيتنفذ و<code>i = 2<\/code>: بيطبع <code>2 5310<\/code>.", "result": null}, {"line": 0, "active": -1, "done": [], "found": -1, "vals": ["2", "-", ""], "out": "0 4127\n1 3051\n2 5310\n", "cap": "No index left - <code>range(3)<\/code> stops <b>before<\/b> 3. The loop is over.", "cap_ar": "مفيش indexes تاني - <code>range(3)<\/code> بتقف <b>قبل<\/b> 3. الـ loop خلصت.", "result": null}], "returned": null}, "found": {"kind": "find", "code": ["def find_index(seats, target):", "    for i in range(len(seats)):", "        if seats[i] == target:", "            return i", "    return -1"], "array": [4127, 3051, 5310, 2268, 4890], "target": 5310, "labels": ["i", "seats[i]", "checks"], "note": "checks: counted by this display, not by the code", "note_ar": "الـ checks بيعدّها العرض ده، مش الكود", "frames": [{"line": 0, "active": -1, "done": [], "found": -1, "vals": ["-", "-", "0"], "cap": "We call <code>find_index(seats, 5310)<\/code>. The target is <b>5310<\/b>. Nothing checked yet.", "cap_ar": "بننادي <code>find_index(seats, 5310)<\/code>. الـ target هو <b>5310<\/b>. لسه ما فحصناش حاجة.", "result": null}, {"line": 1, "active": 0, "done": [], "found": -1, "vals": ["0", "4127", "0"], "cap": "The <code>for<\/code> hands out the next index: <b>i = 0<\/b>.", "cap_ar": "الـ <code>for<\/code> بتدّي الـ index اللي بعده: <code>i = 0<\/code>.", "result": null}, {"line": 2, "active": 0, "done": [], "found": -1, "vals": ["0", "4127", "1"], "cap": "Compare <code>seats[0]<\/code>, which is <b>4127<\/b>, with the target <b>5310<\/b>. Equal?", "cap_ar": "قارن <code>seats[0]<\/code>، اللي هي <b>4127<\/b>، بالـ target <b>5310<\/b>. متساويين؟", "result": null}, {"line": 1, "active": 1, "done": [0], "found": -1, "vals": ["1", "3051", "1"], "cap": "4127 is not 5310, so the <code>return i<\/code> is skipped. The <code>for<\/code> hands out the next index: <b>i = 1<\/b>.", "cap_ar": "4127 مش 5310، فالـ <code>return i<\/code> مش هتتنفذ. الـ <code>for<\/code> بتدّي الـ index اللي بعده: <code>i = 1<\/code>.", "result": null}, {"line": 2, "active": 1, "done": [0], "found": -1, "vals": ["1", "3051", "2"], "cap": "Compare <code>seats[1]<\/code>, which is <b>3051<\/b>, with the target <b>5310<\/b>. Equal?", "cap_ar": "قارن <code>seats[1]<\/code>، اللي هي <b>3051<\/b>، بالـ target <b>5310<\/b>. متساويين؟", "result": null}, {"line": 1, "active": 2, "done": [0, 1], "found": -1, "vals": ["2", "5310", "2"], "cap": "3051 is not 5310, so the <code>return i<\/code> is skipped. The <code>for<\/code> hands out the next index: <b>i = 2<\/b>.", "cap_ar": "3051 مش 5310، فالـ <code>return i<\/code> مش هتتنفذ. الـ <code>for<\/code> بتدّي الـ index اللي بعده: <code>i = 2<\/code>.", "result": null}, {"line": 2, "active": 2, "done": [0, 1], "found": -1, "vals": ["2", "5310", "3"], "cap": "Compare <code>seats[2]<\/code>, which is <b>5310<\/b>, with the target <b>5310<\/b>. Equal?", "cap_ar": "قارن <code>seats[2]<\/code>، اللي هي <b>5310<\/b>، بالـ target <b>5310<\/b>. متساويين؟", "result": null}, {"line": 3, "active": -1, "done": [0, 1], "found": 2, "vals": ["2", "5310", "3"], "cap": "5310 <b>is<\/b> 5310. <code>return 2<\/code> hands back the index and the function <b>stops<\/b> - no more checks.", "cap_ar": "5310 <b>هي<\/b> 5310. <code>return 2<\/code> بترجّع الـ index، والـ function <b>بتقف<\/b> - مفيش مقارنات تاني.", "result": 2}], "returned": 2, "key": "found"}, "absent": {"kind": "find", "code": ["def find_index(seats, target):", "    for i in range(len(seats)):", "        if seats[i] == target:", "            return i", "    return -1"], "array": [4127, 3051, 5310, 2268, 4890], "target": 9999, "labels": ["i", "seats[i]", "checks"], "note": "checks: counted by this display, not by the code", "note_ar": "الـ checks بيعدّها العرض ده، مش الكود", "frames": [{"line": 0, "active": -1, "done": [], "found": -1, "vals": ["-", "-", "0"], "cap": "We call <code>find_index(seats, 9999)<\/code>. The target is <b>9999<\/b>. Nothing checked yet.", "cap_ar": "بننادي <code>find_index(seats, 9999)<\/code>. الـ target هو <b>9999<\/b>. لسه ما فحصناش حاجة.", "result": null}, {"line": 1, "active": 0, "done": [], "found": -1, "vals": ["0", "4127", "0"], "cap": "The <code>for<\/code> hands out the next index: <b>i = 0<\/b>.", "cap_ar": "الـ <code>for<\/code> بتدّي الـ index اللي بعده: <code>i = 0<\/code>.", "result": null}, {"line": 2, "active": 0, "done": [], "found": -1, "vals": ["0", "4127", "1"], "cap": "Compare <code>seats[0]<\/code>, which is <b>4127<\/b>, with the target <b>9999<\/b>. Equal?", "cap_ar": "قارن <code>seats[0]<\/code>، اللي هي <b>4127<\/b>، بالـ target <b>9999<\/b>. متساويين؟", "result": null}, {"line": 1, "active": 1, "done": [0], "found": -1, "vals": ["1", "3051", "1"], "cap": "4127 is not 9999, so the <code>return i<\/code> is skipped. The <code>for<\/code> hands out the next index: <b>i = 1<\/b>.", "cap_ar": "4127 مش 9999، فالـ <code>return i<\/code> مش هتتنفذ. الـ <code>for<\/code> بتدّي الـ index اللي بعده: <code>i = 1<\/code>.", "result": null}, {"line": 2, "active": 1, "done": [0], "found": -1, "vals": ["1", "3051", "2"], "cap": "Compare <code>seats[1]<\/code>, which is <b>3051<\/b>, with the target <b>9999<\/b>. Equal?", "cap_ar": "قارن <code>seats[1]<\/code>، اللي هي <b>3051<\/b>، بالـ target <b>9999<\/b>. متساويين؟", "result": null}, {"line": 1, "active": 2, "done": [0, 1], "found": -1, "vals": ["2", "5310", "2"], "cap": "3051 is not 9999, so the <code>return i<\/code> is skipped. The <code>for<\/code> hands out the next index: <b>i = 2<\/b>.", "cap_ar": "3051 مش 9999، فالـ <code>return i<\/code> مش هتتنفذ. الـ <code>for<\/code> بتدّي الـ index اللي بعده: <code>i = 2<\/code>.", "result": null}, {"line": 2, "active": 2, "done": [0, 1], "found": -1, "vals": ["2", "5310", "3"], "cap": "Compare <code>seats[2]<\/code>, which is <b>5310<\/b>, with the target <b>9999<\/b>. Equal?", "cap_ar": "قارن <code>seats[2]<\/code>، اللي هي <b>5310<\/b>، بالـ target <b>9999<\/b>. متساويين؟", "result": null}, {"line": 1, "active": 3, "done": [0, 1, 2], "found": -1, "vals": ["3", "2268", "3"], "cap": "5310 is not 9999, so the <code>return i<\/code> is skipped. The <code>for<\/code> hands out the next index: <b>i = 3<\/b>.", "cap_ar": "5310 مش 9999، فالـ <code>return i<\/code> مش هتتنفذ. الـ <code>for<\/code> بتدّي الـ index اللي بعده: <code>i = 3<\/code>.", "result": null}, {"line": 2, "active": 3, "done": [0, 1, 2], "found": -1, "vals": ["3", "2268", "4"], "cap": "Compare <code>seats[3]<\/code>, which is <b>2268<\/b>, with the target <b>9999<\/b>. Equal?", "cap_ar": "قارن <code>seats[3]<\/code>، اللي هي <b>2268<\/b>، بالـ target <b>9999<\/b>. متساويين؟", "result": null}, {"line": 1, "active": 4, "done": [0, 1, 2, 3], "found": -1, "vals": ["4", "4890", "4"], "cap": "2268 is not 9999, so the <code>return i<\/code> is skipped. The <code>for<\/code> hands out the next index: <b>i = 4<\/b>.", "cap_ar": "2268 مش 9999، فالـ <code>return i<\/code> مش هتتنفذ. الـ <code>for<\/code> بتدّي الـ index اللي بعده: <code>i = 4<\/code>.", "result": null}, {"line": 2, "active": 4, "done": [0, 1, 2, 3], "found": -1, "vals": ["4", "4890", "5"], "cap": "Compare <code>seats[4]<\/code>, which is <b>4890<\/b>, with the target <b>9999<\/b>. Equal?", "cap_ar": "قارن <code>seats[4]<\/code>، اللي هي <b>4890<\/b>، بالـ target <b>9999<\/b>. متساويين؟", "result": null}, {"line": 1, "active": -1, "done": [0, 1, 2, 3, 4], "found": -1, "vals": ["4", "-", "5"], "cap": "4890 is not 9999, so the <code>return i<\/code> is skipped. <code>range<\/code> has no index left: <b>all 5 positions checked<\/b>. The loop ends.", "cap_ar": "4890 مش 9999، فالـ <code>return i<\/code> مش هتتنفذ. الـ <code>range<\/code> خلصت الـ indexes: <b>اتفحصت الـ 5 أماكن كلها<\/b>. الـ loop خلصت.", "result": null}, {"line": 4, "active": -1, "done": [0, 1, 2, 3, 4], "found": -1, "vals": ["4", "-", "5"], "cap": "No position matched, so we reach the last line. <code>return -1<\/code> is this function's signal for <b>not found<\/b>.", "cap_ar": "ولا مكان اتطابق، فوصلنا لآخر سطر. <code>return -1<\/code> هي علامة الـ function دي إن الحاجة <b>مش موجودة<\/b>.", "result": -1}], "returned": -1, "key": "absent"}}</script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var NS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function pct(x, d) { return (x * 100).toFixed(d == null ? 1 : d) + "%"; }
+  function fmt(n) { return Number(n).toLocaleString("en-US"); }
+  function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $("#toast");
+    if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 4200);
+  }
+
+  /* ---------- code blocks: highlighting, line numbers, diffs, copy ---------- */
+  var KEYWORDS = {
+    python: "False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield",
+    cfamily: "auto bool break case catch char class const continue default delete do double else enum export extern false float for function goto if import inline int let long namespace new null nullptr private protected public return short signed sizeof static struct switch template this throw true try typedef typeof union unsigned using var void volatile while",
+    sql: "select from where group by having order limit join inner left right outer on as insert into values update set delete create table alter drop index distinct union all case when then else end",
+    plain: ""
+  };
+  var BUILTINS = "print input eval format len range sum sorted dict list open round float int zip enumerate repr min max isinstance set tuple str console log cout cin cerr endl fixed scientific setprecision setw main";
+  function langKey(lang) {
+    lang = (lang || "plain").toLowerCase();
+    if (lang === "python" || lang === "py") return "python";
+    if (lang === "sql") return "sql";
+    if (["js","javascript","ts","typescript","c","cpp","c++","java","go","rust","json","css"].indexOf(lang) >= 0) return "cfamily";
+    return "plain";
+  }
+  function tokenize(code, lang) {
+    var key = langKey(lang);
+    var re = key === "python"
+      ? /(#[^\n]*)|((?:[rRfFbB]{1,2})?(?:'''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"))|(\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)/g
+      /* cfamily: note the preprocessor group. #include must not render as a comment. */
+      : /(\/\*[\s\S]*?\*\/|\/\/[^\n]*|--[^\n]*)|('(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"|`(?:\\.|[^`\\])*`|<[A-Za-z_][A-Za-z0-9_+./]*>)|(\b0x[0-9a-fA-F]+\b|\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)|(#[A-Za-z_]+)/g;
+    var kw = (KEYWORDS[key] || "").split(" "), bi = BUILTINS.split(" ");
+    var segs = [], last = 0, m;
+    while ((m = re.exec(code))) {
+      if (m.index > last) segs.push(["", code.slice(last, m.index)]);
+      var t = m[0], cls = "";
+      if (m[1]) cls = "tk-c";
+      else if (m[2]) cls = "tk-s";
+      else if (m[3]) cls = "tk-n";
+      else if (m[5]) cls = "tk-p";
+      else if (m[4]) {
+        if (kw.indexOf(t) >= 0 || kw.indexOf(t.toLowerCase()) >= 0) cls = "tk-k";
+        else if (bi.indexOf(t) >= 0) cls = "tk-f";
+        else if (/^\s*\(/.test(code.slice(re.lastIndex, re.lastIndex + 2))) cls = "tk-f";
+      }
+      segs.push([cls, t]);
+      last = re.lastIndex;
+    }
+    if (last < code.length) segs.push(["", code.slice(last)]);
+    return segs;
+  }
+  function highlightLines(code, lang) {
+    var lines = [""];
+    tokenize(code, lang).forEach(function (seg) {
+      seg[1].split("\n").forEach(function (p, i) {
+        if (i > 0) lines.push("");
+        if (p) lines[lines.length - 1] += seg[0] ? '<span class="' + seg[0] + '">' + esc(p) + "</span>" : esc(p);
+      });
+    });
+    return lines;
+  }
+  function copyText(text, statusEl, preEl) {
+    function done(msg) { statusEl.textContent = msg; setTimeout(function () { statusEl.textContent = ""; }, 2200); }
+    function fallback() {
+      try {
+        var sel = window.getSelection(), range = document.createRange();
+        range.selectNodeContents(preEl); sel.removeAllRanges(); sel.addRange(range);
+        if (document.execCommand && document.execCommand("copy")) { sel.removeAllRanges(); done("Copied"); }
+        else done("Selected. Press Ctrl+C or Cmd+C");
+      } catch (e) { done("Select the code and copy it"); }
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done("Copied"); }, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  }
+  $$('script[data-show]').forEach(function (s) {
+    var lang = s.getAttribute("data-lang") || "plain";
+    var raw = s.textContent.replace(/^\n/, "").replace(/\s+$/, "");
+    var shown = raw;
+    var isDiff = s.hasAttribute("data-diff");
+    var lineNums = s.hasAttribute("data-ln");
+    var hl = (s.getAttribute("data-hl") || "").split(",").filter(Boolean).map(Number);
+    var hlClass = s.getAttribute("data-hl-kind") === "change" ? "chg-line" : "hl-line";
+    var markers = null, text = shown;
+    if (isDiff) {
+      var src = shown.split("\n");
+      markers = src.map(function (l) { return l.charAt(0) || " "; });
+      text = src.map(function (l) { return l.slice(2); }).join("\n");
+    }
+    var html = highlightLines(text, lang).map(function (h, i) {
+      if (isDiff) {
+        var mk = markers[i], cls = mk === "+" ? "add-line" : mk === "-" ? "del-line" : "";
+        var g = '<span class="dg">' + (mk === " " ? " " : esc(mk)) + "</span>";
+        return cls ? '<span class="' + cls + '">' + g + h + "</span>" : g + h;
+      }
+      var ln = lineNums ? '<span class="ln">' + (i + 1) + "</span>" : "";
+      return hl.indexOf(i + 1) >= 0 ? '<span class="' + hlClass + '">' + ln + (h || " ") + "</span>" : ln + h;
+    }).join("\n");
+    var box = document.createElement("div");
+    box.className = "code";
+    box.innerHTML = '<div class="code-head"><span class="ttl">' + esc(s.getAttribute("data-title") || lang) +
+      '</span><span class="copy-status" aria-live="polite"></span><button type="button" class="btn small copy">Copy</button></div><pre><code>' + html + "</code></pre>";
+    s.parentNode.insertBefore(box, s);
+    box.querySelector(".copy").addEventListener("click", function () { copyText(isDiff ? text : raw, box.querySelector(".copy-status"), box.querySelector("pre")); });
+  });
+
+
+  /* =======================================================================
+     This lab's widgets. The counts come from DSAModel (src/dsamodel.js),
+     which check-model.py compares with Python doing the work. The traces
+     are frames Python recorded (build-data.py, sys.settrace); the page only
+     replays them.
+     ======================================================================= */
+  var TRACE = JSON.parse($("#trace-data").textContent);
+
+  /* ---------- "you are here" strips ---------- */
+  var STAGES = [["why", "Why"], ["tools", "PyCharm"], ["list", "Lists"], ["loop", "Loops"], ["func", "Functions"], ["search", "Search"]];
+  $$(".where").forEach(function (el) {
+    var on = (el.getAttribute("data-stage") || "").split(",");
+    el.innerHTML = STAGES.map(function (s) { return '<span class="' + (on.indexOf(s[0]) >= 0 ? "on" : "") + '">' + s[1] + "</span>"; }).join('<i aria-hidden="true">›</i>');
+    el.setAttribute("role", "img");
+    el.setAttribute("aria-label", "Stage: " + STAGES.filter(function (s) { return on.indexOf(s[0]) >= 0; }).map(function (s) { return s[1]; }).join(", "));
+  });
+
+  /* a slider position 0..100 on a log scale between lo and hi, and back */
+  function logPick(t, lo, hi) { return Math.round(Math.pow(10, Math.log10(lo) + t / 100 * (Math.log10(hi) - Math.log10(lo)))); }
+  function logPos(n, lo, hi) { return Math.round((Math.log10(n) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo)) * 100); }
+  function barPct(v, top) { return Math.max(2, Math.log10(Math.max(1, v)) / Math.log10(top) * 100); }
+
+  /* ---------- hero: records inspected, scan against halving ---------- */
+  (function () {
+    var slider = $("#hero-n"); if (!slider) return;
+    var LO = 6, HI = 10000000, n = 1000;
+    function paint() {
+      var s = DSAModel.scanWorst(n), h = DSAModel.halvingWorst(n);
+      $("#hero-n-out").textContent = fmt(n);
+      $("#hero-duel").innerHTML =
+        '<div class="row"><span class="name">Unsorted<small>check one by one</small></span><span class="bar hot"><i style="width:' + barPct(s, HI) + '%"></i></span><span class="num hot">' + fmt(s) + "</span></div>" +
+        '<div class="row"><span class="name">Sorted<small>check the middle, drop half</small></span><span class="bar good"><i style="width:' + barPct(h, HI) + '%"></i></span><span class="num good">' + fmt(h) + "</span></div>";
+      $("#hero-verdict").innerHTML = '<span class="tagv">' + fmt(n) + " records:</span> a scan may inspect every one of them; halving a sorted list inspects at most " + fmt(h) + (s > h ? ". Every time the records double, halving needs just one more look." : ".");
+    }
+    slider.value = logPos(n, LO, HI);
+    slider.addEventListener("input", function () { n = logPick(+slider.value, LO, HI); paint(); });
+    $$("#hero-presets button").forEach(function (b) {
+      b.addEventListener("click", function () { n = +b.getAttribute("data-n"); slider.value = logPos(n, LO, HI); paint(); });
+    });
+    paint();
+  })();
+
+  /* ---------- 2.2 pairs of IDs ---------- */
+  (function () {
+    var slider = $("#pr-n"); if (!slider) return;
+    var LO = 2, HI = 1000000;
+    function paint() {
+      var n = logPick(+slider.value, LO, HI), p = DSAModel.pairs(n), p10 = DSAModel.pairs(n * 10);
+      $("#pr-n-out").textContent = fmt(n);
+      $("#pr-cards").innerHTML =
+        '<div class="pgcard"><p class="k">IDs</p><p class="v">' + fmt(n) + '</p><p class="n">all different, so the check never stops early</p></div>' +
+        '<div class="pgcard hot"><p class="k">pairs to compare</p><p class="v">' + fmt(p) + '</p><p class="n">each pair once</p></div>' +
+        '<div class="pgcard"><p class="k">with ten times the IDs</p><p class="v">' + fmt(p10) + '</p><p class="n">' + fmt(n * 10) + " IDs</p></div>";
+      $("#pr-verdict").innerHTML = '<span class="tagv">Ten times the IDs, ' + (p ? fmt(Math.round(p10 / p)) + " times the pairs." : "and the pairs go from none to some.") + "</span> One search through the list only grows ten times.";
+    }
+    slider.addEventListener("input", paint);
+    paint();
+  })();
+
+  /* ---------- trace players (5.1, 7.3) ---------- */
+  function tracePlayer(box) {
+    var state = { key: box.getAttribute("data-trace"), n: 0 };
+    function build() {
+      var T = TRACE[state.key];
+      var code = highlightLines(T.code.join("\n"), "python");
+      box.innerHTML =
+        '<div class="gt-top"><span class="gt-name">seats</span>' + T.array.map(function (v, k) {
+          return '<div class="gt-cell"><span class="ix">' + k + '</span><span class="gt-box">' + v + "</span></div>";
+        }).join("") + (T.target !== null ? '<span class="gt-target">target<b>' + T.target + "</b></span>" : "") + "</div>" +
+        '<div class="gt-mid"><pre class="gt-code">' + code.map(function (h) { return '<span class="ln">' + (h || " ") + "</span>"; }).join("") + "</pre>" +
+        '<div class="gt-state">' + T.labels.map(function (l, k) {
+          return '<div class="gt-row' + (T.kind === "walk" && k === 2 ? " out" : "") + '"><span class="k">' + esc(l) + '</span><span class="v"></span></div>';
+        }).join("") + (T.note ? '<p class="gt-note">' + esc(T.note) + "</p>" : "") + "</div></div>" +
+        '<p class="gt-cap" aria-live="polite"></p>' +
+        '<div class="btnrow"><button type="button" class="btn small" data-a="back">Back</button>' +
+        '<button type="button" class="btn small primary" data-a="next">Run the next line</button>' +
+        '<button type="button" class="btn small" data-a="reset">Start again</button><span class="gt-count"></span></div>';
+      $$("[data-a]", box).forEach(function (b) {
+        b.addEventListener("click", function () {
+          var a = b.getAttribute("data-a"), last = TRACE[state.key].frames.length - 1;
+          state.n = a === "next" ? Math.min(last, state.n + 1) : a === "back" ? Math.max(0, state.n - 1) : 0;
+          paint();
+        });
+      });
+      paint();
+    }
+    function paint() {
+      var T = TRACE[state.key], f = T.frames[state.n], last = T.frames.length - 1;
+      $$(".gt-cell", box).forEach(function (c, k) {
+        c.classList.toggle("active", k === f.active);
+        c.classList.toggle("done", f.done.indexOf(k) >= 0);
+        c.classList.toggle("found", k === f.found);
+      });
+      $$(".gt-code .ln", box).forEach(function (l, k) { l.classList.toggle("on", k === f.line); });
+      $$(".gt-row", box).forEach(function (r, k) {
+        $(".v", r).textContent = (T.kind === "walk" && k === 2) ? (f.out || "").replace(/\n$/, "") : f.vals[k];
+      });
+      var done = f.result !== null && f.result !== undefined;
+      var cap = $(".gt-cap", box);
+      cap.innerHTML = f.cap + (done ? " <b>Returned: " + esc(String(f.result)) + "</b>" : "");
+      cap.classList.toggle("ret", done);
+      $('[data-a="next"]', box).disabled = state.n >= last;
+      $('[data-a="next"]', box).textContent = state.n >= last ? "Finished" : state.n === 0 ? "Run the first line" : "Run the next line";
+      $('[data-a="back"]', box).disabled = state.n === 0;
+      $(".gt-count", box).textContent = "step " + state.n + " of " + last;
+    }
+    build();
+    return { show: function (key) { state.key = key; state.n = 0; build(); } };
+  }
+  var players = {};
+  $$(".gtrace[data-trace]").forEach(function (box, i) { players[box.id || "t" + i] = tracePlayer(box); });
+  $$("#tr-seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      $$("#tr-seg button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      players["tr-search"].show(b.getAttribute("data-v"));
+    });
+  });
+
+
+  /* ---------- self-checks ---------- */
+  $$("[data-quiz]").forEach(function (q) {
+    var fb = $(".fb", q), btns = $$(".opts button", q);
+    btns.forEach(function (b, i) {
+      b.innerHTML = '<span class="mk">' + "ABCD".charAt(i) + "</span><span>" + b.innerHTML + "</span>";
+      b.addEventListener("click", function () {
+        var ok = b.getAttribute("data-ok") === "1";
+        btns.forEach(function (x) { x.classList.remove("right", "wrong"); });
+        b.classList.add(ok ? "right" : "wrong");
+        fb.className = "fb " + (ok ? "ok" : "no");
+        fb.innerHTML = '<span class="verdict">' + (ok ? "Right." : "Not quite.") + "</span> " + b.getAttribute("data-fb");
+      });
+    });
+  });
+
+  /* ---------- checklist, remembered in this browser only ---------- */
+  var CK_KEY = "dsa-w1-checklist-v1", ck = {};
+  try { ck = JSON.parse(localStorage.getItem(CK_KEY) || "{}") || {}; } catch (e) { ck = {}; }
+  $$(".checklist input").forEach(function (box) {
+    box.checked = !!ck[box.getAttribute("data-k")];
+    box.addEventListener("change", function () {
+      ck[box.getAttribute("data-k")] = box.checked;
+      try { localStorage.setItem(CK_KEY, JSON.stringify(ck)); } catch (e) { /* private window: ticks last for this visit */ }
+    });
+  });
+
+  /* ---------- chapter highlighting ---------- */
+  var navLinks = $$(".rail a[data-for], .chipnav a[data-for]"), chipnav = $(".chipnav");
+  function markChapter(id) {
+    navLinks.forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-for") === id); });
+    var chip = chipnav && chipnav.querySelector('a[data-for="' + id + '"]');
+    if (chip && getComputedStyle(chipnav).display !== "none") {
+      chipnav.scrollTo({ left: chip.offsetLeft - chipnav.clientWidth / 2 + chip.clientWidth / 2, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) markChapter(e.target.getAttribute("data-chapter")); });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    $$("[data-chapter]").forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- companion file: one runnable .py, built from the blocks above ---------- */
+  var COMPANION = "q00_worksheet.py";
+  function companionBlocks() {
+    return $$("script[data-companion], script[data-kind]").map(function (s) {
+      var kind = s.getAttribute("data-kind") || "code";
+      return { order: parseFloat(s.getAttribute("data-order") || "0"), kind: kind, src: s.textContent.replace(/^\n/, "").replace(/\s+$/, "") };
+    }).sort(function (a, b) { return a.order - b.order; });
+  }
+  function buildCompanion() {
+    var blocks = companionBlocks();
+    if (/\.(cpp|cc|c|h|hpp)$/.test(COMPANION)) {
+      /* prose becomes comments so the saved file compiles as it stands */
+      return blocks.map(function (c) {
+        return c.kind === "markdown"
+          ? c.src.split("\n").map(function (l) { return l.length ? "// " + l : "//"; }).join("\n")
+          : c.src;
+      }).join("\n\n") + "\n";
+    }
+    if (/\.py$/.test(COMPANION)) {
+      /* prose becomes comments so the saved file runs as it stands */
+      return blocks.map(function (c) {
+        return c.kind === "markdown"
+          ? c.src.split("\n").map(function (l) { return l.length ? "# " + l : "#"; }).join("\n")
+          : c.src;
+      }).join("\n\n") + "\n";
+    }
+    if (/\.ipynb$/.test(COMPANION)) {
+      var cells = blocks.map(function (c, i) {
+        var lines = c.src.split("\n"), source = lines.map(function (l, j) { return j < lines.length - 1 ? l + "\n" : l; });
+        var cell = { cell_type: c.kind === "markdown" ? "markdown" : "code", id: "cell-" + (i + 1), metadata: {}, source: source };
+        if (cell.cell_type === "code") { cell.execution_count = null; cell.outputs = []; }
+        return cell;
+      });
+      return JSON.stringify({ nbformat: 4, nbformat_minor: 5, metadata: {}, cells: cells }, null, 1) + "\n";
+    }
+    return blocks.map(function (c) { return c.kind === "markdown" ? c.src : "```\n" + c.src + "\n```"; }).join("\n\n") + "\n";
+  }
+  var CRC = (function () { var t = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(buf) { var c = 0xFFFFFFFF; for (var i = 0; i < buf.length; i++) c = CRC[(c ^ buf[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function zipOne(name, data) {
+    var nb = new TextEncoder().encode(name), crc = crc32(data), d = new Date();
+    var time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+    var date = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    var loc = new Uint8Array(30 + nb.length), lv = new DataView(loc.buffer);
+    lv.setUint32(0, 0x04034b50, true); lv.setUint16(4, 20, true); lv.setUint16(6, 0x0800, true);
+    lv.setUint16(10, time, true); lv.setUint16(12, date, true); lv.setUint32(14, crc, true);
+    lv.setUint32(18, data.length, true); lv.setUint32(22, data.length, true); lv.setUint16(26, nb.length, true);
+    loc.set(nb, 30);
+    var cen = new Uint8Array(46 + nb.length), cv = new DataView(cen.buffer);
+    cv.setUint32(0, 0x02014b50, true); cv.setUint16(4, 20, true); cv.setUint16(6, 20, true); cv.setUint16(8, 0x0800, true);
+    cv.setUint16(12, time, true); cv.setUint16(14, date, true); cv.setUint32(16, crc, true);
+    cv.setUint32(20, data.length, true); cv.setUint32(24, data.length, true); cv.setUint16(28, nb.length, true);
+    cen.set(nb, 46);
+    var end = new Uint8Array(22), ev = new DataView(end.buffer);
+    ev.setUint32(0, 0x06054b50, true); ev.setUint16(8, 1, true); ev.setUint16(10, 1, true);
+    ev.setUint32(12, cen.length, true); ev.setUint32(16, loc.length + data.length, true);
+    var out = new Uint8Array(loc.length + data.length + cen.length + end.length);
+    out.set(loc, 0); out.set(data, loc.length); out.set(cen, loc.length + data.length); out.set(end, loc.length + data.length + cen.length);
+    return out;
+  }
+  function saveCompanion() {
+    var text = buildCompanion();
+    var host = window.claude && typeof window.claude.use === "function";
+    if (!host) {
+      var url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
+      var a = document.createElement("a"); a.href = url; a.download = COMPANION;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 3000);
+      toast("Saving " + COMPANION + ".");
+      return;
+    }
+    window.claude.use("downloads").then(function (dl) {
+      if (!dl) { toast("Saving isn't available in this view."); return; }
+      var ext = COMPANION.split(".").pop().toLowerCase();
+      var allowed = ["txt", "json", "md", "csv", "html", "svg", "pdf", "zip", "png", "jpg", "jpeg", "webp", "gif", "mp4", "webm", "docx", "pptx", "xlsx", "epub", "ttf"];
+      var bytes = new TextEncoder().encode(text);
+      var req = allowed.indexOf(ext) >= 0 ? { filename: COMPANION, data: text } : { filename: COMPANION.replace(/\.[^.]+$/, "") + ".zip", data: zipOne(COMPANION, bytes) };
+      return dl.save(req).then(function () { toast("Saved."); }, function (err) {
+        var code = err && err.code;
+        toast(code === "declined" ? "Save cancelled." : code === "rate_limited" ? "A save prompt is already open." : "Saving isn't available in this view.");
+      });
+    }, function () { toast("Saving isn't available in this view."); });
+  }
+  $$(".companion-save").forEach(function (b) { b.addEventListener("click", saveCompanion); });
+
+  /* Exposed for automated checks. */
+  window.guideKit = { $: $, $$: $$, svgEl: svgEl, esc: esc, toast: toast, buildCompanion: buildCompanion, zipOne: zipOne, DSAModel: DSAModel };
+})();
+</script>
+</body>
+</html>

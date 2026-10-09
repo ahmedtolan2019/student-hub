@@ -1,0 +1,41 @@
+{
+  "academic_year": "2026 / 2027",
+  "semester": 1,
+  "courses": [
+    {
+      "id": "dsa", "code": "DSA", "title": "Data Structures & Algorithms", "language": "Python",
+      "source": "DSA-data-structures-and-algorithms",
+      "weeks": [
+        {"number": 1, "folder": "week-01-why-data-structures", "title": "Why data structures?", "description": "Lists, loops, functions and linear search.", "kind": "student",
+          "slides": "student/DSA-Lab-01-Slides.html", "guide": "student/DSA-Lab-01-Guide.html", "sheet": "student/sheet-01.html", "sheet_pdf": "student/sheet-01.pdf", "extras": []},
+        {"number": 2, "folder": "week-02-algorithms-and-data", "title": "Algorithms and data", "description": "Python foundations, algorithm representations and complexity.", "kind": "student",
+          "slides": "student/DSA-Lab-02-Slides.html", "guide": "student/DSA-Lab-02-Guide.html", "guide_pdf": "student/DSA-Lab-02-Guide.pdf", "sheet": "student/sheet-02.html", "sheet_pdf": "student/sheet-02.pdf",
+          "extras": [{"source": "student/FONT-LICENSES.txt", "label": "Font licenses", "hidden": true}],
+          "starters": ["student/starter-files/q00_ready.py", "student/starter-files/q02_larger.py", "student/starter-files/q04_count.py", "student/starter-files/q05_below.py", "student/starter-files/README.txt"]}
+      ]
+    },
+    {
+      "id": "ece122", "code": "ECE122", "title": "Computer Programming 1", "language": "Python",
+      "source": "ECE122-computer-programming-1",
+      "weeks": [
+        {"number": 1, "folder": "week-01-first-programs", "title": "First programs", "description": "Your first Python programs, input, output and calculations.", "kind": "student",
+          "slides": "../exports/ECE122-Week01-Slides.html", "guide": "../exports/ECE122-Week01-Guide.html", "sheet": "../course-materials/sheets/sheet-01.pdf", "extras": []}
+      ]
+    },
+    {
+      "id": "gen241", "code": "GEN241", "title": "Computer Language & Applications", "language": "C++",
+      "source": "GEN241-computer-language-and-applications",
+      "weeks": [
+        {"number": 1, "folder": "week-01-first-programs", "title": "First programs", "description": "C++ foundations, variables, output and engineering calculations.", "kind": "gen241",
+          "slides": "slides/index.html", "guide": "guide/index.html", "guide_pdf": "../exports/GEN241 Week 01 - Guide.pdf", "sheet": "../course-materials/sheets/sheet-01.pdf",
+          "extras": [{"source": "../course-materials/lectures/02-computers-languages-variables.pdf", "label": "Lecture 2"}]},
+        {"number": 2, "folder": "week-02-input-types-and-arithmetic", "title": "Input, types and arithmetic", "description": "Reading input, choosing types and solving Sheet 2, part 1.", "kind": "gen241",
+          "slides": "slides/index.html", "guide": "guide/index.html", "guide_pdf": "../exports/GEN241 Week 02 - Guide.pdf", "sheet": "../course-materials/sheets/sheet-02.pdf",
+          "extras": [{"source": "../course-materials/lectures/03-GEN_241_03.pdf", "label": "Lecture 3"}, {"source": "../course-materials/submission-rules.pdf", "label": "Submission rules"}]},
+        {"number": 3, "folder": "week-03-selection-if-else", "title": "Selection with if / else", "description": "Conditions, decisions and solving Sheet 2, part 2.", "kind": "gen241",
+          "slides": "slides/index.html", "guide": "guide/index.html", "guide_pdf": "../exports/GEN241 Week 03 - Guide.pdf", "sheet": "../course-materials/sheets/sheet-02.pdf",
+          "extras": [{"source": "../course-materials/lectures/03-GEN_241_03.pdf", "label": "Lecture 3"}, {"source": "../course-materials/submission-rules.pdf", "label": "Submission rules"}]}
+      ]
+    }
+  ]
+}

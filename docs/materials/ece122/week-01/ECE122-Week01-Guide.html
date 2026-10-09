@@ -1,0 +1,2132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>First Python Programs</title>
+<meta name="description" content="ECE122 Sheet 1, worked as one running example: set up PyCharm and your folders, read numbers with input(), and print answers you can check.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  /* surfaces and ink: pick a neutral with a slight bias toward the accent */
+  --bg: #f4f6f9; --surface: #ffffff; --surface-2: #eef1f6; --surface-3: #e2e7ee;
+  --ink: #111821; --ink-2: #435061; --ink-3: #5f6b7c;
+  --rule: #d9dfe7; --rule-strong: #b9c2ce;
+  /* accent: interactive things only */
+  --accent: #0f6e78; --accent-strong: #0b555d; --accent-soft: #e0f0f2; --on-accent: #ffffff;
+  /* semantic pair: the thing under study vs its background class. Rename per subject. */
+  --hot: #b4531f; --hot-ink: #93411a; --hot-soft: #fbeade;
+  --cool: #8894a5; --cool-soft: #e9edf2;
+  --good: #1b7446; --good-soft: #e0f2e7;
+  --warn-ink: #7f4d00; --warn-soft: #fff1d6; --warn-line: #e0a126;
+  --mark: #111821;           /* outline used as a second channel beside colour */
+  --dim: 0.16;               /* opacity for "not counted" marks */
+  --code-bg: #f6f8fb; --code-ink: #1b2430;
+  --tok-key: #0b555d; --tok-str: #1b7446; --tok-num: #93411a; --tok-com: #6b7684; --tok-fn: #6a3ab2; --tok-pre: #a2337a;
+  --shadow: 0 1px 2px rgba(17,24,33,.05), 0 6px 20px rgba(17,24,33,.06);
+  --radius: 6px; --radius-sm: 4px;
+  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-alt: "IBM Plex Sans Arabic", system-ui, sans-serif; /* second-language callouts */
+  --top: env(safe-area-inset-top, 0px);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --cool: #5e6a7b; --cool-soft: #222b37;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412; --warn-line: #b88419;
+  --mark: #e8ecf2; --dim: 0.2;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-fn: #c3a6f5; --tok-pre: #f09ccd;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --cool: #5e6a7b; --cool-soft: #222b37;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412; --warn-line: #b88419;
+  --mark: #e8ecf2; --dim: 0.2;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-fn: #c3a6f5; --tok-pre: #f09ccd;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--top) + 72px); -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.62 var(--font-body); text-rendering: optimizeLegibility; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-strong); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+code, kbd, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+p code, li code, td code, figcaption code, .callout code, h3 code, summary code, label code, .quiz .opts button code {
+  background: var(--surface-2); border: 1px solid var(--rule); border-radius: 3px; padding: 0.04em 0.32em;
+  /* not nowrap: a long path or statement would push the whole page sideways on a phone */
+  overflow-wrap: break-word;
+}
+strong { font-weight: 650; }
+.num { font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- top bar and chapter navigation ---------- */
+.topbar { position: sticky; top: var(--top); z-index: 30; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--rule); }
+.topbar-inner { max-width: 1320px; margin: 0 auto; padding-block: 10px; padding-inline: 16px; display: flex; align-items: center; gap: 16px; }
+.wordmark { display: flex; align-items: baseline; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 17px; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.wordmark small { font-family: var(--font-mono); font-weight: 500; font-size: 11.5px; letter-spacing: 0.06em; color: var(--ink-3); text-transform: uppercase; }
+.topbar .spacer { flex: 1; }
+.chipnav { display: none; }
+@media (max-width: 1099px) {
+  .chipnav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-block: 0 10px; padding-inline: 16px; max-width: 1320px; margin: 0 auto; }
+  .chipnav::-webkit-scrollbar { display: none; }
+  .chipnav a { flex: none; font-size: 13.5px; text-decoration: none; color: var(--ink-2); border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: var(--surface); }
+  .chipnav a.on { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+  .wordmark small { display: none; }
+}
+
+/* ---------- controls ---------- */
+.btn { appearance: none; font: 600 14.5px/1 var(--font-body); display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: var(--radius-sm); border: 1px solid var(--rule-strong); background: var(--surface); color: var(--ink); cursor: pointer; text-decoration: none; white-space: nowrap; }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--on-accent); }
+.btn.small { padding: 6px 10px; font-size: 13px; }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); }
+.seg button { appearance: none; border: 0; background: transparent; color: var(--ink-2); font: 600 14px/1.2 var(--font-body); padding: 8px 13px; cursor: pointer; border-right: 1px solid var(--rule); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.seg button:hover:not([aria-pressed="true"]) { background: var(--accent-soft); color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { appearance: none; font: 500 14px/1.25 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 6px 10px; cursor: pointer; text-align: left; }
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+input[type="range"] { width: 100%; accent-color: var(--accent); height: 28px; margin: 0; }
+.field-row { display: grid; gap: 4px; }
+.field-row label { font-size: 14px; color: var(--ink-2); display: flex; justify-content: space-between; gap: 12px; }
+.field-row label output { font-family: var(--font-mono); color: var(--ink); font-weight: 600; }
+input[type="text"] { width: 100%; font: 400 15px/1.4 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 9px 11px; }
+input[type="text"]:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+
+/* ---------- layout ---------- */
+.shell { max-width: 1320px; margin: 0 auto; padding-inline: 16px; }
+@media (min-width: 1100px) { .shell { display: grid; grid-template-columns: 212px minmax(0, 1fr); gap: 56px; padding-inline: 32px; } }
+.rail { display: none; }
+@media (min-width: 1100px) { .rail { display: block; } .rail nav { position: sticky; top: calc(var(--top) + 80px); padding-block: 8px 24px; } }
+.rail ol { list-style: none; margin: 0; padding: 0; position: relative; }
+.rail ol::before { content: ""; position: absolute; left: 7px; top: 12px; bottom: 12px; width: 1px; background: var(--rule-strong); }
+.rail li a { position: relative; display: grid; grid-template-columns: 15px 1fr; gap: 12px; align-items: baseline; padding: 6px 0; text-decoration: none; color: var(--ink-2); font-size: 14.5px; line-height: 1.3; }
+.rail li a::before { content: ""; width: 9px; height: 9px; margin-left: 3px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--rule-strong); transform: translateY(1px); }
+.rail li a span.k { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); display: block; letter-spacing: 0.04em; }
+.rail li a:hover { color: var(--ink); }
+.rail li a.on { color: var(--ink); font-weight: 600; }
+.rail li a.on::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.rail .rail-foot { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule); display: grid; gap: 10px; }
+.rail .rail-foot p { margin: 0; font-size: 13px; color: var(--ink-3); line-height: 1.45; }
+main { min-width: 0; padding-block: 8px 80px; }
+.prose { max-width: 700px; }
+p { margin: 0 0 1em; }
+ul, ol { margin: 0 0 1em; padding-left: 1.3em; }
+li { margin: 0.25em 0; }
+li::marker { color: var(--ink-3); }
+h1, h2, h3, h4 { font-family: var(--font-display); color: var(--ink); text-wrap: balance; margin: 0; }
+h3 { font-size: 22px; font-weight: 700; line-height: 1.25; margin: 2.2em 0 0.55em; }
+h3 .step { font-family: var(--font-mono); font-weight: 500; font-size: 13px; color: var(--ink-3); letter-spacing: 0.04em; display: block; margin-bottom: 4px; }
+h4 { font-size: 17px; font-weight: 700; margin: 1.4em 0 0.4em; }
+.lede { font-size: 19.5px; line-height: 1.55; color: var(--ink-2); }
+.muted { color: var(--ink-3); }
+.small { font-size: 14.5px; }
+
+/* ---------- hero and chapter heads ---------- */
+.hero { padding-block: 44px 20px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
+.hero h1 { font-size: clamp(34px, 5.2vw, 56px); line-height: 1.04; letter-spacing: -0.025em; font-weight: 800; max-width: 16ch; margin-bottom: 18px; }
+.hero .lede { max-width: 640px; }
+.specimen { display: inline-flex; align-items: center; gap: 0.35em; font-family: var(--font-mono); font-weight: 600; font-size: 0.88em; color: var(--ink); background: var(--hot-soft); border-radius: 3px; padding: 0 0.35em; white-space: nowrap; }
+.specimen::before { content: ""; width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--hot); }
+.startrow { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin: 28px 0 8px; }
+.startrow > div { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; }
+.startrow h4 { margin: 0 0 4px; font-size: 15px; }
+.startrow p { margin: 0 0 10px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; }
+.startrow p:last-child { margin-bottom: 0; }
+.chapter { padding-top: 56px; margin-top: 40px; border-top: 1px solid var(--rule); }
+.ch-head { margin-bottom: 26px; }
+.ch-num { font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+.ch-head h2 { font-size: clamp(30px, 4vw, 42px); line-height: 1.08; letter-spacing: -0.02em; font-weight: 800; margin-bottom: 12px; }
+.ch-goal { font-size: 17.5px; color: var(--ink-2); max-width: 660px; margin: 0; }
+/* "you are here" strip: JS fills it from data-stage (see STAGES in the script) */
+.where { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 16px; font-family: var(--font-mono); font-size: 12px; }
+.where span { padding: 3px 8px; border: 1px solid var(--rule); border-radius: 3px; color: var(--ink-3); background: var(--surface); }
+.where i { color: var(--rule-strong); font-style: normal; }
+.where span.on { border-color: var(--accent); background: var(--accent); color: var(--on-accent); font-weight: 600; }
+
+/* ---------- figures ---------- */
+.fig { margin: 26px 0 30px; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px; }
+.fig.flat { background: transparent; border: 0; padding: 0; }
+.fig figcaption { margin-top: 12px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; max-width: 700px; }
+.fig figcaption strong { color: var(--ink); }
+.fig .controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-bottom: 14px; }
+.fig .controls .lbl { font-size: 13.5px; color: var(--ink-3); }
+.fig details.more { margin: 14px 0 0; }
+.fig details.more > summary { font-size: 14.5px; padding: 8px 12px; }
+.svgbox { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+.svgbox svg { display: block; width: 100%; height: auto; }
+.svgbox.wide svg { min-width: 680px; }   /* keeps diagram text legible on phones */
+.scrollhint { display: none; font-size: 12.5px; color: var(--ink-3); margin: 6px 0 0; }
+@media (max-width: 760px) { .svgbox.wide + .scrollhint { display: block; } }
+svg text { font-family: var(--font-body); }
+svg .mono { font-family: var(--font-mono); }
+.t-ink { fill: var(--ink); } .t-ink2 { fill: var(--ink-2); } .t-ink3 { fill: var(--ink-3); }
+.t-acc { fill: var(--accent); } .t-hot { fill: var(--hot-ink); } .t-good { fill: var(--good); }
+.s-rule { stroke: var(--rule-strong); } .s-ink { stroke: var(--ink); } .s-ink3 { stroke: var(--ink-3); } .s-acc { stroke: var(--accent); }
+.f-surface { fill: var(--surface); } .f-surface2 { fill: var(--surface-2); } .f-acc-soft { fill: var(--accent-soft); }
+.f-hot { fill: var(--hot); } .f-hot-soft { fill: var(--hot-soft); } .f-cool { fill: var(--cool); } .f-cool-soft { fill: var(--cool-soft); }
+.f-good-soft { fill: var(--good-soft); } .f-acc { fill: var(--accent); } .f-ink { fill: var(--ink); } .f-none { fill: none; }
+
+/* ---------- callouts ---------- */
+.callout { margin: 22px 0; padding: 14px 16px 12px; border-radius: var(--radius); background: var(--surface-2); max-width: 700px; }
+.callout > .tag { display: inline-block; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 6px; color: var(--ink-2); }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout.key { background: var(--accent-soft); } .callout.key > .tag { color: var(--accent); }
+.callout.watch { background: var(--warn-soft); } .callout.watch > .tag { color: var(--warn-ink); }
+.callout.fact { background: var(--surface); border: 1px solid var(--rule); }
+.callout.fact > .tag { color: var(--good); } .callout.fact > .tag::before { content: "\2713\00a0"; }
+.callout.alt { direction: rtl; text-align: right; font-family: var(--font-alt); font-size: 17px; line-height: 1.85; background: var(--surface); border: 1px dashed var(--rule-strong); }
+.callout.alt > .tag { font-family: var(--font-alt); letter-spacing: 0; text-transform: none; font-size: 13px; color: var(--ink-3); }
+.callout.alt code, .callout.alt .ltr { direction: ltr; unicode-bidi: isolate; font-family: var(--font-mono); font-size: 0.85em; }
+
+/* ---------- code ---------- */
+.code { margin: 18px 0 22px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--code-bg); overflow: hidden; }
+.code-head { display: flex; align-items: center; gap: 10px; padding: 7px 8px 7px 12px; border-bottom: 1px solid var(--rule); font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3); background: var(--surface); }
+.code-head .ttl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.code-head .copy { margin-left: auto; }
+.code pre { margin: 0; padding: 12px 14px 14px; overflow-x: auto; font: 400 13.6px/1.62 var(--font-mono); color: var(--code-ink); tab-size: 4; }
+.code pre .ln { display: inline-block; width: 2.2em; margin-left: -0.4em; color: var(--ink-3); opacity: 0.55; user-select: none; text-align: right; padding-right: 1em; }
+.tk-k { color: var(--tok-key); } .tk-s { color: var(--tok-str); } .tk-n { color: var(--tok-num); } .tk-c { color: var(--tok-com); font-style: italic; } .tk-f { color: var(--tok-fn); }
+.hl-line, .chg-line, .add-line, .del-line { display: inline-block; width: calc(100% + 28px); margin-left: -14px; padding-left: 14px; }
+.hl-line { background: var(--hot-soft); } .chg-line { background: var(--accent-soft); }
+.add-line { background: var(--good-soft); } .del-line { background: var(--hot-soft); }
+.dg { display: inline-block; width: 1.4em; margin-left: -0.3em; color: var(--ink-3); user-select: none; }
+.add-line .dg { color: var(--good); font-weight: 600; } .del-line .dg { color: var(--hot-ink); font-weight: 600; }
+.copy-status { font-family: var(--font-body); font-size: 12.5px; color: var(--good); }
+/* numbered notes that explain a code block or figure line by line */
+.notes { display: grid; gap: 10px; margin: 0 0 22px; padding: 0; list-style: none; max-width: 700px; }
+.notes li { display: grid; grid-template-columns: auto 1fr; gap: 10px; margin: 0; font-size: 15.5px; line-height: 1.55; }
+.notes li code { white-space: normal; }
+.notes .n { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 50%; width: 22px; height: 22px; display: grid; place-items: center; margin-top: 1px; }
+.expect { font-family: var(--font-mono); font-size: 13.5px; background: var(--surface); border: 1px dashed var(--rule-strong); border-radius: var(--radius-sm); padding: 10px 12px; margin: -8px 0 22px; color: var(--ink-2); white-space: pre-wrap; max-width: 700px; }
+.expect b { font-family: var(--font-body); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: 4px; }
+
+/* ---------- tables ---------- */
+.tablewrap { overflow-x: auto; margin: 18px 0 24px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 650; font-size: 13px; color: var(--ink-2); background: var(--surface-2); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- self-check ---------- */
+.quiz { margin: 26px 0; padding: 16px 18px; border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--surface); max-width: 700px; }
+.quiz .q-tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+.quiz .q { font-weight: 600; margin: 0 0 12px; }
+.quiz .opts { display: grid; gap: 8px; }
+.quiz .opts button { appearance: none; text-align: left; font: 400 15.5px/1.45 var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 9px 12px; cursor: pointer; display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+.quiz .opts button:hover { border-color: var(--accent); }
+.quiz .opts button .mk { font-family: var(--font-mono); font-size: 13px; color: var(--ink-3); padding-top: 1px; }
+.quiz .opts button.right { border-color: var(--good); background: var(--good-soft); }
+.quiz .opts button.wrong { border-color: var(--hot); background: var(--hot-soft); }
+.quiz .fb { margin: 12px 0 0; font-size: 15.5px; line-height: 1.55; }
+.quiz .fb:empty { display: none; }
+.quiz .fb .verdict { font-weight: 700; }
+.quiz .fb.ok .verdict { color: var(--good); } .quiz .fb.no .verdict { color: var(--hot-ink); }
+
+/* ---------- disclosure, panels, boards, lists ---------- */
+details.more { margin: 22px 0; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+details.more > summary { cursor: pointer; padding: 12px 16px; font-weight: 650; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::before { content: "+"; font-family: var(--font-mono); font-weight: 600; color: var(--accent); width: 14px; }
+details.more[open] > summary::before { content: "\2212"; }
+details.more > summary .muted { font-weight: 400; font-size: 14px; }
+details.more > .inner { padding: 0 16px 16px; }
+.grid2 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid3 { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; }
+.panel h4 { margin: 0 0 6px; font-size: 15.5px; }
+.panel p:not(.label-cap) { font-size: 15px; color: var(--ink-2); margin: 0 0 8px; line-height: 1.5; }
+.panel p:last-child { margin-bottom: 0; }
+.label-cap { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; }
+.dot.hot { background: var(--hot); } .dot.cool { background: var(--cool); }
+.dot.ring { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 3px var(--mark); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--ink-2); margin: 10px 0 0; }
+.legend > span { display: inline-block; }
+.badge { display: inline-block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 3px; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--rule); }
+.badge.hot { background: var(--hot-soft); color: var(--hot-ink); border-color: transparent; }
+.badge.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+/* decided vs open board: say the state of the world once, instead of hedging every sentence */
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 18px 0 24px; }
+.board .dcard { border: 1px solid var(--rule); border-radius: var(--radius); padding: 12px 14px; background: var(--surface); }
+.board .dcard .st { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.board .dcard.done .st { color: var(--good); } .board .dcard.open .st { color: var(--warn-ink); }
+.board .dcard.open { border-style: dashed; border-color: var(--rule-strong); }
+.board .dcard.done { grid-column: 1 / -1; }
+.board .dcard h4 { margin: 4px 0 6px; font-size: 16px; }
+.board .dcard p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+.checklist { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 8px; max-width: 760px; }
+.checklist li { margin: 0; }
+.checklist label { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); cursor: pointer; }
+.checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); }
+.checklist .t { font-weight: 650; display: block; }
+.checklist .d { font-size: 14.5px; color: var(--ink-2); display: block; margin-top: 2px; line-height: 1.5; }
+.checklist input:checked + span .t { text-decoration: line-through; text-decoration-color: var(--ink-3); color: var(--ink-3); }
+.tree { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.7; background: var(--code-bg); border: 1px solid var(--rule); border-radius: var(--radius); padding: 12px 16px; overflow-x: auto; white-space: pre; margin: 16px 0 24px; }
+.tree .c { color: var(--ink-3); }
+/* stat cards: one card per quantity, tap to explain (see wireUp in the script) */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; margin-top: 16px; }
+.scard { appearance: none; text-align: left; font: inherit; color: inherit; cursor: pointer; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 11px 12px 12px; display: grid; gap: 3px; align-content: start; }
+.scard:hover, .scard[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.scard .s-name { font-weight: 700; font-size: 15px; }
+.scard .s-val { font-family: var(--font-mono); font-weight: 600; font-size: 21px; }
+.scard .s-q { font-size: 13.5px; color: var(--ink-2); line-height: 1.4; }
+.scard .s-f { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3); overflow-wrap: anywhere; }
+.readout { font-size: 15px; margin: 12px 0 0; min-height: 3em; }
+
+footer.sources { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-2); }
+footer.sources h2 { font-size: 20px; margin-bottom: 10px; }
+footer.sources li { margin: 0.35em 0; }
+footer.sources code { white-space: normal; overflow-wrap: anywhere; }
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: var(--radius); font-size: 14.5px; box-shadow: var(--shadow); z-index: 50; max-width: calc(100vw - 32px); }
+@media print { .topbar, .rail, .chipnav, .btn, .seg { display: none !important; } .shell { display: block; } details.more > .inner { display: block; } .chapter { break-before: page; } }
+
+/* ---------- additions for this guide ---------- */
+/* preprocessor directives: #include must not render as a comment */
+.tk-p { color: var(--tok-pre); font-weight: 600; }
+
+/* a console, because half of this guide is about what lands on one */
+.console { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.6; background: #14181d; color: #e6ebf1;
+  border: 1px solid var(--rule-strong); border-radius: var(--radius); padding: 0; margin: 18px 0 22px; overflow: hidden; max-width: 700px; }
+.console .bar { display: flex; align-items: center; gap: 7px; padding: 7px 11px; background: #1e242c; border-bottom: 1px solid #2c333d; }
+.console .bar i { width: 10px; height: 10px; border-radius: 50%; background: #3d4651; display: block; }
+.console .bar span { font-size: 11.5px; letter-spacing: 0.05em; color: #8d98a6; margin-left: 4px; text-transform: uppercase; }
+.console pre { margin: 0; padding: 12px 14px; white-space: pre; overflow-x: auto; font: inherit; color: inherit; }
+.console pre b { color: #8de0a6; font-weight: 400; }          /* the value the chapter is about */
+.console pre i { color: #f0a271; font-style: normal; }        /* the wrong value */
+
+/* a space you can see: used where the spaces inside a string literal are the lesson */
+.ws { display: inline-block; width: 1ch; text-align: center; color: var(--ink-3); opacity: 0.5; }
+.ws::before { content: "\00b7"; }
+.starline { font-family: var(--font-mono); font-size: 14px; line-height: 1.5; white-space: pre; }
+.starline b { color: var(--hot-ink); font-weight: 600; }
+
+/* side-by-side result cards, used by the conversion and text widgets */
+.pg { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin: 14px 0 0; }
+.pg .pgcard { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 12px 14px; }
+.pg .pgcard.hot { border-color: var(--hot); box-shadow: inset 3px 0 0 var(--hot); }
+.pg .pgcard.good { border-color: var(--good); box-shadow: inset 3px 0 0 var(--good); }
+.pg .pgcard .k { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.pg .pgcard .v { font-family: var(--font-mono); font-size: 23px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }
+.pg .pgcard .n { font-size: 13.5px; color: var(--ink-2); margin: 6px 0 0; line-height: 1.45; }
+.verdictline { margin: 12px 0 0; font-size: 15px; line-height: 1.55; }
+.verdictline .tagv { font-weight: 700; }
+.verdictline.agree .tagv { color: var(--good); }
+.verdictline.differ .tagv { color: var(--hot-ink); }
+
+/* small row of buttons under a widget */
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 0; }
+.tty { font-family: var(--font-mono); font-size: 14px; background: var(--surface-2); border: 1px solid var(--rule);
+  border-radius: var(--radius-sm); padding: 9px 12px; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 2.6em; margin: 12px 0 0; }
+.kbd { font-family: var(--font-mono); font-size: 12.5px; border: 1px solid var(--rule-strong); border-bottom-width: 2px;
+  border-radius: 4px; padding: 1px 6px; background: var(--surface); white-space: nowrap; }
+.q-table td.mono, .q-table th.mono { font-family: var(--font-mono); font-size: 13.5px; }
+.callout.alt p { margin-bottom: 0.5em; }
+.callout.alt p:last-child { margin-bottom: 0; }
+/* a card label that is code keeps its case: Python is case-sensitive */
+.pg .pgcard .k.code { text-transform: none; letter-spacing: 0; font-size: 12.5px; }
+/* the smallest phones: the title and the Worksheet button must share 320px */
+@media (max-width: 360px) { .wm-extra { display: none; } .topbar .btn { flex: none; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="wordmark" href="#top"><span><span class="wm-extra">First </span>Python Programs</span> <small>ECE122 · week 1</small></a>
+    <span class="spacer"></span>
+    <button class="btn small primary companion-save" type="button">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v8.2M4.6 6.6 8 10l3.4-3.4M2.5 11.5v2h11v-2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Worksheet
+    </button>
+  </div>
+  <nav class="chipnav" aria-label="Chapters">
+    <a href="#top" data-for="top">Map</a>
+    <a href="#ch1" data-for="ch1">1 Folders</a>
+    <a href="#ch2" data-for="ch2">2 PyCharm</a>
+    <a href="#ch3" data-for="ch3">3 input()</a>
+    <a href="#ch4" data-for="ch4">4 eval()</a>
+    <a href="#ch5" data-for="ch5">5 Arithmetic</a>
+    <a href="#ch6" data-for="ch6">6 format()</a>
+    <a href="#ch7" data-for="ch7">7 The sheet</a>
+  </nav>
+</header>
+
+<div class="shell">
+  <aside class="rail" aria-label="Chapters">
+    <nav>
+      <ol>
+        <li><a href="#top" data-for="top"><span><span class="k">START</span>The map</span></a></li>
+        <li><a href="#ch1" data-for="ch1"><span><span class="k">CH 1</span>Where your work lives</span></a></li>
+        <li><a href="#ch2" data-for="ch2"><span><span class="k">CH 2</span>PyCharm, first glance</span></a></li>
+        <li><a href="#ch3" data-for="ch3"><span><span class="k">CH 3</span>input() gives text</span></a></li>
+        <li><a href="#ch4" data-for="ch4"><span><span class="k">CH 4</span>Text into a number</span></a></li>
+        <li><a href="#ch5" data-for="ch5"><span><span class="k">CH 5</span>/ // % **</span></a></li>
+        <li><a href="#ch6" data-for="ch6"><span><span class="k">CH 6</span>Showing a number</span></a></li>
+        <li><a href="#ch7" data-for="ch7"><span><span class="k">CH 7</span>Plan it, then the sheet</span></a></li>
+      </ol>
+      <div class="rail-foot">
+        <p>The worksheet is one <code>.py</code> file with every step in it, ready to run in PyCharm.</p>
+        <button class="btn small companion-save" type="button">Save worksheet</button>
+        <p>Every output on this page came from running the code with Python 3.14, the version on the lab PCs.</p>
+      </div>
+    </nav>
+  </aside>
+
+<main id="top">
+  <section class="hero" data-chapter="top">
+    <p class="eyebrow">ECE122 · Computer Programming (1) · Sheet 1 · lab week 1</p>
+    <h1>input() hands you text. Everything else follows from that.</h1>
+    <p class="lede">Type <span class="specimen">36.6</span>, a normal body temperature, into sheet 1's first program. Written one way it prints <strong>97.9 Fahrenheit</strong>. Written another way, with one word changed, it stops with a red error and prints nothing at all. This guide follows that one number from your keyboard to the screen, and every chapter is one step of the trip.</p>
+
+    <figure class="fig" aria-labelledby="spine-cap">
+      <div class="controls">
+        <span class="lbl" id="spine-lbl">How the program turns the text into a number</span>
+        <div class="seg" role="group" aria-labelledby="spine-lbl" id="spine-seg">
+          <button type="button" data-v="int" aria-pressed="true">int(input(...))</button>
+          <button type="button" data-v="eval" aria-pressed="false">eval(input(...))</button>
+        </div>
+      </div>
+      <div class="svgbox wide">
+        <svg id="spine" viewBox="0 0 890 250" role="img" aria-label="Six steps from keyboard to screen. 1: you type 36.6 in the Run window. 2: input() hands the program the text 36.6, not a number. 3: the program turns the text into a number; this is the only box the switch changes. With int() it stops with a ValueError; with eval() it gets the number 36.6. 4: it calculates F = 9 / 5 * C + 32, which is 97.88000000000001. 5: format(F, .1f) turns that into the text 97.9. 6: the Run window shows 97.9 Fahrenheit.">
+          <defs>
+            <marker id="sp-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker>
+          </defs>
+          <g id="sp-boxes"></g>
+          <text x="445" y="200" text-anchor="middle" style="font-size: 13px; fill: var(--ink-2)">Every box except number 3 is identical in both versions: same keyboard, same formula, same printing.</text>
+          <text id="sp-note" x="445" y="222" text-anchor="middle" style="font-size: 13px; fill: var(--ink-3)"></text>
+          <text x="445" y="244" text-anchor="middle" class="mono" style="font-size: 11px; fill: var(--ink-3)">Chapters 1-2: where the program lives and runs. 3-4: boxes 2 and 3. 5: box 4. 6: box 5.</text>
+        </svg>
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <div class="grid3" style="margin-top: 14px">
+        <div><p class="label-cap">What changes</p><p id="sp-change" class="small"></p></div>
+        <div><p class="label-cap">What stays the same</p><p id="sp-same" class="small"></p></div>
+        <div><p class="label-cap">The question it answers</p><p id="sp-q" class="small"></p></div>
+      </div>
+      <figcaption id="spine-cap"><strong>What you type arrives as text, and one function decides whether it becomes a number.</strong> The boxes are worked out by this page as it loads, using a model of Python checked against Python 3.14.</figcaption>
+    </figure>
+
+    <div class="startrow">
+      <div><h4>Read it in order once</h4><p>The chapters follow the boxes above, left to right. Every widget computes what Python would print while you watch; nothing on this page is a screenshot.</p></div>
+      <div><h4>The worksheet</h4><p>One <code>.py</code> file with every step, and the exercises left for you. Save it into your <code>sheet01</code> folder and run it before you start.</p><p><button class="btn small primary companion-save" type="button">Save worksheet</button></p></div>
+      <div><h4>What you need</h4><p>PyCharm with Python 3.14 (on the lab PCs already, free at home), and about 90 minutes. Chapter 2 walks through PyCharm from the first launch.</p></div>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 1 ============================ -->
+  <section class="chapter" id="ch1" data-chapter="ch1">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 1</p>
+      <h2>Where your work lives</h2>
+      <p class="ch-goal">After this chapter you can put every file for this course in one place, name it so you can find it in ten seconds, and carry it home and back.</p>
+      <div class="where" data-stage="file"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">1.1</span>One folder for the term, one per sheet, one file per question</h3>
+      <p>Before any Python, decide where the files go. It sounds like housekeeping. It is not: a program you cannot find is a program you cannot run, fix, or show at the exam, and a file saved in the wrong folder looks exactly like a program that "does not work". So the shape is fixed now, for the whole term:</p>
+    </div>
+
+    <figure class="fig" aria-labelledby="folders-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 320" role="img" aria-label="Desktop contains the folder ECE122, which is one PyCharm project for the whole term. Inside it, one folder per sheet: sheet01 holds q01_celsius.py, q05_minutes.py and q06_energy.py, one file per question. sheet02 comes next week."><defs><marker id="ahF1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--accent)"/></marker></defs><path d="M24 22 h11 l3 -4 h10 v4 h6 v18 h-30 z" style="fill: var(--surface-2); stroke: var(--ink-3); stroke-width: 1.6; stroke-linejoin: round"/><text x="66" y="36" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink)">Desktop</text><line x1="39" y1="56" x2="39" y2="80" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="39" y1="80" x2="62" y2="80" style="stroke: var(--rule-strong); stroke-width: 2"/><path d="M68 72 h11 l3 -4 h10 v4 h6 v18 h-30 z" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6; stroke-linejoin: round"/><text x="110" y="86" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink)">ECE122</text><line x1="420" y1="80" x2="520" y2="80" style="stroke: var(--accent); stroke-width: 2" marker-end="url(#ahF1)"/><text x="530" y="86" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--accent)">one PyCharm project for the whole term</text><line x1="83" y1="106" x2="83" y2="130" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="83" y1="130" x2="106" y2="130" style="stroke: var(--rule-strong); stroke-width: 2"/><path d="M112 122 h11 l3 -4 h10 v4 h6 v18 h-30 z" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6; stroke-linejoin: round"/><text x="154" y="136" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink)">sheet01</text><line x1="420" y1="130" x2="520" y2="130" style="stroke: var(--accent); stroke-width: 2" marker-end="url(#ahF1)"/><text x="530" y="136" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--accent)">one folder per sheet</text><line x1="127" y1="158" x2="127" y2="174" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="127" y1="174" x2="150" y2="174" style="stroke: var(--rule-strong); stroke-width: 2"/><path d="M160 161 h15 l6 6 v18 h-21 z" style="fill: var(--surface); stroke: var(--ink-3); stroke-width: 1.6; stroke-linejoin: round"/><text x="170.5" y="180" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 8.5px; font-weight: 700; fill: var(--accent)">py</text><text x="194" y="180" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 500; fill: var(--ink)">q01_celsius.py</text><line x1="420" y1="174" x2="520" y2="174" style="stroke: var(--accent); stroke-width: 2" marker-end="url(#ahF1)"/><text x="530" y="180" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--accent)">one file per question</text><line x1="127" y1="196" x2="127" y2="212" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="127" y1="212" x2="150" y2="212" style="stroke: var(--rule-strong); stroke-width: 2"/><path d="M160 199 h15 l6 6 v18 h-21 z" style="fill: var(--surface); stroke: var(--ink-3); stroke-width: 1.6; stroke-linejoin: round"/><text x="170.5" y="218" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 8.5px; font-weight: 700; fill: var(--accent)">py</text><text x="194" y="218" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 500; fill: var(--ink)">q05_minutes.py</text><line x1="127" y1="234" x2="127" y2="250" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="127" y1="250" x2="150" y2="250" style="stroke: var(--rule-strong); stroke-width: 2"/><path d="M160 237 h15 l6 6 v18 h-21 z" style="fill: var(--surface); stroke: var(--ink-3); stroke-width: 1.6; stroke-linejoin: round"/><text x="170.5" y="256" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 8.5px; font-weight: 700; fill: var(--accent)">py</text><text x="194" y="256" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 500; fill: var(--ink)">q06_energy.py</text><line x1="83" y1="270" x2="83" y2="294" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="83" y1="294" x2="106" y2="294" style="stroke: var(--rule-strong); stroke-width: 2"/><path d="M112 286 h11 l3 -4 h10 v4 h6 v18 h-30 z" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1.6; stroke-linejoin: round"/><text x="154" y="300" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 21px; font-weight: 700; fill: var(--ink-3)">sheet02</text><line x1="420" y1="294" x2="520" y2="294" style="stroke: var(--accent); stroke-width: 2" marker-end="url(#ahF1)"/><text x="530" y="300" text-anchor="start" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink-3)">next week</text><line x1="127" y1="150" x2="127" y2="250" style="stroke: var(--rule-strong); stroke-width: 2"/><line x1="83" y1="100" x2="83" y2="294" style="stroke: var(--rule-strong); stroke-width: 2"/></svg></div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption id="folders-cap"><strong>ECE122 is one PyCharm project that lasts the term.</strong> Each sheet gets a folder inside it, and each question gets its own file inside that. Next week you add <code>sheet02</code> next to <code>sheet01</code>; you never start a second project.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">1.2</span>Names that sort, and that Python accepts</h3>
+      <p>A file name has three parts, and each one does a job:</p>
+    </div>
+
+    <ol class="notes">
+      <li><span class="n">1</span><span><code>q05</code> - the question number, with <strong>two digits</strong>. Computers sort names letter by letter, so <code>q1, q10, q11, q2</code> is the order you get with one digit, and <code>q01 ... q09, q10</code> with two.</span></li>
+      <li><span class="n">2</span><span><code>_minutes</code> - one word saying what it does, joined with an underscore. <strong>No spaces</strong>: Python runs a file called <code>sheet 1 q5.py</code> today, but spaces break things later, when one file uses another.</span></li>
+      <li><span class="n">3</span><span><code>.py</code> - the extension. It is what tells PyCharm and Windows that this is Python. <code>.txt</code> is a text file, and PyCharm will not offer to run it.</span></li>
+    </ol>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p>If you cannot find a file in ten seconds, it is in the wrong place. Fix it now, while there are three files, not in week 8 when there are forty.</p>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">1.3</span>Taking it home, and bringing it back</h3>
+      <p>Assume the lab PC forgets everything by next week: other groups use it, and lab PCs get reset. Before you leave, close PyCharm and copy the whole <code>ECE122</code> folder from the Desktop to your flash drive, or zip it and send it to yourself. Copy the <strong>folder</strong>, not single <code>.py</code> files, so the shape comes with it.</p>
+      <p>Next time, in the lab or at home, open PyCharm and choose <strong>Open</strong>, then the <code>ECE122</code> folder. Do not make a new project each week. At home you need Python from <code>python.org</code> and PyCharm from <code>jetbrains.com</code>, both free.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>فولدر واحد اسمه <span class="ltr">ECE122</span> على الـ<span class="ltr">Desktop</span> للترم كله. جواه فولدر لكل شيت، وجوه كل شيت ملف لكل سؤال.</p>
+      <p>وقبل ما تمشي، انسخ الفولدر كله على الفلاشة. جهاز المعمل ممكن ينسى كل حاجة.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>Saving into Downloads or Documents</strong> because that is where the window opened. Look at the path before you press Enter.</li>
+        <li><strong>A file next to <code>sheet01</code> instead of inside it.</strong> In PyCharm's Project panel, a file inside a folder is indented under it. If it sits at the same level as the folder, drag it in.</li>
+        <li><strong>Windows hides extensions.</strong> File Explorer may show <code>q05_minutes</code> when the real name is <code>q05_minutes.py</code>, or worse, <code>q05_minutes.py.txt</code>. PyCharm always shows the real name, so trust PyCharm.</li>
+        <li><strong>A new project every week.</strong> Four weeks later your work is in four places, each missing the others.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">Next week the lecturer gives out sheet 2. Where does your first file for it go?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="That splits your term in two. Everything goes in the one ECE122 project; a new sheet is a new folder inside it, not a new project.">A new PyCharm project called <code>ECE122_sheet2</code></button>
+        <button type="button" data-ok="1" data-fb="Exactly. Open the same ECE122 project, add a folder next to sheet01, and put the question's file in it: ECE122 / sheet02 / q01_something.py.">Open <code>ECE122</code>, make a folder <code>sheet02</code> next to <code>sheet01</code>, and put <code>q01_....py</code> inside it</button>
+        <button type="button" data-ok="0" data-fb="Then sheet01 holds two different q01 files, or you rename one and nobody knows which sheet it belongs to. One folder per sheet.">Inside <code>sheet01</code>, since it is already there</button>
+        <button type="button" data-ok="0" data-fb="That is where files go to be lost. It is also where a browser saves things, so it fills with everything else.">In Downloads, and move it later</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 2 ============================ -->
+  <section class="chapter" id="ch2" data-chapter="ch2">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 2</p>
+      <h2>PyCharm at first glance</h2>
+      <p class="ch-goal">After this chapter you can make the ECE122 project, add a file, run it, answer a program's question, and read a red error from the bottom up.</p>
+      <div class="where" data-stage="file,run"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">2.1</span>Four parts, and permission to ignore the rest</h3>
+      <p>PyCharm shows a great many buttons. For this whole sheet you need four parts of the window. Everything else can wait until the course needs it, and not knowing what to ignore is most of what makes PyCharm feel hard on day one.</p>
+    </div>
+
+    <figure class="fig" aria-labelledby="pyc-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 472" role="img" aria-label="A simplified PyCharm window. 1: the Project panel on the left shows ECE122, the folder sheet01 and the files q01_celsius.py and q05_minutes.py. 2: the editor in the middle, where you type the code. 3: the green Run triangle at the top. 4: the Run window at the bottom, where the output appears and where you type the answer, 36.6, shown in green, followed by Process finished with exit code 0."><rect x="0" y="0" width="1000" height="472" rx="10" style="fill: #1e1f22; stroke: #4e5157; stroke-width: 1.5"/><rect x="1" y="1" width="998" height="40" rx="9" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><text x="22" y="27" text-anchor="start" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: #dfe1e5">☰</text><rect x="52" y="10" width="30" height="22" rx="5" style="fill: #3574f0; stroke: none; stroke-width: 0"/><text x="67" y="26" text-anchor="middle" xml:space="preserve" style="font-size: 12px; font-weight: 700; fill: #ffffff">EC</text><text x="92" y="27" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #dfe1e5">ECE122 ▾</text><rect x="640" y="8" width="170" height="26" rx="6" style="fill: #393b40; stroke: none; stroke-width: 0"/><text x="652" y="26" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">q01_celsius ▾</text><path d="M832 12 l14 9 l-14 9 z" style="fill: #6aab73"/><text x="866" y="27" text-anchor="start" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: #8c8f94">⚙</text><rect x="1" y="42" width="38" height="300" rx="0" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><rect x="40" y="42" width="250" height="300" rx="0" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><text x="52" y="66" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #dfe1e5">Project ▾</text><text x="54" y="96" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #dfe1e5">▾ ECE122</text><text x="128" y="96" text-anchor="start" xml:space="preserve" style="font-size: 11.5px; font-weight: 400; fill: #8c8f94">C:\...\Desktop\ECE122</text><text x="72" y="122" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #dfe1e5">▾ sheet01</text><rect x="42" y="130" width="246" height="25" rx="3" style="fill: #2e436e; stroke: none; stroke-width: 0"/><text x="90" y="148" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #dfe1e5">q01_celsius.py</text><text x="90" y="174" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #dfe1e5">q05_minutes.py</text><text x="54" y="204" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #dfe1e5">▸ External Libraries</text><rect x="292" y="42" width="707" height="30" rx="0" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><rect x="300" y="46" width="160" height="26" rx="4" style="fill: #1e1f22; stroke: none; stroke-width: 0"/><text x="312" y="64" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 500; fill: #dfe1e5">q01_celsius.py ×</text><text x="318" y="100" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">1</text><text x="334" y="100" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #7a7e85; font-weight: 400"># Sheet (1), Q #01 - Celsius to Fahrenheit</tspan></text><text x="318" y="126" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">2</text><text x="334" y="126" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #dfe1e5; font-weight: 400">C = </tspan><tspan style="fill: #56a8f5; font-weight: 400">eval</tspan><tspan style="fill: #dfe1e5; font-weight: 400">(</tspan><tspan style="fill: #56a8f5; font-weight: 400">input</tspan><tspan style="fill: #dfe1e5; font-weight: 400">(</tspan><tspan style="fill: #6aab73; font-weight: 400">&quot;Enter a degree in celsius: &quot;</tspan><tspan style="fill: #dfe1e5; font-weight: 400">))</tspan></text><text x="318" y="152" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">3</text><text x="334" y="152" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #dfe1e5; font-weight: 400">F = </tspan><tspan style="fill: #2aacb8; font-weight: 400">9</tspan><tspan style="fill: #dfe1e5; font-weight: 400"> / </tspan><tspan style="fill: #2aacb8; font-weight: 400">5</tspan><tspan style="fill: #dfe1e5; font-weight: 400"> * C + </tspan><tspan style="fill: #2aacb8; font-weight: 400">32</tspan></text><text x="318" y="178" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #6f737a">4</text><text x="334" y="178" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #56a8f5; font-weight: 400">print</tspan><tspan style="fill: #dfe1e5; font-weight: 400">(</tspan><tspan style="fill: #56a8f5; font-weight: 400">format</tspan><tspan style="fill: #dfe1e5; font-weight: 400">(C, </tspan><tspan style="fill: #6aab73; font-weight: 400">&quot;.1f&quot;</tspan><tspan style="fill: #dfe1e5; font-weight: 400">), </tspan><tspan style="fill: #6aab73; font-weight: 400">&quot;Celsius is ...&quot;</tspan><tspan style="fill: #dfe1e5; font-weight: 400">, ...)</tspan></text><rect x="1" y="344" width="998" height="127" rx="0" style="fill: #2b2d30; stroke: none; stroke-width: 0"/><line x1="1" y1="344" x2="999" y2="344" style="stroke: #393b40; stroke-width: 1.5"/><text x="16" y="366" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 700; fill: #dfe1e5">Run</text><text x="52" y="366" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 500; fill: #dfe1e5">q01_celsius ×</text><text x="16" y="392" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 12.5px; font-weight: 400; fill: #8c8f94">C:\Program Files\Python314\python.exe C:\...\ECE122\sheet01\q01_celsius.py</text><text x="16" y="414" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #dfe1e5; font-weight: 400">Enter a degree in celsius: </tspan><tspan style="fill: #6aab73; font-weight: 700">36.6</tspan></text><text x="16" y="434" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px"><tspan style="fill: #dfe1e5; font-weight: 400">36.6 Celsius is equivalent to 97.9 Fahrenheit</tspan></text><text x="16" y="456" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 12.5px; font-weight: 400; fill: #8c8f94">Process finished with exit code 0</text><circle cx="270" cy="70" r="15" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="270" y="76" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">1</text><circle cx="970" cy="110" r="15" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="970" y="116" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">2</text><circle cx="832" cy="58" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="832" y="64" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">3</text><circle cx="970" cy="372" r="15" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="970" y="378" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">4</text></svg></div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption id="pyc-cap"><strong>1 Project</strong>: your folders and files. <strong>2 Editor</strong>: where you type the program. <strong>3 Run</strong>. <strong>4 Run window</strong>: where the output appears, and where you type your answers when the program asks. A simplified drawing of PyCharm 2026.2; your screen has more on it.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">2.2</span>Make the project once</h3>
+      <p>Open PyCharm from the desktop. If the first window asks about a trial, an account or signing in, choose the free option and skip signing in: everything this course uses is in the free part. Then <strong>New Project</strong> (or <strong>&#9776; menu → File → New Project</strong> if a project is already open).</p>
+    </div>
+
+    <figure class="fig" aria-labelledby="np-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 440" role="img" aria-label="A simplified New Project window. 1: Name ECE122. 2: Location, your Desktop. Create a welcome script left unticked. 3: Interpreter type, Custom environment. 4: Environment, Select existing. 5: Python path, C:\Program Files\Python314\python.exe. 6: the Create button."><rect x="120" y="4" width="760" height="432" rx="10" style="fill: #2b2d30; stroke: #4e5157; stroke-width: 1.5"/><text x="140" y="34" text-anchor="start" xml:space="preserve" style="font-size: 16px; font-weight: 700; fill: #dfe1e5">New Project</text><text x="160" y="78" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Name:</text><rect x="330" y="58" width="380" height="30" rx="5" style="fill: #1e1f22; stroke: #3574f0; stroke-width: 2"/><text x="342" y="78" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">ECE122</text><text x="160" y="120" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Location:</text><rect x="330" y="100" width="380" height="30" rx="5" style="fill: #1e1f22; stroke: #3574f0; stroke-width: 2"/><text x="342" y="120" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">C:\Users\&lt;you&gt;\Desktop</text><rect x="160" y="146" width="16" height="16" rx="3" style="fill: #1e1f22; stroke: #4e5157; stroke-width: 1.2"/><text x="186" y="159" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">Create Git repository</text><rect x="160" y="174" width="16" height="16" rx="3" style="fill: #1e1f22; stroke: #e8894f; stroke-width: 2"/><text x="186" y="187" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #dfe1e5">Create a welcome script</text><text x="400" y="187" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 700; fill: #f0a271">← leave unticked</text><line x1="140" y1="208" x2="860" y2="208" style="stroke: #393b40; stroke-width: 1.2"/><text x="160" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Interpreter type:</text><circle cx="337" cy="233" r="7" style="fill: #1e1f22; stroke: #6f737a; stroke-width: 1.5"/><text x="350" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">Project venv</text><circle cx="459" cy="233" r="7" style="fill: #1e1f22; stroke: #6f737a; stroke-width: 1.5"/><text x="472" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">uv</text><circle cx="507" cy="233" r="7" style="fill: #1e1f22; stroke: #6f737a; stroke-width: 1.5"/><text x="520" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">Base conda</text><circle cx="617" cy="233" r="7" style="fill: #3574f0; stroke: #3574f0; stroke-width: 1.5"/><text x="630" y="238" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 700; fill: #dfe1e5">Custom environment</text><text x="160" y="276" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Environment:</text><circle cx="337" cy="271" r="7" style="fill: #1e1f22; stroke: #6f737a; stroke-width: 1.5"/><text x="350" y="276" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #8c8f94">Generate new</text><circle cx="477" cy="271" r="7" style="fill: #3574f0; stroke: #3574f0; stroke-width: 1.5"/><text x="490" y="276" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 700; fill: #dfe1e5">Select existing</text><text x="160" y="316" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Type:</text><rect x="330" y="296" width="380" height="30" rx="5" style="fill: #1e1f22; stroke: #4e5157; stroke-width: 1.2"/><text x="342" y="316" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">Python ▾</text><text x="160" y="358" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 500; fill: #8c8f94">Python path:</text><rect x="330" y="338" width="380" height="30" rx="5" style="fill: #1e1f22; stroke: #3574f0; stroke-width: 2"/><text x="342" y="358" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 14px; font-weight: 500; fill: #dfe1e5">C:\Program Files\Python314\python.exe</text><rect x="760" y="392" width="100" height="32" rx="6" style="fill: #3574f0; stroke: none; stroke-width: 0"/><text x="810" y="413" text-anchor="middle" xml:space="preserve" style="font-size: 15px; font-weight: 700; fill: #ffffff">Create</text><circle cx="102" cy="73" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="79" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">1</text><circle cx="102" cy="115" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="121" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">2</text><circle cx="102" cy="233" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="239" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">3</text><circle cx="102" cy="271" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="277" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">4</text><circle cx="102" cy="353" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="102" y="359" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">5</text><circle cx="742" cy="408" r="14" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="742" y="414" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">6</text></svg></div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption id="np-cap"><strong>Name <code>ECE122</code>, on the Desktop, using the lab's Python.</strong> Interpreter type <em>Custom environment</em>, then <em>Select existing</em>, then <code>C:\Program Files\Python314\python.exe</code>. Leave the welcome script unticked. If your window has only one box for the place, make it end in <code>Desktop\ECE122</code>.</figcaption>
+    </figure>
+
+    <details class="more">
+      <summary>Why not the default, "Project venv"? <span class="muted">· optional</span></summary>
+      <div class="inner">
+        <p>A "venv" is a private, empty copy of Python for one project. It is a good habit for professional work. The lab PCs have extra libraries (numpy, pandas, matplotlib) installed into the main Python, and a fresh venv cannot see them, and cannot download them either, because the lab is offline. Selecting the existing Python avoids a surprise later in the term. For sheet 1 either works.</p>
+      </div>
+    </details>
+
+    <div class="prose">
+      <h3><span class="step">2.3</span>A folder, a file, and running it</h3>
+      <p>In the Project panel: right-click <strong>ECE122 → New → Directory</strong>, type <code>sheet01</code>. Then right-click <strong>sheet01 → New → Python File</strong>, type <code>q00_hello</code> and press Enter; PyCharm adds <code>.py</code>. Check the file is indented <em>under</em> sheet01. Type one line:</p>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="sheet01/q00_hello.py">print('Hello from ECE122')</script>
+
+    <div class="prose">
+      <p>Run the file you are looking at with <kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">Shift</kbd>+<kbd class="kbd">F10</kbd>, or right-click inside the code and choose <strong>Run 'q00_hello'</strong>. The Run window opens at the bottom:</p>
+    </div>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run</span></div><pre>C:\Program Files\Python314\python.exe C:\...\ECE122\sheet01\q00_hello.py
+<b>Hello from ECE122</b>
+
+Process finished with exit code 0</pre></div>
+
+    <div class="grid2">
+      <div class="panel">
+        <p class="label-cap">There is no Save button</p>
+        <h4>PyCharm saves by itself</h4>
+        <p>Every change is written to the file as you type and whenever you run. You cannot forget to save, so do not go looking for how.</p>
+      </div>
+      <div class="panel">
+        <p class="label-cap">The green triangle</p>
+        <h4>▶ runs the name written next to it</h4>
+        <p>After the first run, the ▶ at the top re-runs <em>that</em> file, even when you are looking at a different one. Read the name beside it, or use <kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">Shift</kbd>+<kbd class="kbd">F10</kbd>, which always runs the file on screen.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">2.4</span>When the program asks, answer in the Run window</h3>
+      <p>Most sheet 1 programs ask a question and wait. The question appears in the Run window, and that is where you answer: click there, type, press Enter. What you type shows in green. Typing in the editor instead changes the program, and the program just keeps waiting.</p>
+    </div>
+
+    <figure class="fig" aria-labelledby="rw-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 250" role="img" aria-label="Two Run windows. It worked: the prompt, the answer 36.6 typed in green, the result 36.6 Celsius is equivalent to 97.9 Fahrenheit, then Process finished with exit code 0. It crashed: red text. Marker 1 is the line number, line 2. Marker 2 is the last red line, ValueError: invalid literal for int() with base 10: &#x27;36.6&#x27;, which says what went wrong. Exit code 1."><text x="10" y="20" text-anchor="start" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--good)">It worked</text><rect x="0" y="30" width="480" height="210" rx="8" style="fill: #2b2d30; stroke: var(--good); stroke-width: 2.5"/><text x="16" y="54" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 700; fill: #dfe1e5">Run   q01_celsius</text><text x="16" y="86" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #dfe1e5; font-weight: 400">Enter a degree in celsius: </tspan><tspan style="fill: #6aab73; font-weight: 700">36.6</tspan></text><text x="16" y="108" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #dfe1e5; font-weight: 400">36.6 Celsius is equivalent to 97.9 Fahrenheit</tspan></text><text x="16" y="130" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #dfe1e5; font-weight: 400"></tspan></text><text x="16" y="152" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #8c8f94; font-weight: 400">Process finished with exit code 0</tspan></text><text x="520" y="20" text-anchor="start" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--hot-ink)">It crashed</text><rect x="510" y="30" width="480" height="210" rx="8" style="fill: #2b2d30; stroke: var(--hot); stroke-width: 2.5"/><text x="526" y="54" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 700; fill: #dfe1e5">Run   q01_celsius</text><text x="526" y="86" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #dfe1e5; font-weight: 400">Enter a degree in celsius: </tspan><tspan style="fill: #6aab73; font-weight: 700">36.6</tspan></text><text x="526" y="108" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #f75464; font-weight: 400">Traceback (most recent call last):</tspan></text><text x="526" y="130" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #f75464; font-weight: 400">  File &quot;...\q01_celsius.py&quot;, </tspan><tspan style="fill: #f75464; font-weight: 700">line 2</tspan></text><text x="526" y="152" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #f75464; font-weight: 400">    C = int(input(...))</tspan></text><text x="526" y="174" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #f75464; font-weight: 700">ValueError: invalid literal for</tspan></text><text x="526" y="196" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #f75464; font-weight: 700">int() with base 10: &#x27;36.6&#x27;</tspan></text><text x="526" y="218" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px"><tspan style="fill: #8c8f94; font-weight: 400">Process finished with exit code 1</tspan></text><circle cx="988" cy="126" r="13" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="988" y="132" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">1</text><circle cx="988" cy="181" r="13" style="fill: var(--accent); stroke: var(--bg); stroke-width: 3"/><text x="988" y="187" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--on-accent)">2</text></svg></div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption id="rw-cap"><strong>Red text is Python telling you what went wrong. Read it from the bottom.</strong> The last line (<strong>2</strong>) says what happened; the line above with a number (<strong>1</strong>) says where. Exit code 0 means the program finished normally; 1 means it stopped on an error.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">2.5</span>The five red lines you will meet this week</h3>
+      <p>Each one below was produced by running the mistake in Python 3.14, the lab's version. The last line of the red text is exactly what you will see.</p>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q-table">
+        <thead><tr><th>You wrote</th><th class="mono">Last red line</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Quotes pasted from a PDF or Word: <code>print(“Hello”)</code></td><td class="mono">SyntaxError: invalid character '“' (U+201C)</td><td>Type the quotes yourself in PyCharm.</td></tr>
+          <tr><td>A capital letter: <code>Print('Hello')</code></td><td class="mono">NameError: name 'Print' is not defined. Did you mean: 'print'?</td><td>Python is case-sensitive; <code>print</code> is lower-case.</td></tr>
+          <tr><td>A space at the start of a line</td><td class="mono">IndentationError: unexpected indent</td><td>Every line of this sheet starts at the left edge.</td></tr>
+          <tr><td>A bracket never closed: <code>print("hello"</code></td><td class="mono">SyntaxError: '(' was never closed</td><td>Count the <code>(</code> and <code>)</code>; they must match.</td></tr>
+          <tr><td>Text used as a number: <code>x + 1</code> after <code>x = input()</code></td><td class="mono">TypeError: can only concatenate str (not "int") to str</td><td>Chapters 3 and 4.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>لما البرنامج يسألك سؤال، الإجابة بتتكتب تحت في الـ<span class="ltr">Run window</span>، مش في الكود.</p>
+      <p>ولو ظهر كلام أحمر، اقرا آخر سطر الأول: هو اللي بيقولك إيه اللي حصل. وبعدين رقم السطر.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>The ▶ ran your last file.</strong> You fixed q06, pressed ▶, and q05 ran again. Check the name beside the triangle.</li>
+        <li><strong>The program looks frozen.</strong> It is waiting for your answer in the Run window. Click there and type.</li>
+        <li><strong>Reading the top of the red text first.</strong> <em>Traceback (most recent call last)</em> is a heading, not the problem. The problem is the last line.</li>
+        <li><strong>An old Run tab.</strong> Each run can open a new tab in the Run window. Look at the newest one.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">Your program stops with six lines of red text. Which line tells you what went wrong?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="That line is the same every time: it only announces that a list of where-it-happened is coming. It never names the problem.">The first: <code>Traceback (most recent call last):</code></button>
+        <button type="button" data-ok="0" data-fb="That tells you where - which file and which line - and it is the second thing to read. It does not say what went wrong.">The one with <code>line 2</code> in it</button>
+        <button type="button" data-ok="1" data-fb="Right. The last red line names the kind of error and the reason, like ValueError: invalid literal for int() with base 10: '36.6'. Then go up one or two lines to find where.">The last red line</button>
+        <button type="button" data-ok="0" data-fb="Exit code 1 only confirms it stopped on an error. Exit code 0 means it finished normally.">The grey line <code>Process finished with exit code 1</code></button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <div class="prose">
+      <p class="small muted">Back to the sheet: with this much you can make <code>sheet01</code> and run any program you are given. The sheet's programs all ask questions, which is chapter 3.</p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 3 ============================ -->
+  <section class="chapter" id="ch3" data-chapter="ch3">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 3</p>
+      <h2>print() shows, input() asks - and gives text</h2>
+      <p class="ch-goal">After this chapter you can predict exactly what <code>print</code> puts on the screen, and say what is inside a variable that came from <code>input()</code>.</p>
+      <div class="where" data-stage="input"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">3.1</span>print puts one space between items</h3>
+      <p>The lecture's Example 4 prints a label and a number on each line, separated by a comma. Here it is, and what it really prints:</p>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="lecture 1, Example 4">
+# Basic Math Example
+x1 = 15
+x2 = 10
+print('x1 + x2 = ', x1 + x2)
+print('x1 - x2 = ', x1 - x2)
+print('x1 * x2 =', x1*x2)
+print('x1 / x2 = ', x1 / x2)
+print('x1**2 = ', x1**2)</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run · spaces shown as ·</span></div><pre>x1·+·x2·=·<b>·</b>25
+x1·-·x2·=·<b>·</b>5
+x1·*·x2·=·150
+x1·/·x2·=·<b>·</b>1.5
+x1**2·=·<b>·</b>225</pre></div>
+
+    <div class="prose">
+      <p>Look at the green dots. Four lines have <strong>two</strong> spaces before the number, and the third has one. The text <code>'x1 + x2 = '</code> already ends with a space, and <code>print</code> adds another between the two items. Line 6's text ends with <code>=</code>, so it gets just the one from <code>print</code>. Neither is wrong; it is worth knowing where every space comes from, because the sheet's answers are full of them.</p>
+      <p>Two more things this example shows. <code>#</code> starts a comment: Python ignores the rest of that line, and people read it. And <code>x1 / x2</code> prints <code>1.5</code>, a decimal, which is chapter 5.</p>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">3.2</span>input() always gives text</h3>
+      <p><code>input('Enter a number: ')</code> shows its message in the Run window, waits for you to type and press Enter, and hands the program <strong>what you typed, as text</strong>. Always text, even when you typed digits. Python calls text a <em>string</em>, and shows it in quotes: <code>'21'</code>.</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="it-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 250" role="img" aria-label="You type 2 1 and Enter. input() hands back the text &quot;21&quot;, not a number, so &quot;21&quot; times 2 is &quot;2121&quot; and &quot;21&quot; plus 1 is a TypeError. eval() turns the text into the number 21, and 21 times 2 is 42."><defs><marker id="ahI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker></defs><rect x="10" y="40" width="150" height="70" rx="8" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 2"/><text x="85" y="70" text-anchor="middle" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: var(--ink-2)">you type</text><text x="85" y="98" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--ink)">2  1  ↵</text><line x1="162" y1="75" x2="212" y2="75" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#ahI)"/><rect x="216" y="40" width="160" height="70" rx="8" style="fill: var(--surface); stroke: var(--accent); stroke-width: 2"/><text x="296" y="82" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--accent)">input()</text><line x1="378" y1="75" x2="428" y2="75" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#ahI)"/><rect x="432" y="32" width="170" height="86" rx="8" style="fill: var(--hot-soft); stroke: var(--hot); stroke-width: 2"/><text x="517" y="70" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 28px; font-weight: 700; fill: var(--hot-ink)">&quot;21&quot;</text><text x="517" y="100" text-anchor="middle" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: var(--hot-ink)">text, not a number</text><line x1="604" y1="75" x2="654" y2="75" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#ahI)"/><rect x="658" y="40" width="160" height="70" rx="8" style="fill: var(--surface); stroke: var(--accent); stroke-width: 2"/><text x="738" y="82" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 22px; font-weight: 700; fill: var(--accent)">eval()</text><line x1="820" y1="75" x2="862" y2="75" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#ahI)"/><rect x="866" y="32" width="124" height="86" rx="8" style="fill: var(--good-soft); stroke: var(--good); stroke-width: 2"/><text x="928" y="70" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 28px; font-weight: 700; fill: var(--good)">21</text><text x="928" y="100" text-anchor="middle" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: var(--good)">a number</text><text x="517" y="162" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 600; fill: var(--ink)">&quot;21&quot; * 2</text><text x="517" y="192" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--hot-ink)">→ &quot;2121&quot;</text><text x="517" y="222" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 600; fill: var(--hot-ink)">&quot;21&quot; + 1  →  TypeError</text><text x="928" y="162" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 600; fill: var(--ink)">21 * 2</text><text x="928" y="192" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--good)">→ 42</text><line x1="517" y1="122" x2="517" y2="140" style="stroke: var(--rule-strong); stroke-width: 2; stroke-dasharray: 6 5"/><line x1="928" y1="122" x2="928" y2="140" style="stroke: var(--rule-strong); stroke-width: 2; stroke-dasharray: 6 5"/></svg></div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption id="it-cap"><strong>Text and numbers obey different rules.</strong> Text times 2 repeats it; text plus a number is an error. Turn the text into a number before you calculate with it.</figcaption>
+    </figure>
+
+    <figure class="fig" aria-labelledby="tx-cap">
+      <div class="field-row" style="max-width: 460px">
+        <label for="tx-in">Type what the user types into <code>x = input('Enter a number: ')</code></label>
+        <input type="text" id="tx-in" value="21" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="chips" style="margin-top:10px" id="tx-presets">
+        <button type="button" class="chip" data-e="21">21</button>
+        <button type="button" class="chip" data-e="36.6">36.6</button>
+        <button type="button" class="chip" data-e="Ahmed">Ahmed</button>
+        <button type="button" class="chip" data-e="150,3.5">150,3.5</button>
+      </div>
+      <div class="pg">
+        <div class="pgcard hot">
+          <p class="k code">x = input(...)</p>
+          <p class="v" id="tx-raw"></p>
+          <p class="n" id="tx-raw-n"></p>
+        </div>
+        <div class="pgcard good">
+          <p class="k code">x = eval(input(...))</p>
+          <p class="v" id="tx-num"></p>
+          <p class="n" id="tx-num-n"></p>
+        </div>
+      </div>
+      <p class="verdictline" id="tx-verdict" aria-live="polite"></p>
+      <figcaption id="tx-cap"><strong>Both cards are worked out by this page as you type</strong>, using a model of Python 3.14 that was checked against the real thing on over 26,000 cases. Each card shows what <code>x</code> holds, then what <code>print(x * 2)</code> and <code>print(x + 1)</code> would do.</figcaption>
+    </figure>
+
+    <div class="callout key">
+      <span class="tag">Key idea</span>
+      <p>Whatever the user types arrives as text. Before you do arithmetic with it, turn it into a number. Chapter 4 is how.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p><span class="ltr">input()</span> بترجعلك كلام مش رقم، حتى لو كتبت أرقام. <span class="ltr">"21"</span> في 2 تبقى <span class="ltr">"2121"</span> مش 42.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>It looks like a number.</strong> <code>print(x)</code> shows <code>21</code> either way; the quotes only appear when Python shows you what is inside. The difference shows up the moment you calculate.</li>
+        <li><strong>No space at the end of the prompt.</strong> <code>input('Enter a number:')</code> puts your answer right against the colon: <code>Enter a number:21</code>. End the prompt with a space.</li>
+        <li><strong><code>"21" + "1"</code> is <code>"211"</code></strong>, not 22. Adding two pieces of text joins them.</li>
+        <li><strong>Capitals.</strong> <code>Name</code> and <code>name</code> are two different variables. The lecture's Example 3 uses capitals; whatever you choose, use it the same way every time.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q"><code>x = input('Enter a number: ')</code>, and the user types <code>21</code>. What does <code>print(x * 2)</code> show?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="That is what a calculator does. x holds the text '21', not the number 21.">42</button>
+        <button type="button" data-ok="1" data-fb="Right. Text times 2 repeats the text, with nothing between the copies. Python did exactly what was written.">2121</button>
+        <button type="button" data-ok="0" data-fb="Repeating text glues the copies together. No space is added.">21 21</button>
+        <button type="button" data-ok="0" data-fb="x + 1 would be an error. Text times a whole number is allowed: it repeats.">An error</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 4 ============================ -->
+  <section class="chapter" id="ch4" data-chapter="ch4">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 4</p>
+      <h2>Turning text into a number</h2>
+      <p class="ch-goal">After this chapter you can choose between <code>int()</code>, <code>float()</code> and <code>eval()</code>, read two numbers from one line, and explain why the sheet's answers use <code>eval(input(...))</code>.</p>
+      <div class="where" data-stage="input"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">4.1</span>Three functions, three sets of rules</h3>
+      <p>Each takes text and tries to make a number of it. They differ in what text they accept:</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="cv-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 210" role="img" aria-label="What each function gives for three typed answers. Typing 36: int gives 36, float gives 36.0, eval gives 36. Typing 36.6: int gives a ValueError, float gives 36.6, eval gives 36.6. Typing 150,3.5: int and float both give a ValueError, eval gives two numbers, 150 and 3.5."><text x="150" y="28" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--ink-2)">you type</text><text x="400" y="28" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--accent)">int(...)</text><text x="620" y="28" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--accent)">float(...)</text><text x="850" y="28" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--accent)">eval(...)</text><rect x="10" y="48" width="980" height="44" rx="7" style="fill: var(--surface); stroke: var(--rule); stroke-width: 1.5"/><text x="150" y="77" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">36</text><text x="400" y="77" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--good)">36</text><text x="620" y="77" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--good)">36.0</text><text x="850" y="77" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--good)">36</text><rect x="10" y="100" width="980" height="44" rx="7" style="fill: var(--surface); stroke: var(--rule); stroke-width: 1.5"/><text x="150" y="129" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">36.6</text><text x="400" y="129" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--hot-ink)">ValueError</text><text x="620" y="129" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--good)">36.6</text><text x="850" y="129" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--good)">36.6</text><rect x="10" y="152" width="980" height="44" rx="7" style="fill: var(--surface); stroke: var(--rule); stroke-width: 1.5"/><text x="150" y="181" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">150,3.5</text><text x="400" y="181" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--hot-ink)">ValueError</text><text x="620" y="181" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--hot-ink)">ValueError</text><text x="850" y="181" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--good)">150  and  3.5</text></svg></div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption id="cv-cap"><strong>Only <code>eval()</code> copes with all three.</strong> <code>int()</code> wants a whole number, <code>float()</code> any single number, and <code>eval()</code> reads what you typed as Python - so <code>150,3.5</code> becomes two numbers.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>This is why sheet 1's first program has a trap in it. Written with <code>int(input(...))</code>, it works for 43 and stops for 36.6, with a red <code>ValueError</code>. <code>int(36.6)</code> on a <em>number</em> would quietly give 36, but here <code>int</code> receives the <em>text</em> <code>'36.6'</code>, and text with a point in it is not a whole number.</p>
+      <h3><span class="step">4.2</span>Try any text</h3>
+    </div>
+
+    <figure class="fig" aria-labelledby="cn-cap">
+      <div class="field-row" style="max-width: 460px">
+        <label for="cn-in">What the user types</label>
+        <input type="text" id="cn-in" value="36.6" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="chips" style="margin-top:10px" id="cn-presets">
+        <button type="button" class="chip" data-e="43">43</button>
+        <button type="button" class="chip" data-e="36.6">36.6</button>
+        <button type="button" class="chip" data-e="150,3.5">150,3.5</button>
+        <button type="button" class="chip" data-e="150 3.5">150 3.5</button>
+        <button type="button" class="chip" data-e="1e9">1e9</button>
+        <button type="button" class="chip" data-e="036">036</button>
+        <button type="button" class="chip" data-e="1.5,-3.4,4.6,5,9.5,-3.4">six numbers</button>
+      </div>
+      <div class="pg" id="cn-cards"></div>
+      <p class="verdictline" id="cn-verdict" aria-live="polite"></p>
+      <figcaption id="cn-cap"><strong>Four ways a program can take the same typed text</strong>, each computed as you type. The last card is how Q2 and Q7-Q10 read two or more numbers from one line.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">4.3</span>Two numbers from one line</h3>
+      <p>Q8 asks for a speed and an acceleration. The sheet's answer reads both at once:</p>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="sheet01/q08_runway.py">
+# Sheet (1), Q #08 - minimum runway length
+v, a = eval(input("Enter speed and acceleration: "))
+length = v ** 2 / (2 * a)
+print("The minimum runway length for this airplane is", format(length, ".2f"), "meters")</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run</span></div><pre>Enter speed and acceleration: <b>60,3.5</b>
+The minimum runway length for this airplane is 514.29 meters</pre></div>
+
+    <div class="prose">
+      <p><code>eval</code> reads <code>60,3.5</code> as two values, and <code>v, a = </code> puts the first in <code>v</code> and the second in <code>a</code>. The count must match: type one number and Python stops with <code>TypeError: cannot unpack non-iterable int object</code>; type three and it says <code>ValueError: too many values to unpack (expected 2, got 3)</code>. Type them with a space instead of a comma and it is <code>SyntaxError: invalid syntax</code>. So say it in the prompt: <em>separate them with a comma</em>.</p>
+    </div>
+
+    <details class="more">
+      <summary>Is eval() a good idea? <span class="muted">· optional</span></summary>
+      <div class="inner">
+        <p><code>eval()</code> runs whatever is typed as Python. In your own programs, with you typing the answers, that is fine, and it is what makes <code>150,3.5</code> arrive as two numbers. Programs that read text from strangers - a web form, a file from the internet - never use it, because a stranger could type Python that does damage. There, <code>float(input(...))</code> reads one number safely. You will meet the safe way to read several numbers later in the course.</p>
+      </div>
+    </details>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p><span class="ltr">int()</span> بتقبل رقم صحيح بس، و<span class="ltr">float()</span> أي رقم واحد، و<span class="ltr">eval()</span> بتقرا اللي كتبته كأنه بايثون، فتقدر تكتب رقمين بينهم فاصلة.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>One <code>eval</code> missing out of three.</strong> Q6 reads three numbers. Forget <code>eval</code> on <code>T_final</code> only, and <code>T_final - T_initial</code> stops with <code>TypeError: unsupported operand type(s) for -: 'str' and 'float'</code> - text minus a number.</li>
+        <li><strong>A space instead of a comma</strong> between two numbers. <code>SyntaxError: invalid syntax</code>.</li>
+        <li><strong>A leading zero.</strong> <code>eval('036')</code> is a <code>SyntaxError</code> (Python refuses whole numbers written with a leading zero), while <code>int('036')</code> is 36.</li>
+        <li><strong><code>1e9</code> is a float.</strong> <code>eval('1e9')</code> is <code>1000000000.0</code>, with the <code>.0</code>. Q5's answer prints it with <code>format</code>, so you never see the difference.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">The program runs <code>C = int(input('Enter a degree in celsius: '))</code> and you type <code>36.6</code>. What happens?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="int means a whole number. There is no room for the .6.">C becomes 36.6</button>
+        <button type="button" data-ok="0" data-fb="The tempting one. int(36.6) on a number does give 36, but here int receives the text '36.6', and that is not a whole number, so it refuses.">C becomes 36</button>
+        <button type="button" data-ok="0" data-fb="int never rounds, and here it does not get that far.">C becomes 37</button>
+        <button type="button" data-ok="1" data-fb="Right: ValueError: invalid literal for int() with base 10: '36.6'. Use eval(input(...)) as the sheet's other answers do, or float(input(...)).">It stops with a red <code>ValueError</code></button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <div class="prose">
+      <p class="small muted">Back to the sheet: every question reads its numbers this way. Q1, Q3, Q4, Q6 and Q11 read one number at a time; Q2, Q7, Q8, Q9 and Q10 read several from one line.</p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 5 ============================ -->
+  <section class="chapter" id="ch5" data-chapter="ch5">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 5</p>
+      <h2>Arithmetic: / // % **</h2>
+      <p class="ch-goal">After this chapter you can pick the right one of Python's two divisions, split a quantity into whole units and a remainder, and write a power or a square root with the brackets in the right place.</p>
+      <div class="where" data-stage="calculate"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">5.1</span>Seven operators, run on Python 3.14</h3>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q-table">
+        <thead><tr><th>Operator</th><th class="mono">Example</th><th class="mono">Prints</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>/</code> division</td><td class="mono">7 / 2</td><td class="mono">3.5</td><td>Always a decimal (a <em>float</em>)...</td></tr>
+          <tr><td></td><td class="mono">10 / 2</td><td class="mono">5.0</td><td>...even when it divides exactly.</td></tr>
+          <tr><td><code>//</code> whole division</td><td class="mono">7 // 2</td><td class="mono">3</td><td>How many whole times 2 fits into 7.</td></tr>
+          <tr><td><code>%</code> remainder</td><td class="mono">7 % 2</td><td class="mono">1</td><td>What is left over after that. Not a percentage.</td></tr>
+          <tr><td><code>**</code> power</td><td class="mono">2 ** 3</td><td class="mono">8</td><td>2 to the power 3.</td></tr>
+          <tr><td></td><td class="mono">9 ** 0.5</td><td class="mono">3.0</td><td>A square root is the power 0.5.</td></tr>
+          <tr><td><code>^</code> <em>not</em> a power</td><td class="mono">2 ^ 3</td><td class="mono">1</td><td>Runs with no error and means something else entirely.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">5.2</span>// counts whole blocks, % keeps the leftover</h3>
+      <p>Q5 turns a number of minutes into years and days. That needs <em>whole</em> hours, <em>whole</em> days and <em>whole</em> years, plus the days that do not make a full year. <code>//</code> and <code>%</code> are exactly those two questions:</p>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="bl-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 185" role="img" aria-label="500 minutes drawn as eight full blocks of 60 and 20 left over. 500 // 60 counts the full blocks, 8 hours. 500 % 60 is what is left over, 20 minutes."><rect x="10" y="60" width="100" height="60" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2"/><text x="60.0" y="97" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">60</text><rect x="116" y="60" width="100" height="60" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2"/><text x="166.0" y="97" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">60</text><rect x="222" y="60" width="100" height="60" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2"/><text x="272.0" y="97" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">60</text><rect x="328" y="60" width="100" height="60" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2"/><text x="378.0" y="97" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">60</text><rect x="434" y="60" width="100" height="60" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2"/><text x="484.0" y="97" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">60</text><rect x="540" y="60" width="100" height="60" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2"/><text x="590.0" y="97" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">60</text><rect x="646" y="60" width="100" height="60" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2"/><text x="696.0" y="97" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">60</text><rect x="752" y="60" width="100" height="60" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2"/><text x="802.0" y="97" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 600; fill: var(--ink)">60</text><rect x="858" y="60" width="36" height="60" rx="5" style="fill: var(--hot-soft); stroke: var(--hot); stroke-width: 2"/><text x="876" y="97" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 700; fill: var(--hot-ink)">20</text><text x="10" y="40" text-anchor="start" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--ink)">500 minutes</text><path d="M10 132 v10 H852 v-10" style="fill: none; stroke: var(--accent); stroke-width: 2"/><text x="10" y="170" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--accent)">500 // 60  →  8 full hours</text><path d="M858 132 v10 H894 v-10" style="fill: none; stroke: var(--hot); stroke-width: 2"/><text x="990" y="170" text-anchor="end" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--hot-ink)">500 % 60  →  20 left over</text></svg></div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption id="bl-cap"><strong>500 = 8 × 60 + 20.</strong> <code>500 // 60</code> is the 8, <code>500 % 60</code> is the 20. Both are in the same unit you started with.</figcaption>
+    </figure>
+
+    <figure class="fig" aria-labelledby="q5-cap">
+      <div class="field-row" style="max-width: 460px">
+        <label for="q5-in">Minutes, as the user types them into Q5</label>
+        <input type="text" id="q5-in" value="1000000000" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="chips" style="margin-top:10px" id="q5-presets">
+        <button type="button" class="chip" data-e="1000000000">1000000000</button>
+        <button type="button" class="chip" data-e="1e9">1e9</button>
+        <button type="button" class="chip" data-e="525600">525600</button>
+        <button type="button" class="chip" data-e="1440">1440</button>
+        <button type="button" class="chip" data-e="500">500</button>
+      </div>
+      <div class="cards" id="q5-cards"></div>
+      <div class="console" style="margin-top:14px"><div class="bar"><i></i><i></i><i></i><span>what q05_minutes.py prints</span></div><pre id="q5-out"></pre></div>
+      <p class="readout" id="q5-readout" aria-live="polite"></p>
+      <figcaption id="q5-cap"><strong>The four lines of Q5's answer, worked out as you type</strong> with Python's rules for <code>//</code> and <code>%</code>. Try <code>1e9</code> next to <code>1000000000</code>: same answer, but every step carries a <code>.0</code>, because <code>1e9</code> is a float.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">5.3</span>Powers first, and brackets around a fraction</h3>
+      <p>Python does <code>**</code> before <code>* / // %</code>, and those before <code>+ -</code>. Equal ones go left to right. So Q1's <code>9 / 5 * C + 32</code> is (9 ÷ 5) × C, then + 32, as the formula means. But a square root written as a fraction needs brackets:</p>
+    </div>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run</span></div><pre>print(9 ** 1/2, 9 ** (1/2))
+<i>4.5</i> <b>3.0</b></pre></div>
+
+    <div class="prose">
+      <p>Without brackets Python does <code>9 ** 1</code> first, then divides by 2. That is why Q10's answer writes every root as <code>** (1 / 2)</code>, and why <code>** 0.5</code> is the safer habit.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p><span class="ltr">//</span> بتعدّ كام مرة كاملة، و<span class="ltr">%</span> بتديك الباقي. و<span class="ltr">/</span> العادية دايمًا بتطلع رقم عشري.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong><code>^</code> for a power.</strong> <code>2 ^ 3</code> prints 1, with no error. Use <code>**</code>.</li>
+        <li><strong><code>%</code> is not "percent".</strong> <code>50 % 10</code> is 0, the remainder.</li>
+        <li><strong>A fraction in a power without brackets.</strong> <code>x ** 1/2</code> is half of x.</li>
+        <li><strong>Expecting <code>/</code> to give a whole number.</strong> <code>10 / 2</code> is <code>5.0</code>. If you need whole units, you need <code>//</code>.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">Q5 has <code>days</code> and wants the days left over after the whole years. Which line gives it?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="That is the number of whole years - the other half of the answer.">remDays = days // 365</button>
+        <button type="button" data-ok="1" data-fb="Right. % gives what is left over after taking out as many whole 365s as fit. For 1000000000 minutes that is 214 days.">remDays = days % 365</button>
+        <button type="button" data-ok="0" data-fb="That is years as a decimal, like 1902.586. The .586 of a year is not a number of days.">remDays = days / 365</button>
+        <button type="button" data-ok="0" data-fb="That would be the days as a percentage of a year, which the question does not ask for, and % is not percent in Python.">remDays = days / 365 * 100</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 6 ============================ -->
+  <section class="chapter" id="ch6" data-chapter="ch6">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 6</p>
+      <h2>Showing a number: format()</h2>
+      <p class="ch-goal">After this chapter you can read any format code on the sheet, predict the spaces in front of a number, and choose how many digits to show.</p>
+      <div class="where" data-stage="show"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">6.1</span>Why 36.6 °C comes out as 97.88000000000001</h3>
+      <p>Computers store decimals in binary, and most decimals, like 0.1, have no exact binary form, the way 1/3 has no exact decimal form. The tiny error shows up when Python prints the full value:</p>
+    </div>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run</span></div><pre>print(9 / 5 * 36.6 + 32)
+<i>97.88000000000001</i>
+print(0.1 + 0.2)
+<i>0.30000000000000004</i></pre></div>
+
+    <div class="prose">
+      <p>Nothing is broken, and the error is far too small to matter for an engineer. But nobody wants to read it. <code>format()</code> chooses how the number is <strong>shown</strong>; it never changes the number itself.</p>
+      <h3><span class="step">6.2</span>Reading a format code</h3>
+    </div>
+
+    <figure class="fig flat" aria-labelledby="fc-cap">
+      <div class="svgbox wide"><svg viewBox="0 0 1000 250" role="img" aria-label="format(3.14159, &quot;8.2f&quot;). The 8 is the total width, filled with spaces on the left. The .2 is two digits after the point, rounded. The f means a plain decimal; e would give scientific form like 1.0e+09. The result is 8 characters: four spaces, then 3.14. From the sheet answers: format(10, &quot;8.2f&quot;) gives three spaces and 10.00, and format(1e9, &quot;.1e&quot;) gives 1.0e+09."><text x="10" y="70" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 30px; font-weight: 500; fill: var(--ink-2)">format(3.14159, </text><text x="298" y="70" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 34px"><tspan style="fill: var(--ink-3); font-weight: 500">&quot;</tspan><tspan style="fill: var(--hot-ink); font-weight: 700">8</tspan><tspan style="fill: var(--accent); font-weight: 700">.2</tspan><tspan style="fill: var(--good); font-weight: 700">f</tspan><tspan style="fill: var(--ink-3); font-weight: 500">&quot;)</tspan></text><line x1="328" y1="84" x2="150" y2="122" style="stroke: var(--hot); stroke-width: 2"/><text x="150" y="142" text-anchor="middle" xml:space="preserve" style="font-size: 16px; font-weight: 700; fill: var(--hot-ink)">8 = total width</text><text x="150" y="162" text-anchor="middle" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: var(--ink-2)">spaces fill the left</text><line x1="358" y1="84" x2="430" y2="122" style="stroke: var(--accent); stroke-width: 2"/><text x="430" y="142" text-anchor="middle" xml:space="preserve" style="font-size: 16px; font-weight: 700; fill: var(--accent)">.2 = two digits after the point</text><text x="430" y="162" text-anchor="middle" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: var(--ink-2)">rounded</text><line x1="392" y1="84" x2="700" y2="122" style="stroke: var(--good); stroke-width: 2"/><text x="700" y="142" text-anchor="middle" xml:space="preserve" style="font-size: 16px; font-weight: 700; fill: var(--good)">f = a plain decimal</text><text x="700" y="162" text-anchor="middle" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: var(--ink-2)">e instead would give 1.0e+09</text><text x="640" y="54" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: var(--ink-2)">the result, 8 characters:</text><rect x="650" y="64" width="36" height="40" rx="5" style="fill: var(--hot-soft); stroke: var(--hot); stroke-width: 1.5"/><text x="668" y="92" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--hot-ink)">␣</text><rect x="690" y="64" width="36" height="40" rx="5" style="fill: var(--hot-soft); stroke: var(--hot); stroke-width: 1.5"/><text x="708" y="92" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--hot-ink)">␣</text><rect x="730" y="64" width="36" height="40" rx="5" style="fill: var(--hot-soft); stroke: var(--hot); stroke-width: 1.5"/><text x="748" y="92" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--hot-ink)">␣</text><rect x="770" y="64" width="36" height="40" rx="5" style="fill: var(--hot-soft); stroke: var(--hot); stroke-width: 1.5"/><text x="788" y="92" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--hot-ink)">␣</text><rect x="810" y="64" width="36" height="40" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5"/><text x="828" y="92" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">3</text><rect x="850" y="64" width="36" height="40" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5"/><text x="868" y="92" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">.</text><rect x="890" y="64" width="36" height="40" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5"/><text x="908" y="92" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">1</text><rect x="930" y="64" width="36" height="40" rx="5" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5"/><text x="948" y="92" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">4</text><text x="10" y="214" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 600; fill: var(--ink)">From the sheet answers:   format(10, &quot;8.2f&quot;) → &quot;   10.00&quot;     format(1e9, &quot;.1e&quot;) → &quot;1.0e+09&quot;</text></svg></div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption id="fc-cap"><strong>Width, then digits after the point, then the style.</strong> Leave the width out, as in <code>".2f"</code>, and you get just the digits with no spaces in front.</figcaption>
+    </figure>
+
+    <figure class="fig" aria-labelledby="fd-cap">
+      <div class="grid2">
+        <div class="field-row">
+          <label for="fd-in">The number (typed as the user would)</label>
+          <input type="text" id="fd-in" value="3.14159" spellcheck="false" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label for="fd-w">Width <output id="fd-w-o"></output></label>
+          <input type="range" id="fd-w" min="0" max="14" step="1" value="8">
+          <label for="fd-p">Digits after the point <output id="fd-p-o"></output></label>
+          <input type="range" id="fd-p" min="0" max="6" step="1" value="2">
+        </div>
+      </div>
+      <div class="controls" style="margin-top: 12px">
+        <span class="lbl" id="fd-t-lbl">Style</span>
+        <div class="seg" role="group" aria-labelledby="fd-t-lbl" id="fd-t">
+          <button type="button" data-v="f" aria-pressed="true">f · plain decimal</button>
+          <button type="button" data-v="e" aria-pressed="false">e · scientific</button>
+        </div>
+      </div>
+      <div class="chips" id="fd-presets">
+        <button type="button" class="chip" data-n="3.14159" data-w="8" data-p="2" data-t="f">Q3/Q4 style</button>
+        <button type="button" class="chip" data-n="97.88000000000001" data-w="0" data-p="1" data-t="f">Q1: 97.9</button>
+        <button type="button" class="chip" data-n="1000000000" data-w="0" data-p="1" data-t="e">Q5: 1.0e+09</button>
+        <button type="button" class="chip" data-n="2.675" data-w="0" data-p="2" data-t="f">2.675 to 2 digits</button>
+      </div>
+      <div class="tty" id="fd-code"></div>
+      <div class="tty" id="fd-out" style="font-size: 18px"></div>
+      <p class="readout" id="fd-readout" aria-live="polite"></p>
+      <figcaption id="fd-cap"><strong>Spaces are shown as <code>␣</code> so you can count them.</strong> The result is computed by this page with Python's own rounding rules, checked against Python 3.14.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">6.3</span>The spaces in the sheet's answers are not your mistake</h3>
+      <p>The answers the lecturer supplied use widths, so their output has spaces in front of the numbers. Here is Q3's, run with 10 feet:</p>
+    </div>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>reference answer, Q3 · spaces shown as ·</span></div><pre>Enter a value for feet: <b>10</b>
+···10.00·feet·is·····3.05·meters</pre></div>
+
+    <div class="prose">
+      <p><code>"8.2f"</code> makes <code>10.00</code> (5 characters) 8 wide, so 3 spaces go in front; then <code>print</code> adds its own space between items, which is why there are 5 before <code>3.05</code>. If your version prints <code>10.0 feet is 3.05 meters</code>, the numbers are the same; only the layout differs. Widths are for lining numbers up in columns; when you are printing one line, <code>".2f"</code> reads better.</p>
+    </div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>الرقم الأول في <span class="ltr">"8.2f"</span> هو العرض الكلي، وبعد النقطة عدد الأرقام العشرية. المسافات اللي قبل الرقم طبيعية ومش غلط منك.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong><code>format()</code> gives text.</strong> <code>format(3.14159, ".2f") + 1</code> stops with <code>TypeError: can only concatenate str (not "int") to str</code>. Calculate first, format last, inside the <code>print</code>.</li>
+        <li><strong>2.675 to two digits is 2.67</strong>, not 2.68. The stored value is a hair below 2.675 (6.1 again), and <code>format</code> rounds what is really stored.</li>
+        <li><strong>A width too small never cuts a number.</strong> The number is shown in full and the width is ignored.</li>
+        <li><strong><code>"e"</code> writes the power of ten after the e</strong>: <code>1.0e+09</code> means 1.0 × 10<sup>9</sup>.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">What does <code>print('[' + format(3.14159, '8.2f') + ']')</code> show?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="That is '.2f'. The 8 in front sets a total width.">[3.14]</button>
+        <button type="button" data-ok="1" data-fb="Right. 8 characters in total, 2 after the point. 3.14 is 4 characters, so 4 spaces go in front.">[&nbsp;&nbsp;&nbsp;&nbsp;3.14]</button>
+        <button type="button" data-ok="0" data-fb="The 8 is the total width, not a number of digits.">[3.14159000]</button>
+        <button type="button" data-ok="0" data-fb="Padding is spaces. Zeros would need '08.2f'.">[00003.14]</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <!-- ============================ CHAPTER 7 ============================ -->
+  <section class="chapter" id="ch7" data-chapter="ch7">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 7</p>
+      <h2>Plan it, then the sheet question by question</h2>
+      <p class="ch-goal">After this chapter you can get from a paragraph of engineering to a plan in five lines, turn the plan into Python, and check every sheet answer against a known-good output.</p>
+      <div class="where" data-stage="file,run,input,calculate,show"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">7.1</span>Five lines before any code</h3>
+      <p>Most of the sheet hands you a formula. Q5 and Q12 do not: they are a paragraph, the units in them do not match what is asked for, and something has to be worked out before it can be used. Knowing Python does not tell you where to start on those. A plan does. Write these five lines on paper first, every time:</p>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q-table">
+        <thead><tr><th>Line</th><th>Asks</th><th>Q5: minutes to years and days</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">WANT</td><td>the answer, and its unit</td><td>whole <strong>years</strong>, and the <strong>days</strong> left over</td></tr>
+          <tr><td class="mono">HAVE</td><td>what you are given</td><td>a number of minutes, typed by the user · 60 min/h · 24 h/day · 365 days/year</td></tr>
+          <tr><td class="mono">CONVERT</td><td>what must change</td><td>minutes → hours → days, whole ones only: <code>//</code></td></tr>
+          <tr><td class="mono">RELATE</td><td>how they connect</td><td>years = days <code>//</code> 365 · days left = days <code>%</code> 365</td></tr>
+          <tr><td class="mono">CHECK</td><td>roughly how big?</td><td>a year is 60 × 24 × 365 = 525,600 minutes, so 10<sup>9</sup> minutes is about 1900 years</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>Now each line of the plan becomes a line or two of Python. The comments in the finished file say which group of lines does which job - that labelling is what lets the same plan carry over to the next question:</p>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="sheet01/q05_minutes.py">
+# Sheet (1), Q #05 - minutes to years and days
+# PLAN
+#   WANT     years and leftover days
+#   HAVE     a number of minutes (1e9 in the example)
+#   CONVERT  minutes -> hours (60) -> days (24) -> years (365)
+#   RELATE   whole years = days // 365, leftover days = days % 365
+#   CHECK    1e9 minutes is about 1900 years
+#
+# The idea: // keeps only the whole part of a division, % keeps what is left over.
+minutes = eval(input("Enter the number of minutes: "))
+
+# 1. convert down to whole days
+hours = minutes // 60
+days = hours // 24
+
+# 2. split the days into years and leftover days
+years = days // 365
+remDays = days % 365
+
+print(format(minutes, ".1e"), "minutes is approximately", format(years, ".0f"),
+      "years and", format(remDays, ".0f"), "days")
+
+# test: 1000000000 -> 1.0e+09 minutes is approximately 1902 years and 214 days</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run</span></div><pre>Enter the number of minutes: <b>1000000000</b>
+1.0e+09 minutes is approximately 1902 years and 214 days</pre></div>
+
+    <div class="prose">
+      <p>CHECK said about 1900 years, and it prints 1902. That agreement is what lets you believe the program. Had it printed 31 years, or 1,902,000, the plan would have told you something was wrong before anyone else did.</p>
+      <h3><span class="step">7.2</span>Q12, planned the same way</h3>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q-table">
+        <thead><tr><th>Line</th><th>Q12: Egypt's population for the next five years</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">WANT</td><td>the population at the end of 2026, 2027, 2028, 2029 and 2030, in people</td></tr>
+          <tr><td class="mono">HAVE</td><td>118,058,996 people at the end of 2025 · 226.625 births/h · 70.583 deaths/h · 365 days/year</td></tr>
+          <tr><td class="mono">CONVERT</td><td>per hour → per year: × 24 hours × 365 days</td></tr>
+          <tr><td class="mono">RELATE</td><td>growth per year = (births − deaths) × 24 × 365 → year N = start + N × growth</td></tr>
+          <tr><td class="mono">CHECK</td><td>about 156 more people each hour, so about 1.4 million a year</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+<script type="text/x-code" data-lang="python" data-show data-ln data-title="sheet01/q12_population.py">
+# Sheet (1), Q #12 - Egypt's population for the next five years
+# PLAN
+#   WANT     the population at the end of 2026, 2027, 2028, 2029, 2030 (people)
+#   HAVE     118,058,996 people at the end of 2025
+#            226.625 births per hour, 70.583 deaths per hour, 365 days a year
+#   CONVERT  per hour -> per year: x 24 hours x 365 days
+#   RELATE   growth per year = (births - deaths) x 24 x 365
+#            population after N years = start + N x growth per year
+#   CHECK    about 156 more people each hour, so about 1.4 million a year
+#
+# The idea: the question is a paragraph, not a formula. Plan it first.
+
+# 1. the numbers from the question
+population = 118058996
+births = 226.625        # per hour
+deaths = 70.583         # per hour
+
+# 2. how much it grows in one year
+growth = (births - deaths) * 24 * 365
+
+# 3. one line per year
+print("2026:", format(population + 1 * growth, ".0f"))
+print("2027:", format(population + 2 * growth, ".0f"))
+print("2028:", format(population + 3 * growth, ".0f"))
+print("2029:", format(population + 4 * growth, ".0f"))
+print("2030:", format(population + 5 * growth, ".0f"))</script>
+
+    <div class="console"><div class="bar"><i></i><i></i><i></i><span>run</span></div><pre>2026: 119425924
+2027: 120792852
+2028: 122159780
+2029: 123526708
+2030: 124893636</pre></div>
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>قبل ما تكتب كود، اكتب الخمس سطور: عايز إيه، معايا إيه، إيه اللي لازم يتحوّل، إزاي يترابطوا، والناتج تقريبًا قد إيه.</p>
+      <p>ولما البرنامج يطلع رقم، قارنه بالـ <span class="ltr">CHECK</span> قبل ما تصدّقه.</p>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">7.3</span>Every question, with a value to test it</h3>
+      <p>Type the input shown, and your program should print the numbers on the right. They come from running the solution files with Python 3.14. If yours differ, the chapter named is where to look. Spaces may differ; numbers may not.</p>
+    </div>
+
+    <div class="tablewrap">
+      <table class="q-table">
+        <thead><tr><th>Q</th><th>What it practises</th><th>Where</th><th class="mono">Type</th><th class="mono">Expect</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1</td><td>One number in, formula, <code>".1f"</code></td><td>Ch 4, 6</td><td class="mono">43</td><td class="mono">43.0 ... 109.4 Fahrenheit</td></tr>
+          <tr><td class="mono">2</td><td>Two numbers from one line, <code>**</code></td><td>Ch 4, 5</td><td class="mono">5.5,12</td><td class="mono">area 23.758 · volume 285.099</td></tr>
+          <tr><td class="mono">3</td><td>Multiply by a constant, <code>"8.2f"</code></td><td>Ch 6</td><td class="mono">10</td><td class="mono">10.00 feet is 3.05 meters</td></tr>
+          <tr><td class="mono">4</td><td>The same shape as Q3</td><td>Ch 6</td><td class="mono">55.5</td><td class="mono">55.50 pounds is 25.20 kilograms</td></tr>
+          <tr><td class="mono">5</td><td><code>//</code> and <code>%</code>, planned</td><td>Ch 5, 7</td><td class="mono">1000000000</td><td class="mono">1902 years and 214 days</td></tr>
+          <tr><td class="mono">6</td><td>Three separate inputs</td><td>Ch 4</td><td class="mono">55.5 · 3.5 · 10.5</td><td class="mono">1626649.5 Joules</td></tr>
+          <tr><td class="mono">7</td><td>Three numbers from one line</td><td>Ch 4</td><td class="mono">5.5,50.9,4.5</td><td class="mono">10.0889 m/s^2</td></tr>
+          <tr><td class="mono">8</td><td><code>v ** 2</code></td><td>Ch 4, 5</td><td class="mono">60,3.5</td><td class="mono">514.29 meters</td></tr>
+          <tr><td class="mono">9</td><td>A square root as <code>** 0.5</code></td><td>Ch 5</td><td class="mono">1.5,-3.4 · 4,5</td><td class="mono">8.764</td></tr>
+          <tr><td class="mono">10</td><td>Q9 three times, then Heron's formula</td><td>Ch 5</td><td class="mono">1.5,-3.4,4.6,5,9.5,-3.4</td><td class="mono">33.60</td></tr>
+          <tr><td class="mono">11</td><td>√3 as <code>3 ** 0.5</code></td><td>Ch 5</td><td class="mono">5.5</td><td class="mono">78.59</td></tr>
+          <tr><td class="mono">12</td><td>A paragraph, planned</td><td>Ch 7</td><td class="mono">(nothing)</td><td class="mono">2026: 119425924 ... 2030: 124893636</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">7.4</span>Where things stand</h3>
+      <p>A few of the reference answers differ from the sheet's wording. None is a trap and none is your fault; they are listed so you recognise the difference instead of deciding your program is broken.</p>
+    </div>
+
+    <div class="board">
+      <div class="dcard done">
+        <p class="st">Settled</p>
+        <h4>Everything in chapters 3 to 6 is how Python behaves, not opinion</h4>
+        <p><code>input()</code> giving text, <code>/</code> giving a float, <code>//</code> and <code>%</code>, and how <code>format</code> rounds and pads are the same on every computer running Python 3. Every output on this page was produced by running the code with Python 3.14.</p>
+      </div>
+      <div class="dcard open">
+        <p class="st">Open · Q6</p>
+        <h4>4187 or 4182</h4>
+        <p>The sheet multiplies by 4187; the reference answer uses 4182. <strong>What it changes:</strong> 1626649.5 against 1624707.0 Joules for the test above. Follow the sheet unless your lecturer says otherwise.</p>
+      </div>
+      <div class="dcard open">
+        <p class="st">Open · Q2</p>
+        <h4>π and "radius"</h4>
+        <p>The reference uses <code>PI = 3.1459</code> and asks for the "radius" while calculating with the diameter. <strong>What it changes:</strong> area 23.791 against 23.758 with 3.14159. Ask for the diameter, as the sheet does.</p>
+      </div>
+      <div class="dcard open">
+        <p class="st">Open · Q1</p>
+        <h4>int or eval</h4>
+        <p>The reference reads the temperature with <code>int()</code>, which stops on 36.6 (chapter 4). <strong>What it changes:</strong> only decimal temperatures. <code>eval()</code>, like the other answers, accepts both.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3><span class="step">7.5</span>Before you hand it in</h3>
+      <p>Ticks are kept in this browser only, so they will not follow you to another machine.</p>
+    </div>
+
+    <ul class="checklist" id="checklist">
+      <li><label><input type="checkbox" data-k="place"><span><span class="t">Every file is inside <code>ECE122/sheet01</code></span><span class="d">Named <code>qNN_word.py</code>, two-digit number, no spaces.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="header"><span><span class="t">Each file starts with a comment naming the question</span><span class="d">Like the lecturer's <code># Sheet (1), Q #05</code>.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="eval"><span><span class="t">Every <code>input</code> has an <code>eval</code> around it</span><span class="d">Count them. Q6 has three.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="tested"><span><span class="t">Each program run with the test input in 7.3</span><span class="d">And the numbers match, digit for digit. Spaces may differ.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="units"><span><span class="t">Every answer is printed with its unit</span><span class="d">A bare number on the screen is an answer nobody can check.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="plans"><span><span class="t">Five-line plans written for Q5, Q6 and Q12</span><span class="d">In your notebook, before the code.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="copied"><span><span class="t">The ECE122 folder copied to your flash drive</span><span class="d">The whole folder, not single files.</span></span></label></li>
+    </ul>
+
+    <details class="more">
+      <summary>If you want to go further this week <span class="muted">· optional, not on the sheet</span></summary>
+      <div class="inner">
+        <ul>
+          <li>Make Q5 also print the hours and minutes left over. You will need <code>%</code> twice more.</li>
+          <li>In Q12, print the growth per year as well, with <code>".2f"</code>, and find the .92 of a person hiding in it.</li>
+          <li>Type <code>150 3.5</code> into Q8, read the red text from the bottom, and fix only the prompt so nobody makes that mistake again.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ COMPANION FILE: one runnable .py, built from these blocks ============ -->
+<script type="text/x-companion" data-kind="markdown" data-order="1">============================================================
+ ECE122 - Computer Programming (1)
+ Week 1 worksheet: first Python programs
+
+ Saved from the guide "First Python Programs".
+ Every step below matches a step number in the guide.
+
+ HOW TO USE THIS FILE
+   1. Put it in ECE122/sheet01 as q00_worksheet.py.
+   2. Run it before you change anything (Ctrl+Shift+F10).
+      It asks nothing and prints a banner for each step.
+   3. Work through the steps in order, in the guide and here.
+      Where a step says YOUR TURN, write the code yourself
+      and run again. Keep it running at every stage.
+
+ The steps use text in quotes, like '21', where a real
+ program would use input(), so the whole file runs without
+ stopping to ask you anything.
+============================================================</script>
+
+<script type="text/x-companion" data-kind="code" data-order="20"># ---------------------------------------------------------
+# Step 1  (guide 2.3) - the smallest program that does something
+# ---------------------------------------------------------
+print("--- Step 1 ---")
+print('Hello from ECE122')
+
+# YOUR TURN: print the five lines of the lecture's Example 1,
+# one print per line.
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="30"># ---------------------------------------------------------
+# Step 2  (guide 3.1) - print puts one space between items
+# Predict the spaces before you run it.
+# ---------------------------------------------------------
+print("--- Step 2 ---")
+print('x1 + x2 = ', 15 + 10)
+print('x1 * x2 =', 15 * 10)
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="40"># ---------------------------------------------------------
+# Step 3  (guide 3.2) - input() gives text
+# typed holds what input() would hand you if the user typed 21.
+# ---------------------------------------------------------
+print("--- Step 3 ---")
+typed = '21'
+print(typed * 2)
+number = eval(typed)
+print(number * 2)
+
+# Remove the # on the next line, run, and read the last red line.
+# print(typed + 1)
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="50"># ---------------------------------------------------------
+# Step 4  (guide 4.1) - int(), float() and eval()
+# ---------------------------------------------------------
+print("--- Step 4 ---")
+typed = '36.6'
+print(float(typed))
+print(eval(typed))
+
+# Remove the # on the next line, run, and read the last red line.
+# print(int(typed))
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="60"># ---------------------------------------------------------
+# Step 5  (guide 4.3) - two numbers from one line
+# ---------------------------------------------------------
+print("--- Step 5 ---")
+v, a = eval('60,3.5')
+print('v =', v, ' a =', a)
+
+# YOUR TURN (Sheet Q8): work out length = v squared / (2 a)
+# and print it with format(length, ".2f"). Expect 514.29.
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="70"># ---------------------------------------------------------
+# Step 6  (guide 5.1, 5.2) - / // % **
+# ---------------------------------------------------------
+print("--- Step 6 ---")
+print(7 / 2, 7 // 2, 7 % 2, 2 ** 3)
+print(500 // 60, 500 % 60)
+
+minutes = 1000000000
+hours = minutes // 60
+days = hours // 24
+print('whole days:', days)
+
+# YOUR TURN (Sheet Q5): years and leftover days from days.
+# Expect 1902 years and 214 days.
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="80"># ---------------------------------------------------------
+# Step 7  (guide 5.3) - brackets around a fraction in a power
+# ---------------------------------------------------------
+print("--- Step 7 ---")
+print(9 ** 1/2, 9 ** (1/2), 9 ** 0.5)
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="90"># ---------------------------------------------------------
+# Step 8  (guide 6.1, 6.2) - format() shows, it does not change
+# The brackets are only there so you can see the spaces.
+# ---------------------------------------------------------
+print("--- Step 8 ---")
+F = 9 / 5 * 36.6 + 32
+print(F)
+print(format(F, ".1f"))
+print('[' + format(3.14159, '8.2f') + ']')
+print(format(1000000000, ".1e"))
+
+# YOUR TURN (Sheet Q1): C = 43, and print
+#   43.0 Celsius is equivalent to 109.4 Fahrenheit
+print()</script>
+
+<script type="text/x-companion" data-kind="code" data-order="95"># ---------------------------------------------------------
+# Step 9  (guide 7.1) - plan before you code
+# YOUR TURN (Sheet Q6): fill in the five lines, then write
+# q06_energy.py. Test: 55.5, 3.5, 10.5 -> 1626649.5 Joules
+#
+# PLAN
+#   WANT
+#   HAVE
+#   CONVERT
+#   RELATE
+#   CHECK
+# ---------------------------------------------------------
+print("--- Step 9 ---")
+print("Plan Q6 in the comments above, then write q06_energy.py.")</script>
+
+  <footer class="sources">
+    <h2>Sources and checks</h2>
+    <ul>
+      <li><strong>Sheet (1)</strong>, Computer Programming (1), ECE122, Prof. Mahmoud M. Khater. All twelve questions, read 29 September 2026; kept in the course folder at <code>course-materials/sheets/sheet-01.pdf</code>.</li>
+      <li><strong>Lecture 1, Introduction</strong>, same author. Examples 1 to 4 are the source for chapter 3; Example 4's printed spacing was reproduced by running it.</li>
+      <li><strong>Reference answers</strong>: ten screenshots (Q1-Q10) supplied with the sheet, typed out and run. Where they differ from the sheet's wording is listed in 7.4.</li>
+      <li><strong>Every output on this page was produced by running code with Python 3.14.6</strong>, the version on the lab PCs, on 29 September 2026. None was worked out by hand or copied from a screenshot; the Q5 and Q12 figures were then recomputed by hand.</li>
+      <li><strong>The widgets</strong> run a small model of Python (how a float is shown, <code>format</code>, <code>int</code>, <code>float</code>, <code>eval</code> of numbers, <code>//</code> and <code>%</code>), checked against Python 3.14 on over 26,000 cases with no difference. It is a teaching model, not Python: when it meets something it does not cover it says so, and when it and PyCharm disagree, PyCharm is right.</li>
+      <li><strong>PyCharm</strong> drawings are simplified, based on JetBrains' documentation for PyCharm 2026.2, the version on the lab PCs.</li>
+    </ul>
+    <p class="muted">Written for first-year ECE122 students, and for the teaching assistant running the week 1 lab. It covers sheet 1 only: no conditions, no loops.</p>
+  </footer>
+</main>
+</div>
+<script>
+/* =======================================================================
+   A small model of Python 3.14, just enough for this guide's widgets:
+   how a float is shown (repr), format() with "W.Pf" / "W.Pe", and what
+   int(), float() and eval() do with text a user typed.
+
+   Checked against real Python by ../check-model.py - run it after any
+   change here. When the model meets something it does not cover it says
+   so, rather than guessing.
+
+   This file is plain ES5 so it can be pasted into the page's script by
+   build-guide.sh and also loaded by node for the check.
+   ======================================================================= */
+var PyModel = (function () {
+  "use strict";
+
+  /* ---- exact decimal expansion of a double, via BigInt ---- */
+  function exactDecimal(x) {
+    /* returns { neg, int: "123", frac: "4560..." } with no rounding at all */
+    var buf = new DataView(new ArrayBuffer(8));
+    buf.setFloat64(0, x);
+    var hi = buf.getUint32(0), lo = buf.getUint32(4);
+    var neg = (hi >>> 31) === 1;
+    var e = (hi >>> 20) & 0x7ff;
+    var m = (BigInt(hi & 0xfffff) << 32n) | BigInt(lo);
+    if (e === 0) e = 1; else m |= (1n << 52n);
+    e -= 1075;                         /* value = m * 2^e */
+    var intPart, frac = "";
+    if (e >= 0) {
+      intPart = (m << BigInt(e)).toString();
+    } else {
+      var k = -e;                      /* m / 2^k = m * 5^k / 10^k */
+      var s = (m * (5n ** BigInt(k))).toString();
+      while (s.length <= k) s = "0" + s;
+      intPart = s.slice(0, s.length - k);
+      frac = s.slice(s.length - k).replace(/0+$/, "");
+    }
+    return { neg: neg, int: intPart, frac: frac };
+  }
+
+  /* round a digit string (no point) to n digits, half to even, on exact digits */
+  function roundDigits(digits, n) {
+    /* digits: all significant digits available (exact); returns {d, carry} */
+    if (digits.length <= n) { while (digits.length < n) digits += "0"; return { d: digits, carry: false }; }
+    var keep = digits.slice(0, n), rest = digits.slice(n);
+    var first = rest.charAt(0), tail = rest.slice(1).replace(/0+$/, "");
+    var up = first > "5" || (first === "5" && (tail.length > 0 || (n > 0 && (+keep.charAt(n - 1)) % 2 === 1)));
+    if (first === "5" && tail.length === 0 && n === 0) up = false;   /* 0.5 -> 0 */
+    if (!up) return { d: keep, carry: false };
+    var arr = keep.split(""), i = arr.length - 1;
+    while (i >= 0) {
+      if (arr[i] === "9") { arr[i] = "0"; i--; }
+      else { arr[i] = String(+arr[i] + 1); break; }
+    }
+    if (i < 0) return { d: "1" + arr.join(""), carry: true };
+    return { d: arr.join(""), carry: false };
+  }
+
+  function fixed(x, p) {
+    if (!isFinite(x)) return isNaN(x) ? "nan" : (x > 0 ? "inf" : "-inf");
+    var ex = exactDecimal(x);
+    var all = ex.int + ex.frac;
+    var r = roundDigits(all, ex.int.length + p);
+    var d = r.d, il = ex.int.length + (r.carry ? 1 : 0);
+    var ip = d.slice(0, il).replace(/^0+(?=\d)/, ""), fp = d.slice(il);
+    return (ex.neg ? "-" : "") + ip + (p > 0 ? "." + fp : "");
+  }
+
+  function sci(x, p) {
+    if (!isFinite(x)) return isNaN(x) ? "nan" : (x > 0 ? "inf" : "-inf");
+    var ex = exactDecimal(x);
+    var all = (ex.int + ex.frac), lead = all.search(/[1-9]/);
+    var exp, digits;
+    if (lead < 0) { exp = 0; digits = ""; }
+    else { exp = ex.int.length - 1 - lead; digits = all.slice(lead); }
+    var r = roundDigits(digits || "0", p + 1);
+    if (r.carry) { exp += 1; r.d = r.d.slice(0, p + 1); }
+    var mant = r.d.charAt(0) + (p > 0 ? "." + r.d.slice(1) : "");
+    var ae = Math.abs(exp);
+    return (ex.neg ? "-" : "") + mant + "e" + (exp < 0 ? "-" : "+") + (ae < 10 ? "0" : "") + ae;
+  }
+
+  /* format(value, spec) for spec = [width][.precision](f|e), value = Py number */
+  function format(val, spec) {
+    var m = /^(\d*)(?:\.(\d+))?([fe])$/.exec(spec);
+    if (!m) throw new Error("This page only models format codes like \"8.2f\", \".1f\" or \".1e\".");
+    var w = m[1] ? +m[1] : 0, p = m[2] != null ? +m[2] : 6, x = Number(val.v);
+    var s = m[3] === "f" ? fixed(x, p) : sci(x, p);
+    while (s.length < w) s = " " + s;
+    return s;
+  }
+
+  /* repr() of a float: shortest round-trip digits, Python's layout rules */
+  function reprFloat(x) {
+    if (!isFinite(x)) return isNaN(x) ? "nan" : (x > 0 ? "inf" : "-inf");
+    if (x === 0) return (1 / x < 0) ? "-0.0" : "0.0";
+    var t = x.toExponential();                 /* shortest digits, e.g. "8.333333333333334e+0" */
+    var neg = t.charAt(0) === "-"; if (neg) t = t.slice(1);
+    var mm = /^(\d)(?:\.(\d+))?e([+-]\d+)$/.exec(t);
+    var digits = mm[1] + (mm[2] || ""), exp = +mm[3];
+    var out;
+    if (exp >= -4 && exp < 16) {
+      if (exp >= 0) {
+        var ip = digits.slice(0, exp + 1), fp = digits.slice(exp + 1);
+        while (ip.length < exp + 1) ip += "0";
+        out = ip + "." + (fp || "0");
+      } else {
+        out = "0." + new Array(-exp).join("0") + digits;
+      }
+    } else {
+      var ae = Math.abs(exp);
+      out = digits.charAt(0) + (digits.length > 1 ? "." + digits.slice(1) : "") + "e" + (exp < 0 ? "-" : "+") + (ae < 10 ? "0" : "") + ae;
+    }
+    return (neg ? "-" : "") + out;
+  }
+
+  /* A Python value: {k: "int", v: BigInt} | {k: "float", v: Number} | {k: "str", v: String} | {k: "tuple", v: [values]} */
+  function repr(val) {
+    if (val.k === "int") return val.v.toString();
+    if (val.k === "float") return reprFloat(val.v);
+    if (val.k === "str") return reprStr(val.v);
+    if (val.k === "tuple") return "(" + val.v.map(repr).join(", ") + (val.v.length === 1 ? ",)" : ")");
+    return "?";
+  }
+  /* what print() shows: str without quotes, everything else as repr */
+  function show(val) { return val.k === "str" ? val.v : repr(val); }
+  function reprStr(s) {
+    var q = s.indexOf("'") >= 0 && s.indexOf('"') < 0 ? '"' : "'";
+    return q + s.replace(/\\/g, "\\\\").split(q).join("\\" + q) + q;
+  }
+
+  function PyError(type, msg) { var e = new Error(msg); e.pyType = type; return e; }
+  function Unmodelled(msg) { var e = new Error(msg); e.unmodelled = true; return e; }
+
+  /* int(text) */
+  function toInt(s) {
+    var t = s.trim();
+    if (/^[+-]?\d+(?:_\d+)*$/.test(t)) return { k: "int", v: BigInt(t.replace(/_/g, "")) };
+    throw PyError("ValueError", "invalid literal for int() with base 10: " + reprStr(s));
+  }
+  /* float(text) */
+  function toFloat(s) {
+    var t = s.trim();
+    if (/^[+-]?(?:\d+(?:_\d+)*(?:\.(?:\d+(?:_\d+)*)?)?|\.\d+(?:_\d+)*)(?:[eE][+-]?\d+(?:_\d+)*)?$/.test(t))
+      return { k: "float", v: parseFloat(t.replace(/_/g, "")) };
+    if (/^[+-]?(inf|infinity|nan)$/i.test(t)) throw Unmodelled("Python accepts this one, but this page does not model it.");
+    throw PyError("ValueError", "could not convert string to float: " + reprStr(s));
+  }
+  /* eval(text), for numbers and commas only */
+  var NUM = /^[+-]*\s*(?:(\d+(?:_\d+)*)|(\d+(?:_\d+)*\.(?:\d+(?:_\d+)*)?(?:[eE][+-]?\d+)?|\.\d+(?:[eE][+-]?\d+)?|\d+(?:_\d+)*[eE][+-]?\d+))$/;
+  function evalNumber(part) {
+    var t = part.trim();
+    var m = NUM.exec(t);
+    if (!m) return null;
+    var signs = (t.match(/^[+-]*/)[0].match(/-/g) || []).length;
+    var body = t.replace(/^[+-]*\s*/, "");
+    if (m[1] != null) {
+      if (/^0\d/.test(body) && /[1-9]/.test(body)) throw PyError("SyntaxError", "leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers");
+      var v = BigInt(body.replace(/_/g, ""));
+      return { k: "int", v: signs % 2 ? -v : v };
+    }
+    var f = parseFloat(body.replace(/_/g, ""));
+    return { k: "float", v: signs % 2 ? -f : f };
+  }
+  function pyEval(s) {
+    var t = s.trim();
+    if (t === "") throw PyError("SyntaxError", "invalid syntax");
+    if (/^\(.*\)$/.test(t)) t = t.slice(1, -1).trim();
+    var parts = t.split(",");
+    var trailing = parts.length > 1 && parts[parts.length - 1].trim() === "";
+    if (trailing) parts.pop();
+    var vals = [];
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      var n = evalNumber(p);
+      if (n) { vals.push(n); continue; }
+      var q = p.trim();
+      if (q === "") throw PyError("SyntaxError", "invalid syntax");
+      if (/^[+-]?[\d.]+(?:[eE][+-]?\d+)?(?:\s+[+-]?[\d.]+(?:[eE][+-]?\d+)?)+$/.test(q)) throw PyError("SyntaxError", "invalid syntax");
+      if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(q) && !/^(True|False|None)$/.test(q)) throw PyError("NameError", "name " + reprStr(q) + " is not defined");
+      throw Unmodelled("eval() runs this as Python. This page only models numbers separated by commas - try it in PyCharm.");
+    }
+    if (vals.length === 1 && !trailing) return vals[0];
+    return { k: "tuple", v: vals };
+  }
+
+  /* x * 2 and x + 1, for the text-versus-number widget */
+  function times2(val) {
+    if (val.k === "str") return { k: "str", v: val.v + val.v };
+    if (val.k === "int") return { k: "int", v: val.v * 2n };
+    if (val.k === "float") return { k: "float", v: val.v * 2 };
+    if (val.k === "tuple") return { k: "tuple", v: val.v.concat(val.v) };
+  }
+  function plus1(val) {
+    if (val.k === "str") throw PyError("TypeError", "can only concatenate str (not \"int\") to str");
+    if (val.k === "int") return { k: "int", v: val.v + 1n };
+    if (val.k === "float") return { k: "float", v: val.v + 1 };
+    if (val.k === "tuple") throw PyError("TypeError", "can only concatenate tuple (not \"int\") to tuple");
+  }
+
+  /* // and % for whole numbers (BigInt floor semantics, like Python) */
+  function floordiv(a, b) { var q = a / b; if ((a % b !== 0n) && ((a < 0n) !== (b < 0n))) q -= 1n; return q; }
+  function mod(a, b) { var r = a % b; if (r !== 0n && ((r < 0n) !== (b < 0n))) r += b; return r; }
+
+
+  /* a // b and a % b on Python values (int or float), as Q5 uses them */
+  function pyFloordiv(a, b) {
+    if (a.k === "int" && b.k === "int") return { k: "int", v: floordiv(a.v, b.v) };
+    var x = Number(a.v), y = Number(b.v);
+    if (Math.abs(x) >= 1e15) throw Unmodelled("This page only models float // below 10^15.");
+    return { k: "float", v: Math.floor(x / y) };
+  }
+  function pyMod(a, b) {
+    if (a.k === "int" && b.k === "int") return { k: "int", v: mod(a.v, b.v) };
+    var x = Number(a.v), y = Number(b.v);
+    if (Math.abs(x) >= 1e15) throw Unmodelled("This page only models float % below 10^15.");
+    var r = x % y; if (r !== 0 && ((r < 0) !== (y < 0))) r += y;
+    return { k: "float", v: r };
+  }
+  /* Q5: minutes -> hours -> days -> years, days left */
+  function q5(minutes) {
+    if (minutes.k !== "int" && minutes.k !== "float") throw PyError("TypeError", "unsupported operand type(s) for //: '" + (minutes.k === "tuple" ? "tuple" : "str") + "' and 'int'");
+    var hours = pyFloordiv(minutes, { k: "int", v: 60n });
+    var days = pyFloordiv(hours, { k: "int", v: 24n });
+    var years = pyFloordiv(days, { k: "int", v: 365n });
+    var rem = pyMod(days, { k: "int", v: 365n });
+    return { hours: hours, days: days, years: years, rem: rem };
+  }
+  /* v, a = value */
+  function unpack2(val) {
+    if (val.k === "tuple") {
+      if (val.v.length === 2) return val.v;
+      if (val.v.length > 2) throw PyError("ValueError", "too many values to unpack (expected 2, got " + val.v.length + ")");
+      throw PyError("ValueError", "not enough values to unpack (expected 2, got " + val.v.length + ")");
+    }
+    if (val.k === "str") {
+      if (val.v.length === 2) return [{ k: "str", v: val.v[0] }, { k: "str", v: val.v[1] }];
+      throw PyError("ValueError", (val.v.length > 2 ? "too many" : "not enough") + " values to unpack (expected 2, got " + val.v.length + ")");
+    }
+    throw PyError("TypeError", "cannot unpack non-iterable " + val.k + " object");
+  }
+
+  return {
+    exactDecimal: exactDecimal, fixed: fixed, sci: sci, format: format,
+    reprFloat: reprFloat, repr: repr, show: show, reprStr: reprStr,
+    toInt: toInt, toFloat: toFloat, pyEval: pyEval, times2: times2, plus1: plus1,
+    floordiv: floordiv, mod: mod, pyFloordiv: pyFloordiv, pyMod: pyMod, q5: q5, unpack2: unpack2
+  };
+})();
+if (typeof module !== "undefined") module.exports = PyModel;
+</script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var NS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function pct(x, d) { return (x * 100).toFixed(d == null ? 1 : d) + "%"; }
+  function fmt(n) { return Number(n).toLocaleString("en-US"); }
+  function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $("#toast");
+    if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 4200);
+  }
+
+  /* ---------- code blocks: highlighting, line numbers, diffs, copy ---------- */
+  var KEYWORDS = {
+    python: "False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield",
+    cfamily: "auto bool break case catch char class const continue default delete do double else enum export extern false float for function goto if import inline int let long namespace new null nullptr private protected public return short signed sizeof static struct switch template this throw true try typedef typeof union unsigned using var void volatile while",
+    sql: "select from where group by having order limit join inner left right outer on as insert into values update set delete create table alter drop index distinct union all case when then else end",
+    plain: ""
+  };
+  var BUILTINS = "print input eval format len range sum sorted dict list open round float int zip enumerate repr min max isinstance set tuple str console log cout cin cerr endl fixed scientific setprecision setw main";
+  function langKey(lang) {
+    lang = (lang || "plain").toLowerCase();
+    if (lang === "python" || lang === "py") return "python";
+    if (lang === "sql") return "sql";
+    if (["js","javascript","ts","typescript","c","cpp","c++","java","go","rust","json","css"].indexOf(lang) >= 0) return "cfamily";
+    return "plain";
+  }
+  function tokenize(code, lang) {
+    var key = langKey(lang);
+    var re = key === "python"
+      ? /(#[^\n]*)|((?:[rRfFbB]{1,2})?(?:'''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"))|(\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)/g
+      /* cfamily: note the preprocessor group. #include must not render as a comment. */
+      : /(\/\*[\s\S]*?\*\/|\/\/[^\n]*|--[^\n]*)|('(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"|`(?:\\.|[^`\\])*`|<[A-Za-z_][A-Za-z0-9_+./]*>)|(\b0x[0-9a-fA-F]+\b|\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)|(#[A-Za-z_]+)/g;
+    var kw = (KEYWORDS[key] || "").split(" "), bi = BUILTINS.split(" ");
+    var segs = [], last = 0, m;
+    while ((m = re.exec(code))) {
+      if (m.index > last) segs.push(["", code.slice(last, m.index)]);
+      var t = m[0], cls = "";
+      if (m[1]) cls = "tk-c";
+      else if (m[2]) cls = "tk-s";
+      else if (m[3]) cls = "tk-n";
+      else if (m[5]) cls = "tk-p";
+      else if (m[4]) {
+        if (kw.indexOf(t) >= 0 || kw.indexOf(t.toLowerCase()) >= 0) cls = "tk-k";
+        else if (bi.indexOf(t) >= 0) cls = "tk-f";
+        else if (/^\s*\(/.test(code.slice(re.lastIndex, re.lastIndex + 2))) cls = "tk-f";
+      }
+      segs.push([cls, t]);
+      last = re.lastIndex;
+    }
+    if (last < code.length) segs.push(["", code.slice(last)]);
+    return segs;
+  }
+  function highlightLines(code, lang) {
+    var lines = [""];
+    tokenize(code, lang).forEach(function (seg) {
+      seg[1].split("\n").forEach(function (p, i) {
+        if (i > 0) lines.push("");
+        if (p) lines[lines.length - 1] += seg[0] ? '<span class="' + seg[0] + '">' + esc(p) + "</span>" : esc(p);
+      });
+    });
+    return lines;
+  }
+  function copyText(text, statusEl, preEl) {
+    function done(msg) { statusEl.textContent = msg; setTimeout(function () { statusEl.textContent = ""; }, 2200); }
+    function fallback() {
+      try {
+        var sel = window.getSelection(), range = document.createRange();
+        range.selectNodeContents(preEl); sel.removeAllRanges(); sel.addRange(range);
+        if (document.execCommand && document.execCommand("copy")) { sel.removeAllRanges(); done("Copied"); }
+        else done("Selected. Press Ctrl+C or Cmd+C");
+      } catch (e) { done("Select the code and copy it"); }
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done("Copied"); }, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  }
+  $$('script[data-show]').forEach(function (s) {
+    var lang = s.getAttribute("data-lang") || "plain";
+    var raw = s.textContent.replace(/^\n/, "").replace(/\s+$/, "");
+    var shown = raw;
+    var isDiff = s.hasAttribute("data-diff");
+    var lineNums = s.hasAttribute("data-ln");
+    var hl = (s.getAttribute("data-hl") || "").split(",").filter(Boolean).map(Number);
+    var hlClass = s.getAttribute("data-hl-kind") === "change" ? "chg-line" : "hl-line";
+    var markers = null, text = shown;
+    if (isDiff) {
+      var src = shown.split("\n");
+      markers = src.map(function (l) { return l.charAt(0) || " "; });
+      text = src.map(function (l) { return l.slice(2); }).join("\n");
+    }
+    var html = highlightLines(text, lang).map(function (h, i) {
+      if (isDiff) {
+        var mk = markers[i], cls = mk === "+" ? "add-line" : mk === "-" ? "del-line" : "";
+        var g = '<span class="dg">' + (mk === " " ? " " : esc(mk)) + "</span>";
+        return cls ? '<span class="' + cls + '">' + g + h + "</span>" : g + h;
+      }
+      var ln = lineNums ? '<span class="ln">' + (i + 1) + "</span>" : "";
+      return hl.indexOf(i + 1) >= 0 ? '<span class="' + hlClass + '">' + ln + (h || " ") + "</span>" : ln + h;
+    }).join("\n");
+    var box = document.createElement("div");
+    box.className = "code";
+    box.innerHTML = '<div class="code-head"><span class="ttl">' + esc(s.getAttribute("data-title") || lang) +
+      '</span><span class="copy-status" aria-live="polite"></span><button type="button" class="btn small copy">Copy</button></div><pre><code>' + html + "</code></pre>";
+    s.parentNode.insertBefore(box, s);
+    box.querySelector(".copy").addEventListener("click", function () { copyText(isDiff ? text : raw, box.querySelector(".copy-status"), box.querySelector("pre")); });
+  });
+
+
+  /* =======================================================================
+     This week's widgets. Every value they show is computed by PyModel
+     (src/pymodel.js), which check-model.py compares against Python 3.14.
+     ======================================================================= */
+  var M = window.PyModel;
+  function attempt(fn) { try { return { ok: true, v: fn() }; } catch (e) { return { ok: false, err: e }; } }
+  function errText(e) { return e.unmodelled ? e.message : (e.pyType ? e.pyType + ": " + e.message : "Error: " + e.message); }
+  function wirePresets(box, input, run) {
+    if (!box) return;
+    $$("button", box).forEach(function (b) {
+      b.addEventListener("click", function () { input.value = b.getAttribute("data-e"); run(); });
+    });
+  }
+
+  /* ---------- "you are here" strips ---------- */
+  var STAGES = [["file", "Your file"], ["run", "Run"], ["input", "input()"], ["calculate", "Calculate"], ["show", "format()"]];
+  $$(".where").forEach(function (el) {
+    var on = (el.getAttribute("data-stage") || "").split(",");
+    el.innerHTML = STAGES.map(function (s) { return '<span class="' + (on.indexOf(s[0]) >= 0 ? "on" : "") + '">' + s[1] + "</span>"; }).join('<i aria-hidden="true">›</i>');
+    el.setAttribute("role", "img");
+    el.setAttribute("aria-label", "Stage: " + STAGES.filter(function (s) { return on.indexOf(s[0]) >= 0; }).map(function (s) { return s[1]; }).join(", "));
+  });
+
+  /* ---------- the running example, computed once ---------- */
+  var TYPED = "36.6";
+  var INT_TRY = attempt(function () { return M.toInt(TYPED); });
+  var C_VAL = M.pyEval(TYPED);
+  var F_VAL = { k: "float", v: 9 / 5 * C_VAL.v + 32 };
+  var F_SHOWN = M.format(F_VAL, ".1f");
+
+  /* ---------- spine: int() versus eval() ---------- */
+  var spine = $("#spine");
+  if (spine) {
+    var G = $("#sp-boxes");
+    var BOX = [
+      { k: "1 · YOU TYPE", main: TYPED, sub: "in the Run window" },
+      { k: "2 · input() GIVES", main: M.reprStr(TYPED), sub: "text, not a number" },
+      { k: "3 · INTO A NUMBER", main: "", sub: "", id: "conv" },
+      { k: "4 · CALCULATE", main: "9 / 5 * C + 32", sub: "", id: "calc" },
+      { k: "5 · format(F, \".1f\")", main: "", sub: "", id: "fmt" },
+      { k: "6 · RUN WINDOW", main: "", sub: "", id: "out", dark: true }
+    ];
+    var parts = {};
+    BOX.forEach(function (b, i) {
+      var x = 8 + i * 148, cx = x + 64;
+      var r = svgEl("rect", { x: x, y: 36, width: 128, height: 112, rx: 6,
+        style: b.dark ? "fill: #14181d; stroke: var(--rule-strong); stroke-width: 1.5" : "fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1.5" }, G);
+      svgEl("text", { x: cx, y: 58, "text-anchor": "middle", "class": "mono",
+        style: "font-size: 10px; letter-spacing: .04em; fill: " + (b.dark ? "#8d98a6" : "var(--ink-3)") }, G).textContent = b.k;
+      var m = svgEl("text", { x: cx, y: 90, "text-anchor": "middle", "class": "mono", style: "font-size: 14px; font-weight: 700; fill: var(--ink)" }, G);
+      var s = svgEl("text", { x: cx, y: 116, "text-anchor": "middle", "class": "mono", style: "font-size: 11px; fill: var(--ink-2)" }, G);
+      m.textContent = b.main; s.textContent = b.sub;
+      parts[b.id || i] = { rect: r, main: m, sub: s };
+      if (i < BOX.length - 1) svgEl("line", { x1: x + 130, y1: 92, x2: x + 146, y2: 92, style: "stroke: var(--ink-3); stroke-width: 1.5", "marker-end": "url(#sp-ah)" }, G);
+    });
+    var VARIANTS = {
+      int: ["Box 3 uses int(), which only accepts text that is a whole number. '36.6' has a point in it, so the program stops there, and boxes 4 and 5 never run.",
+            "What you typed, the text input() handed over, the formula and the printing.",
+            "What happens when the text is not the kind of number the function expects?"],
+      eval: ["Box 3 uses eval(), which reads the text as Python: '36.6' becomes the number 36.6, and everything after it runs.",
+             "What you typed, the text input() handed over, the formula and the printing.",
+             "What does it take for typed text to become a number you can calculate with?"]
+    };
+    var setVariant = function (v) {
+      $$("#spine-seg button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === v)); });
+      $("#sp-change").textContent = VARIANTS[v][0];
+      $("#sp-same").textContent = VARIANTS[v][1];
+      $("#sp-q").textContent = VARIANTS[v][2];
+      var isInt = v === "int";
+      parts.conv.rect.setAttribute("style", "fill: " + (isInt ? "var(--hot-soft)" : "var(--accent-soft)") + "; stroke: " + (isInt ? "var(--hot)" : "var(--accent)") + "; stroke-width: 2");
+      parts.conv.main.textContent = isInt ? "int(text)" : "eval(text)";
+      parts.conv.sub.textContent = isInt ? INT_TRY.err.pyType : M.repr(C_VAL);
+      parts.conv.sub.setAttribute("style", "font-size: 12px; font-weight: 700; fill: " + (isInt ? "var(--hot-ink)" : "var(--accent)"));
+      [parts.calc, parts.fmt].forEach(function (p) { p.rect.setAttribute("style", "fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1.5; opacity: " + (isInt ? ".45" : "1")); });
+      parts.calc.main.setAttribute("style", "font-size: 12.5px; font-weight: 700; fill: var(--ink); opacity: " + (isInt ? ".45" : "1"));
+      parts.calc.sub.textContent = isInt ? "never runs" : M.repr(F_VAL);
+      parts.fmt.main.textContent = isInt ? "" : M.reprStr(F_SHOWN);
+      parts.fmt.sub.textContent = isInt ? "never runs" : "text, for showing";
+      parts.out.main.textContent = isInt ? INT_TRY.err.pyType : F_SHOWN + " Fahrenheit";
+      parts.out.main.setAttribute("style", "font-size: " + (isInt ? "14px" : "12.5px") + "; font-weight: 700; fill: " + (isInt ? "#f75464" : "#8de0a6"));
+      parts.out.sub.textContent = isInt ? "exit code 1" : "exit code 0";
+      parts.out.sub.setAttribute("style", "font-size: 11px; fill: #8d98a6");
+      $("#sp-note").textContent = isInt
+        ? "int() stops the program: " + errText(INT_TRY.err)
+        : "eval() gives the number " + M.repr(C_VAL) + ", and the program prints " + F_SHOWN + " Fahrenheit.";
+    };
+    $$("#spine-seg button").forEach(function (b) { b.addEventListener("click", function () { setVariant(b.getAttribute("data-v")); }); });
+    setVariant("int");
+  }
+
+  /* ---------- 3.2 text versus number ---------- */
+  var txIn = $("#tx-in");
+  if (txIn) {
+    var lines = function (val) {
+      var t2 = attempt(function () { return M.show(M.times2(val)); });
+      var p1 = attempt(function () { return M.show(M.plus1(val)); });
+      return "print(x * 2)  →  " + esc(t2.ok ? t2.v : errText(t2.err)) + "<br>print(x + 1)  →  " + (p1.ok ? esc(p1.v) : '<span style="color: var(--hot-ink)">' + esc(errText(p1.err)) + "</span>");
+    };
+    var txRun = function () {
+      var text = txIn.value, raw = { k: "str", v: text };
+      $("#tx-raw").textContent = M.repr(raw);
+      $("#tx-raw-n").innerHTML = "text · " + lines(raw);
+      var ev = attempt(function () { return M.pyEval(text); });
+      if (ev.ok) {
+        $("#tx-num").textContent = M.repr(ev.v);
+        $("#tx-num-n").innerHTML = (ev.v.k === "tuple" ? "two or more numbers" : ev.v.k === "int" ? "a whole number (int)" : "a decimal number (float)") + " · " + lines(ev.v);
+      } else {
+        $("#tx-num").textContent = ev.err.unmodelled ? "?" : ev.err.pyType;
+        $("#tx-num-n").textContent = errText(ev.err);
+      }
+      var v = $("#tx-verdict");
+      if (ev.ok && ev.v.k !== "tuple") {
+        v.className = "verdictline differ";
+        v.innerHTML = '<span class="tagv">Same characters, different things.</span> The left card holds the text ' + esc(M.repr(raw)) + ", the right one the number " + esc(M.repr(ev.v)) + ". Only the number can be used in arithmetic.";
+      } else if (ev.ok) {
+        v.className = "verdictline agree";
+        v.innerHTML = '<span class="tagv">Several numbers at once.</span> eval() read the commas as Python does, so x holds all of them together. Chapter 4 shows how to give each one its own name.';
+      } else {
+        v.className = "verdictline differ";
+        v.innerHTML = '<span class="tagv">input() accepts anything; eval() does not.</span> The left card is always fine, because any typing is text. Only text that reads as Python numbers survives eval().';
+      }
+    };
+    txIn.addEventListener("input", txRun);
+    wirePresets($("#tx-presets"), txIn, txRun);
+    txRun();
+  }
+
+  /* ---------- 4.2 int / float / eval / unpack ---------- */
+  var cnIn = $("#cn-in");
+  if (cnIn) {
+    var cnRun = function () {
+      var text = cnIn.value;
+      var rows = [
+        ["int(x)", function () { return M.repr(M.toInt(text)); }],
+        ["float(x)", function () { return M.repr(M.toFloat(text)); }],
+        ["eval(x)", function () { return M.repr(M.pyEval(text)); }],
+        ["v, a = eval(x)", function () { var r = M.unpack2(M.pyEval(text)); return "v = " + M.repr(r[0]) + ", a = " + M.repr(r[1]); }]
+      ];
+      var okCount = 0;
+      $("#cn-cards").innerHTML = rows.map(function (r) {
+        var a = attempt(r[1]);
+        if (a.ok) okCount++;
+        var cls = a.ok ? "good" : (a.err.unmodelled ? "" : "hot");
+        var val = a.ok ? a.v : (a.err.unmodelled ? "?" : a.err.pyType);
+        var note = a.ok ? "works" : errText(a.err);
+        return '<div class="pgcard ' + cls + '"><p class="k code">' + esc(r[0]) + '</p><p class="v" style="font-size: 19px">' + esc(val) + '</p><p class="n">' + esc(note) + "</p></div>";
+      }).join("");
+      var v = $("#cn-verdict");
+      v.className = "verdictline " + (okCount ? "agree" : "differ");
+      v.innerHTML = '<span class="tagv">' + okCount + " of 4 accept " + esc(M.reprStr(text)) + ".</span> " +
+        (okCount === 0 ? "Nothing here can use it: check what was typed." :
+         "Red cards are the red line you would see in PyCharm, word for word.");
+    };
+    cnIn.addEventListener("input", cnRun);
+    wirePresets($("#cn-presets"), cnIn, cnRun);
+    cnRun();
+  }
+
+  /* ---------- 5.2 Q5 step by step ---------- */
+  var q5In = $("#q5-in");
+  if (q5In) {
+    var q5Run = function () {
+      var text = q5In.value;
+      var r = attempt(function () { var m = M.pyEval(text); return { m: m, q: M.q5(m) }; });
+      var out = $("#q5-out"), cards = $("#q5-cards"), rd = $("#q5-readout");
+      if (!r.ok) {
+        cards.innerHTML = "";
+        out.innerHTML = "Enter the number of minutes: <b>" + esc(text) + "</b>\n<i>" + esc(errText(r.err)) + "</i>";
+        rd.textContent = r.err.unmodelled ? r.err.message : "Q5 stops here: it needs one number of minutes.";
+        return;
+      }
+      var q = r.v.q, m = r.v.m;
+      var C = [
+        ["hours", "minutes // 60", q.hours, "whole hours"],
+        ["days", "hours // 24", q.days, "whole days"],
+        ["years", "days // 365", q.years, "whole years"],
+        ["remDays", "days % 365", q.rem, "days that do not make a year"]
+      ];
+      cards.innerHTML = C.map(function (c) {
+        return '<div class="scard"><span class="s-name">' + c[0] + '</span><span class="s-val">' + esc(M.repr(c[2])) + '</span><span class="s-f">' + esc(c[1]) + '</span><span class="s-q">' + c[3] + "</span></div>";
+      }).join("");
+      out.innerHTML = "Enter the number of minutes: <b>" + esc(text) + "</b>\n" +
+        esc(M.format(m, ".1e") + " minutes is approximately " + M.format(q.years, ".0f") + " years and " + M.format(q.rem, ".0f") + " days");
+      var est = M.format({ k: "float", v: Number(m.v) / 525600 }, ".1f");
+      rd.textContent = "CHECK: a year is 525,600 minutes, and " + M.repr(m) + " / 525600 is about " + est + " years. The program says " +
+        M.format(q.years, ".0f") + " whole years and " + M.format(q.rem, ".0f") + " days, which agrees." +
+        (m.k === "float" ? " Every step shows .0 because the input was a float." : "");
+    };
+    q5In.addEventListener("input", q5Run);
+    wirePresets($("#q5-presets"), q5In, q5Run);
+    q5Run();
+  }
+
+  /* ---------- 6.2 the format dial ---------- */
+  var fdIn = $("#fd-in");
+  if (fdIn) {
+    var fdType = "f";
+    var fdRun = function () {
+      var w = +$("#fd-w").value, p = +$("#fd-p").value;
+      $("#fd-w-o").textContent = w === 0 ? "none" : w;
+      $("#fd-p-o").textContent = p;
+      $$("#fd-t button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === fdType)); });
+      var spec = (w ? w : "") + "." + p + fdType;
+      $("#fd-code").textContent = 'format(' + fdIn.value + ', "' + spec + '")';
+      var r = attempt(function () {
+        var val = M.pyEval(fdIn.value);
+        if (val.k === "tuple") throw Object.assign(new Error("format() here needs one number, not several."), { unmodelled: true });
+        return M.format(val, spec);
+      });
+      var out = $("#fd-out"), rd = $("#fd-readout");
+      if (!r.ok) { out.textContent = errText(r.err); rd.textContent = ""; return; }
+      var s = r.v, pad = s.length - s.replace(/^ +/, "").length, need = s.length - pad;
+      out.innerHTML = '"' + esc(s).replace(/ /g, '<span style="color: var(--hot-ink)">␣</span>') + '"';
+      rd.textContent = "The number itself needs " + need + " characters. " +
+        (w === 0 ? "With no width, nothing is added in front." :
+         w > need ? "Width " + w + " adds " + pad + " space" + (pad === 1 ? "" : "s") + " in front to make " + w + "." :
+         "Width " + w + " is not more than that, so it adds nothing - a width never cuts a number.") +
+        (fdType === "e" ? " In e style, the digits after the point count from the first digit, and e+NN is the power of ten." : "");
+    };
+    fdIn.addEventListener("input", fdRun);
+    $("#fd-w").addEventListener("input", fdRun);
+    $("#fd-p").addEventListener("input", fdRun);
+    $$("#fd-t button").forEach(function (b) { b.addEventListener("click", function () { fdType = b.getAttribute("data-v"); fdRun(); }); });
+    $$("#fd-presets button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        fdIn.value = b.getAttribute("data-n"); $("#fd-w").value = b.getAttribute("data-w");
+        $("#fd-p").value = b.getAttribute("data-p"); fdType = b.getAttribute("data-t"); fdRun();
+      });
+    });
+    fdRun();
+  }
+
+  /* ---------- self-checks ---------- */
+  $$("[data-quiz]").forEach(function (q) {
+    var fb = $(".fb", q), btns = $$(".opts button", q);
+    btns.forEach(function (b, i) {
+      b.innerHTML = '<span class="mk">' + "ABCD".charAt(i) + "</span><span>" + b.innerHTML + "</span>";
+      b.addEventListener("click", function () {
+        var ok = b.getAttribute("data-ok") === "1";
+        btns.forEach(function (x) { x.classList.remove("right", "wrong"); });
+        b.classList.add(ok ? "right" : "wrong");
+        fb.className = "fb " + (ok ? "ok" : "no");
+        fb.innerHTML = '<span class="verdict">' + (ok ? "Right." : "Not quite.") + "</span> " + b.getAttribute("data-fb");
+      });
+    });
+  });
+
+  /* ---------- checklist, remembered in this browser only ---------- */
+  var CK_KEY = "ece122-w1-checklist-v1", ck = {};
+  try { ck = JSON.parse(localStorage.getItem(CK_KEY) || "{}") || {}; } catch (e) { ck = {}; }
+  $$(".checklist input").forEach(function (box) {
+    box.checked = !!ck[box.getAttribute("data-k")];
+    box.addEventListener("change", function () {
+      ck[box.getAttribute("data-k")] = box.checked;
+      try { localStorage.setItem(CK_KEY, JSON.stringify(ck)); } catch (e) { /* private window: ticks last for this visit */ }
+    });
+  });
+
+  /* ---------- chapter highlighting ---------- */
+  var navLinks = $$(".rail a[data-for], .chipnav a[data-for]"), chipnav = $(".chipnav");
+  function markChapter(id) {
+    navLinks.forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-for") === id); });
+    var chip = chipnav && chipnav.querySelector('a[data-for="' + id + '"]');
+    if (chip && getComputedStyle(chipnav).display !== "none") {
+      chipnav.scrollTo({ left: chip.offsetLeft - chipnav.clientWidth / 2 + chip.clientWidth / 2, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) markChapter(e.target.getAttribute("data-chapter")); });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    $$("[data-chapter]").forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- companion file: one runnable .py, built from the blocks above ---------- */
+  var COMPANION = "q00_worksheet.py";
+  function companionBlocks() {
+    return $$("script[data-companion], script[data-kind]").map(function (s) {
+      var kind = s.getAttribute("data-kind") || "code";
+      return { order: parseFloat(s.getAttribute("data-order") || "0"), kind: kind, src: s.textContent.replace(/^\n/, "").replace(/\s+$/, "") };
+    }).sort(function (a, b) { return a.order - b.order; });
+  }
+  function buildCompanion() {
+    var blocks = companionBlocks();
+    if (/\.(cpp|cc|c|h|hpp)$/.test(COMPANION)) {
+      /* prose becomes comments so the saved file compiles as it stands */
+      return blocks.map(function (c) {
+        return c.kind === "markdown"
+          ? c.src.split("\n").map(function (l) { return l.length ? "// " + l : "//"; }).join("\n")
+          : c.src;
+      }).join("\n\n") + "\n";
+    }
+    if (/\.py$/.test(COMPANION)) {
+      /* prose becomes comments so the saved file runs as it stands */
+      return blocks.map(function (c) {
+        return c.kind === "markdown"
+          ? c.src.split("\n").map(function (l) { return l.length ? "# " + l : "#"; }).join("\n")
+          : c.src;
+      }).join("\n\n") + "\n";
+    }
+    if (/\.ipynb$/.test(COMPANION)) {
+      var cells = blocks.map(function (c, i) {
+        var lines = c.src.split("\n"), source = lines.map(function (l, j) { return j < lines.length - 1 ? l + "\n" : l; });
+        var cell = { cell_type: c.kind === "markdown" ? "markdown" : "code", id: "cell-" + (i + 1), metadata: {}, source: source };
+        if (cell.cell_type === "code") { cell.execution_count = null; cell.outputs = []; }
+        return cell;
+      });
+      return JSON.stringify({ nbformat: 4, nbformat_minor: 5, metadata: {}, cells: cells }, null, 1) + "\n";
+    }
+    return blocks.map(function (c) { return c.kind === "markdown" ? c.src : "```\n" + c.src + "\n```"; }).join("\n\n") + "\n";
+  }
+  var CRC = (function () { var t = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(buf) { var c = 0xFFFFFFFF; for (var i = 0; i < buf.length; i++) c = CRC[(c ^ buf[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function zipOne(name, data) {
+    var nb = new TextEncoder().encode(name), crc = crc32(data), d = new Date();
+    var time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+    var date = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    var loc = new Uint8Array(30 + nb.length), lv = new DataView(loc.buffer);
+    lv.setUint32(0, 0x04034b50, true); lv.setUint16(4, 20, true); lv.setUint16(6, 0x0800, true);
+    lv.setUint16(10, time, true); lv.setUint16(12, date, true); lv.setUint32(14, crc, true);
+    lv.setUint32(18, data.length, true); lv.setUint32(22, data.length, true); lv.setUint16(26, nb.length, true);
+    loc.set(nb, 30);
+    var cen = new Uint8Array(46 + nb.length), cv = new DataView(cen.buffer);
+    cv.setUint32(0, 0x02014b50, true); cv.setUint16(4, 20, true); cv.setUint16(6, 20, true); cv.setUint16(8, 0x0800, true);
+    cv.setUint16(12, time, true); cv.setUint16(14, date, true); cv.setUint32(16, crc, true);
+    cv.setUint32(20, data.length, true); cv.setUint32(24, data.length, true); cv.setUint16(28, nb.length, true);
+    cen.set(nb, 46);
+    var end = new Uint8Array(22), ev = new DataView(end.buffer);
+    ev.setUint32(0, 0x06054b50, true); ev.setUint16(8, 1, true); ev.setUint16(10, 1, true);
+    ev.setUint32(12, cen.length, true); ev.setUint32(16, loc.length + data.length, true);
+    var out = new Uint8Array(loc.length + data.length + cen.length + end.length);
+    out.set(loc, 0); out.set(data, loc.length); out.set(cen, loc.length + data.length); out.set(end, loc.length + data.length + cen.length);
+    return out;
+  }
+  function saveCompanion() {
+    var text = buildCompanion();
+    var host = window.claude && typeof window.claude.use === "function";
+    if (!host) {
+      var url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
+      var a = document.createElement("a"); a.href = url; a.download = COMPANION;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 3000);
+      toast("Saving " + COMPANION + ".");
+      return;
+    }
+    window.claude.use("downloads").then(function (dl) {
+      if (!dl) { toast("Saving isn't available in this view."); return; }
+      var ext = COMPANION.split(".").pop().toLowerCase();
+      var allowed = ["txt", "json", "md", "csv", "html", "svg", "pdf", "zip", "png", "jpg", "jpeg", "webp", "gif", "mp4", "webm", "docx", "pptx", "xlsx", "epub", "ttf"];
+      var bytes = new TextEncoder().encode(text);
+      var req = allowed.indexOf(ext) >= 0 ? { filename: COMPANION, data: text } : { filename: COMPANION.replace(/\.[^.]+$/, "") + ".zip", data: zipOne(COMPANION, bytes) };
+      return dl.save(req).then(function () { toast("Saved."); }, function (err) {
+        var code = err && err.code;
+        toast(code === "declined" ? "Save cancelled." : code === "rate_limited" ? "A save prompt is already open." : "Saving isn't available in this view.");
+      });
+    }, function () { toast("Saving isn't available in this view."); });
+  }
+  $$(".companion-save").forEach(function (b) { b.addEventListener("click", saveCompanion); });
+
+  /* Exposed for automated checks. */
+  window.guideKit = { $: $, $$: $$, svgEl: svgEl, esc: esc, toast: toast, buildCompanion: buildCompanion, zipOne: zipOne, PyModel: M };
+})();
+</script>
+</body>
+</html>

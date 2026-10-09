@@ -1,0 +1,1115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decisions and boundaries | GEN 241 week 3</title><!-- a name, not a summary -->
+<meta name="description" content="Trace if and else, test Sheet 2 boundaries, and package your C++ files on Windows.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@600;700&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  /* surfaces and ink: pick a neutral with a slight bias toward the accent */
+  --bg: #f4f6f9; --surface: #ffffff; --surface-2: #eef1f6; --surface-3: #e2e7ee;
+  --ink: #111821; --ink-2: #435061; --ink-3: #5f6b7c;
+  --rule: #d9dfe7; --rule-strong: #b9c2ce;
+  /* accent: interactive things only */
+  --accent: #0f6e78; --accent-strong: #0b555d; --accent-soft: #e0f0f2; --on-accent: #ffffff;
+  /* semantic pair: the thing under study vs its background class. Rename per subject. */
+  --hot: #b4531f; --hot-ink: #93411a; --hot-soft: #fbeade;
+  --cool: #8894a5; --cool-soft: #e9edf2;
+  --good: #1b7446; --good-soft: #e0f2e7;
+  --warn-ink: #7f4d00; --warn-soft: #fff1d6; --warn-line: #e0a126;
+  --mark: #111821;           /* outline used as a second channel beside colour */
+  --dim: 0.16;               /* opacity for "not counted" marks */
+  --code-bg: #f6f8fb; --code-ink: #1b2430;
+  --tok-key: #0b555d; --tok-str: #1b7446; --tok-num: #93411a; --tok-com: #6b7684; --tok-fn: #6a3ab2; --tok-pre: #a2337a;
+  --shadow: 0 1px 2px rgba(17,24,33,.05), 0 6px 20px rgba(17,24,33,.06);
+  --radius: 6px; --radius-sm: 4px;
+  --font-display: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-alt: "IBM Plex Sans Arabic", system-ui, sans-serif; /* second-language callouts */
+  --top: env(safe-area-inset-top, 0px);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --cool: #5e6a7b; --cool-soft: #222b37;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412; --warn-line: #b88419;
+  --mark: #e8ecf2; --dim: 0.2;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-fn: #c3a6f5; --tok-pre: #f09ccd;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --cool: #5e6a7b; --cool-soft: #222b37;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412; --warn-line: #b88419;
+  --mark: #e8ecf2; --dim: 0.2;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-fn: #c3a6f5; --tok-pre: #f09ccd;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--top) + 72px); -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.62 var(--font-body); text-rendering: optimizeLegibility; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { color: var(--accent-strong); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+code, kbd, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+p code, li code, td code, figcaption code, .callout code, h3 code, summary code, label code, .quiz .opts button code {
+  background: var(--surface-2); border: 1px solid var(--rule); border-radius: 3px; padding: 0.04em 0.32em;
+  /* not nowrap: a long path or statement would push the whole page sideways on a phone */
+  overflow-wrap: break-word;
+}
+strong { font-weight: 650; }
+.num { font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- top bar and chapter navigation ---------- */
+.topbar { position: sticky; top: var(--top); z-index: 30; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--rule); }
+.topbar-inner { max-width: 1320px; margin: 0 auto; padding-block: 10px; padding-inline: 16px; display: flex; align-items: center; gap: 16px; }
+.wordmark { display: flex; align-items: baseline; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 17px; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.wordmark small { font-family: var(--font-mono); font-weight: 500; font-size: 11.5px; letter-spacing: 0.06em; color: var(--ink-3); text-transform: uppercase; }
+.topbar .spacer { flex: 1; }
+.chipnav { display: none; }
+@media (max-width: 1099px) {
+  .chipnav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-block: 0 10px; padding-inline: 16px; max-width: 1320px; margin: 0 auto; }
+  .chipnav::-webkit-scrollbar { display: none; }
+  .chipnav a { flex: none; font-size: 13.5px; text-decoration: none; color: var(--ink-2); border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: var(--surface); }
+  .chipnav a.on { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+  .wordmark small { display: none; }
+}
+
+/* ---------- controls ---------- */
+.btn { appearance: none; font: 600 14.5px/1 var(--font-body); display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: var(--radius-sm); border: 1px solid var(--rule-strong); background: var(--surface); color: var(--ink); cursor: pointer; text-decoration: none; white-space: nowrap; }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--on-accent); }
+.btn.small { padding: 6px 10px; font-size: 13px; }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); }
+.seg button { appearance: none; border: 0; background: transparent; color: var(--ink-2); font: 600 14px/1.2 var(--font-body); padding: 8px 13px; cursor: pointer; border-right: 1px solid var(--rule); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.seg button:hover:not([aria-pressed="true"]) { background: var(--accent-soft); color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { appearance: none; font: 500 14px/1.25 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 6px 10px; cursor: pointer; text-align: left; }
+.chip:hover { border-color: var(--accent); }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+input[type="range"] { width: 100%; accent-color: var(--accent); height: 28px; margin: 0; }
+.field-row { display: grid; gap: 4px; }
+.field-row label { font-size: 14px; color: var(--ink-2); display: flex; justify-content: space-between; gap: 12px; }
+.field-row label output { font-family: var(--font-mono); color: var(--ink); font-weight: 600; }
+input[type="text"] { width: 100%; font: 400 15px/1.4 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 9px 11px; }
+input[type="text"]:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+
+/* ---------- layout ---------- */
+.shell { max-width: 1320px; margin: 0 auto; padding-inline: 16px; }
+@media (min-width: 1100px) { .shell { display: grid; grid-template-columns: 212px minmax(0, 1fr); gap: 56px; padding-inline: 32px; } }
+.rail { display: none; }
+@media (min-width: 1100px) { .rail { display: block; } .rail nav { position: sticky; top: calc(var(--top) + 80px); padding-block: 8px 24px; } }
+.rail ol { list-style: none; margin: 0; padding: 0; position: relative; }
+.rail ol::before { content: ""; position: absolute; left: 7px; top: 12px; bottom: 12px; width: 1px; background: var(--rule-strong); }
+.rail li a { position: relative; display: grid; grid-template-columns: 15px 1fr; gap: 12px; align-items: baseline; padding: 6px 0; text-decoration: none; color: var(--ink-2); font-size: 14.5px; line-height: 1.3; }
+.rail li a::before { content: ""; width: 9px; height: 9px; margin-left: 3px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--rule-strong); transform: translateY(1px); }
+.rail li a span.k { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); display: block; letter-spacing: 0.04em; }
+.rail li a:hover { color: var(--ink); }
+.rail li a.on { color: var(--ink); font-weight: 600; }
+.rail li a.on::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.rail .rail-foot { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--rule); display: grid; gap: 10px; }
+.rail .rail-foot p { margin: 0; font-size: 13px; color: var(--ink-3); line-height: 1.45; }
+main { min-width: 0; padding-block: 8px 80px; }
+.prose { max-width: 700px; }
+p { margin: 0 0 1em; }
+ul, ol { margin: 0 0 1em; padding-left: 1.3em; }
+li { margin: 0.25em 0; }
+li::marker { color: var(--ink-3); }
+h1, h2, h3, h4 { font-family: var(--font-display); color: var(--ink); text-wrap: balance; margin: 0; }
+h3 { font-size: 22px; font-weight: 700; line-height: 1.25; margin: 2.2em 0 0.55em; }
+h3 .step { font-family: var(--font-mono); font-weight: 500; font-size: 13px; color: var(--ink-3); letter-spacing: 0.04em; display: block; margin-bottom: 4px; }
+h4 { font-size: 17px; font-weight: 700; margin: 1.4em 0 0.4em; }
+.lede { font-size: 19.5px; line-height: 1.55; color: var(--ink-2); }
+.muted { color: var(--ink-3); }
+.small { font-size: 14.5px; }
+
+/* ---------- hero and chapter heads ---------- */
+.hero { padding-block: 44px 20px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
+.hero h1 { font-size: clamp(34px, 5.2vw, 56px); line-height: 1.04; letter-spacing: -0.025em; font-weight: 800; max-width: 16ch; margin-bottom: 18px; }
+.hero .lede { max-width: 640px; }
+.specimen { display: inline-flex; align-items: center; gap: 0.35em; font-family: var(--font-mono); font-weight: 600; font-size: 0.88em; color: var(--ink); background: var(--hot-soft); border-radius: 3px; padding: 0 0.35em; white-space: nowrap; }
+.specimen::before { content: ""; width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--hot); }
+.startrow { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin: 28px 0 8px; }
+.startrow > div { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; }
+.startrow h4 { margin: 0 0 4px; font-size: 15px; }
+.startrow p { margin: 0 0 10px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; }
+.startrow p:last-child { margin-bottom: 0; }
+.chapter { padding-top: 56px; margin-top: 40px; border-top: 1px solid var(--rule); }
+.ch-head { margin-bottom: 26px; }
+.ch-num { font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+.ch-head h2 { font-size: clamp(30px, 4vw, 42px); line-height: 1.08; letter-spacing: -0.02em; font-weight: 800; margin-bottom: 12px; }
+.ch-goal { font-size: 17.5px; color: var(--ink-2); max-width: 660px; margin: 0; }
+/* "you are here" strip: JS fills it from data-stage (see STAGES in the script) */
+.where { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 16px; font-family: var(--font-mono); font-size: 12px; }
+.where span { padding: 3px 8px; border: 1px solid var(--rule); border-radius: 3px; color: var(--ink-3); background: var(--surface); }
+.where i { color: var(--rule-strong); font-style: normal; }
+.where span.on { border-color: var(--accent); background: var(--accent); color: var(--on-accent); font-weight: 600; }
+
+/* ---------- figures ---------- */
+.fig { margin: 26px 0 30px; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px; }
+.fig.flat { background: transparent; border: 0; padding: 0; }
+.fig figcaption { margin-top: 12px; font-size: 14.5px; color: var(--ink-2); line-height: 1.5; max-width: 700px; }
+.fig figcaption strong { color: var(--ink); }
+.fig .controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-bottom: 14px; }
+.fig .controls .lbl { font-size: 13.5px; color: var(--ink-3); }
+.fig details.more { margin: 14px 0 0; }
+.fig details.more > summary { font-size: 14.5px; padding: 8px 12px; }
+.svgbox { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+.svgbox svg { display: block; width: 100%; height: auto; }
+.svgbox.wide svg { min-width: 680px; }   /* keeps diagram text legible on phones */
+.scrollhint { display: none; font-size: 12.5px; color: var(--ink-3); margin: 6px 0 0; }
+@media (max-width: 760px) { .svgbox.wide + .scrollhint { display: block; } }
+svg text { font-family: var(--font-body); }
+svg .mono { font-family: var(--font-mono); }
+.t-ink { fill: var(--ink); } .t-ink2 { fill: var(--ink-2); } .t-ink3 { fill: var(--ink-3); }
+.t-acc { fill: var(--accent); } .t-hot { fill: var(--hot-ink); } .t-good { fill: var(--good); }
+.s-rule { stroke: var(--rule-strong); } .s-ink { stroke: var(--ink); } .s-ink3 { stroke: var(--ink-3); } .s-acc { stroke: var(--accent); }
+.f-surface { fill: var(--surface); } .f-surface2 { fill: var(--surface-2); } .f-acc-soft { fill: var(--accent-soft); }
+.f-hot { fill: var(--hot); } .f-hot-soft { fill: var(--hot-soft); } .f-cool { fill: var(--cool); } .f-cool-soft { fill: var(--cool-soft); }
+.f-good-soft { fill: var(--good-soft); } .f-acc { fill: var(--accent); } .f-ink { fill: var(--ink); } .f-none { fill: none; }
+
+/* ---------- callouts ---------- */
+.callout { margin: 22px 0; padding: 14px 16px 12px; border-radius: var(--radius); background: var(--surface-2); max-width: 700px; }
+.callout > .tag { display: inline-block; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 6px; color: var(--ink-2); }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout.key { background: var(--accent-soft); } .callout.key > .tag { color: var(--accent); }
+.callout.watch { background: var(--warn-soft); } .callout.watch > .tag { color: var(--warn-ink); }
+.callout.fact { background: var(--surface); border: 1px solid var(--rule); }
+.callout.fact > .tag { color: var(--good); } .callout.fact > .tag::before { content: "\2713\00a0"; }
+.callout.alt { direction: rtl; text-align: right; font-family: var(--font-alt); font-size: 17px; line-height: 1.85; background: var(--surface); border: 1px dashed var(--rule-strong); }
+.callout.alt > .tag { font-family: var(--font-alt); letter-spacing: 0; text-transform: none; font-size: 13px; color: var(--ink-3); }
+.callout.alt code, .callout.alt .ltr { direction: ltr; unicode-bidi: isolate; font-family: var(--font-mono); font-size: 0.85em; }
+
+/* ---------- code ---------- */
+.code { margin: 18px 0 22px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--code-bg); overflow: hidden; }
+.code-head { display: flex; align-items: center; gap: 10px; padding: 7px 8px 7px 12px; border-bottom: 1px solid var(--rule); font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3); background: var(--surface); }
+.code-head .ttl { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.code-head .copy { margin-left: auto; }
+.code pre { margin: 0; padding: 12px 14px 14px; overflow-x: auto; font: 400 13.6px/1.62 var(--font-mono); color: var(--code-ink); tab-size: 4; }
+.code pre .ln { display: inline-block; width: 2.2em; margin-left: -0.4em; color: var(--ink-3); opacity: 0.55; user-select: none; text-align: right; padding-right: 1em; }
+.tk-k { color: var(--tok-key); } .tk-s { color: var(--tok-str); } .tk-n { color: var(--tok-num); } .tk-c { color: var(--tok-com); font-style: italic; } .tk-f { color: var(--tok-fn); }
+.hl-line, .chg-line, .add-line, .del-line { display: inline-block; width: calc(100% + 28px); margin-left: -14px; padding-left: 14px; }
+.hl-line { background: var(--hot-soft); } .chg-line { background: var(--accent-soft); }
+.add-line { background: var(--good-soft); } .del-line { background: var(--hot-soft); }
+.dg { display: inline-block; width: 1.4em; margin-left: -0.3em; color: var(--ink-3); user-select: none; }
+.add-line .dg { color: var(--good); font-weight: 600; } .del-line .dg { color: var(--hot-ink); font-weight: 600; }
+.copy-status { font-family: var(--font-body); font-size: 12.5px; color: var(--good); }
+/* numbered notes that explain a code block or figure line by line */
+.notes { display: grid; gap: 10px; margin: 0 0 22px; padding: 0; list-style: none; max-width: 700px; }
+.notes li { display: grid; grid-template-columns: auto 1fr; gap: 10px; margin: 0; font-size: 15.5px; line-height: 1.55; }
+.notes li code { white-space: normal; }
+.notes .n { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 50%; width: 22px; height: 22px; display: grid; place-items: center; margin-top: 1px; }
+.expect { font-family: var(--font-mono); font-size: 13.5px; background: var(--surface); border: 1px dashed var(--rule-strong); border-radius: var(--radius-sm); padding: 10px 12px; margin: -8px 0 22px; color: var(--ink-2); white-space: pre-wrap; max-width: 700px; }
+.expect b { font-family: var(--font-body); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: 4px; }
+
+/* ---------- tables ---------- */
+.tablewrap { overflow-x: auto; margin: 18px 0 24px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 650; font-size: 13px; color: var(--ink-2); background: var(--surface-2); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- self-check ---------- */
+.quiz { margin: 26px 0; padding: 16px 18px; border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--surface); max-width: 700px; }
+.quiz .q-tag { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+.quiz .q { font-weight: 600; margin: 0 0 12px; }
+.quiz .opts { display: grid; gap: 8px; }
+.quiz .opts button { appearance: none; text-align: left; font: 400 15.5px/1.45 var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-sm); padding: 9px 12px; cursor: pointer; display: grid; grid-template-columns: 22px 1fr; gap: 8px; align-items: start; }
+.quiz .opts button:hover { border-color: var(--accent); }
+.quiz .opts button .mk { font-family: var(--font-mono); font-size: 13px; color: var(--ink-3); padding-top: 1px; }
+.quiz .opts button.right { border-color: var(--good); background: var(--good-soft); }
+.quiz .opts button.wrong { border-color: var(--hot); background: var(--hot-soft); }
+.quiz .fb { margin: 12px 0 0; font-size: 15.5px; line-height: 1.55; }
+.quiz .fb:empty { display: none; }
+.quiz .fb .verdict { font-weight: 700; }
+.quiz .fb.ok .verdict { color: var(--good); } .quiz .fb.no .verdict { color: var(--hot-ink); }
+
+/* ---------- disclosure, panels, boards, lists ---------- */
+details.more { margin: 22px 0; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); }
+details.more > summary { cursor: pointer; padding: 12px 16px; font-weight: 650; list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::before { content: "+"; font-family: var(--font-mono); font-weight: 600; color: var(--accent); width: 14px; }
+details.more[open] > summary::before { content: "\2212"; }
+details.more > summary .muted { font-weight: 400; font-size: 14px; }
+details.more > .inner { padding: 0 16px 16px; }
+.grid2 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grid3 { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 14px 16px; }
+.panel h4 { margin: 0 0 6px; font-size: 15.5px; }
+.panel p:not(.label-cap) { font-size: 15px; color: var(--ink-2); margin: 0 0 8px; line-height: 1.5; }
+.panel p:last-child { margin-bottom: 0; }
+.label-cap { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; }
+.dot.hot { background: var(--hot); } .dot.cool { background: var(--cool); }
+.dot.ring { box-shadow: 0 0 0 1.5px var(--surface), 0 0 0 3px var(--mark); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--ink-2); margin: 10px 0 0; }
+.legend > span { display: inline-block; }
+.badge { display: inline-block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 3px; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--rule); }
+.badge.hot { background: var(--hot-soft); color: var(--hot-ink); border-color: transparent; }
+.badge.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+/* decided vs open board: say the state of the world once, instead of hedging every sentence */
+.board { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 24px; }
+.board .dcard { flex: 1 1 220px; }
+.board .dcard { border: 1px solid var(--rule); border-radius: var(--radius); padding: 12px 14px; background: var(--surface); }
+.board .dcard .st { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.board .dcard.done .st { color: var(--good); } .board .dcard.open .st { color: var(--warn-ink); }
+.board .dcard.open { border-style: dashed; border-color: var(--rule-strong); }
+.board .dcard.done { flex-basis: 100%; }
+.board .dcard h4 { margin: 4px 0 6px; font-size: 16px; }
+.board .dcard p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+.checklist { list-style: none; padding: 0; margin: 16px 0; display: grid; gap: 8px; max-width: 760px; }
+.checklist li { margin: 0; }
+.checklist label { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); cursor: pointer; }
+.checklist input { width: 18px; height: 18px; margin: 3px 0 0; accent-color: var(--accent); }
+.checklist .t { font-weight: 650; display: block; }
+.checklist .d { font-size: 14.5px; color: var(--ink-2); display: block; margin-top: 2px; line-height: 1.5; }
+.checklist input:checked + span .t { text-decoration: line-through; text-decoration-color: var(--ink-3); color: var(--ink-3); }
+.tree { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.7; background: var(--code-bg); border: 1px solid var(--rule); border-radius: var(--radius); padding: 12px 16px; overflow-x: auto; white-space: pre; margin: 16px 0 24px; }
+.tree .c { color: var(--ink-3); }
+/* stat cards: one card per quantity, tap to explain (see wireUp in the script) */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; margin-top: 16px; }
+.scard { appearance: none; text-align: left; font: inherit; color: inherit; cursor: pointer; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 11px 12px 12px; display: grid; gap: 3px; align-content: start; }
+.scard:hover, .scard[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.scard .s-name { font-weight: 700; font-size: 15px; }
+.scard .s-val { font-family: var(--font-mono); font-weight: 600; font-size: 21px; }
+.scard .s-q { font-size: 13.5px; color: var(--ink-2); line-height: 1.4; }
+.scard .s-f { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-3); overflow-wrap: anywhere; }
+.readout { font-size: 15px; margin: 12px 0 0; min-height: 3em; }
+
+footer.sources { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 14px; color: var(--ink-2); }
+footer.sources h2 { font-size: 20px; margin-bottom: 10px; }
+footer.sources li { margin: 0.35em 0; }
+footer.sources code { white-space: normal; overflow-wrap: anywhere; }
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: var(--radius); font-size: 14.5px; box-shadow: var(--shadow); z-index: 50; max-width: calc(100vw - 32px); }
+@media print { .topbar, .rail, .chipnav, .btn, .seg { display: none !important; } .svgbox { overflow: visible !important; } .svgbox.wide svg { min-width: 0 !important; } .scrollhint { display: none !important; } .shell { display: block; } details.more > .inner { display: block; } .chapter { break-before: page; } }
+
+/* ---------- additions for this guide ---------- */
+/* preprocessor directives: #include must not render as a comment */
+.tk-p { color: var(--tok-pre); font-weight: 600; }
+
+/* a console, because half of this guide is about what lands on one */
+.console { font-family: var(--font-mono); font-size: 13.5px; line-height: 1.6; background: #14181d; color: #e6ebf1;
+  border: 1px solid var(--rule-strong); border-radius: var(--radius); padding: 0; margin: 18px 0 22px; overflow: hidden; max-width: 700px; }
+.console .bar { display: flex; align-items: center; gap: 7px; padding: 7px 11px; background: #1e242c; border-bottom: 1px solid #2c333d; }
+.console .bar i { width: 10px; height: 10px; border-radius: 50%; background: #3d4651; display: block; }
+.console .bar span { font-size: 11.5px; letter-spacing: 0.05em; color: #8d98a6; margin-left: 4px; text-transform: uppercase; }
+.console pre { margin: 0; padding: 12px 14px; white-space: pre; overflow-x: auto; font: inherit; color: inherit; }
+.console pre b { color: #8de0a6; font-weight: 400; }          /* the value the chapter is about */
+.console pre i { color: #f0a271; font-style: normal; }        /* the wrong value */
+
+/* a space you can see: used where the spaces inside a string literal are the lesson */
+.ws { display: inline-block; width: 1ch; text-align: center; color: var(--ink-3); opacity: 0.5; }
+.ws::before { content: "\00b7"; }
+.starline { font-family: var(--font-mono); font-size: 14px; line-height: 1.5; white-space: pre; }
+.starline b { color: var(--hot-ink); font-weight: 600; }
+
+/* side-by-side "what a calculator says / what C++ says" */
+.pg { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin: 14px 0 0; }
+.pg .pgcard { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 12px 14px; }
+.pg .pgcard.hot { border-color: var(--hot); box-shadow: inset 3px 0 0 var(--hot); }
+.pg .pgcard.good { border-color: var(--good); box-shadow: inset 3px 0 0 var(--good); }
+.pg .pgcard .k { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+.pg .pgcard .v { font-family: var(--font-mono); font-size: 23px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }
+.pg .pgcard .n { font-size: 13.5px; color: var(--ink-2); margin: 6px 0 0; line-height: 1.45; }
+.verdictline { margin: 12px 0 0; font-size: 15px; line-height: 1.55; }
+.verdictline .tagv { font-weight: 700; }
+.verdictline.agree .tagv { color: var(--good); }
+.verdictline.differ .tagv { color: var(--hot-ink); }
+
+/* small row of buttons under a widget */
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 0; }
+.tty { font-family: var(--font-mono); font-size: 14px; background: var(--surface-2); border: 1px solid var(--rule);
+  border-radius: var(--radius-sm); padding: 9px 12px; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 2.6em; margin: 12px 0 0; }
+.kbd { font-family: var(--font-mono); font-size: 12.5px; border: 1px solid var(--rule-strong); border-bottom-width: 2px;
+  border-radius: 4px; padding: 1px 6px; background: var(--surface); white-space: nowrap; }
+.q-table td.mono, .q-table th.mono { font-family: var(--font-mono); font-size: 13.5px; }
+.callout.alt p { margin-bottom: 0.5em; }
+.callout.alt p:last-child { margin-bottom: 0; }
+/* the name builder and checker (chapter 1) */
+.nb-fields { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: end; }
+.nb-fields label { display: grid; gap: 5px; font-size: 13.5px; color: var(--ink-2); }
+.nb-fields label.grow { flex: 1 1 260px; }
+.nb-fields input { font: 600 16px/1.2 var(--font-mono); color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 6px; padding: 8px 10px; width: 9ch; }
+.nb-fields label.grow input { width: 100%; box-sizing: border-box; }
+.nb-fields input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.nb-out { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 14px; }
+.nb-out > div { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface-2); padding: 10px 12px; }
+.nb-out .k { margin: 0; font-size: 12.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; }
+.nb-out .v { margin: 4px 0 0; font: 700 18px/1.3 var(--font-mono); color: var(--ink); overflow-wrap: anywhere; }
+
+.lab-fields {display:flex; flex-wrap:wrap; gap:16px; margin-bottom:14px}
+.lab-fields label {display:grid;gap:5px;flex:1;min-width:140px}
+.lab-fields input,.lab-fields select {width:100%;max-width:100%;padding:9px;background:var(--surface);color:var(--ink);border:1px solid var(--rule-strong);border-radius:5px}
+.trace-lines {padding-left:30px;font-family:var(--font-mono);font-size:13px;overflow:auto}
+.trace-lines li {padding:5px;white-space:pre; border-left:3px solid transparent}
+.trace-lines li.active {background:var(--accent-soft);border-color:var(--accent)}
+.trace-lines li.skipped {color:var(--ink-3)}
+.trace-status {min-height:50px;line-height:1.6}
+@media print { .lab-fields,.btnrow {display:none!important} .trace-lines {font-size:9px} details {break-inside:auto} }
+
+@media print {
+  html, body {background:#fff!important; color:#111!important;font-size:10.5pt!important;}
+  .shell, main {margin:0!important;padding:0!important;max-width:none!important;width:auto!important;}
+  .hero {padding:0!important;margin:0 0 24px!important;}
+  .chapter {break-before:auto!important;margin:24px 0 0!important;padding-top:18px!important;}
+  .ch-head {break-inside:avoid;break-after:avoid;margin-bottom:16px!important;}
+  h1 {font-size:27pt!important;max-width:none!important;}
+  h2 {font-size:20pt!important;} h3 {font-size:13pt!important;break-after:avoid!important;}
+  h3 {break-inside:avoid!important;} h4, summary {break-after:avoid;} p, li {orphans:3;widows:3;}
+  p,.prose p {line-height:1.5!important;}
+  .lede {font-size:12pt!important;max-width:none!important;}
+  .prose {max-width:none!important;}
+  figure,.fig,.code,.console,.quiz,.callout,.startrow > div,.checklist li {break-inside:avoid!important;}
+  .fig {margin:14px 0!important;padding:12px!important;}
+  .startrow {display:block!important;} .startrow > div {margin:8px 0!important;padding:8px!important;}
+  .sources {break-inside:avoid;margin-top:24px!important;}
+  .trace-lines {font-size:9pt!important;} .trace-lines li {padding:3px!important;}
+  .chip,.controls,.nb-fields,.lab-fields,.btnrow {display:none!important;}
+  .code pre,.code code {font-size:9pt!important;}
+}
+
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner"><a class="wordmark" href="#top">Programs that decide <small>GEN 241 · week 3</small></a><span class="spacer"></span><button class="btn small primary companion-save" type="button">Worksheet</button></div><nav class="chipnav" aria-label="Chapters"><a href="#top" data-for="top">Start</a><a href="#ch1" data-for="ch1">1 One decision</a><a href="#ch2" data-for="ch2">2 All conditions</a><a href="#ch3" data-for="ch3">3 The BMI ladder</a><a href="#ch4" data-for="ch4">4 Test the boundary</a><a href="#ch5" data-for="ch5">5 Finish the sheet</a><a href="#ch6" data-for="ch6">6 Windows names</a><a href="#ch7" data-for="ch7">7 Final archive</a></nav></header>
+<div class="shell"><aside class="rail"><nav><ol><li><a href="#top" data-for="top">Start here</a></li><li><a href="#ch1" data-for="ch1"><span><span class="k">CH 1</span>One decision</span></a></li><li><a href="#ch2" data-for="ch2"><span><span class="k">CH 2</span>All conditions</span></a></li><li><a href="#ch3" data-for="ch3"><span><span class="k">CH 3</span>The BMI ladder</span></a></li><li><a href="#ch4" data-for="ch4"><span><span class="k">CH 4</span>Test the boundary</span></a></li><li><a href="#ch5" data-for="ch5"><span><span class="k">CH 5</span>Finish the sheet</span></a></li><li><a href="#ch6" data-for="ch6"><span><span class="k">CH 6</span>Windows names</span></a></li><li><a href="#ch7" data-for="ch7"><span><span class="k">CH 7</span>Final archive</span></a></li></ol><div class="rail-foot"><p>Read, predict, then run.</p><button class="btn small companion-save" type="button">Save worksheet</button></div></nav></aside><main id="top">
+<section class="hero" data-chapter="top"><p class="eyebrow">GEN 241 · Sheet 2, part 2 · lab week 3</p><h1>The first true condition chooses the answer</h1><p class="lede">For 70 kg and 175 cm, Q18 gives BMI 22.8571 and the sheet's label Normal. Put the test <code>bmi &lt; 30</code> first and the same number prints Overweight. The calculation is right; the decision is wrong.</p>
+<div class="callout key"><span class="tag">This week's task</span><p>Finish Q7, Q9-Q11 and Q13-Q18. Keep last week's eight files in the same <code>XXX_Sheet_2</code> folder. The final archive needs all 18.</p></div>
+<div class="callout watch"><span class="tag">Professor's message</span><p>Sheet 2 must be completed within two weeks. Counting from the 4 October 2026 message gives <strong>18 October 2026</strong>; this is an inferred planning date. Follow any exact deadline and upload link the professor announces.</p></div>
+<div class="callout alt" lang="ar" dir="rtl"><span class="tag">بالمصري</span><p>اكتب توقّعك الأول، وبعد كده جرّب. ركّز على الرقم اللي عند الحد بالظبط، مش بس المثال السهل. أسماء الملفات وخطوات التسليم بالصور في الفصلين 6 و7.</p></div>
+<div class="startrow"><div><h4>During the lab</h4><p>Q7 together, Q18 from your plan, Q14 alone. Vote with your fingers.</p></div><div><h4>After the lab</h4><p>Use the widgets, then type and test your own programs in Dev-C++. F11 compiles and runs; F9 compiles only. On the TA's Mac, Cmd+Shift+B runs in VS Code.</p></div><div><h4>Worksheet</h4><p>One practice program. It runs before you edit it. It is not a replacement for the 18 question files.</p></div></div></section><section class="chapter" id="ch1" data-chapter="ch1"><header class="ch-head"><p class="ch-num">Chapter 1</p><h2>One test chooses one block</h2><p class="ch-goal">Trace a two-way if/else and explain which statements run.</p><div class="where" data-stage="read,decide,check"></div></header><div class="prose"><h3>1.1 Read the test aloud</h3><p>In this teaching example, a current above 16 A prints Overloaded; otherwise it prints Within rating. This is a simplified comparison exercise, not a model of a real circuit breaker.</p><p><code>&gt;</code> means greater than, <code>&lt;</code> less than, <code>&gt;=</code> and <code>&lt;=</code> include equality. Use <code>==</code> to compare and <code>!=</code> for not equal. One <code>=</code> assigns a value.</p></div><figure class="fig"><div class="svgbox wide"><!-- FIG:ifelse:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="One decision, drawn and written. Left, a flowchart: read current; the diamond tests current &gt; 16; if true, print Overloaded; if false, print Within rating; both paths meet at the next line. Right, the same program in C++: if (current &gt; 16), a braced block that prints Overloaded, else, a braced block that prints Within rating. The brackets hold a test that is true or false; the block after if runs only when it is true, the block after else only when it is false."><defs><marker id="w3-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker></defs><path d="M80 22 L330 22 L300 72 L50 72 Z" style="fill: var(--surface); stroke: var(--accent); stroke-width: 2"/><text x="190" y="53" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">cin &gt;&gt; current;</text><line x1="180" y1="72" x2="180" y2="108" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#w3-ah)"/><path d="M180 112 L300 175 L180 238 L60 175 Z" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2"/><text x="180" y="181" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 700; fill: var(--ink)">current &gt; 16</text><line x1="300" y1="175" x2="338" y2="175" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#w3-ah)"/><text x="306" y="165" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 700; fill: var(--good)">true</text><rect x="340" y="150" width="140" height="50" rx="6" style="fill: var(--surface); stroke: var(--good); stroke-width: 2"/><text x="410" y="181" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">Overloaded</text><line x1="180" y1="238" x2="180" y2="278" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#w3-ah)"/><text x="190" y="262" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 700; fill: var(--hot-ink)">false</text><rect x="100" y="280" width="160" height="50" rx="6" style="fill: var(--surface); stroke: var(--hot); stroke-width: 2"/><text x="180" y="311" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">Within rating</text><line x1="410" y1="200" x2="410" y2="380" style="stroke: var(--ink-3); stroke-width: 2"/><line x1="410" y1="380" x2="262" y2="380" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#w3-ah)"/><line x1="180" y1="330" x2="180" y2="358" style="stroke: var(--ink-3); stroke-width: 2" marker-end="url(#w3-ah)"/><rect x="100" y="360" width="160" height="40" rx="20" style="fill: var(--surface-2); stroke: var(--rule-strong); stroke-width: 1.5"/><text x="180" y="386" text-anchor="middle" xml:space="preserve" style="font-size: 14.5px; font-weight: 600; fill: var(--ink-2)">next line</text><rect x="504" y="14" width="486" height="392" rx="8" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 1.5"/><rect x="508" y="84" width="478" height="28" rx="4" style="fill: var(--accent-soft); stroke: none; stroke-width: 0"/><rect x="508" y="113" width="5" height="85" rx="0" style="fill: var(--good); stroke: none; stroke-width: 0"/><rect x="508" y="229" width="5" height="85" rx="0" style="fill: var(--hot); stroke: none; stroke-width: 0"/><text x="520" y="46" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">cout &lt;&lt; "Current (A): ";</text><text x="520" y="75" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">cin &gt;&gt; current;</text><text x="520" y="104" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 600; fill: var(--ink)">if (current &gt; 16)</text><text x="520" y="133" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">{</text><text x="520" y="162" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">    cout &lt;&lt; "Overloaded" &lt;&lt; endl;</text><text x="520" y="191" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">}</text><text x="520" y="220" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">else</text><text x="520" y="249" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">{</text><text x="520" y="278" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">    cout &lt;&lt; "Within rating" &lt;&lt; endl;</text><text x="520" y="307" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 400; fill: var(--ink)">}</text><text x="520" y="344" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 700; fill: var(--accent)">( )  a test: it is true or false</text><text x="520" y="368" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 700; fill: var(--good)">{ }  after if: runs only when true</text><text x="520" y="392" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 700; fill: var(--hot-ink)">{ }  after else: runs only when false</text></svg>
+<!-- FIG:ifelse:end --></div><figcaption>Follow one path from input to output. Both paths meet after the if/else.</figcaption></figure><script type="text/x-code" data-lang="cpp" data-show data-ln data-title="C++ excerpt">double current;
+cin >> current;
+if (current > 16)
+{
+    cout << "Overloaded" << endl;
+}
+else
+{
+    cout << "Within rating" << endl;
+}</script><div class="prose"><h3>1.2 Braces group statements</h3><p>The braces make a block. Without braces, an <code>if</code> controls only the next statement. A plain <code>if</code> can do nothing when false; an <code>if/else</code> executes exactly one of its two blocks.</p><p>Do not put a semicolon after <code>if (current &gt; 16)</code>. That would make an empty statement the controlled statement. A compiler may warn, but it can still produce an executable. Read warnings.</p></div><div class="callout alt" lang="ar" dir="rtl"><span class="tag">بالمصري</span><p>الـ <span class="ltr">if</span> بتسأل سؤال إجابته صح أو غلط. الأقواس <span class="ltr">{ }</span> بتجمع السطور اللي ليها نفس الشرط. الفاصلة المنقوطة بعد الشرط بتخلّيه يتحكم في جملة فاضية.</p></div><div class="quiz" data-quiz><p class="q-tag">Check yourself</p><p class="q">At exactly 16 A, what does the program above print?</p><div class="opts"><button type="button" data-ok="0" data-fb="The test uses greater than, not greater than or equal.">Overloaded</button><button type="button" data-ok="1" data-fb="16 is not greater than 16, so the else block runs.">Within rating</button><button type="button" data-ok="0" data-fb="An if/else chooses one block.">Both messages</button></div><p class="fb" aria-live="polite"></p></div><div class="prose"><p class="small muted">Source: Lecture 3 pp. 10-11 introduces selection and Boolean expressions. Liang §§3.3-3.6 develops the syntax and common errors.</p></div></section>
+<section class="chapter" id="ch2" data-chapter="ch2"><header class="ch-head"><p class="ch-num">Chapter 2</p><h2>A triangle needs every inequality</h2><p class="ch-goal">Use && for conditions that must all hold, before calculating an area.</p><div class="where" data-stage="read,decide,check"></div></header><div class="prose"><h3>2.1 A safe place for the formula</h3><p>Q7 asks you to calculate an area only when the three edges form a triangle. Every pair must add to more than the remaining edge. <code>&amp;&amp;</code> means all conditions must be true; <code>||</code> means at least one; <code>!</code> reverses true and false.</p></div><script type="text/x-code" data-lang="cpp" data-show data-ln data-title="Q7 body, after reading double a, b, c; include cmath">if (a + b > c && a + c > b && b + c > a)
+{
+    double s = (a + b + c) / 2;
+    double area = pow(s * (s-a) * (s-b) * (s-c), 0.5);
+    cout << "Area = " << area << endl;
+}
+else
+{
+    cout << "The input is invalid" << endl;
+}</script><figure class="fig"><div class="lab-fields"><label>a<input id="tri-a" type="number" value="3" step="any"></label><label>b<input id="tri-b" type="number" value="4" step="any"></label><label>c<input id="tri-c" type="number" value="5" step="any"></label></div><div class="btnrow" id="tri-presets"><button class="btn" data-v="3,4,5">3 4 5</button><button class="btn" data-v="1,2,3">1 2 3</button><button class="btn" data-v="10,2,3">10 2 3</button></div><pre class="tty" id="tri-out" aria-live="polite"></pre><figcaption>Change the sides. Read each comparison before the combined result.</figcaption></figure><div class="prose"><h3>2.2 Try the case that breaks your rule</h3><p><code>3 4 5</code> gives area 6. <code>1 2 3</code> lies flat, so <code>&gt;=</code> would wrongly accept it. <code>10 2 3</code> passes <code>a+b&gt;c</code>, but fails another pair. One comparison is not enough.</p></div><div class="quiz" data-quiz><p class="q-tag">Check yourself</p><p class="q">Why is the area calculation inside the true block?</p><div class="opts"><button type="button" data-ok="1" data-fb="Validate first; only then apply the area formula.">To avoid calculating an area for invalid edges</button><button type="button" data-ok="0" data-fb="cout can be used without an if.">Because cout always needs if</button></div><p class="fb" aria-live="polite"></p></div><div class="callout alt" lang="ar" dir="rtl"><span class="tag">بالمصري</span><p>قبل ما تحسب المساحة، اتأكد إن الأضلاع ينفع تعمل مثلث. علامة <span class="ltr">&amp;&amp;</span> معناها الشروط كلها، مش شرط واحد بس.</p></div></section>
+<section class="chapter" id="ch3" data-chapter="ch3"><header class="ch-head"><p class="ch-num">Chapter 3</p><h2>Convert first, then climb the BMI ladder</h2><p class="ch-goal">Turn Q18 into a plan and trace the first matching branch.</p><div class="where" data-stage="read,decide,check"></div></header><div class="prose"><h3>3.1 Five lines before code</h3><p>Use the labels from the sheet as a programming exercise. Inputs here must be positive.</p><dl><dt>WANT</dt><dd>The BMI value in kg/m² and the word from the table.</dd><dt>HAVE</dt><dd>Weight in kg, height in cm; boundaries 18.5, 25 and 30.</dd><dt>CONVERT</dt><dd><code>heightM = heightCm / 100</code>. The variable is double, so this is real division.</dd><dt>RELATE</dt><dd><code>bmi = weight / pow(heightM, 2)</code>, followed by the table from top to bottom.</dd><dt>CHECK</dt><dd>70 kg, 175 cm gives 22.8571, Normal. At 76.5625 kg and 175 cm, BMI is exactly 25, Overweight.</dd></dl></div><script type="text/x-code" data-lang="cpp" data-show data-ln data-title="Q18 body; include iostream and cmath">double weight, heightCm, heightM, bmi;
+cin >> weight >> heightCm;
+// CONVERT
+heightM = heightCm / 100;
+// RELATE
+bmi = weight / pow(heightM, 2);
+cout << "BMI is " << bmi << endl;
+if (bmi < 18.5)       cout << "Underweight" << endl;
+else if (bmi < 25.0)  cout << "Normal" << endl;
+else if (bmi < 30.0)  cout << "Overweight" << endl;
+else                  cout << "Obese" << endl;</script><figure class="fig"><h3>3.2 Watch a compiled run</h3><ol class="trace-lines" id="ladder-lines"></ol><p class="trace-status" id="ladder-caption" aria-live="polite"></p><pre class="tty" id="ladder-values"></pre><pre class="tty" id="ladder-console"></pre><div class="btnrow"><button class="btn" id="trace-reset">Reset</button><button class="btn primary" id="trace-next">Next statement</button></div><figcaption>Input: 70 175. These states were recorded from compiled C++, not invented by the browser. The declaration frame means uninitialized, not zero.</figcaption></figure>
+<figure class="fig"><h3>3.3 Change one thing</h3><div class="lab-fields"><label>Weight, kg<input id="bmi-w" type="number" value="70" step="any"></label><label>Height, cm<input id="bmi-h" type="number" value="175" step="any"></label><label>Program variant<select id="bmi-mode"><option value="right">Convert; correct ladder</option><option value="units">Forget cm to m</option><option value="order">Put bmi &lt; 30 first</option></select></label></div><pre class="tty" id="bmi-out" aria-live="polite"></pre><figcaption>Keep the inputs fixed to compare a unit error with a branch-order error.</figcaption></figure><div class="prose"><h3>3.4 Why the second test has no lower bound</h3><p>If execution reaches <code>bmi &lt; 25</code>, the first test <code>bmi &lt; 18.5</code> already failed. The lower bound is established by the path. Once a branch runs, the later tests are not evaluated.</p></div><div class="callout alt" lang="ar" dir="rtl"><span class="tag">بالمصري</span><p>لو وصلت للشرط التاني، يبقى الأول طلع <span class="ltr">false</span> فعلًا. أول شرط يطلع <span class="ltr">true</span> بينفّذ فرعه، وباقي السلم مش بيتحسب.</p></div><div class="quiz" data-quiz><p class="q-tag">Check yourself</p><p class="q">At BMI exactly 30, which label does the sheet require?</p><div class="opts"><button type="button" data-ok="0" data-fb="This interval ends before 30.">Overweight</button><button type="button" data-ok="1" data-fb="The final interval starts at 30, including equality.">Obese</button></div><p class="fb" aria-live="polite"></p></div></section>
+<section class="chapter" id="ch4" data-chapter="ch4"><header class="ch-head"><p class="ch-num">Chapter 4</p><h2>Test below, at and above the boundary</h2><p class="ch-goal">Choose inputs that expose a wrong comparison, then plan a new decision.</p><div class="where" data-stage="read,decide,check"></div></header><div class="prose"><h3>4.1 Q14 includes the circle edge</h3><p>Distance from the origin is <code>pow(x*x + y*y, 0.5)</code>. The sheet explicitly says less than or equal to 10. So (6,8), whose distance is exactly 10, is in the circle. A reference program may print a separate on-the-circle message; follow the sheet's requested rule here.</p></div><script type="text/x-code" data-lang="cpp" data-show data-ln data-title="C++ excerpt">double distance = pow(x*x + y*y, 0.5);
+if (distance <= 10)
+    cout << "in the circle" << endl;
+else
+    cout << "outside the circle" << endl;</script><figure class="fig"><div class="lab-fields"><label>x<input id="circle-x" type="number" value="6" step="any"></label><label>y<input id="circle-y" type="number" value="8" step="any"></label></div><div class="btnrow" id="circle-presets"><button class="btn" data-v="4,5">4 5</button><button class="btn" data-v="6,8">6 8</button><button class="btn" data-v="9,9">9 9</button></div><pre class="tty" id="circle-out" aria-live="polite"></pre><figcaption>Compare &lt; with &lt;=. The edge input is what tells them apart.</figcaption></figure><div class="prose"><h3>4.2 Your turn: a cable decision</h3><p>This extra exercise uses a given resistance of 7.41 Ω/km per conductor, a 16 A current, a 220 V supply and a 5% budget. Treat these as exercise assumptions: two conductors, a resistive load, and reactance ignored.</p></div><figure class="fig"><div class="svgbox wide"><!-- FIG:vdrop:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="A 220 volt supply on the left feeds a 16 ampere load on the right through a cable L meters long, one way. The current goes out on one conductor and back on the other, so the length that drops voltage is 2 times L. The drop is 2 times (L divided by 1000.0) times 7.41 times 16 volts, using the given exercise value of 7.41 ohms per kilometer per conductor. The budget in this exercise is 5 percent of 220 volts; single-phase, resistive load, reactance ignored."><defs><marker id="w3-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill: var(--ink-3)"/></marker></defs><rect x="20" y="110" width="130" height="120" rx="8" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 2"/><text x="85" y="160" text-anchor="middle" xml:space="preserve" style="font-size: 16px; font-weight: 700; fill: var(--ink)">supply</text><text x="85" y="190" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--ink)">220 V</text><rect x="830" y="110" width="150" height="120" rx="8" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 2"/><text x="905" y="160" text-anchor="middle" xml:space="preserve" style="font-size: 16px; font-weight: 700; fill: var(--ink)">load</text><text x="905" y="190" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: var(--ink)">I = 16 A</text><line x1="150" y1="140" x2="830" y2="140" style="stroke: var(--accent); stroke-width: 4"/><line x1="150" y1="200" x2="830" y2="200" style="stroke: var(--accent); stroke-width: 4"/><path d="M330 131 L346 140 L330 149 Z" style="fill: var(--accent)"/><path d="M630 131 L646 140 L630 149 Z" style="fill: var(--accent)"/><path d="M346 191 L330 200 L346 209 Z" style="fill: var(--accent)"/><path d="M646 191 L630 200 L646 209 Z" style="fill: var(--accent)"/><line x1="150" y1="80" x2="150" y2="98" style="stroke: var(--ink-3); stroke-width: 1.5"/><line x1="830" y1="80" x2="830" y2="98" style="stroke: var(--ink-3); stroke-width: 1.5"/><line x1="150" y1="89" x2="830" y2="89" style="stroke: var(--ink-3); stroke-width: 1.5"/><rect x="380" y="72" width="220" height="30" rx="4" style="fill: var(--bg); stroke: none; stroke-width: 0"/><text x="490" y="94" text-anchor="middle" xml:space="preserve" style="font-size: 16px; font-weight: 700; fill: var(--ink)">L meters, one way</text><text x="490" y="250" text-anchor="middle" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink-2)">out on one conductor, back on the other: 2 × L</text><rect x="20" y="282" width="960" height="122" rx="8" style="fill: var(--surface-2); stroke: none; stroke-width: 0"/><text x="40" y="318" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 19px; font-weight: 700; fill: var(--ink)">drop = 2 * (L / 1000.0) * 7.41 * 16</text><text x="40" y="350" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: var(--ink-2)">Given for this exercise: 7.41 Ω per km per conductor</text><text x="40" y="376" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: var(--ink-2)">Budget in this exercise: 5% of 220 V. Single-phase, resistive load, reactance ignored.</text></svg>
+<!-- FIG:vdrop:end --></div><figcaption>The current travels out and back. Use twice the one-way length.</figcaption></figure><div class="prose"><p>In your notebook, write WANT, HAVE, CONVERT, RELATE and CHECK before opening the answer. Read the one-way length L in meters; print the drop in volts and whether it is within the given budget.</p></div><details class="more"><summary>Compare your plan</summary><div class="inner"><p><b>WANT:</b> volts and within/over budget. <b>HAVE:</b> L meters and the given constants. <b>CONVERT:</b> L/1000.0 km; 0.05*220 = 11 V. <b>RELATE:</b> drop = 2*(L/1000.0)*7.41*16; if drop &lt;= 11, within. <b>CHECK:</b> 40 m gives 9.4848 V, within; 50 m gives 11.856 V, over.</p></div></details><div class="quiz" data-quiz><p class="q-tag">Check yourself</p><p class="q">Which test most directly distinguishes &lt; from &lt;= 10 in Q14?</p><div class="opts"><button type="button" data-ok="0" data-fb="Both comparisons accept this interior point.">(4,5)</button><button type="button" data-ok="1" data-fb="The distance is exactly 10.">(6,8)</button><button type="button" data-ok="0" data-fb="Both comparisons reject this exterior point.">(9,9)</button></div><p class="fb" aria-live="polite"></p></div></section>
+<section class="chapter" id="ch5" data-chapter="ch5"><header class="ch-head"><p class="ch-num">Chapter 5</p><h2>Finish the selection questions</h2><p class="ch-goal">Choose a decision structure and a test for each remaining question.</p><div class="where" data-stage="read,decide,check"></div></header><div class="prose"><p>Lab priority: Q7, Q18, then Q14 alone. Q11 is the extension. Use these routes for the remaining questions; write and test your own files. Keep Q1-Q6, Q8 and Q12 from week 2.</p></div><div class="prose"><h3>Q9 · three discriminant cases</h3><p>Assume a is nonzero for a quadratic. Compute d = b*b - 4*a*c. For d &gt; 0, print (-b+sqrt(d))/(2*a) and (-b-sqrt(d))/(2*a); for d == 0, print -b/(2*a); otherwise print exactly "The equation has no real roots." Do not calculate sqrt(d) in the negative case. Use &lt;cmath&gt;.</p><p><strong>Test:</strong> 1 -3 2 → roots 2 and 1; 1 2 1 → -1; 1 2 5 → no real roots.</p></div><div class="prose"><h3>Q10 · three separate comparisons</h3><p>Read integers a, b, c. If a&lt;b, exchange them using temp=a; a=b; b=temp;. Then if a&lt;c, exchange a and c. Finally if b&lt;c, exchange b and c. These are three independent if statements: test all three, although a swap only runs when its test is true.</p><p><strong>Test:</strong> 1 2 3 → 3 2 1; 3 2 1 → unchanged; 2 2 1 → 2 2 1.</p></div><div class="prose"><h3>Q11 · validity, then triangle type</h3><p>Use Q7's validity test first. In the valid branch: if a==b &amp;&amp; b==c, Equilateral; else if a==b || a==c || b==c, Isosceles; else Scalene. Test equilateral first because it also satisfies the two-equal test.</p><p><strong>Test:</strong> 5 5 5 → Equilateral; 5 5 8 → Isosceles; 3 4 5 → Scalene; 1 2 3 → invalid.</p></div><div class="prose"><h3>Q13 · a valid three-digit integer</h3><p>Test n&gt;=100 &amp;&amp; n&lt;=999. In the valid branch, hundreds=n/100; tens=(n/10)%10; units=n%10; print their sum. Otherwise print invalid.</p><p><strong>Test:</strong> 456 → 15; 100 → 1; 999 → 27; 99 and 1000 → invalid.</p></div><div class="prose"><h3>Q15 · check containment before overlap</h3><p>Find d between the centers using the Q4 distance formula. The supplied hint tests d&lt;=fabs(r1-r2), then d&lt;=r1+r2, then neither. Its first condition detects containment in either direction. To say specifically "circle2 is inside circle1", the directional condition is d+r2&lt;=r1. Ask the TA which interpretation the professor wants before final submission.</p><p><strong>Test:</strong> 0 0 5 / 0 0 2 → circle2 inside; 0 0 5 / 6 0 2 → overlap; 0 0 5 / 10 0 2 → neither. Reversing the radii exposes the hint's ambiguity.</p></div><div class="prose"><h3>Q16 · clock arithmetic, then AM/PM</h3><p>Include &lt;ctime&gt;. Obtain seconds from time(0). second=totalSeconds%60; minute=(totalSeconds/60)%60; hour=(totalSeconds/3600+offset)%24. Read the whole-hour GMT offset. If hour==0, display 12 AM; else if hour&lt;12, display hour AM; else if hour==12, display 12 PM; otherwise display hour-12 PM. Minutes and seconds remain unchanged.</p><p><strong>Test:</strong> Test the conversion with fixed hour values: 0 → 12 AM; 11 → 11 AM; 12 → 12 PM; 23 → 11 PM. Live seconds change on every run.</p></div><div class="prose"><h3>Q17 · print the equation in pieces</h3><p>For x1!=x2, calculate m=(y2-y1)/(x2-x1) and b=y1-m*x1 in double. Start with "y = ". If m!=1, print m; then print "x". If b&gt;0 print " + " and b; else if b&lt;0 print " - " and -b; if b==0 print nothing. The sheet's slope formula assumes a nonvertical line.</p><p><strong>Test:</strong> 0 3 / 2 5 → y = x + 3; 0 -3 / 1 -1 → y = 2x - 3; 0 0 / 1 1 → y = x.</p></div><div class="callout alt" lang="ar" dir="rtl"><span class="tag">بالمصري</span><p>لو إجابتك مختلفة عن صورة الحل، ارجع لنص السؤال. في <span class="ltr">Q15</span> تحديدًا التلميح ممكن يقول إن الدايرة التانية جوه الأولى حتى لو العكس هو الصح. اسأل المعيد قبل ما تسلّم.</p></div></section>
+  <section class="chapter" id="ch6" data-chapter="ch6">
+    <header class="ch-head">
+      <p class="ch-num">Chapter 6</p>
+      <h2>Name it, save it: the professor's rules</h2>
+      <p class="ch-goal">After this chapter you can make the sheet folder and every question file with exactly the names the professor specifies, on a lab PC, without help.</p>
+      <div class="where" data-stage="name,hand"></div>
+    </header>
+
+    <div class="prose">
+      <h3><span class="step">6.1</span>Five rules to check before submission</h3>
+      <p>Follow the professor's file and folder naming instructions for every sheet. The rules, from the note the professor sent to every student:</p>
+      <ol>
+        <li><strong>No Arabic and no spaces</strong> in any file or folder name. English letters, digits and underscores only.</li>
+        <li><strong>One folder per sheet</strong>, named <code>XXX_Sheet_N</code>. <code>XXX</code> is your number on the class list, always three digits.</li>
+        <li><strong>One file per question</strong>, named <code>Q_SSQQ.cpp</code>: two digits for the sheet, two for the question. Underscores, never dashes.</li>
+        <li><strong>Delete the <code>.exe</code> files</strong> before you send. Dev-C++ makes one next to every <code>.cpp</code> you run.</li>
+        <li><strong>Archive the whole folder</strong> into one file with the folder's name, and upload it at the link the professor announces. ZIP and RAR are both allowed; this guide uses Windows ZIP.</li>
+      </ol>
+      <p>Consistent names let the marker identify your class-list number, sheet and question without opening each program. Do not substitute your university ID for your number on the class list.</p>
+
+      <h3><span class="step">6.2</span>Your names, worked out</h3>
+      <p>Type your number on the class list - not your university ID, not the PC's number. The page builds the names the way the rules say.</p>
+    </div>
+
+    <figure class="fig">
+      <div class="nb-fields">
+        <label>Your number on the list <input type="number" id="nb-num" value="34" min="1" max="999"></label>
+        <label>Sheet <input type="number" id="nb-sheet" value="2" min="1" max="99"></label>
+        <label>Question <input type="number" id="nb-q" value="1" min="1" max="99"></label>
+      </div>
+      <div class="nb-out">
+        <div><p class="k">Folder</p><p class="v" id="nb-folder"></p></div>
+        <div><p class="k">File</p><p class="v" id="nb-file"></p></div>
+        <div><p class="k">Zip to send</p><p class="v" id="nb-zip"></p></div>
+      </div>
+      <p class="readout" id="nb-readout" aria-live="polite"></p>
+      <figcaption><strong>The padding is the part people get wrong.</strong> Number 7 is <code>007</code>, question 1 is <code>01</code>. The names are computed by this page from the rules, as you type.</figcaption>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">6.3</span>Check a name before you trust it</h3>
+      <p>Type any file or folder name, or press one of the examples. Each one is a mistake that really happens in the lab.</p>
+    </div>
+
+    <figure class="fig">
+      <div class="nb-fields"><label class="grow">A file or folder name <input type="text" id="nc-in" value="034_Sheet_2" spellcheck="false" autocomplete="off"></label></div>
+      <div class="chips" style="margin-top:10px" id="nc-presets">
+        <button type="button" class="chip" data-e="34_Sheet_2">34_Sheet_2</button>
+        <button type="button" class="chip" data-e="034-Sheet-2">034-Sheet-2</button>
+        <button type="button" class="chip" data-e="034 Sheet 2">034 Sheet 2</button>
+        <button type="button" class="chip" data-e="Q_201.cpp">Q_201.cpp</button>
+        <button type="button" class="chip" data-e="Q_0201.cpp.txt">Q_0201.cpp.txt</button>
+        <button type="button" class="chip" data-e="Q_0201.exe">Q_0201.exe</button>
+        <button type="button" class="chip" data-e="Q_0201.cpp">Q_0201.cpp</button>
+      </div>
+      <p class="verdictline" id="nc-readout" aria-live="polite"></p>
+    </figure>
+
+    <div class="prose">
+      <h3><span class="step">6.4</span>On a lab PC, step by step</h3><p>The pictures are annotated illustrations of Windows 10. Windows 11 has the menu path given below.</p>
+      <ol>
+        <li>Open <code>Desktop › GEN241</code> - the folder from week 1. If it is not there, make it: right-click the desktop, <em>New › Folder</em>, type <code>GEN241</code>.</li>
+        <li>Inside it, right-click an empty space, <em>New › Folder</em>, and type your folder name, e.g. <code>034_Sheet_2</code>. Press Enter.</li>
+        <li>Make sure <em>File name extensions</em> are switched on (Windows 10: <em>View › File name extensions</em>; Windows 11: <em>View › Show › File name extensions</em>), or <code>Q_0201.cpp.txt</code> looks like <code>Q_0201.cpp</code>.</li>
+        <li>In Dev-C++: <em>File › New › Source File</em>, then save it <strong>before typing</strong>: <em>File › Save</em>, go into your sheet folder, type <code>Q_0201.cpp</code>, and check that <em>Save as type</em> says C++.</li>
+      </ol>
+    </div>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+<!-- FIG:folder:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="File Explorer open at Desktop, GEN241, which holds hello.cpp. One: the address bar shows Desktop, GEN241. Two: right-click an empty space, New, Folder. Three: the new folder is named 034_Sheet_2. On the right: number 7 becomes 007_Sheet_2, 34 becomes 034_Sheet_2, 105 becomes 105_Sheet_2. Always three digits, underscores only, no spaces, no dashes, no Arabic letters."><rect x="10" y="14" width="640" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="638.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">GEN241</text><text x="580" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="22" y="54" width="616" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="34" y="73" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     Desktop  ›  GEN241</text><text x="34" y="112" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Name</text><line x1="26" y1="120" x2="634" y2="120" style="stroke: #e3e3e3; stroke-width: 1"/><path d="M36 129 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="151" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="70" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">hello.cpp</text><rect x="26" y="160" width="300" height="30" rx="3" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><path d="M36 168.3 h8.8 l2.75 2.75 h11.55 v13.750000000000002 h-23.1 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="172.15" width="23.1" height="13.200000000000001" rx="2" style="fill: #f8cd5a"/><text x="70" y="181" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b"></text><rect x="70" y="163" width="170" height="25" rx="2" style="fill: #ffffff; stroke: #0067c0; stroke-width: 1.6"/><text x="78" y="181" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">034_Sheet_2</text><line x1="176" y1="167" x2="176" y2="185" style="stroke: #1b1b1b; stroke-width: 1.5"/><rect x="303" y="200" width="220" height="142" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="300" y="196" width="220" height="142" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="314" y="220" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">View</text><text x="508" y="220" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><text x="314" y="249" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Sort by</text><text x="508" y="249" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><line x1="310" y1="262.5" x2="510" y2="262.5" style="stroke: #e0e0e0; stroke-width: 1"/><rect x="304" y="268" width="212" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="314" y="287" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">New</text><text x="508" y="287" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><line x1="310" y1="300.5" x2="510" y2="300.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="314" y="325" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Properties</text><rect x="523" y="271" width="200" height="104" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="520" y="267" width="200" height="104" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="524" y="272" width="192" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="534" y="291" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Folder</text><text x="534" y="320" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Shortcut</text><line x1="530" y1="333.5" x2="710" y2="333.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="534" y="358" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Text Document</text><circle cx="36" cy="69" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="36" y="75" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">1</text><circle cx="286" cy="212" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="286" y="218" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">2</text><circle cx="258" cy="175" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="258" y="181" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">3</text><rect x="668" y="14" width="322" height="392" rx="8" style="fill: var(--surface); stroke: var(--rule-strong); stroke-width: 2"/><text x="684" y="44" text-anchor="start" xml:space="preserve" style="font-size: 16px; font-weight: 600; fill: var(--ink)">Your number on the class list:</text><text x="700" y="88" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 600; fill: var(--ink-2)">7</text><text x="752" y="88" text-anchor="start" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-3)">→</text><text x="790" y="88" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--accent)">007_Sheet_2</text><text x="700" y="134" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 600; fill: var(--ink-2)">34</text><text x="752" y="134" text-anchor="start" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-3)">→</text><text x="790" y="134" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--accent)">034_Sheet_2</text><text x="700" y="180" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 600; fill: var(--ink-2)">105</text><text x="752" y="180" text-anchor="start" xml:space="preserve" style="font-size: 18px; font-weight: 400; fill: var(--ink-3)">→</text><text x="790" y="180" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 18px; font-weight: 700; fill: var(--accent)">105_Sheet_2</text><text x="684" y="246" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">Always three digits: add 0s in front.</text><text x="684" y="276" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: var(--ink)">Underscores _ only. No spaces,</text><text x="684" y="300" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: var(--ink)">no dashes, no Arabic letters.</text><text x="684" y="344" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: var(--ink-2)">1  open Desktop › GEN241 (make it if missing)</text><text x="684" y="366" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: var(--ink-2)">2  right-click empty space › New › Folder</text><text x="684" y="388" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: var(--ink-2)">3  type YOUR number + _Sheet_2, Enter</text></svg>
+<!-- FIG:folder:end -->
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>The folder goes inside GEN241, named with your own number.</strong> Not 034 unless you are 034 on the list.</figcaption>
+    </figure>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+<!-- FIG:saveas:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="Dev-C++: one, File, New, Source File. In the Save As dialog: two, the address is Desktop, GEN241, 034_Sheet_2; three, the file name is Q_0201.cpp; four, Save as type is C++ source files. The name breaks into Q_, 02 for the sheet, 01 for the question, and .cpp."><rect x="10" y="14" width="415" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="413.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Dev-C++</text><text x="355" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="15" y="48" width="38.4" height="24" rx="3" style="fill: #cce4f7; stroke: none; stroke-width: 1.5"/><text x="22" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">File</text><text x="68.4" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Edit</text><text x="114.80000000000001" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Search</text><text x="180.4" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">View</text><text x="233.4" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Project</text><text x="298.6" y="64" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Execute</text><rect x="25" y="80" width="205" height="133" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="22" y="76" width="205" height="133" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="26" y="81" width="197" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="36" y="100" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">New</text><text x="215" y="100" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><text x="36" y="129" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Open...</text><text x="215" y="129" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Ctrl+O</text><line x1="32" y1="142.5" x2="217" y2="142.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="36" y="167" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Save</text><text x="215" y="167" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Ctrl+S</text><text x="36" y="196" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Save As...</text><rect x="230" y="84" width="190" height="66" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="227" y="80" width="190" height="66" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="231" y="85" width="182" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="241" y="104" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Source File</text><text x="405" y="104" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Ctrl+N</text><text x="241" y="133" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Project...</text><rect x="30" y="268" width="44" height="40" rx="6" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6"/><text x="52.0" y="295" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">Q_</text><text x="52.0" y="330" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--ink-2)">always</text><rect x="82" y="268" width="44" height="40" rx="6" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6"/><text x="104.0" y="295" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">02</text><text x="104.0" y="330" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--ink-2)">sheet</text><rect x="134" y="268" width="44" height="40" rx="6" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6"/><text x="156.0" y="295" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">01</text><text x="156.0" y="330" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--ink-2)">question</text><rect x="186" y="268" width="70" height="40" rx="6" style="fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6"/><text x="221.0" y="295" text-anchor="middle" class="mono" xml:space="preserve" style="font-size: 20px; font-weight: 700; fill: var(--ink)">.cpp</text><text x="221.0" y="330" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--ink-2)">C++ file</text><text x="30" y="370" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: var(--ink-2)">Two-digit sheet, two-digit question.</text><text x="30" y="392" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: var(--ink-2)">Question 1 is 01, question 13 is 13.</text><rect x="440" y="14" width="548" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="440.75" y="14.75" width="546.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="452" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">Save As</text><text x="918" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="452" y="56" width="524" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="464" y="75" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     Desktop  ›  GEN241  ›  034_Sheet_2</text><rect x="450" y="102" width="132" height="26" rx="4" style="fill: #cce4f7; stroke: none; stroke-width: 1.5"/><text x="462" y="120" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">Desktop</text><text x="462" y="150" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">Documents</text><text x="462" y="180" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">Downloads</text><text x="462" y="210" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">This PC</text><line x1="590" y1="96" x2="590" y2="304" style="stroke: #e3e3e3; stroke-width: 1"/><text x="790" y="204" text-anchor="middle" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #5c5c5c">This folder is empty.</text><text x="460" y="330" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">File name:</text><rect x="558" y="312" width="410" height="28" rx="3" style="fill: #ffffff; stroke: #0067c0; stroke-width: 1.6"/><text x="568" y="332" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 16px; font-weight: 600; fill: #1b1b1b">Q_0201.cpp</text><text x="460" y="366" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">Save as type:</text><rect x="558" y="348" width="410" height="28" rx="3" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="568" y="367" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: #1b1b1b">C++ source files (*.cpp ...)</text><rect x="770" y="380" width="92" height="22" rx="4" style="fill: #0067c0; stroke: none; stroke-width: 1.5"/><text x="816" y="396" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: #ffffff">Save</text><rect x="872" y="380" width="92" height="22" rx="4" style="fill: #f3f3f3; stroke: #c4c4c4; stroke-width: 1.5"/><text x="918" y="396" text-anchor="middle" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Cancel</text><circle cx="437" cy="95" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="437" y="101" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">1</text><circle cx="840" cy="71" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="840" y="77" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">2</text><circle cx="980" cy="326" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="980" y="332" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">3</text><circle cx="980" cy="362" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="980" y="368" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">4</text></svg>
+<!-- FIG:saveas:end -->
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>Save before you type.</strong> The file then lives in the sheet folder from its first line, with the name the professor specifies.</figcaption>
+    </figure>
+
+
+    <div class="callout alt" lang="ar" dir="rtl">
+      <span class="tag">بالمصري</span>
+      <p>الرقم في الاسم هو رقمك في الكشف، دايمًا 3 أرقام: <span class="ltr">7</span> تبقى <span class="ltr">007</span>. وسؤال <span class="ltr">1</span> في شيت <span class="ltr">2</span> يبقى <span class="ltr">Q_0201.cpp</span>. مفيش عربي ولا مسافات ولا شرطة.</p>
+    </div>
+
+    <div class="callout watch">
+      <span class="tag">What could fool you</span>
+      <ul>
+        <li><strong>The wrong number.</strong> Your university ID, the PC's number or your partner's number all make a valid-looking name that is still wrong.</li>
+        <li><strong>Hidden extensions.</strong> With extensions hidden, Windows shows <code>Q_0201.cpp.txt</code> as <code>Q_0201.cpp</code>. Switch them on once and it stays on.</li>
+        <li><strong>Working inside Downloads.</strong> A file opened from a WhatsApp download saves back to Downloads. Save it into your sheet folder first.</li>
+      </ul>
+    </div>
+
+    <div class="quiz" data-quiz>
+      <p class="q-tag">Check yourself</p>
+      <p class="q">You are number 105 on the list. Which is the file for sheet 2, question 8?</p>
+      <div class="opts">
+        <button type="button" data-ok="0" data-fb="The question needs two digits: 8 is 08. Sheet 2 question 8 is 0208.">Q_028.cpp</button>
+        <button type="button" data-ok="0" data-fb="Your list number goes on the folder, not the file. The file only names the sheet and question.">105_Q_0208.cpp</button>
+        <button type="button" data-ok="1" data-fb="Q_, sheet 02, question 08, .cpp - inside the folder 105_Sheet_2.">Q_0208.cpp</button>
+        <button type="button" data-ok="0" data-fb="Dashes are not allowed; the rule is underscores.">Q-0208.cpp</button>
+      </div>
+      <p class="fb" aria-live="polite"></p>
+    </div>
+
+    <div class="prose">
+      <p class="small muted">Back to the sheet: make <code>XXX_Sheet_2</code> now, and save every question into it as you go. Sheet 1 is handed in the same way: <code>XXX_Sheet_1</code> with <code>Q_0101.cpp</code> to <code>Q_0112.cpp</code>.</p>
+    </div>
+  </section>
+<section class="chapter" id="ch7" data-chapter="ch7"><header class="ch-head"><p class="ch-num">Chapter 7</p><h2>Build and inspect the final archive</h2><p class="ch-goal">Package the latest files and check the actual archive before uploading.</p><div class="where" data-stage="read,decide,check"></div></header><div class="prose"><h3>7.1 Complete every question file</h3><p>Your final Sheet 2 folder needs <code>Q_0201.cpp</code> through <code>Q_0218.cpp</code>. Week 3 continues Sheet 2, so do not change the prefix to Q_03. Sheet 1 uses Q_0101.cpp through Q_0112.cpp in its own XXX_Sheet_1 folder.</p><h3>7.2 Submission timing</h3><p>The message says two weeks. <strong>18 October 2026 is inferred from 4 October</strong>; check the professor's final announcement for the exact time and upload link. The naming PDF accepts either ZIP or RAR. These pictures use ZIP.</p></div>    <div class="prose">
+      <h3><span class="step">7.3</span>Before you zip it</h3>
+      <p>Ticks are kept in this browser only. Zip at the very end: a zip is a copy of the folder at that moment, and editing a <code>.cpp</code> afterwards does not change it.</p>
+    </div>
+
+    <ul class="checklist" id="checklist">
+      <li><label><input type="checkbox" data-k="folder"><span><span class="t">The folder is your number, three digits, _Sheet_2</span><span class="d">034_Sheet_2, inside Desktop › GEN241. Chapter 6's builder makes it for you.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="names"><span><span class="t">Every file is Q_02 + two digits + .cpp</span><span class="d">All 18: Q_0201.cpp through Q_0218.cpp. Extensions switched on, so .cpp.txt cannot hide.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="compile"><span><span class="t">Every file compiles after your last edit</span><span class="d">Compile each one again. "It worked yesterday" is not a test.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="tested"><span><span class="t">Every program passes its normal and boundary cases</span><span class="d">Use the tests in chapters 2-5 and last week's guide.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="divisions"><span><span class="t">Every division checked on its own</span><span class="d">Both sides whole numbers? Did you mean that?</span></span></label></li>
+      <li><label><input type="checkbox" data-k="exe"><span><span class="t">The .exe files are deleted</span><span class="d">Close the black window first. Delete only names ending .exe.</span></span></label></li>
+      <li><label><input type="checkbox" data-k="zip"><span><span class="t">The zip holds one folder, named like the zip</span><span class="d">Zip from GEN241, not from inside the folder. Open the zip and look.</span></span></label></li>
+    </ul>
+
+    <div class="prose">
+      <h3><span class="step">7.4</span>Packaging on a lab PC, picture by picture</h3><p>Windows 11: right-click the folder, choose <em>Show more options › Send to › Compressed (zipped) folder</em>. Windows 10: <em>Send to › Compressed (zipped) folder</em>. If an older archive has the same name, move it aside or remove that old archive only. Keep your working folder.</p>
+      <p>Do this once, at the very end, after the last test run. The same three moves package sheet 1 into <code>XXX_Sheet_1</code>.</p>
+    </div>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+<!-- FIG:delexe:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="File Explorer in Desktop, GEN241, 034_Sheet_2, with Q_0201.cpp, Q_0201.exe, Q_0208.cpp and Q_0208.exe. One: close the black console window first, because a running .exe cannot be deleted. Two: Ctrl+click only the names ending .exe. Three: right-click, Delete. Running a program again makes its .exe again, so delete them at the very end."><rect x="10" y="14" width="640" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="638.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">034_Sheet_2</text><text x="580" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="22" y="54" width="616" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="34" y="73" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     Desktop  ›  GEN241  ›  034_Sheet_2</text><text x="34" y="112" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Name</text><text x="394" y="112" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Type</text><line x1="26" y1="120" x2="634" y2="120" style="stroke: #e3e3e3; stroke-width: 1"/><path d="M36 129 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="151" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="70" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Q_0201.cpp</text><text x="394" y="147" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">CPP File</text><rect x="26" y="162" width="380" height="30" rx="3" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><path d="M36 165 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="187" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #a33">EXE</text><text x="70" y="183" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Q_0201.exe</text><text x="394" y="183" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Application</text><path d="M36 201 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="223" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="70" y="219" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Q_0208.cpp</text><text x="394" y="219" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">CPP File</text><rect x="26" y="234" width="380" height="30" rx="3" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><path d="M36 237 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="259" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #a33">EXE</text><text x="70" y="255" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Q_0208.exe</text><text x="394" y="255" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Application</text><rect x="423" y="172" width="200" height="171" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="420" y="168" width="200" height="171" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="434" y="192" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Open</text><line x1="430" y1="205.5" x2="610" y2="205.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="434" y="230" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Cut</text><text x="434" y="259" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Copy</text><line x1="430" y1="272.5" x2="610" y2="272.5" style="stroke: #e0e0e0; stroke-width: 1"/><rect x="424" y="278" width="192" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="434" y="297" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Delete</text><text x="434" y="326" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Rename</text><rect x="660" y="30" width="330" height="150" rx="6" style="fill: #0c0c0c; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="660.75" y="30.75" width="328.5" height="26" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="672" y="49" text-anchor="start" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #1b1b1b">...\034_Sheet_2\Q_0208.exe</text><text x="966" y="49" text-anchor="middle" xml:space="preserve" style="font-size: 15px; font-weight: 700; fill: #c42b1c">✕</text><text x="676" y="86" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #f2f2f2">The fuel cost of the trip is 480</text><text x="676" y="112" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13px; font-weight: 400; fill: #bdbdbd">Press any key to continue . . .</text><circle cx="990" cy="42" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="990" y="48" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">1</text><circle cx="18" cy="177" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="18" y="183" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">2</text><circle cx="612" cy="352" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="612" y="358" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">3</text><text x="664" y="214" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">1  close the black window first</text><text x="664" y="238" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: var(--ink-2)">    (a running .exe cannot be deleted)</text><text x="664" y="276" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">2  Ctrl+click only names ending .exe</text><text x="664" y="314" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: var(--ink)">3  right-click › Delete</text><text x="664" y="362" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--hot-ink)">Run it again and the .exe comes back:</text><text x="664" y="384" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 600; fill: var(--hot-ink)">delete them at the very end.</text></svg>
+<!-- FIG:delexe:end -->
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>Close the black window first.</strong> Windows will not delete an <code>.exe</code> that is still running. Delete only the names ending in <code>.exe</code>.</figcaption>
+    </figure>
+
+    <figure class="fig">
+      <div class="svgbox wide">
+<!-- FIG:zip:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="File Explorer in Desktop, GEN241. One: go up to GEN241, not inside the sheet folder. Two: right-click the folder 034_Sheet_2 itself. Three: Send to, Compressed (zipped) folder. Four: a new file 034_Sheet_2.zip appears, with the same name as the folder."><rect x="10" y="14" width="780" height="392" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="778.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">GEN241</text><text x="720" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="22" y="54" width="756" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="34" y="73" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     Desktop  ›  GEN241</text><text x="34" y="112" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Name</text><line x1="26" y1="120" x2="774" y2="120" style="stroke: #e3e3e3; stroke-width: 1"/><path d="M36 129 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="47" y="151" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="70" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">hello.cpp</text><rect x="26" y="160" width="300" height="30" rx="3" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><path d="M36 168.3 h8.8 l2.75 2.75 h11.55 v13.750000000000002 h-23.1 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="172.15" width="23.1" height="13.200000000000001" rx="2" style="fill: #f8cd5a"/><text x="70" y="181" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">034_Sheet_2</text><path d="M36 339.72 h9.92 l3.1 3.1 h13.02 v15.5 h-26.04 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="344.06" width="26.04" height="14.879999999999999" rx="2" style="fill: #f8cd5a"/><rect x="47" y="345" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="348" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="351" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="354" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="357" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><text x="70" y="351" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">034_Sheet_2.zip</text><rect x="253" y="154" width="230" height="200" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="250" y="150" width="230" height="200" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="264" y="174" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Open</text><text x="264" y="203" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Open in new window</text><line x1="260" y1="216.5" x2="470" y2="216.5" style="stroke: #e0e0e0; stroke-width: 1"/><rect x="254" y="222" width="222" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="264" y="241" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Send to</text><text x="468" y="241" text-anchor="end" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">›</text><line x1="260" y1="254.5" x2="470" y2="254.5" style="stroke: #e0e0e0; stroke-width: 1"/><text x="264" y="279" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Copy</text><text x="264" y="308" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Delete</text><text x="264" y="337" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Rename</text><rect x="483" y="225" width="290" height="95" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="480" y="221" width="290" height="95" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="484" y="226" width="282" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="494" y="245" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Compressed (zipped) folder</text><text x="494" y="274" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Desktop (create shortcut)</text><text x="494" y="303" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Documents</text><circle cx="36" cy="69" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="36" y="75" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">1</text><circle cx="18" cy="175" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="18" y="181" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">2</text><circle cx="792" cy="236" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="792" y="242" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">3</text><circle cx="18" cy="345" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="18" y="351" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">4</text><text x="800" y="300" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 600; fill: var(--ink)">4  a new file appears:</text><text x="800" y="322" text-anchor="start" xml:space="preserve" style="font-size: 14.5px; font-weight: 400; fill: var(--ink-2)">same name, ending .zip</text></svg>
+<!-- FIG:zip:end -->
+      </div>
+      <p class="scrollhint">Scroll sideways to see the whole figure.</p>
+      <figcaption><strong>Zip the folder, from one level up.</strong> Zipping the files inside it gives a zip with no folder in it.</figcaption>
+    </figure>
+
+    <figure class="fig"><div class="svgbox wide"><!-- FIG:rezip:start -->
+<svg viewBox="0 0 1000 420" role="img" aria-label="Left: File Explorer in Desktop, GEN241, with folders 034_Sheet_1 and 034_Sheet_2 and last week's 034_Sheet_2.zip, which is being deleted. Right: the new zip opened, holding the folder 034_Sheet_2 with 18 files, Q_0201.cpp to Q_0218.cpp. Steps: one, delete last week's practice zip first; two, zip the folder again from GEN241 after your last edit; three, open it and check one folder, 18 .cpp files, no .exe."><rect x="10" y="14" width="470" height="300" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="10.75" y="14.75" width="468.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="22" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">GEN241</text><text x="410" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><rect x="22" y="54" width="446" height="28" rx="4" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="34" y="73" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">‹  ›  ↑     Desktop  ›  GEN241</text><text x="34" y="112" text-anchor="start" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #5c5c5c">Name</text><line x1="26" y1="120" x2="464" y2="120" style="stroke: #e3e3e3; stroke-width: 1"/><path d="M36 134.3 h8.8 l2.75 2.75 h11.55 v13.750000000000002 h-23.1 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="138.15" width="23.1" height="13.200000000000001" rx="2" style="fill: #f8cd5a"/><text x="70" y="147" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">034_Sheet_1</text><path d="M36 168.3 h8.8 l2.75 2.75 h11.55 v13.750000000000002 h-23.1 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="172.15" width="23.1" height="13.200000000000001" rx="2" style="fill: #f8cd5a"/><text x="70" y="181" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">034_Sheet_2</text><rect x="26" y="194" width="260" height="30" rx="3" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><path d="M36 203.72 h9.92 l3.1 3.1 h13.02 v15.5 h-26.04 z" style="fill: #f2b233; stroke: #c98a12; stroke-width: 1"/><rect x="36" y="208.06" width="26.04" height="14.879999999999999" rx="2" style="fill: #f8cd5a"/><rect x="47" y="209" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="212" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="215" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="218" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><rect x="47" y="221" width="4" height="2" rx="0" style="fill: #7a5a10; stroke: none; stroke-width: 0"/><text x="70" y="215" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">034_Sheet_2.zip</text><rect x="303" y="154" width="230" height="104" rx="6" style="fill: rgba(0,0,0,0.18); stroke: none; stroke-width: 1.5"/><rect x="300" y="150" width="230" height="104" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><text x="314" y="174" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Open</text><line x1="310" y1="187.5" x2="520" y2="187.5" style="stroke: #e0e0e0; stroke-width: 1"/><rect x="304" y="193" width="222" height="27" rx="4" style="fill: #cce4f7; stroke: #0067c0; stroke-width: 1.2"/><text x="314" y="212" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 600; fill: #1b1b1b">Delete</text><text x="314" y="241" text-anchor="start" xml:space="preserve" style="font-size: 15px; font-weight: 400; fill: #1b1b1b">Rename</text><circle cx="18" cy="209" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="18" y="215" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">1</text><rect x="500" y="14" width="490" height="300" rx="6" style="fill: #ffffff; stroke: #c4c4c4; stroke-width: 1.5"/><rect x="500.75" y="14.75" width="488.5" height="30" rx="5" style="fill: #f3f3f3; stroke: none; stroke-width: 1.5"/><text x="512" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #1b1b1b">034_Sheet_2.zip › 034_Sheet_2</text><text x="920" y="35" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 400; fill: #5c5c5c">-   □   ✕</text><text x="514" y="62" text-anchor="start" xml:space="preserve" style="font-size: 14px; font-weight: 600; fill: #1b1b1b">18 files, Q_0201 to Q_0218:</text><path d="M514 74 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="525" y="96" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="544" y="92" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0201.cpp</text><path d="M514 106 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="525" y="128" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="544" y="124" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0202.cpp</text><path d="M514 138 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="525" y="160" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="544" y="156" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0203.cpp</text><path d="M514 170 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="525" y="192" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="544" y="188" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0204.cpp</text><path d="M514 202 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="525" y="224" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="544" y="220" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0205.cpp</text><path d="M514 234 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="525" y="256" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="544" y="252" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0206.cpp</text><path d="M514 266 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="525" y="288" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="544" y="284" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0207.cpp</text><path d="M674 74 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="685" y="96" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="704" y="92" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0208.cpp</text><path d="M674 106 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="685" y="128" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="704" y="124" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0209.cpp</text><path d="M674 138 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="685" y="160" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="704" y="156" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0210.cpp</text><path d="M674 170 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="685" y="192" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="704" y="188" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0211.cpp</text><path d="M674 202 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="685" y="224" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="704" y="220" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0212.cpp</text><path d="M674 234 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="685" y="256" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="704" y="252" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0213.cpp</text><path d="M674 266 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="685" y="288" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="704" y="284" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0214.cpp</text><path d="M834 74 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="845" y="96" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="864" y="92" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0215.cpp</text><path d="M834 106 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="845" y="128" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="864" y="124" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0216.cpp</text><path d="M834 138 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="845" y="160" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="864" y="156" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0217.cpp</text><path d="M834 170 h15 l7 7 v22 h-22 z" style="fill: #ffffff; stroke: #7a7a7a; stroke-width: 1.2"/><text x="845" y="192" text-anchor="middle" xml:space="preserve" style="font-size: 7.5px; font-weight: 700; fill: #0067c0">C++</text><text x="864" y="188" text-anchor="start" class="mono" xml:space="preserve" style="font-size: 13.5px; font-weight: 400; fill: #1b1b1b">Q_0218.cpp</text><circle cx="964" cy="56" r="15" style="fill: #d9480f; stroke: #ffffff; stroke-width: 2.5"/><text x="964" y="62" text-anchor="middle" xml:space="preserve" style="font-size: 17px; font-weight: 700; fill: #ffffff">3</text><text x="20" y="346" text-anchor="start" xml:space="preserve" style="font-size: 15.5px; font-weight: 600; fill: var(--ink)">1  delete last week's practice zip first</text><text x="20" y="372" text-anchor="start" xml:space="preserve" style="font-size: 15.5px; font-weight: 600; fill: var(--ink)">2  zip the folder again, from GEN241, after your last edit</text><text x="20" y="398" text-anchor="start" xml:space="preserve" style="font-size: 15.5px; font-weight: 600; fill: var(--ink)">3  open it: one folder, 18 .cpp files, no .exe</text></svg>
+<!-- FIG:rezip:end --></div><figcaption>The final archive contains one correctly named folder and all 18 source files.</figcaption></figure>
+
+<div class="prose"><p>After upload, check the website's confirmation and keep your working folder and submitted archive. Ticking this page does not upload anything.</p><p class="small muted">Windows menu paths checked against <a href="https://support.microsoft.com/en-us/windows/experience/storage-filemanagement/common-file-name-extensions-in-windows">Microsoft: file extensions</a> and <a href="https://support.microsoft.com/en-us/windows/experience/storage-filemanagement/zip-and-unzip-files">Microsoft: ZIP files</a>. Pictures are explanatory illustrations, not captures from your lab PC.</p></div></section>
+<script type="text/x-companion" data-kind="code" data-order="1">// GEN 241 week 3 practice worksheet. Not a sheet-submission file.
+// Dev-C++ Windows: F11. VS Code Mac: Cmd+Shift+B.
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main()
+{
+    // Step 1. Change current to 16, then 17. Predict before running.
+    double current = 10;
+    if (current > 16) cout << "Overloaded" << endl;
+    else cout << "Within rating" << endl;
+
+    // Step 2. YOUR TURN: try 1,2,3 and 10,2,3. Explain each false test.
+    double a = 3, b = 4, c = 5;
+    if (a+b > c && a+c > b && b+c > a)
+    {
+        double s = (a+b+c)/2;
+        cout << "Area = " << pow(s*(s-a)*(s-b)*(s-c), 0.5) << endl;
+    }
+    else cout << "Invalid triangle" << endl;
+
+    // Step 3. PLAN: WANT BMI and label; HAVE kg and cm;
+    // CONVERT cm to m; RELATE formula then table; CHECK 70,175 -> Normal.
+    // YOUR TURN: use 76.5625 kg, then change the ladder order and explain.
+    double weight = 70, heightCm = 175;
+    double heightM = heightCm/100;
+    double bmi = weight/pow(heightM, 2);
+    cout << "BMI is " << bmi << endl;
+    if (bmi < 18.5) cout << "Underweight" << endl;
+    else if (bmi < 25) cout << "Normal" << endl;
+    else if (bmi < 30) cout << "Overweight" << endl;
+    else cout << "Obese" << endl;
+
+    // Step 4. YOUR TURN: replace <= with <. Explain the changed output.
+    double x = 6, y = 8;
+    if (pow(x*x+y*y, 0.5) <= 10) cout << "in the circle" << endl;
+    else cout << "outside the circle" << endl;
+    return 0;
+}
+</script><footer class="sources"><h2>Sources and checks</h2><ul><li>Prof. Mahmoud M. Khater, Sheet 2 pp. 1-4, supplied reference code, and submission-rules.pdf. Read 5 October 2026.</li><li>Lecture GEN_241_03 pp. 10-11 introduces selection and Boolean operators. No Lecture 4 file was supplied. Syntax explanations also use Liang, Introduction to Programming with C++, 3rd ed., §§3.3-3.6 and §3.10.</li><li>Q18 labels reproduce the sheet's table for this programming exercise. The cable and current examples are additional teaching exercises.</li><li>Examples compiled with Apple clang in C++98 mode, with checks recorded in CHECKED.md. Browser calculations were compared against compiled results.</li></ul><p>Read on your own after the lab. Use your own class-list number and your own tested code.</p></footer></main></div>
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var NS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function pct(x, d) { return (x * 100).toFixed(d == null ? 1 : d) + "%"; }
+  function fmt(n) { return Number(n).toLocaleString("en-US"); }
+  function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $("#toast");
+    if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 4200);
+  }
+
+  /* =======================================================================
+     A model of how C++ prints a double, and how it evaluates the small
+     expressions on this sheet. Used by every widget on the page so that no
+     number here is typed in by hand.
+     ======================================================================= */
+
+  function stripZeros(s) {
+    if (s.indexOf(".") < 0) return s;
+    return s.replace(/0+$/, "").replace(/\.$/, "");
+  }
+  /* operator<< for a double: default precision 6, %g-style, or fixed notation. */
+  function coutDouble(v, precision, fixedMode) {
+    if (precision == null) precision = 6;
+    if (typeof v !== "number" || !isFinite(v)) return v > 0 ? "inf" : (v < 0 ? "-inf" : "nan");
+    if (fixedMode) return v.toFixed(Math.min(20, Math.max(0, precision)));
+    var P = precision === 0 ? 1 : precision;
+    if (v === 0) return "0";
+    var X = parseInt(v.toExponential(Math.min(20, P - 1)).split("e")[1], 10);
+    if (X < -4 || X >= P) {
+      var parts = v.toExponential(Math.min(20, P - 1)).split("e");
+      var e = parseInt(parts[1], 10), ae = Math.abs(e);
+      return stripZeros(parts[0]) + "e" + (e < 0 ? "-" : "+") + (ae < 10 ? "0" + ae : String(ae));
+    }
+    return stripZeros(v.toFixed(Math.min(20, Math.max(0, P - 1 - X))));
+  }
+  /* operator<< for anything: ints print exactly, doubles go through the above. */
+  function coutValue(val, precision, fixedMode) {
+    return val.isInt ? String(val.v) : coutDouble(val.v, precision, fixedMode);
+  }
+
+  /* --- expression evaluator with C++'s int/double rules --- */
+  var NUMRE = /^(?:\d+\.\d*(?:[eE][+-]?\d+)?|\.\d+(?:[eE][+-]?\d+)?|\d+(?:[eE][+-]?\d+)?)/;
+  function lex(src) {
+    var out = [], i = 0;
+    while (i < src.length) {
+      var c = src[i];
+      if (/\s/.test(c)) { i++; continue; }
+      if ("+-*/()%".indexOf(c) >= 0) { out.push({ t: c }); i++; continue; }
+      var m = NUMRE.exec(src.slice(i));
+      if (!m) throw new Error("I don't understand the character " + JSON.stringify(c) + ".");
+      var txt = m[0];
+      out.push({ t: "num", txt: txt, v: parseFloat(txt), isInt: !/[.eE]/.test(txt) });
+      i += txt.length;
+    }
+    return out;
+  }
+  /* mode "cpp" follows C++; mode "real" does every division for real. */
+  function evaluate(src, mode) {
+    var ts = lex(src), p = 0, truncations = [], sawIntDiv = false;
+    function peek() { return ts[p]; }
+    function eat(t) { if (ts[p] && ts[p].t === t) { return ts[p++]; } return null; }
+    function expr() {
+      var a = term();
+      for (;;) {
+        var op = eat("+") || eat("-");
+        if (!op) return a;
+        var b = term();
+        a = { v: op.t === "+" ? a.v + b.v : a.v - b.v, isInt: a.isInt && b.isInt };
+      }
+    }
+    function term() {
+      var a = unary();
+      for (;;) {
+        var op = eat("*") || eat("/") || eat("%");
+        if (!op) return a;
+        var b = unary();
+        if (op.t === "*") { a = { v: a.v * b.v, isInt: a.isInt && b.isInt }; continue; }
+        var bothInt = a.isInt && b.isInt;
+        if (bothInt && op.t === "/") sawIntDiv = true;   /* % is a remainder, not a division */
+        if (op.t === "%") {
+          if (!bothInt) throw new Error("% only works between whole numbers in C++.");
+          if (b.v === 0) throw new Error("Remainder by zero. This crashes the program.");
+          a = { v: a.v % b.v, isInt: true };
+          continue;
+        }
+        if (bothInt && mode === "cpp") {
+          if (b.v === 0) throw new Error("Whole-number division by zero. This crashes the program, it does not print infinity.");
+          var exact = a.v / b.v, cut = Math.trunc(exact);
+          if (exact !== cut) truncations.push({ a: a.v, b: b.v, exact: exact, cut: cut });
+          a = { v: cut, isInt: true };
+        } else {
+          a = { v: a.v / b.v, isInt: false };
+        }
+      }
+    }
+    function unary() {
+      if (eat("+")) return unary();
+      if (eat("-")) { var u = unary(); return { v: -u.v, isInt: u.isInt }; }
+      return primary();
+    }
+    function primary() {
+      var n = eat("num");
+      if (n) return { v: n.v, isInt: n.isInt };
+      if (eat("(")) { var e = expr(); if (!eat(")")) throw new Error("A closing bracket is missing."); return e; }
+      throw new Error(p >= ts.length ? "The expression stops early - something is missing at the end." : "I did not expect " + JSON.stringify(ts[p].t) + " here.");
+    }
+    if (!ts.length) throw new Error("Type an expression above.");
+    var val = expr();
+    if (p < ts.length) throw new Error("There is something left over after the expression: " + JSON.stringify(ts[p].txt || ts[p].t) + ".");
+    return { val: val, truncations: truncations, sawIntDiv: sawIntDiv };
+  }
+
+  /* ---------- code blocks: highlighting, line numbers, diffs, copy ---------- */
+  var KEYWORDS = {
+    python: "False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield",
+    cfamily: "auto bool break case catch char class const continue default delete do double else enum export extern false float for function goto if import inline int let long namespace new null nullptr private protected public return short signed sizeof static struct switch template this throw true try typedef typeof union unsigned using var void volatile while",
+    sql: "select from where group by having order limit join inner left right outer on as insert into values update set delete create table alter drop index distinct union all case when then else end",
+    plain: ""
+  };
+  var BUILTINS = "print len range sum sorted dict list open round float int zip enumerate repr min max isinstance set tuple str console log cout cin cerr endl fixed scientific setprecision setw main";
+  function langKey(lang) {
+    lang = (lang || "plain").toLowerCase();
+    if (lang === "python" || lang === "py") return "python";
+    if (lang === "sql") return "sql";
+    if (["js","javascript","ts","typescript","c","cpp","c++","java","go","rust","json","css"].indexOf(lang) >= 0) return "cfamily";
+    return "plain";
+  }
+  function tokenize(code, lang) {
+    var key = langKey(lang);
+    var re = key === "python"
+      ? /(#[^\n]*)|((?:[rRfFbB]{1,2})?(?:'''[\s\S]*?'''|"""[\s\S]*?"""|'(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"))|(\b\d+(?:\.\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)/g
+      /* cfamily: note the preprocessor group. #include must not render as a comment. */
+      : /(\/\*[\s\S]*?\*\/|\/\/[^\n]*|--[^\n]*)|('(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"|`(?:\\.|[^`\\])*`|<[A-Za-z_][A-Za-z0-9_+./]*>)|(\b0x[0-9a-fA-F]+\b|\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)|(#[A-Za-z_]+)/g;
+    var kw = (KEYWORDS[key] || "").split(" "), bi = BUILTINS.split(" ");
+    var segs = [], last = 0, m;
+    while ((m = re.exec(code))) {
+      if (m.index > last) segs.push(["", code.slice(last, m.index)]);
+      var t = m[0], cls = "";
+      if (m[1]) cls = "tk-c";
+      else if (m[2]) cls = "tk-s";
+      else if (m[3]) cls = "tk-n";
+      else if (m[5]) cls = "tk-p";
+      else if (m[4]) {
+        if (kw.indexOf(t) >= 0 || kw.indexOf(t.toLowerCase()) >= 0) cls = "tk-k";
+        else if (bi.indexOf(t) >= 0) cls = "tk-f";
+        else if (/^\s*\(/.test(code.slice(re.lastIndex, re.lastIndex + 2))) cls = "tk-f";
+      }
+      segs.push([cls, t]);
+      last = re.lastIndex;
+    }
+    if (last < code.length) segs.push(["", code.slice(last)]);
+    return segs;
+  }
+  function highlightLines(code, lang) {
+    var lines = [""];
+    tokenize(code, lang).forEach(function (seg) {
+      seg[1].split("\n").forEach(function (p, i) {
+        if (i > 0) lines.push("");
+        if (p) lines[lines.length - 1] += seg[0] ? '<span class="' + seg[0] + '">' + esc(p) + "</span>" : esc(p);
+      });
+    });
+    return lines;
+  }
+  function copyText(text, statusEl, preEl) {
+    function done(msg) { statusEl.textContent = msg; setTimeout(function () { statusEl.textContent = ""; }, 2200); }
+    function fallback() {
+      try {
+        var sel = window.getSelection(), range = document.createRange();
+        range.selectNodeContents(preEl); sel.removeAllRanges(); sel.addRange(range);
+        if (document.execCommand && document.execCommand("copy")) { sel.removeAllRanges(); done("Copied"); }
+        else done("Selected. Press Ctrl+C or Cmd+C");
+      } catch (e) { done("Select the code and copy it"); }
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done("Copied"); }, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  }
+  $$('script[data-show]').forEach(function (s) {
+    var lang = s.getAttribute("data-lang") || "plain";
+    var raw = s.textContent.replace(/^\n/, "").replace(/\s+$/, "");
+    var shown = raw;
+    var isDiff = s.hasAttribute("data-diff");
+    var lineNums = s.hasAttribute("data-ln");
+    var hl = (s.getAttribute("data-hl") || "").split(",").filter(Boolean).map(Number);
+    var hlClass = s.getAttribute("data-hl-kind") === "change" ? "chg-line" : "hl-line";
+    var markers = null, text = shown;
+    if (isDiff) {
+      var src = shown.split("\n");
+      markers = src.map(function (l) { return l.charAt(0) || " "; });
+      text = src.map(function (l) { return l.slice(2); }).join("\n");
+    }
+    var html = highlightLines(text, lang).map(function (h, i) {
+      if (isDiff) {
+        var mk = markers[i], cls = mk === "+" ? "add-line" : mk === "-" ? "del-line" : "";
+        var g = '<span class="dg">' + (mk === " " ? " " : esc(mk)) + "</span>";
+        return cls ? '<span class="' + cls + '">' + g + h + "</span>" : g + h;
+      }
+      var ln = lineNums ? '<span class="ln">' + (i + 1) + "</span>" : "";
+      return hl.indexOf(i + 1) >= 0 ? '<span class="' + hlClass + '">' + ln + (h || " ") + "</span>" : ln + h;
+    }).join("\n");
+    var box = document.createElement("div");
+    box.className = "code";
+    box.innerHTML = '<div class="code-head"><span class="ttl">' + esc(s.getAttribute("data-title") || lang) +
+      '</span><span class="copy-status" aria-live="polite"></span><button type="button" class="btn small copy">Copy</button></div><pre><code>' + html + "</code></pre>";
+    s.parentNode.insertBefore(box, s);
+    box.querySelector(".copy").addEventListener("click", function () { copyText(isDiff ? text : raw, box.querySelector(".copy-status"), box.querySelector("pre")); });
+  });
+
+  /* ---------- "you are here" strips ---------- */
+  var STAGES = [["read", "Read"], ["decide", "Decide"], ["check", "Check"], ["name", "Name"], ["hand", "Hand in"]];
+  $$(".where").forEach(function (el) {
+    var on = (el.getAttribute("data-stage") || "").split(",");
+    el.innerHTML = STAGES.map(function (s) { return '<span class="' + (on.indexOf(s[0]) >= 0 ? "on" : "") + '">' + s[1] + "</span>"; }).join('<i aria-hidden="true">›</i>');
+    el.setAttribute("role", "img");
+    el.setAttribute("aria-label", "Stage: " + STAGES.filter(function (s) { return on.indexOf(s[0]) >= 0; }).map(function (s) { return s[1]; }).join(", "));
+  });
+
+  /* ---------- 1.2 the name builder: the professor's rules, computed ---------- */
+  var nbNum = $("#nb-num");
+  if (nbNum) {
+    var pad = function (n, w) { n = String(n); while (n.length < w) n = "0" + n; return n; };
+    var nbRender = function () {
+      var num = Number(nbNum.value), sh = Number($("#nb-sheet").value), q = Number($("#nb-q").value);
+      if (![num, sh, q].every(Number.isInteger) || !(num >= 1 && num <= 999) || !(sh >= 1 && sh <= 99) || !(q >= 1 && q <= 99)) {
+        $("#nb-folder").textContent = "-"; $("#nb-file").textContent = "-"; $("#nb-zip").textContent = "-";
+        $("#nb-readout").textContent = "Type your number on the class list (1 to 999), the sheet and the question.";
+        return;
+      }
+      var folder = pad(num, 3) + "_Sheet_" + sh, file = "Q_" + pad(sh, 2) + pad(q, 2) + ".cpp";
+      $("#nb-folder").textContent = folder; $("#nb-file").textContent = file; $("#nb-zip").textContent = folder + ".zip";
+      $("#nb-readout").textContent = "Number " + num + " becomes " + pad(num, 3) + " (always three digits). Sheet " + sh + ", question " + q +
+        " becomes " + pad(sh, 2) + pad(q, 2) + " (two digits each). The full path is Desktop\\GEN241\\" + folder + "\\" + file + ".";
+    };
+    ["#nb-num", "#nb-sheet", "#nb-q"].forEach(function (id) { $(id).addEventListener("input", nbRender); });
+    nbRender();
+  }
+  var ncIn = $("#nc-in");
+  if (ncIn) {
+    var ncRender = function () {
+      var n = ncIn.value, out = [];
+      if (!n) { $("#nc-readout").className = "verdictline"; $("#nc-readout").textContent = "Type a file or folder name to check it."; return; }
+      if (/[\u0600-\u06FF]/.test(n)) out.push("it has Arabic letters or digits; use English ones");
+      if (/\s/.test(n)) out.push("it has a space");
+      if (/-/.test(n)) out.push("it uses a dash; the rule is underscores");
+      var isZip = /\.(zip|rar)$/i.test(n), isFolder = !/\./.test(n), kind;
+      if (isFolder || isZip) {
+        kind = isZip ? "A correct archive name." : "A correct sheet folder name.";
+        var stem = isZip ? n.replace(/\.(zip|rar)$/i, "") : n, m = /^(\d+)_Sheet_\d+$/i.exec(stem);
+        if (isZip && !/\.(zip|rar)$/.test(n)) out.push("end it in .zip or .rar, small letters");
+        if (m && m[1].length !== 3) out.push("the number needs exactly three digits: 7 is 007, 34 is 034");
+        else if (m && !/_Sheet_/.test(stem)) out.push("write Sheet with a capital S, as the rules do");
+        else if (!m && !out.length) out.push("a sheet folder looks like 007_Sheet_2: three digits, _Sheet_, the sheet number");
+      } else {
+        kind = "A correct question file name.";
+        if (/\.exe$/i.test(n)) out.push("that is the program Dev-C++ made; you send the .cpp");
+        else if (/\.cpp\.txt$/i.test(n)) out.push("it is a text file pretending to be C++; rename it to end in .cpp");
+        else if (/^Q_\d{4}\.cpp$/i.test(n) && !/\.cpp$/.test(n)) out.push("end it in .cpp, small letters");
+        else if (/^Q_\d{3}\.cpp$/i.test(n)) out.push("one digit is missing: two for the sheet and two for the question, so Q_0201, not Q_201");
+        else if (!/^Q_\d{4}\.cpp$/.test(n) && !out.length) out.push("a question file looks like Q_0201.cpp: Q_, two digits of sheet, two of question, .cpp");
+      }
+      if (/^0{3}_Sheet_/.test(n) || /_Sheet_0(?:\.|$)/.test(n)) out.push("the list number and sheet number must be positive");
+      if (/^Q_/.test(n) && (/^Q_00/.test(n) || /^Q_\d{2}00/.test(n))) out.push("sheet and question numbering start at 1");
+      var el = $("#nc-readout"), msg = out.join("; ");
+      el.className = "verdictline " + (out.length ? "differ" : "agree");
+      el.innerHTML = out.length ? '<span class="tagv">Not yet.</span> ' + esc(msg.charAt(0).toUpperCase() + msg.slice(1)) + "." :
+        '<span class="tagv">Follows the rules.</span> ' + kind;
+    };
+    ncIn.addEventListener("input", ncRender);
+    $$("#nc-presets .chip").forEach(function (c) { c.addEventListener("click", function () { ncIn.value = c.getAttribute("data-e"); ncRender(); }); });
+    ncRender();
+  }
+
+
+  function bindInputs(ids, fn) { ids.forEach(function(id){$(id).addEventListener('input',fn)}); fn(); }
+  function presets(id, ids) { $$(id+' button').forEach(function(b){b.addEventListener('click',function(){var vs=b.dataset.v.split(','); ids.forEach(function(s,i){$(s).value=vs[i];$(s).dispatchEvent(new Event('input'))});})}); }
+  function num(id){return $(id).value.trim()==='' ? NaN : Number($(id).value);}
+  bindInputs(['#tri-a','#tri-b','#tri-c'],function(){
+    var a=num('#tri-a'),b=num('#tri-b'),c=num('#tri-c'),out=$('#tri-out');
+    if(![a,b,c].every(Number.isFinite)){out.textContent='Enter three finite numbers.';return;}
+    var tests=[a+b>c,a+c>b,b+c>a],s=(a+b+c)/2;
+    out.textContent=a+' + '+b+' > '+c+': '+tests[0]+'\n'+a+' + '+c+' > '+b+': '+tests[1]+'\n'+b+' + '+c+' > '+a+': '+tests[2]+'\n'+(tests.every(Boolean)?'Valid. Area = '+coutDouble(Math.sqrt(s*(s-a)*(s-b)*(s-c))):'Invalid. The area statement is not executed.');
+  });
+  presets('#tri-presets',['#tri-a','#tri-b','#tri-c']);
+  bindInputs(['#bmi-w','#bmi-h','#bmi-mode'],function(){
+    var w=num('#bmi-w'),h=num('#bmi-h'),mode=$('#bmi-mode').value,out=$('#bmi-out');
+    if(!Number.isFinite(w)||!Number.isFinite(h)||w<=0||h<=0){out.textContent='Enter a positive weight and height. The exercise assumes valid input.';return;}
+    var m=mode==='units'?h:h/100,bmi=w/(m*m),label;
+    if(mode==='order')label=bmi<30?'Overweight':bmi<25?'Normal':bmi<18.5?'Underweight':'Obese';
+    else label=bmi<18.5?'Underweight':bmi<25?'Normal':bmi<30?'Overweight':'Obese';
+    out.textContent='Height used = '+coutDouble(m)+' m\nBMI = '+coutDouble(bmi)+'\nPrinted label = '+label+(mode==='right'?'':'\nThis variant deliberately contains a bug.');
+  });
+  bindInputs(['#circle-x','#circle-y'],function(){
+    var x=num('#circle-x'),y=num('#circle-y'),out=$('#circle-out');
+    if(![x,y].every(Number.isFinite)){out.textContent='Enter two finite coordinates.';return;}
+    var d=Math.sqrt(x*x+y*y);
+    out.textContent='Distance = '+coutDouble(d)+'\nSheet rule <= 10: '+(d<=10?'in the circle':'outside the circle')+'\nWith < 10 instead: '+(d<10?'in the circle':'outside the circle');
+  });
+  presets('#circle-presets',['#circle-x','#circle-y']);
+  /* GUIDE_TRACE:start */
+var GUIDE_TRACE = {"kind": "vars", "code": ["double weight, heightCm, heightM, bmi;", "cout << \"Weight (kg) and height (cm): \";", "cin >> weight >> heightCm;", "heightM = heightCm / 100;", "bmi = weight / pow(heightM, 2);", "if (bmi < 18.5)       cout << \"Underweight\" << endl;", "else if (bmi < 25.0)  cout << \"Normal\" << endl;", "else if (bmi < 30.0)  cout << \"Overweight\" << endl;", "else                  cout << \"Obese\" << endl;", "return 0;"], "array": null, "target": null, "labels": ["weight", "heightCm", "heightM", "bmi", "console"], "outRow": 4, "frames": [{"line": 0, "active": -1, "done": [], "found": -1, "vals": ["?", "?", "?", "?", ""], "out": "", "cap": "Four boxes. <b>Nothing is in them yet.</b>", "cap_ar": "أربع صناديق. <b>لسه مفيش فيهم حاجة.</b>", "result": null}, {"line": 1, "active": -1, "done": [], "found": -1, "vals": ["?", "?", "?", "?", ""], "out": "Weight (kg) and height (cm): ", "cap": "The prompt asks for both numbers.", "cap_ar": "الرسالة بتطلب الرقمين.", "result": null}, {"line": 2, "active": -1, "done": [], "found": -1, "vals": ["70", "175", "?", "?", ""], "out": "Weight (kg) and height (cm): 70 175\n", "cap": "You type <b>70 175</b>. <code>cin</code> fills <code>weight</code>, then <code>heightCm</code>.", "cap_ar": "كتبت <b>70 175</b>. الـ <code>cin</code> بتملا <code>weight</code> وبعدين <code>heightCm</code>.", "result": null}, {"line": 3, "active": -1, "done": [], "found": -1, "vals": ["70", "175", "1.75", "?", ""], "out": "Weight (kg) and height (cm): 70 175\n", "cap": "CONVERT: 175 cm is <b>1.75</b> m. The formula needs meters.", "cap_ar": "CONVERT: 175 سم يبقى <b>1.75</b> متر. القانون محتاج متر.", "result": null}, {"line": 4, "active": -1, "done": [], "found": -1, "vals": ["70", "175", "1.75", "22.8571", ""], "out": "Weight (kg) and height (cm): 70 175\n", "cap": "RELATE: 70 / 1.75² = <b>22.8571</b>.", "cap_ar": "RELATE: 70 / 1.75² = <b>22.8571</b>.", "result": null}, {"line": 5, "active": -1, "done": [], "found": -1, "vals": ["70", "175", "1.75", "22.8571", ""], "out": "Weight (kg) and height (cm): 70 175\n", "cap": "Is 22.8571 < 18.5? <b>No - false.</b> Its statement is skipped; on to the next <code>else</code>.", "cap_ar": "هل 22.8571 < 18.5؟ <b>لأ - false.</b> الجملة بتاعته بتتنط؛ نروح للـ <code>else</code> اللي بعده.", "result": null}, {"line": 6, "active": -1, "done": [], "found": -1, "vals": ["70", "175", "1.75", "22.8571", ""], "out": "Weight (kg) and height (cm): 70 175\n", "cap": "Is 22.8571 < 25.0? <b>Yes - true.</b> This branch runs.", "cap_ar": "هل 22.8571 < 25.0؟ <b>أيوه - true.</b> الفرع ده هو اللي هيشتغل.", "result": null}, {"line": 6, "active": -1, "done": [], "found": -1, "vals": ["70", "175", "1.75", "22.8571", ""], "out": "Weight (kg) and height (cm): 70 175\nNormal\n", "cap": "Its statement prints <b>Normal</b>. One branch, and only one, runs.", "cap_ar": "بيطبع <b>Normal</b>. فرع واحد بس هو اللي بيشتغل.", "result": null}, {"line": 7, "to": 8, "active": -1, "done": [], "found": -1, "vals": ["70", "175", "1.75", "22.8571", ""], "out": "Weight (kg) and height (cm): 70 175\nNormal\n", "cap": "The rest of the ladder is <b>not evaluated</b> - not false, never looked at.", "cap_ar": "باقي السلم <b>مش بيتحسب خالص</b> - مش false، ده محدش بصّ عليه.", "result": null}, {"line": 9, "active": -1, "done": [], "found": -1, "vals": ["70", "175", "1.75", "22.8571", ""], "out": "Weight (kg) and height (cm): 70 175\nNormal\n", "cap": "<code>return 0;</code> - finished. To see another branch, run it again with other numbers.", "cap_ar": "<code>return 0;</code> - خلص. علشان تشوف فرع تاني، شغّله تاني بأرقام تانية.", "result": null}], "returned": null, "key": "ladder", "typed": "70 175", "bmi": "22.8571", "label": "Normal", "tests": 2};
+/* GUIDE_TRACE:end */
+  var frameIndex=0;
+  function drawTrace(){
+    if(!GUIDE_TRACE)return;
+    var f=GUIDE_TRACE.frames[frameIndex];
+    $('#ladder-lines').innerHTML=GUIDE_TRACE.code.map(function(c,i){return '<li class="'+(i>=f.line&&i<=(f.to==null?f.line:f.to)?'active':'')+'">'+esc(c)+'</li>';}).join('');
+    $('#ladder-caption').innerHTML='Step '+(frameIndex+1)+' / '+GUIDE_TRACE.frames.length+': '+f.cap;
+    $('#ladder-values').textContent=GUIDE_TRACE.labels.slice(0,4).map(function(n,i){return n+' = '+f.vals[i]}).join(' | ');
+    $('#ladder-console').textContent=f.out||'(console empty)';
+    $('#trace-next').disabled=frameIndex===GUIDE_TRACE.frames.length-1;
+  }
+  $('#trace-next').addEventListener('click',function(){if(frameIndex<GUIDE_TRACE.frames.length-1)frameIndex++;drawTrace();});
+  $('#trace-reset').addEventListener('click',function(){frameIndex=0;drawTrace();});
+  drawTrace();
+
+  /* ---------- self-checks ---------- */
+  $$("[data-quiz]").forEach(function (q) {
+    var fb = $(".fb", q), btns = $$(".opts button", q);
+    btns.forEach(function (b, i) {
+      b.innerHTML = '<span class="mk">' + "ABCD".charAt(i) + "</span><span>" + b.innerHTML + "</span>";
+      b.addEventListener("click", function () {
+        var ok = b.getAttribute("data-ok") === "1";
+        btns.forEach(function (x) { x.classList.remove("right", "wrong"); });
+        b.classList.add(ok ? "right" : "wrong");
+        fb.className = "fb " + (ok ? "ok" : "no");
+        fb.innerHTML = '<span class="verdict">' + (ok ? "Right." : "Not quite.") + "</span> " + b.getAttribute("data-fb");
+      });
+    });
+  });
+
+  /* ---------- checklist, remembered in this browser only ---------- */
+  var CK_KEY = "gen241-w03-checklist-v1", ck = {};
+  try { ck = JSON.parse(localStorage.getItem(CK_KEY) || "{}") || {}; } catch (e) { ck = {}; }
+  $$(".checklist input").forEach(function (box) {
+    box.checked = !!ck[box.getAttribute("data-k")];
+    box.addEventListener("change", function () {
+      ck[box.getAttribute("data-k")] = box.checked;
+      try { localStorage.setItem(CK_KEY, JSON.stringify(ck)); } catch (e) { /* private window: ticks last for this visit */ }
+    });
+  });
+
+  /* ---------- chapter highlighting ---------- */
+  var navLinks = $$(".rail a[data-for], .chipnav a[data-for]"), chipnav = $(".chipnav");
+  function markChapter(id) {
+    navLinks.forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-for") === id); });
+    var chip = chipnav && chipnav.querySelector('a[data-for="' + id + '"]');
+    if (chip && getComputedStyle(chipnav).display !== "none") {
+      chipnav.scrollTo({ left: chip.offsetLeft - chipnav.clientWidth / 2 + chip.clientWidth / 2, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) markChapter(e.target.getAttribute("data-chapter")); });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    $$("[data-chapter]").forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- companion file: one compilable .cpp, built from the blocks above ---------- */
+  var COMPANION = "gen241-week03-worksheet.cpp";   // set by new-week.sh
+  function companionBlocks() {
+    return $$("script[data-companion], script[data-kind]").map(function (s) {
+      var kind = s.getAttribute("data-kind") || "code";
+      return { order: parseFloat(s.getAttribute("data-order") || "0"), kind: kind, src: s.textContent.replace(/^\n/, "").replace(/\s+$/, "") };
+    }).sort(function (a, b) { return a.order - b.order; });
+  }
+  function buildCompanion() {
+    var blocks = companionBlocks();
+    if (/\.(cpp|cc|c|h|hpp)$/.test(COMPANION)) {
+      /* prose becomes comments so the saved file compiles as it stands */
+      return blocks.map(function (c) {
+        return c.kind === "markdown"
+          ? c.src.split("\n").map(function (l) { return l.length ? "// " + l : "//"; }).join("\n")
+          : c.src;
+      }).join("\n\n") + "\n";
+    }
+    if (/\.ipynb$/.test(COMPANION)) {
+      var cells = blocks.map(function (c, i) {
+        var lines = c.src.split("\n"), source = lines.map(function (l, j) { return j < lines.length - 1 ? l + "\n" : l; });
+        var cell = { cell_type: c.kind === "markdown" ? "markdown" : "code", id: "cell-" + (i + 1), metadata: {}, source: source };
+        if (cell.cell_type === "code") { cell.execution_count = null; cell.outputs = []; }
+        return cell;
+      });
+      return JSON.stringify({ nbformat: 4, nbformat_minor: 5, metadata: {}, cells: cells }, null, 1) + "\n";
+    }
+    return blocks.map(function (c) { return c.kind === "markdown" ? c.src : "```\n" + c.src + "\n```"; }).join("\n\n") + "\n";
+  }
+  var CRC = (function () { var t = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(buf) { var c = 0xFFFFFFFF; for (var i = 0; i < buf.length; i++) c = CRC[(c ^ buf[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  function zipOne(name, data) {
+    var nb = new TextEncoder().encode(name), crc = crc32(data), d = new Date();
+    var time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+    var date = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    var loc = new Uint8Array(30 + nb.length), lv = new DataView(loc.buffer);
+    lv.setUint32(0, 0x04034b50, true); lv.setUint16(4, 20, true); lv.setUint16(6, 0x0800, true);
+    lv.setUint16(10, time, true); lv.setUint16(12, date, true); lv.setUint32(14, crc, true);
+    lv.setUint32(18, data.length, true); lv.setUint32(22, data.length, true); lv.setUint16(26, nb.length, true);
+    loc.set(nb, 30);
+    var cen = new Uint8Array(46 + nb.length), cv = new DataView(cen.buffer);
+    cv.setUint32(0, 0x02014b50, true); cv.setUint16(4, 20, true); cv.setUint16(6, 20, true); cv.setUint16(8, 0x0800, true);
+    cv.setUint16(12, time, true); cv.setUint16(14, date, true); cv.setUint32(16, crc, true);
+    cv.setUint32(20, data.length, true); cv.setUint32(24, data.length, true); cv.setUint16(28, nb.length, true);
+    cen.set(nb, 46);
+    var end = new Uint8Array(22), ev = new DataView(end.buffer);
+    ev.setUint32(0, 0x06054b50, true); ev.setUint16(8, 1, true); ev.setUint16(10, 1, true);
+    ev.setUint32(12, cen.length, true); ev.setUint32(16, loc.length + data.length, true);
+    var out = new Uint8Array(loc.length + data.length + cen.length + end.length);
+    out.set(loc, 0); out.set(data, loc.length); out.set(cen, loc.length + data.length); out.set(end, loc.length + data.length + cen.length);
+    return out;
+  }
+  function saveCompanion() {
+    var text = buildCompanion();
+    var host = window.claude && typeof window.claude.use === "function";
+    if (!host) {
+      var url = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
+      var a = document.createElement("a"); a.href = url; a.download = COMPANION;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 3000);
+      toast("Saving " + COMPANION + ".");
+      return;
+    }
+    window.claude.use("downloads").then(function (dl) {
+      if (!dl) { toast("Saving isn't available in this view."); return; }
+      var ext = COMPANION.split(".").pop().toLowerCase();
+      var allowed = ["txt", "json", "md", "csv", "html", "svg", "pdf", "zip", "png", "jpg", "jpeg", "webp", "gif", "mp4", "webm", "docx", "pptx", "xlsx", "epub", "ttf"];
+      var bytes = new TextEncoder().encode(text);
+      var req = allowed.indexOf(ext) >= 0 ? { filename: COMPANION, data: text } : { filename: COMPANION.replace(/\.[^.]+$/, "") + ".zip", data: zipOne(COMPANION, bytes) };
+      return dl.save(req).then(function () { toast("Saved."); }, function (err) {
+        var code = err && err.code;
+        toast(code === "declined" ? "Save cancelled." : code === "rate_limited" ? "A save prompt is already open." : "Saving isn't available in this view.");
+      });
+    }, function () { toast("Saving isn't available in this view."); });
+  }
+  $$(".companion-save").forEach(function (b) { b.addEventListener("click", saveCompanion); });
+
+  /* Exposed for automated checks. */
+  window.guideKit = {
+    $: $, $$: $$, svgEl: svgEl, esc: esc, pct: pct, fmt: fmt, mulberry32: mulberry32, toast: toast,
+    buildCompanion: buildCompanion, zipOne: zipOne,
+    coutDouble: coutDouble, coutValue: coutValue, evaluate: evaluate
+  };
+})();
+</script>
+</body>
+</html>

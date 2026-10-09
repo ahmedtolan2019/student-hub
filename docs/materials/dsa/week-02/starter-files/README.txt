@@ -1,0 +1,1 @@
+These are incomplete starter files. A function containing only pass returns None. Fill in the plan and body before comparing with the sheet output. Keep files in DSA/sheet02. No extra Python packages are needed.

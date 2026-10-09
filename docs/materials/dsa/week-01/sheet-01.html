@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DSA · Sheet 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@700&display=swap">
+<style>
+/* The sheet students keep. Printed to sheet-01.pdf by make-pdf.py; there is no
+   printer in the lab, so it is read on screen - but it prints cleanly on A4.
+   Every expected result below comes from ../sheet-01/expected-output.txt. */
+:root { --ink: #111821; --ink-2: #435061; --ink-3: #5f6b7c; --rule: #d9dfe7; --accent: #0f6e78; --soft: #e0f0f2; --code: #f6f8fb; --warn: #fff1d6; --warn-ink: #7f4d00; }
+@page { size: A4; margin: 15mm 16mm 16mm; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: var(--ink); font: 400 10.4pt/1.45 "IBM Plex Sans", system-ui, sans-serif; }
+main { max-width: 178mm; margin: 0 auto; padding: 8mm 0; }
+header { border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 12px; }
+.eyebrow { font: 600 8.5pt/1 "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+h1 { font: 700 21pt/1.1 "Space Grotesk", sans-serif; margin: 0 0 4px; letter-spacing: -.01em; }
+.sub { color: var(--ink-2); margin: 0; }
+h2 { font: 700 12.5pt/1.25 "Space Grotesk", sans-serif; margin: 0 0 5px; display: flex; gap: 8px; align-items: baseline; }
+h2 .n { color: var(--accent); }
+.tag { font: 600 7.5pt/1 "IBM Plex Mono", monospace; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--accent); color: var(--accent); border-radius: 99px; padding: 3px 7px; }
+.tag.opt { border-color: var(--ink-3); color: var(--ink-3); }
+.q { border: 1px solid var(--rule); border-radius: 7px; padding: 10px 13px 8px; margin: 0 0 9px; break-inside: avoid; }
+.q p, .q ul, .q ol { margin: 0 0 6px; }
+.q ul, .q ol { padding-left: 1.2em; }
+.q li { margin: 0 0 2px; }
+pre { font: 400 9.2pt/1.45 "IBM Plex Mono", monospace; background: var(--code); border: 1px solid var(--rule); border-radius: 5px; padding: 7px 10px; margin: 0 0 7px; white-space: pre; }
+code { font-family: "IBM Plex Mono", monospace; font-size: .92em; background: var(--code); border: 1px solid var(--rule); border-radius: 3px; padding: 0 .22em; }
+pre code { border: 0; padding: 0; background: none; font-size: 1em; }
+.file { font: 600 8.5pt/1 "IBM Plex Mono", monospace; color: var(--ink-3); margin-left: auto; }
+table { border-collapse: collapse; margin: 2px 0 7px; font-size: 9.6pt; }
+td, th { border: 1px solid var(--rule); padding: 3px 9px; text-align: left; }
+th { background: var(--code); font-weight: 600; }
+td.m, th.m { font-family: "IBM Plex Mono", monospace; }
+.box { background: var(--soft); border-radius: 7px; padding: 9px 13px; margin: 0 0 11px; break-inside: avoid; }
+.box p { margin: 0 0 5px; } .box p:last-child { margin: 0; }
+.plan { display: grid; grid-template-columns: 62px 1fr; gap: 1px 10px; margin: 5px 0 2px; font-size: 9.6pt; }
+.plan b { font-family: "IBM Plex Mono", monospace; color: var(--accent); }
+.warn { background: var(--warn); color: var(--warn-ink); border-radius: 6px; padding: 6px 11px; margin: 0 0 7px; font-size: 9.6pt; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+footer { color: var(--ink-3); font-size: 8.5pt; border-top: 1px solid var(--rule); padding-top: 6px; margin-top: 12px; }
+@media screen { body { background: #eef1f6; } main { background: #fff; padding: 14mm 16mm; margin: 16px auto; box-shadow: 0 1px 4px rgba(0,0,0,.12); } }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <p class="eyebrow">Data Structures and Algorithms · Python · 2026/2027 first semester · Lab 1</p>
+  <h1>Sheet 1 - lists, loops and your first search</h1>
+  <p class="sub">Solve it yourself, after lab 1. Hand it in at the start of lab 2.</p>
+</header>
+
+<div class="box">
+  <p><b>Where your work goes.</b> One PyCharm project, <code>Desktop\DSA</code>. Inside it, the folder <code>sheet01</code>. One file per question, with the name given next to each question (<code>q01_hello.py</code> ...).</p>
+  <p><b>By-hand answers go in the file too</b>, as <code>#</code> comments at the top, written <b>before</b> you run anything. There is nothing to print or write on paper.</p>
+  <p><b>Required:</b> Q1-Q9. <b>Optional stretch:</b> Q10-Q11. <b>Do not use</b> <code>max()</code>, <code>.index()</code>, <code>.count()</code>, <code>sorted()</code>, or a membership test such as <code>target in values</code> - the point is to write the loop yourself. (The <code>in</code> of <code>for i in range(...)</code> is of course allowed.)</p>
+  <p><b>Hand in:</b> zip the whole <code>sheet01</code> folder as <code>sheet01_&lt;your ID&gt;.zip</code> - the <code>.py</code> files, not screenshots - and send it the way your TA announces in lab 1.</p>
+</div>
+
+<div class="box">
+  <p><b>For Q5, Q7 and Q8, write these five lines as comments above the function, before its code.</b> Use them on any other question where you cannot see how to start.</p>
+  <div class="plan">
+    <b>HAVE</b><span>the inputs, and what you may assume about them (sorted? empty? repeats?)</span>
+    <b>WANT</b><span>the exact result - including what happens when there is nothing to find</span>
+    <b>TRY</b><span>one small example, solved by hand, before any code</span>
+    <b>STEPS</b><span>what your hands just did: what you remember, what you repeat, when you stop</span>
+    <b>CHECK</b><span>the test inputs that could catch a mistake, with the answers you expect</span>
+  </div>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q1</span> Hello, and find it again <span class="tag">code</span><span class="file">q01_hello.py</span></h2>
+  <p>Make <code>sheet01/q01_hello.py</code> so that it prints exactly:</p>
+  <pre>Hello from DSA - sheet 1</pre>
+  <p>Run it. Close PyCharm, open it again, open the <code>DSA</code> project, find the file and run it again.</p>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q2</span> Indexes and len <span class="tag">by hand</span><span class="tag">code</span><span class="file">q02_indexes.py</span></h2>
+  <pre>seats = [4127, 3051, 5310, 2268, 4890]</pre>
+  <p>First, as comments, write what you expect each of these to be: <code>len(seats)</code>, <code>seats[0]</code>, <code>seats[2]</code>, <code>seats[len(seats) - 1]</code>. Then add a <code>print</code> for each and run. Next to any prediction that was wrong, add a comment saying why.</p>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q3</span> Trace a linear search <span class="tag">by hand</span><span class="file">q03_trace.py</span></h2>
+  <pre>def find_index(seats, target):
+    for i in range(len(seats)):
+        if seats[i] == target:
+            return i
+    return -1
+
+seats = [4127, 3051, 5310, 2268, 4890]</pre>
+  <p>For <code>find_index(seats, 2268)</code> and then <code>find_index(seats, 9999)</code>, write the trace as comments, one row per comparison:</p>
+  <table><tr><th class="m">i</th><th class="m">seats[i]</th><th>equal to the target?</th><th>comparisons so far</th></tr>
+  <tr><td class="m">0</td><td class="m">4127</td><td>no</td><td>1</td></tr>
+  <tr><td class="m">...</td><td></td><td></td><td></td></tr></table>
+  <p>End each trace with what the function returns, and how many comparisons it made in total.</p>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q4</span> Put the lines in order <span class="tag">by hand</span><span class="tag">code</span><span class="file">q04_order.py</span></h2>
+  <p>These are the lines of <code>find_index</code>, scrambled. The indentation is correct. Type them into the file in the right order, then run it.</p>
+  <pre>    return -1
+print(find_index([4127, 3051, 5310], 9999))
+        if seats[i] == target:
+def find_index(seats, target):
+            return i
+print(find_index([4127, 3051, 5310], 5310))
+    for i in range(len(seats)):</pre>
+  <p>It should print <code>2</code> and then <code>-1</code>. In a comment: <b>why do the two <code>return</code> lines sit at different depths?</b></p>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q5</span> find_index <span class="tag">code</span><span class="file">q05_find_index.py</span></h2>
+  <p>Write the five plan lines as comments, then the function. It returns the index of the <b>first</b> position where <code>target</code> appears in <code>seats</code>, or <code>-1</code> if it is not there. <code>-1</code> is this function's signal for "not found".</p>
+  <pre>def find_index(seats, target):
+    # your code here
+
+
+seats = [4127, 3051, 5310, 2268, 4890]
+print(find_index(seats, 5310))
+print(find_index(seats, 9999))</pre>
+  <p>It must print <code>2</code>, then <code>-1</code>.</p>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q6</span> Tests that catch mistakes <span class="tag">code</span><span class="file">q06_tests.py</span></h2>
+  <p>Copy your <code>find_index</code> into this file and print its result for each case below, next to the expected answer. Then, for each case, add a comment naming a mistake that this test would catch.</p>
+  <table><tr><th>case</th><th>call</th><th>expected</th></tr>
+  <tr><td>first</td><td class="m">find_index(seats, 4127)</td><td class="m">0</td></tr>
+  <tr><td>middle</td><td class="m">find_index(seats, 5310)</td><td class="m">2</td></tr>
+  <tr><td>last</td><td class="m">find_index(seats, 4890)</td><td class="m">4</td></tr>
+  <tr><td>absent</td><td class="m">find_index(seats, 9999)</td><td class="m">-1</td></tr>
+  <tr><td>empty list</td><td class="m">find_index([], 4127)</td><td class="m">-1</td></tr>
+  <tr><td>repeated</td><td class="m">find_index([3051, 4127, 3051], 3051)</td><td class="m">0</td></tr></table>
+  <p><code>seats</code> is the list from Q5.</p>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q7</span> Count the matches <span class="tag">code</span><span class="file">q07_count.py</span></h2>
+  <p>Write <code>count_occurrences(values, target)</code>. It must <b>return</b> the number of times <code>target</code> appears in <code>values</code> - <code>0</code> when there are none, including for an empty list. Plan it first. Unlike <code>find_index</code>, it must not stop at the first match. Print each result, like <code>print(count_occurrences(grades, 7))</code>.</p>
+  <table><tr><th>call, with <code>grades = [7, 10, 7, 9, 7, 4]</code></th><th>expected</th></tr>
+  <tr><td class="m">count_occurrences(grades, 7)</td><td class="m">3</td></tr>
+  <tr><td class="m">count_occurrences(grades, 10)</td><td class="m">1</td></tr>
+  <tr><td class="m">count_occurrences(grades, 5)</td><td class="m">0</td></tr>
+  <tr><td class="m">count_occurrences([], 7)</td><td class="m">0</td></tr></table>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q8</span> Count the comparisons <span class="tag">code</span><span class="file">q08_comparisons.py</span></h2>
+  <p>Copy <code>find_index</code> and rename it <code>find_index_counting</code>. Add a counter that goes up by one every time the <code>if</code> compares a value with the target, and print <code>comparisons: </code> and the count just before each <code>return</code>. With the list from Q5:</p>
+  <table><tr><th>call</th><th>prints</th><th>returns</th></tr>
+  <tr><td class="m">find_index_counting(seats, 4127)</td><td class="m">comparisons: 1</td><td class="m">0</td></tr>
+  <tr><td class="m">find_index_counting(seats, 2268)</td><td class="m">comparisons: 4</td><td class="m">3</td></tr>
+  <tr><td class="m">find_index_counting(seats, 9999)</td><td class="m">comparisons: 5</td><td class="m">-1</td></tr></table>
+  <p>Then make three longer lists and search each one for <code>-1</code>, which none of them contains. <code>list(range(10))</code> is the list <code>[0, 1, 2, ..., 9]</code> - ten numbers:</p>
+  <pre>find_index_counting(list(range(10)), -1)
+find_index_counting(list(range(100)), -1)
+find_index_counting(list(range(1000)), -1)</pre>
+  <p>Fill in a table of list length and comparisons as comments. In one sentence: what happens to the comparisons when the list is ten times longer?</p>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q9</span> Repair an AI draft <span class="tag">by hand</span><span class="tag">code</span><span class="file">q09_ai_draft.py</span></h2>
+  <p>Consider this hypothetical AI-generated draft of <code>find_index</code>. It runs without errors.</p>
+  <pre>def find_index_draft(seats, target):
+    for i in range(len(seats)):
+        if seats[i] == target:
+            return i
+        else:
+            return -1</pre>
+  <ol type="a">
+    <li>Give a list and a target for which it returns the <b>right</b> answer.</li>
+    <li>Give a list and a target for which it returns a <b>wrong</b> answer, and the answer it should have given.</li>
+    <li>In one comment line: what exactly is wrong?</li>
+    <li>Write the corrected function and run it on your input from (b).</li>
+    <li>Run the draft on an empty list. What comes back, and why is that neither an index nor -1? <i>(Hint: the guide, chapter 6, "What could fool you".)</i></li>
+  </ol>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q10</span> The largest value <span class="tag opt">optional</span><span class="tag">code</span><span class="file">q10_largest.py</span></h2>
+  <p>Write <code>largest(values)</code> for a list with at least one value, without <code>max()</code>. <b>New idea:</b> start from a real value in the list, <code>values[0]</code>, not from 0 - the third test shows why.</p>
+  <table><tr><th>call</th><th>expected</th></tr>
+  <tr><td class="m">largest([4127, 3051, 5310, 2268, 4890])</td><td class="m">5310</td></tr>
+  <tr><td class="m">largest([7])</td><td class="m">7</td></tr>
+  <tr><td class="m">largest([-8, -3, -12])</td><td class="m">-3</td></tr></table>
+</div>
+
+<div class="q">
+  <h2><span class="n">Q11</span> Is it sorted? <span class="tag opt">optional</span><span class="tag">code</span><span class="file">q11_sorted.py</span></h2>
+  <p>Write <code>is_sorted(values)</code>: <code>True</code> if every value is less than or equal to the one after it, otherwise <code>False</code>. <b>New idea:</b> compare neighbours, <code>values[i]</code> and <code>values[i + 1]</code> - so where must the loop stop?</p>
+  <table><tr><th>call</th><th>expected</th></tr>
+  <tr><td class="m">is_sorted([2268, 3051, 4127, 4890, 5310])</td><td class="m">True</td></tr>
+  <tr><td class="m">is_sorted([4127, 3051, 5310])</td><td class="m">False</td></tr>
+  <tr><td class="m">is_sorted([7, 7, 9])</td><td class="m">True</td></tr>
+  <tr><td class="m">is_sorted([])</td><td class="m">True</td></tr>
+  <tr><td class="m">is_sorted([5])</td><td class="m">True</td></tr></table>
+</div>
+
+<footer>Stuck? The lab 1 guide, chapter 8, says how to start each question. Every expected result on this sheet was produced by running a solution on Python 3.14, the version on the lab PCs.</footer>
+</main>
+</body>
+</html>
