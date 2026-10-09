@@ -11,6 +11,7 @@ import zipfile
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import quote, unquote, urlsplit
+from computer_basics import build_basics
 
 ROOT = Path(__file__).resolve().parents[1]
 TEACHING = ROOT.parent
@@ -186,12 +187,30 @@ def week_panel(course, week, prefix):
     </article>'''
 
 
-def page(course, nested=True):
-    prefix = '../' if nested else ''
+def site_header(prefix, current):
     course_links = ''
     for c in CATALOG['courses']:
-        selected = ' aria-current="page"' if c['id'] == course['id'] else ''
+        selected = ' aria-current="page"' if c['id'] == current else ''
         course_links += f'<a class="course-link" href="{prefix}{c["id"]}/"{selected} aria-label="{ESC(c["code"]+": "+c["title"])}">{c["code"]}</a>'
+    selected = ' aria-current="page"' if current == 'computer-basics' else ''
+    course_links += f'<a class="course-link basics-nav" href="{prefix}computer-basics/"{selected}>Computer basics</a>'
+    return f'''<header class="site-header sticky top-0 z-50">
+    <div class="nav-container mx-auto flex items-center justify-between gap-6">
+      <a class="brand flex items-center gap-3" href="{prefix}index.html">{icon('book')}<span><b>Ahmed Tolan</b><small>Teaching resources</small></span></a>
+      <nav class="course-switcher flex items-center gap-1" aria-label="Courses and computer help">{course_links}</nav>
+      <p class="term">2026 / 2027<span>Semester 1</span></p>
+    </div>
+  </header>'''
+
+
+def page(course, nested=True):
+    prefix = '../' if nested else ''
+    basics_help = ''
+    if course['id'] in ('ece122', 'gen241'):
+        basics_help = f'''<a class="basics-callout" href="{prefix}computer-basics/">
+          <span class="resource-icon">{icon('slides')}</span><span><b>New to using a computer?</b>
+          <span lang="ar" dir="rtl">ابدأ هنا: شرح بالصور للفولدرات، حفظ الكود، وفك ملفات ZIP.</span>
+          <small>Introduction to Basic Computer · Windows &amp; Mac</small></span>{icon('arrow')}</a>'''
     weeks = sorted(course['weeks'], key=lambda w: w['number'], reverse=True)
     panels = ''.join(week_panel(course, week, prefix) for week in weeks)
     week_links = ''.join(f'<a class="toc-link" href="#week-{w["number"]:02}"><span>Week {w["number"]:02}</span><small>{ESC(w["title"])}</small></a>' for w in weeks)
@@ -212,13 +231,7 @@ def page(course, nested=True):
 </head>
 <body>
   <a class="skip-link" href="#weeks">Skip to weekly materials</a>
-  <header class="site-header sticky top-0 z-50">
-    <div class="nav-container mx-auto flex items-center justify-between gap-6">
-      <a class="brand flex items-center gap-3" href="{prefix}index.html">{icon('book')}<span><b>Ahmed Tolan</b><small>Teaching resources</small></span></a>
-      <nav class="course-switcher flex items-center gap-1" aria-label="Choose your course">{course_links}</nav>
-      <p class="term">2026 / 2027<span>Semester 1</span></p>
-    </div>
-  </header>
+  {site_header(prefix, course['id'])}
   <main>
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-inner mx-auto">
@@ -231,7 +244,7 @@ def page(course, nested=True):
       <aside class="week-sidebar" aria-label="Weekly table of contents">
         <nav class="week-nav sticky" aria-label="Jump to a week"><h2>On this page</h2>{week_links}<p>New weeks appear here.<br>Keep this link handy.</p></nav>
       </aside>
-      <section class="weekly-materials" aria-labelledby="materials-title"><div class="materials-heading flex items-center justify-between gap-4"><h2 id="materials-title">Weekly materials</h2><span>Newest first</span></div>{panels}</section>
+      <section class="weekly-materials" aria-labelledby="materials-title">{basics_help}<div class="materials-heading flex items-center justify-between gap-4"><h2 id="materials-title">Weekly materials</h2><span>Newest first</span></div>{panels}</section>
     </div>
   </main>
   <footer class="site-footer"><div class="footer-inner mx-auto flex flex-wrap items-center justify-between gap-3"><span>Ahmed Tolan <span aria-hidden="true">·</span> Teaching resources</span><span>2026 / 2027 <span aria-hidden="true">·</span> Semester 1</span></div></footer>
@@ -280,6 +293,7 @@ def main():
         archive(OUT/'downloads'/f"{course['code']}-All-weeks.zip",[p for p in base.rglob('*') if p.is_file()],base,course['code'])
         dest = OUT/course['id']; dest.mkdir(); (dest/'index.html').write_text(page(course))
     (OUT/'index.html').write_text(page(CATALOG['courses'][0],nested=False))
+    build_basics(ROOT, OUT, site_header('../', 'computer-basics'))
     (OUT/'.nojekyll').touch()
     validate_site()
     # Only replace the served output after the whole build passes.

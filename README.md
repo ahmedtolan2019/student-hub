@@ -91,3 +91,24 @@ The builder uses Python's standard library. ZIP metadata is deterministic, and
 Treat `docs/` as generated output and change `assets/`, `catalog.json` or the builder
 instead. The public source files are sufficient to maintain the hub layout; the
 private teaching folders supply the lesson exports during the maintainer's build.
+
+## Introduction to Basic Computer
+
+The static reference at [computer-basics/](https://ahmedtolan2019.github.io/student-hub/computer-basics/)
+is separate from the taught-course catalog. It has a global navigation link and
+prominent help cards on ECE122 and GEN241; DSA has no beginner help card. It covers
+file basics, folders, copy/move, renaming and extensions, hub downloads, Dev-C++ and
+PyCharm saving, Windows/Mac ZIP creation and extraction, optional 7-Zip, and a final
+submission check. Instructions use simple Egyptian Arabic with English UI labels.
+
+Edit `scripts/computer_basics.py` for the content and diagrams. Each task has an
+anchor, a zoomable SVG illustration, readable steps, and relevant official-source
+links. All content works without JavaScript. Illustrations are explicitly labeled
+and do not claim to be actual screenshots. `assets/basics/files-and-folders.png` is
+an AI-generated overview made for this guide; the build generates the precise SVG
+diagrams from authored text. No instructor files are added to the publication
+allowlist, and course ZIPs contain the same course materials as before.
+
+When updating this reference, verify Windows/Mac instructions against official
+documentation, keep platform differences visible, and verify the guide at desktop
+and phone sizes. Existing course file URLs and download behavior must stay intact.

@@ -1,0 +1,346 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Introduction to Basic Computer | Ahmed Tolan</title><meta name="description" content="A visual beginner guide to folders, copying files, saving C++ and Python code, and ZIP files on Windows and Mac. Simple Arabic explanations with English interface labels.">
+    <meta name="theme-color" content="#f8fafc"><link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script><style>@font-face {
+  font-family: Inter;
+  src: url("../assets/fonts/Inter.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+}
+:root {
+  color-scheme: light;
+  --ink: #172338;
+  --muted: #607087;
+  --accent: #4f46e5;
+  --accent-dark: #3730a3;
+  --tint: #eef2ff;
+  --line: #e2e8f0;
+  --body: #f8fafc;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --nav-height: 85px;
+  font-family: Inter, system-ui, sans-serif;
+  font-synthesis: none;
+  scroll-padding-top: calc(var(--nav-height) + 28px);
+  scroll-behavior: smooth;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--body); font-size: 15px; line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+a, button { -webkit-tap-highlight-color: transparent; }
+a:focus-visible { outline: 3px solid #a5b4fc; outline-offset: 4px; }
+svg { width: 19px; height: 19px; flex-shrink: 0; vertical-align: middle; }
+h1, h2, h3, h4, p { margin: 0; }
+.site-header { position: sticky; top: 0; z-index: 50; background: #ffffffed; backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); }
+.nav-container, .hero-inner, .materials-layout, .footer-inner { width: min(1320px, calc(100% - 96px)); margin-inline: auto; }
+.nav-container { display: flex; align-items: center; justify-content: space-between; min-height: var(--nav-height); gap: 24px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand > svg { width: 33px; height: 33px; }
+.brand b { display: block; font-size: 17px; font-weight: 700; letter-spacing: -.04em; }
+.brand small { display: block; color: var(--muted); font-size: 12px; }
+.course-switcher { display: flex; align-items: center; gap: 4px; padding: 5px; border: 1px solid var(--line); border-radius: 13px; background: #f8fafc; }
+.course-link { font-family: var(--mono); color: #536278; font-weight: 600; font-size: 13px; letter-spacing: -.02em; padding: 9px 24px; border-radius: 8px; transition: background .18s, color .18s; }
+.course-link:hover { color: var(--accent); background: #eef2ff; }
+.course-link[aria-current="page"] { color: white; background: var(--accent); box-shadow: 0 2px 4px #4f46e51a; }
+.term { font-size: 12px; color: var(--muted); text-align: right; }
+.term span { display: block; }
+.hero { background: linear-gradient(115deg, #eef2ff 0%, #f4f5ff 60%, #f8fafc 100%); border-bottom: 1px solid #e5e9f5; }
+.hero-inner { padding-top: 58px; padding-bottom: 56px; }
+.hero-meta { display: flex; align-items: center; gap: 16px; color: var(--muted); font-size: 13px; }
+.course-badge { font-family: var(--mono); font-size: 13px; font-weight: 600; color: #334155; border: 1px solid #cbd5e1; background: #ffffffbd; padding: 5px 12px; border-radius: 6px; }
+h1 { font-size: clamp(34px, 3.7vw, 54px); font-weight: 750; max-width: 880px; line-height: 1.12; letter-spacing: -.05em; margin: 20px 0; }
+.hero-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+.hero-bottom > p { color: var(--muted); font-size: 16px; line-height: 1.7; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 46px; border-radius: 10px; padding: 12px 18px; font-size: 13px; font-weight: 600; line-height: 1.3; transition: background .18s, box-shadow .18s, border-color .18s; }
+.button-primary { background: var(--accent); color: white; padding: 16px 23px; min-height: 54px; font-size: 14px; box-shadow: 0 5px 12px #4f46e518; }
+.button-primary:hover { background: var(--accent-dark); box-shadow: 0 6px 16px #4f46e52a; }
+.button-secondary { border: 1px solid #cbd5e1; color: #334155; background: #fff; }
+.button-secondary:hover { border-color: var(--accent); color: var(--accent); background: #f5f6ff; }
+.materials-layout { display: grid; grid-template-columns: 185px minmax(0, 1fr); gap: 48px; padding-top: 60px; padding-bottom: 80px; }
+.week-nav { position: sticky; top: calc(var(--nav-height) + 34px); max-height: calc(100dvh - var(--nav-height) - 60px); overflow-y: auto; padding: 4px 2px 8px; }
+.week-nav h2 { color: var(--muted); font-size: 11px; letter-spacing: .11em; text-transform: uppercase; font-weight: 650; margin: 0 12px 18px; }
+.toc-link { display: block; margin-bottom: 7px; border-left: 2px solid transparent; border-radius: 0 8px 8px 0; padding: 12px; color: var(--muted); transition: background .18s, color .18s; }
+.toc-link span { display: block; font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.toc-link small { display: block; font-size: 12px; line-height: 1.5; margin-top: 4px; }
+.toc-link:hover { color: var(--accent); background: #f1f3fc; }
+.toc-link[aria-current="location"] { border-color: var(--accent); color: var(--accent-dark); background: #eef2ff; }
+.week-nav > p { margin: 26px 12px 0; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; line-height: 1.8; }
+.materials-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 26px; }
+.materials-heading h2 { font-size: 20px; font-weight: 650; letter-spacing: -.04em; }
+.materials-heading > span { color: var(--muted); font-size: 12px; }
+.week-card { display: grid; grid-template-columns: minmax(200px, .85fr) minmax(0, 1.75fr); gap: 30px; padding: 36px; margin-bottom: 64px; background: white; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 3px 6px #17233803; scroll-margin-top: 0; transition: transform .2s, box-shadow .2s, border-color .2s; }
+.week-card:last-child { margin-bottom: 0; }
+.week-context { padding-top: 2px; }
+.week-badge { display: inline-block; border-radius: 6px; background: #eef2ff; color: var(--accent-dark); font-family: var(--mono); font-size: 11px; font-weight: 600; padding: 5px 10px; }
+.week-context h3 { font-size: 25px; font-weight: 650; letter-spacing: -.04em; line-height: 1.25; margin: 18px 0 12px; }
+.week-context > p { color: var(--muted); font-size: 13px; line-height: 1.8; }
+.week-context .button { margin-top: 25px; font-size: 12px; padding-inline: 13px; }
+.week-resources { min-width: 0; }
+.resource-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 16px; margin-bottom: 10px; background: #f8fafc; border: 1px solid #edf0f5; border-radius: 11px; }
+.resource-row:last-child { margin-bottom: 0; }
+.resource-label { display: flex; align-items: center; gap: 12px; }
+.resource-icon { display: flex; align-items: center; justify-content: center; width: 38px; height: 40px; background: white; border: 1px solid var(--line); border-radius: 9px; color: #536278; }
+.resource-icon svg { width: 21px; height: 21px; }
+.resource-label h4 { font-size: 14px; font-weight: 650; line-height: 1.4; letter-spacing: -.01em; }
+.resource-label p { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.resource-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pill { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 36px; padding: 8px 11px; border: 1px solid #dce2eb; border-radius: 999px; color: #45536b; background: white; font-size: 12px; line-height: 1.5; font-weight: 550; white-space: nowrap; transition: border-color .18s, background .18s, color .18s; }
+.pill svg { width: 13px; height: 13px; }
+.pill-open { color: var(--accent); background: #eef2ff; border-color: #dee4ff; }
+.pill:hover { color: var(--accent-dark); border-color: #a5b4fc; background: #e8edff; }
+.extras { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
+.extra-row, .starter-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; }
+.extra-row > span, .starter-heading > span { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 550; color: var(--muted); }
+.extra-row > span svg, .starter-heading > span svg { width: 16px; height: 16px; }
+.extra-row:last-child { margin-bottom: 0; }
+.starter-files { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.file-link { font-family: var(--mono); font-size: 10px; color: var(--accent); text-decoration: underline; text-underline-offset: 4px; padding-block: 5px; }
+.site-footer { border-top: 1px solid var(--line); background: white; }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-block: 26px; color: var(--muted); font-size: 11px; }
+.skip-link { position: fixed; top: -80px; left: 18px; z-index: 100; padding: 10px 16px; border: 2px solid var(--accent); border-radius: 8px; background: white; color: var(--accent); }
+.skip-link:focus { top: 14px; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .week-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px #1723380b; border-color: #cfd6e3; }
+}
+@media (min-width: 1500px) {
+  .resource-row { flex-wrap: nowrap; }
+  .resource-actions { max-width: 204px; }
+}
+@media (max-width: 1190px) {
+  .nav-container, .hero-inner, .materials-layout, .footer-inner { width: calc(100% - 64px); }
+  .materials-layout { grid-template-columns: 160px minmax(0, 1fr); gap: 28px; }
+  .week-card { grid-template-columns: minmax(180px, .8fr) minmax(0, 1.3fr); padding: 28px; gap: 24px; }
+  .week-context h3 { font-size: 23px; }
+  .resource-row { padding: 13px; }
+}
+@media (max-width: 960px) {
+  .term { display: none; }
+  .materials-layout { grid-template-columns: 1fr; padding-top: 30px; gap: 30px; }
+  .week-nav { position: static; display: flex; flex-wrap: wrap; gap: 8px; max-height: none; overflow: visible; padding: 0; }
+  .week-nav h2 { flex-basis: 100%; margin: 0 0 5px; }
+  .toc-link { border: 1px solid var(--line); border-radius: 8px; padding: 9px 15px; margin: 0; background: white; }
+  .toc-link small, .week-nav > p { display: none; }
+  .toc-link[aria-current="location"] { border-color: #a5b4fc; }
+  .week-card { grid-template-columns: minmax(200px, .8fr) minmax(0, 1.4fr); }
+}
+@media (max-width: 680px) {
+  :root { --nav-height: 129px; }
+  .nav-container, .hero-inner, .materials-layout, .footer-inner { width: calc(100% - 40px); }
+  .nav-container { flex-direction: column; align-items: stretch; justify-content: center; gap: 11px; padding-block: 12px; }
+  .brand { gap: 9px; }
+  .brand > svg { width: 27px; height: 27px; }
+  .brand b { font-size: 14px; }
+  .brand small { font-size: 10px; }
+  .course-switcher { justify-content: space-between; padding: 3px; border-radius: 10px; }
+  .course-link { text-align: center; flex: 1; padding: 7px 10px; font-size: 12px; border-radius: 7px; }
+  .hero-inner { padding-top: 35px; padding-bottom: 35px; }
+  .hero-meta { font-size: 12px; gap: 12px; }
+  .course-badge { font-size: 12px; }
+  h1 { font-size: 35px; line-height: 1.12; letter-spacing: -.045em; margin: 18px 0; }
+  .hero-bottom { gap: 22px; align-items: flex-start; }
+  .hero-bottom > p { font-size: 14px; }
+  .button-primary { width: 100%; min-height: 49px; padding: 14px; font-size: 13px; }
+  .materials-layout { padding-top: 28px; padding-bottom: 45px; gap: 26px; }
+  .materials-heading { margin-bottom: 20px; }
+  .materials-heading h2 { font-size: 18px; }
+  .materials-heading > span { font-size: 11px; }
+  .week-card { grid-template-columns: minmax(0, 1fr); gap: 27px; padding: 23px; margin-bottom: 32px; border-radius: 14px; }
+  .week-context h3 { font-size: 24px; margin-top: 15px; }
+  .week-context > p { font-size: 13px; }
+  .week-context .button { margin-top: 19px; min-height: 44px; }
+  .resource-row { padding: 15px; gap: 15px; }
+  .resource-label h4 { font-size: 14px; }
+  .resource-actions { gap: 7px; }
+  .pill { font-size: 12px; min-height: 40px; padding: 9px 11px; }
+  .extra-row { padding-block: 5px; }
+  .extra-row > span { font-size: 12px; }
+  .file-link { font-size: 11px; min-height: 36px; }
+  .footer-inner { font-size: 10px; padding-block: 23px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+}
+
+/* Beginner reference shares the course shell and remains fully readable without JS. */
+.basics-nav { font-family: Inter, system-ui, sans-serif; letter-spacing: -.03em; }
+.course-link { padding-inline: 18px; }
+.basics-callout { display: flex; align-items: center; gap: 16px; padding: 22px; margin-bottom: 32px; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 14px; }
+.basics-callout > span:nth-child(2) { flex: 1; min-width: 0; }
+.basics-callout b, .basics-callout small, .basics-callout [lang="ar"] { display: block; }
+.basics-callout b { font-size: 16px; color: var(--accent-dark); }
+.basics-callout [lang="ar"] { text-align: left; margin-block: 5px; font-size: 15px; }
+.basics-callout small { color: var(--muted); font-size: 11px; }
+.basics-callout:hover { border-color: var(--accent); background: #e8edff; }
+.basics-hero { display: grid; grid-template-columns: 1.15fr 1fr; align-items: center; gap: 50px; }
+.basics-hero h1 { font-size: clamp(34px,3.5vw,51px); }
+.basics-intro { font-size: 18px; line-height: 1.9; text-align: left; color: #45536b; }
+.basics-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 25px; }
+.basics-platforms { color: var(--muted); font-size: 11px; margin-top: 18px; }
+.basics-cover { margin: 0; }
+.basics-cover img { display: block; width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--line); }
+.basics-cover figcaption { font-size: 10px; color: var(--muted); text-align: center; margin-top: 9px; }
+.basics-layout { grid-template-columns: 190px minmax(0,1fr); gap: 38px; }
+.basics-layout .toc-link { padding: 9px 12px; }
+.basics-layout .toc-link span { font-family: Inter, system-ui, sans-serif; font-size: 12px; }
+.basics-route { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 15px; margin-bottom: 26px; font-size: 12px; }
+.basics-route > span { color: var(--muted); }
+.basics-route a, .lesson-sources a { color: var(--accent); text-decoration: underline; text-underline-offset: 4px; }
+.lesson-card { background: white; border: 1px solid var(--line); border-radius: 18px; padding: 32px; margin-bottom: 48px; }
+.lesson-top h2 { font-size: 28px; line-height: 1.3; letter-spacing: -.035em; margin: 15px 0 8px; }
+.lesson-top h3 { font-size: 22px; margin: 15px 0 7px; }
+.lesson-top > p { color: #536278; font-size: 17px; line-height: 1.9; }
+.lesson-body { display: grid; grid-template-columns: 1fr; gap: 22px; margin-top: 26px; }
+.lesson-figure { margin: 0; order: -1; }
+.lesson-figure img { display: block; width: 100%; max-width: 840px; height: auto; border: 1px solid #e0e7ff; border-radius: 12px; }
+.lesson-figure figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px; margin-top: 9px; color: var(--muted); font-size: 11px; }
+.lesson-instructions ol { margin: 0; padding: 0; list-style: none; counter-reset: steps; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.lesson-instructions li { counter-increment: steps; position: relative; padding-right: 37px; }
+.lesson-instructions li::before { content: counter(steps); position: absolute; right: 0; top: 1px; width: 25px; height: 25px; border-radius: 50%; background: #eef2ff; color: var(--accent-dark); text-align: center; font: 600 12px/25px Inter, sans-serif; }
+.step-label { display: inline-block; font: 650 13px/1.5 Inter, system-ui, sans-serif; margin-bottom: 7px; color: #334155; }
+.lesson-instructions p { font-size: 17px; line-height: 1.95; }
+.ui-label { display: inline; font-family: system-ui, sans-serif; color: #3730a3; background: #f1f3fd; border-radius: 3px; padding-inline: 3px; font-size: .9em; overflow-wrap: anywhere; }
+.lesson-note { background: #f8fafc; border-inline-start: 3px solid #a5b4fc; padding: 15px 18px; font-size: 16px; line-height: 1.9; color: #45536b; margin-top: 27px; border-radius: 7px; }
+.lesson-sources { display: flex; flex-wrap: wrap; gap: 10px 20px; font-size: 11px; margin-top: 18px; }
+.lesson-sources:empty { display: none; }
+.basics-return { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; padding: 20px 0; }
+.basics-return p { flex-basis: 100%; text-align: center; font-size: 18px; margin-bottom: 10px; }
+@media (min-width: 1500px) { .lesson-body { grid-template-columns: 1fr 1.1fr; align-items: start; } .lesson-figure { order: 0; position: sticky; top: 120px; } .lesson-instructions ol { grid-template-columns: 1fr; } }
+@media (max-width: 1100px) { .term { display: none; } .basics-hero { gap: 30px; } }
+@media (max-width: 960px) { .basics-layout { grid-template-columns: 1fr; } .basics-hero { grid-template-columns: 1fr; } .basics-cover { max-width: 520px; } }
+@media (max-width: 680px) {
+  .course-link { font-size: 10px; padding: 8px 5px; }
+  .basics-nav { flex: 1.7; line-height: 1.3; }
+  .basics-callout { padding: 17px; gap: 10px; }
+  .basics-callout > .resource-icon { display: none; }
+  .basics-callout [lang="ar"] { text-align: right; }
+  .basics-callout b { font-size: 14px; }
+  .basics-hero { gap: 27px; }
+  .basics-hero .hero-meta { flex-wrap: wrap; }
+  .basics-intro { font-size: 17px; text-align: right; }
+  .basics-hero-actions > a { width: 100%; }
+  .basics-layout .week-nav { gap: 7px; }
+  .basics-layout .toc-link { padding: 9px 10px; }
+  .basics-layout .toc-link span { font-size: 11px; }
+  .lesson-card { padding: 20px; border-radius: 14px; margin-bottom: 28px; }
+  .lesson-top h2 { font-size: 24px; }
+  .lesson-top h3 { font-size: 21px; }
+  .lesson-instructions ol { grid-template-columns: 1fr; gap: 22px; }
+  .lesson-instructions li { padding-right: 32px; }
+  .lesson-figure figcaption { font-size: 10px; }
+  .lesson-note { padding: 13px; }
+}
+.mac-illustration { display: block; margin-top: 20px; }
+.mac-illustration > span { display: block; margin-bottom: 7px; color: var(--muted); font-size: 12px; font-weight: 600; }
+@media (max-width: 680px) { .course-link { font-size: 12px; } .basics-nav { font-size: 11px; } }
+</style></head><body>
+    <a class="skip-link" href="#start">Skip to the guide</a><header class="site-header sticky top-0 z-50">
+    <div class="nav-container mx-auto flex items-center justify-between gap-6">
+      <a class="brand flex items-center gap-3" href="../index.html"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5c-3-2-7-2-10-1v15c3-1 7-1 10 1 3-2 7-2 10-1V4c-3-1-7-1-10 1Z"/><path d="M12 5v15"/></svg><span><b>Ahmed Tolan</b><small>Teaching resources</small></span></a>
+      <nav class="course-switcher flex items-center gap-1" aria-label="Courses and computer help"><a class="course-link" href="../dsa/" aria-label="DSA: Data Structures &amp; Algorithms">DSA</a><a class="course-link" href="../ece122/" aria-label="ECE122: Computer Programming 1">ECE122</a><a class="course-link" href="../gen241/" aria-label="GEN241: Computer Language &amp; Applications">GEN241</a><a class="course-link basics-nav" href="../computer-basics/" aria-current="page">Computer basics</a></nav>
+      <p class="term">2026 / 2027<span>Semester 1</span></p>
+    </div>
+  </header><main>
+    <section class="hero"><div class="hero-inner basics-hero"><div><div class="hero-meta"><span class="course-badge">COMPUTER BASICS</span><span>A visual reference</span></div>
+    <h1>Introduction to<br>Basic Computer</h1><p class="basics-intro" lang="ar" dir="rtl">أول مرة تتعامل مع ملفات على الكمبيوتر؟ خدها خطوة خطوة.<br>ده مرجع بسيط يساعدك في اللاب، مش كورس إضافي ولا عليه تسليم.</p>
+    <div class="basics-hero-actions"><a class="button button-primary" href="#start">Start with the basics ↓</a><a class="button button-secondary" href="#download">Find my lab files</a></div><p class="basics-platforms">Windows &amp; Mac · Arabic steps · English button names</p></div>
+    <figure class="basics-cover"><img src="../assets/basics/files-and-folders.png" width="1536" height="1024" alt="Illustration of a laptop with a lab folder, C++ and Python files, and a ZIP archive."><figcaption>AI-generated illustration · رسم توضيحي مولّد</figcaption></figure></div></section>
+    <div class="materials-layout basics-layout" id="guide"><aside class="week-sidebar"><nav class="week-nav" aria-label="Guide contents"><h2>Find a task</h2><a class="toc-link" href="#start"><span>01 · Meet your files &amp; folders</span></a><a class="toc-link" href="#folder"><span>02 · Create a folder</span></a><a class="toc-link" href="#copy"><span>03 · Copy, paste &amp; move</span></a><a class="toc-link" href="#rename"><span>04 · Rename &amp; keep the extension</span></a><a class="toc-link" href="#download"><span>05 · Download &amp; find your materials</span></a><a class="toc-link" href="#cpp"><span>06 · Save C++ from Dev-C++</span></a><a class="toc-link" href="#python"><span>07 · Save Python from PyCharm</span></a><a class="toc-link" href="#zip"><span>08 · Make a ZIP</span></a><a class="toc-link" href="#extract"><span>09 · Extract a ZIP</span></a><a class="toc-link" href="#7zip"><span>10 · Optional: install &amp; use 7-Zip</span></a><a class="toc-link" href="#check"><span>11 · Before you send your work</span></a><p>Try one task at a time.<br>Keep this page beside you.</p></nav></aside>
+    <div class="weekly-materials"><div class="basics-route"><b>Here for a lab?</b><span>Use this whenever you need it.</span><a href="../ece122/">ECE122 · Python ↗</a><a href="../gen241/">GEN241 · C++ ↗</a></div><article class="lesson-card" id="start" aria-labelledby="title-start">
+          <div class="lesson-top"><span class="week-badge">01 / START HERE</span><h2 id="title-start">Meet your files &amp; folders</h2>
+          <h3 lang="ar" dir="rtl">نبدأ من الأساسيات</h3><p lang="ar" dir="rtl">الفايل هو ملف زي كود أو PDF. الفولدر مكان بتحط فيه ملفاتك وتجمعها مع بعض. جرّب الخطوات على الكمبيوتر وإنت بتقرأ من الموبايل.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Click</bdi><p>ضغطة واحدة بالزر الشمال بتختار الملف. ضغطتين ورا بعض بسرعة بتفتح الملف أو الفولدر.</p></li><li><bdi class="step-label" dir="ltr">Right-click</bdi><p>الزر اليمين بيظهر قائمة أوامر. على تاتش باد Mac تقدر تعمل <bdi class="ui-label" dir="ltr">Control + click</bdi> عشان تفتحها.</p></li><li><bdi class="step-label" dir="ltr">Find your files</bdi><p>على Windows افتح <bdi class="ui-label" dir="ltr">File Explorer</bdi> باختصار <bdi class="ui-label" dir="ltr">Windows + E</bdi>. على Mac افتح <bdi class="ui-label" dir="ltr">Finder</bdi> من الشريط اللي تحت. هتلاقي <bdi class="ui-label" dir="ltr">Documents</bdi> و<bdi class="ui-label" dir="ltr">Downloads</bdi> في القائمة الجانبية.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/start.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Meet your files &amp; folders"><img src="../assets/basics/start.svg" width="840" height="510" loading="lazy" alt="Files &amp; folders. 1 click = select. 2 clicks = open. Right-click = menu"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">الصور هنا رسومات تعليمية مبسطة، مش لقطات شاشة فعلية. شكل القوائم ممكن يختلف حسب إصدار جهازك ولغة البرنامج.</p><div class="lesson-sources"><a href="https://support.microsoft.com/en-us/windows/experience/fileexplorer/file-explorer-in-windows" target="_blank" rel="noopener">Microsoft · File Explorer ↗</a></div></article><article class="lesson-card" id="folder" aria-labelledby="title-folder">
+          <div class="lesson-top"><span class="week-badge">02 / FILES</span><h2 id="title-folder">Create a folder</h2>
+          <h3 lang="ar" dir="rtl">اعمل فولدر لشغلك</h3><p lang="ar" dir="rtl">خلّي لكل كورس فولدر، وجواه فولدر لكل لاب. كده هتعرف تلاقي شغلك بعد ما تقفل البرنامج.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Choose a place</bdi><p>افتح <bdi class="ui-label" dir="ltr">Documents</bdi> من <bdi class="ui-label" dir="ltr">File Explorer</bdi> أو <bdi class="ui-label" dir="ltr">Finder</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Windows</bdi><p>اضغط بالزر اليمين في مساحة فاضية، واختار <bdi class="ui-label" dir="ltr">New → Folder</bdi>. اكتب <bdi class="ui-label" dir="ltr">My labs</bdi> واضغط <bdi class="ui-label" dir="ltr">Enter</bdi>. الاختصار: <bdi class="ui-label" dir="ltr">Ctrl + Shift + N</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Mac</bdi><p>من القائمة فوق اختار <bdi class="ui-label" dir="ltr">File → New Folder</bdi>، أو <bdi class="ui-label" dir="ltr">Shift + Command + N</bdi>. اكتب الاسم واضغط <bdi class="ui-label" dir="ltr">Return</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Make it yours</bdi><p>افتح الفولدر الجديد بضغطتين، واعمل جواه فولدر للكورس، وبعدين <bdi class="ui-label" dir="ltr">Lab 01</bdi>. الأسماء دي للتجربة؛ في التسليم استخدم الأسماء المطلوبة في الشيت.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/folder.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Create a folder"><img src="../assets/basics/folder.svg" width="840" height="510" loading="lazy" alt="File Explorer · Windows. Right-click empty space. New  &gt;  Folder. Name: Lab 01. Enter"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">المكان اللي ظاهر فوق النافذة هو عنوان الفولدر الحالي. افتكره عشان ترجع لنفس المكان وقت الحفظ.</p><div class="lesson-sources"><a href="https://support.apple.com/en-gb/guide/mac-help/mh26885/mac" target="_blank" rel="noopener">Apple · Folders ↗</a></div></article><article class="lesson-card" id="copy" aria-labelledby="title-copy">
+          <div class="lesson-top"><span class="week-badge">03 / FILES</span><h2 id="title-copy">Copy, paste &amp; move</h2>
+          <h3 lang="ar" dir="rtl">انسخ ملف أو انقله</h3><p lang="ar" dir="rtl">Copy بيعمل نسخة وبيسيب الأصل مكانه. Move بينقل الملف من المكان القديم للجديد.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Copy</bdi><p>اختار الملف بضغطة واحدة. على Windows اضغط <bdi class="ui-label" dir="ltr">Ctrl + C</bdi>، وعلى Mac <bdi class="ui-label" dir="ltr">Command + C</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Paste</bdi><p>افتح فولدر تاني، واضغط <bdi class="ui-label" dir="ltr">Ctrl + V</bdi> على Windows أو <bdi class="ui-label" dir="ltr">Command + V</bdi> على Mac. دلوقتي فيه نسخة في كل مكان.</p></li><li><bdi class="step-label" dir="ltr">Move instead</bdi><p>على Windows: <bdi class="ui-label" dir="ltr">Ctrl + X</bdi>، افتح المكان الجديد، ثم <bdi class="ui-label" dir="ltr">Ctrl + V</bdi>. على Mac: <bdi class="ui-label" dir="ltr">Command + C</bdi> ثم في المكان الجديد <bdi class="ui-label" dir="ltr">Option + Command + V</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Check the result</bdi><p>لو ظهر إن فيه ملف بنفس الاسم، اختار <bdi class="ui-label" dir="ltr">Cancel</bdi> لو مش متأكد. افتح الملفين واتأكد من محتواهم قبل ما تستبدل واحد بالتاني.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/copy.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Copy, paste &amp; move"><img src="../assets/basics/copy.svg" width="840" height="510" loading="lazy" alt="Copy a file · Windows. 1. Select hello.cpp. 2. Ctrl + C. 3. Open another folder. 4. Ctrl + V"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">اختصارات نسخ الملفات بتشتغل لما تكون محدد الملف في File Explorer أو Finder. لو جوه محرر الكود، هتنسخ النص المحدد.</p><div class="lesson-sources"><a href="https://support.apple.com/en-us/102553" target="_blank" rel="noopener">Apple · Copy and paste ↗</a></div></article><article class="lesson-card" id="rename" aria-labelledby="title-rename">
+          <div class="lesson-top"><span class="week-badge">04 / FILES</span><h2 id="title-rename">Rename &amp; keep the extension</h2>
+          <h3 lang="ar" dir="rtl">غيّر الاسم وسيب نوع الملف</h3><p lang="ar" dir="rtl">في اسم زي <bdi class="ui-label" dir="ltr">hello.cpp</bdi>، الجزء <bdi class="ui-label" dir="ltr">.cpp</bdi> هو امتداد ملف C++. و<bdi class="ui-label" dir="ltr">.py</bdi> لملف Python. تغيير الامتداد مش بيحوّل نوع الملف.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Show extensions</bdi><p>Windows 11: من <bdi class="ui-label" dir="ltr">View → Show → File name extensions</bdi>. Windows 10: افتح تبويب <bdi class="ui-label" dir="ltr">View</bdi> وعلّم على <bdi class="ui-label" dir="ltr">File name extensions</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Windows</bdi><p>اختار الملف، واضغط <bdi class="ui-label" dir="ltr">F2</bdi> أو بالزر اليمين اختار <bdi class="ui-label" dir="ltr">Rename</bdi>. غيّر <bdi class="ui-label" dir="ltr">hello</bdi> بس، وسيب <bdi class="ui-label" dir="ltr">.cpp</bdi> زي ما هي، ثم <bdi class="ui-label" dir="ltr">Enter</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Mac</bdi><p>في Finder اختار الملف واضغط <bdi class="ui-label" dir="ltr">Return</bdi>، عدّل الاسم ثم <bdi class="ui-label" dir="ltr">Return</bdi> تاني. لإظهار الامتدادات: <bdi class="ui-label" dir="ltr">Finder → Settings → Advanced → Show all filename extensions</bdi>؛ في الإصدارات الأقدم اسمها <bdi class="ui-label" dir="ltr">Preferences</bdi>.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/rename.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Rename &amp; keep the extension"><img src="../assets/basics/rename.svg" width="840" height="510" loading="lazy" alt="Rename a source file. Before: hello.cpp. Rename: practice.cpp. Keep .cpp. Do not add .txt"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">hello.cpp.txt مش ملف C++ بالامتداد المطلوب. ارجع للبرنامج واحفظه كملف C++، واتأكد من الاسم الكامل في فولدر الحفظ.</p><div class="lesson-sources"><a href="https://support.microsoft.com/en-us/windows/experience/storage-filemanagement/common-file-name-extensions-in-windows" target="_blank" rel="noopener">Microsoft · File extensions ↗</a><a href="https://support.apple.com/guide/mac-help/rename-files-folders-and-disks-mchlp1144/mac" target="_blank" rel="noopener">Apple · Rename files ↗</a></div></article><article class="lesson-card" id="download" aria-labelledby="title-download">
+          <div class="lesson-top"><span class="week-badge">05 / STUDENT HUB</span><h2 id="title-download">Download &amp; find your materials</h2>
+          <h3 lang="ar" dir="rtl">حمّل ملفات اللاب وافتحها</h3><p lang="ar" dir="rtl">لينك الكورس بيجمع الأسابيع كلها. زرار Open بيفتح الملف أونلاين، وزرار Get أو Download بينزّله على جهازك.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Choose your week</bdi><p>افتح صفحة الكورس، واختار الأسبوع. افتح السلايدز أو الـ Guide من <bdi class="ui-label" dir="ltr">Open web</bdi>، أو الشيت من <bdi class="ui-label" dir="ltr">Open PDF</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Download</bdi><p>حمّل ملف لوحده من <bdi class="ui-label" dir="ltr">Get HTML</bdi> أو <bdi class="ui-label" dir="ltr">Get PDF</bdi> حسب المتاح. لو عايز ملفات الأسبوع مع بعض اختار <bdi class="ui-label" dir="ltr">Download week ZIP</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Find it</bdi><p>افتح قائمة التنزيلات في المتصفح، واختار إظهار الملف في فولدره. غالبًا هتلاقيه في <bdi class="ui-label" dir="ltr">Downloads</bdi>، إلا لو اخترت مكان تاني وقت التحميل.</p></li><li><bdi class="step-label" dir="ltr">Open locally</bdi><p>ملف PDF بيتفتح بقارئ PDF أو المتصفح. ملف HTML بيتفتح في المتصفح. لو نزلت ZIP، فكّه الأول بالطريقة اللي تحت، وسيب ملفات الأسبوع مع بعض عشان الروابط تفضل شغالة.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/download.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Download &amp; find your materials"><img src="../assets/basics/download.svg" width="840" height="510" loading="lazy" alt="Find your download. Open web = read online. Get PDF = save one file. Week ZIP = all week files"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">لو التحميل لسه شغال أو الملف حجمه صفر، استنى لحد ما يكتمل. السلايدز التفاعلية موجودة في نسخة HTML.</p><div class="lesson-sources"></div></article><article class="lesson-card" id="cpp" aria-labelledby="title-cpp">
+          <div class="lesson-top"><span class="week-badge">06 / GEN241 · WINDOWS</span><h2 id="title-cpp">Save C++ from Dev-C++</h2>
+          <h3 lang="ar" dir="rtl">احفظ ملف الكود نفسه</h3><p lang="ar" dir="rtl">حفظ الكود مختلف عن تشغيله. المطلوب هنا إن يبقى عندك ملف <bdi class="ui-label" dir="ltr">.cpp</bdi> تعرف مكانه وتقدر تفتحه تاني.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">New source file</bdi><p>في Dev-C++ اختار <bdi class="ui-label" dir="ltr">File → New → Source File</bdi>. لو الكود مفتوح عندك بالفعل، كمّل من الخطوة اللي بعدها.</p></li><li><bdi class="step-label" dir="ltr">Save As</bdi><p>اختار <bdi class="ui-label" dir="ltr">File → Save As</bdi>. في نافذة الحفظ ادخل على <bdi class="ui-label" dir="ltr">Documents</bdi> ثم فولدر اللاب اللي عملته.</p></li><li><bdi class="step-label" dir="ltr">Name &amp; save</bdi><p>اكتب <bdi class="ui-label" dir="ltr">hello.cpp</bdi> في <bdi class="ui-label" dir="ltr">File name</bdi>، واختار نوع ملفات <bdi class="ui-label" dir="ltr">C++ source files (*.cpp)</bdi> لو ظاهر، ثم اضغط <bdi class="ui-label" dir="ltr">Save</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Check it</bdi><p>بعد أي تعديل اضغط <bdi class="ui-label" dir="ltr">Ctrl + S</bdi>. افتح فولدر اللاب واتأكد إن <bdi class="ui-label" dir="ltr">hello.cpp</bdi> موجود. افتحه من <bdi class="ui-label" dir="ltr">File → Open</bdi> في Dev-C++ وشوف إن آخر تعديل موجود.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/cpp.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Save C++ from Dev-C++"><img src="../assets/basics/cpp.svg" width="840" height="510" loading="lazy" alt="Dev-C++ · Save As · illustration. File name: hello.cpp. Type: C++ source (*.cpp). Save. Later changes: Ctrl + S"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">الشرح ده لبرنامج Dev-C++ على Windows. على Mac استخدم محرر الكود المحدد في اللاب واحفظ بامتداد .cpp. ملف .exe الناتج من التشغيل أو صورة الشاشة مش بديل لملف الكود.</p><div class="lesson-sources"><a href="https://github.com/Embarcadero/Dev-Cpp/wiki/Compiling" target="_blank" rel="noopener">Embarcadero · Dev-C++ ↗</a></div></article><article class="lesson-card" id="python" aria-labelledby="title-python">
+          <div class="lesson-top"><span class="week-badge">07 / ECE122 · WINDOWS / MAC</span><h2 id="title-python">Save Python from PyCharm</h2>
+          <h3 lang="ar" dir="rtl">اعرف ملف Python محفوظ فين</h3><p lang="ar" dir="rtl">ملفات PyCharm بتكون جوه فولدر المشروع. البرنامج بيحفظ تلقائيًا في مواقف كتير، وتقدر تعمل حفظ يدوي كمان.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Know the location</bdi><p>لو بتعمل مشروع جديد من <bdi class="ui-label" dir="ltr">New Project</bdi>، اختار مكانه في <bdi class="ui-label" dir="ltr">Location</bdi> داخل فولدر شغلك. لو المشروع موجود، استخدم نفس المشروع.</p></li><li><bdi class="step-label" dir="ltr">Create a Python file</bdi><p>في قائمة <bdi class="ui-label" dir="ltr">Project</bdi> على الشمال، اضغط بالزر اليمين على فولدر المشروع واختار <bdi class="ui-label" dir="ltr">New → Python File</bdi>. اكتب <bdi class="ui-label" dir="ltr">hello</bdi>، وهيتعمل <bdi class="ui-label" dir="ltr">hello.py</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Save All</bdi><p>بعد كتابة الكود اختار <bdi class="ui-label" dir="ltr">File → Save All</bdi>. مع الاختصارات الافتراضية: <bdi class="ui-label" dir="ltr">Ctrl + S</bdi> على Windows أو <bdi class="ui-label" dir="ltr">Command + S</bdi> على Mac.</p></li><li><bdi class="step-label" dir="ltr">Locate &amp; check</bdi><p>اضغط بالزر اليمين على <bdi class="ui-label" dir="ltr">hello.py</bdi> في Project. دور على <bdi class="ui-label" dir="ltr">Open In → Explorer</bdi> أو <bdi class="ui-label" dir="ltr">Finder</bdi> حسب جهازك وإصدار البرنامج. أو افتح فولدر المشروع اللي اخترته في Location. اتأكد إن ملف <bdi class="ui-label" dir="ltr">.py</bdi> موجود هناك.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/python.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Save Python from PyCharm"><img src="../assets/basics/python.svg" width="840" height="510" loading="lazy" alt="PyCharm · Project · illustration. New  &gt;  Python File. Name: hello. File  &gt;  Save All. Your code: hello.py"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">للتسليم، خد ملفات .py المطلوبة حسب تعليمات الشيت. فولدر .venv بتاع بيئة Python مش هو كودك، ومش محتاج تضغطه مع الحل إلا لو مطلوب صراحة.</p><div class="lesson-sources"><a href="https://www.jetbrains.com/help/pycharm/creating-and-running-your-first-python-project.html" target="_blank" rel="noopener">JetBrains · Your first project ↗</a><a href="https://www.jetbrains.com/help/pycharm/saving-and-reverting-changes.html" target="_blank" rel="noopener">JetBrains · Save changes ↗</a></div></article><article class="lesson-card" id="zip" aria-labelledby="title-zip">
+          <div class="lesson-top"><span class="week-badge">08 / WINDOWS / MAC</span><h2 id="title-zip">Make a ZIP</h2>
+          <h3 lang="ar" dir="rtl">اجمع ملفاتك في ZIP واحد</h3><p lang="ar" dir="rtl">ZIP بيجمع ملفات أو فولدر في ملف واحد سهل تبعته. اعمل فولدر فيه الملفات المطلوبة بس، واحفظ آخر تعديل قبل الضغط.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Prepare</bdi><p>لو هتضغط ملف واحد، اختاره مباشرة. لو عندك كذا ملف، حطهم في فولدر زي <bdi class="ui-label" dir="ltr">Lab 01</bdi>، وارجع خطوة لبرّه الفولدر عشان تختاره.</p></li><li><bdi class="step-label" dir="ltr">Windows 10</bdi><p>اضغط بالزر اليمين على الفولدر، واختار <bdi class="ui-label" dir="ltr">Send to → Compressed (zipped) folder</bdi>. هيتعمل ملف ZIP جنبه.</p></li><li><bdi class="step-label" dir="ltr">Windows 11</bdi><p>اختار <bdi class="ui-label" dir="ltr">Compress to ZIP file</bdi> لو ظاهر، أو <bdi class="ui-label" dir="ltr">Show more options → Send to → Compressed (zipped) folder</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Mac</bdi><p>في Finder اعمل <bdi class="ui-label" dir="ltr">Control + click</bdi> على الفولدر واختار <bdi class="ui-label" dir="ltr">Compress “Lab 01”</bdi>. هتلاقي <bdi class="ui-label" dir="ltr">Lab 01.zip</bdi> في نفس المكان.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/zip.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Make a ZIP"><img src="../assets/basics/zip.svg" width="840" height="510" loading="lazy" alt="Compress a folder. Windows: Send to. Compressed (zipped) folder. Mac: Compress “Lab 01”"></a><a class="mac-illustration" href="../assets/basics/zip-mac.svg" target="_blank" rel="noopener" aria-label="Enlarge Mac illustration"><span>Mac · Finder</span><img src="../assets/basics/zip-mac.svg" width="840" height="510" loading="lazy" alt="Mac Finder: Control-click Lab 01. Compress “Lab 01”. Result: Lab 01.zip"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">Windows وMac فيهم ضغط ZIP من غير برنامج إضافي. لو عدّلت الكود بعد ما عملت ZIP، اعمل ZIP جديد عشان يحتوي على آخر نسخة.</p><div class="lesson-sources"><a href="https://support.microsoft.com/en-gb/windows/experience/storage-filemanagement/zip-and-unzip-files" target="_blank" rel="noopener">Microsoft · ZIP files ↗</a><a href="https://support.apple.com/en-bh/guide/mac-help/mchlp2528/mac" target="_blank" rel="noopener">Apple · ZIP files ↗</a></div></article><article class="lesson-card" id="extract" aria-labelledby="title-extract">
+          <div class="lesson-top"><span class="week-badge">09 / WINDOWS / MAC</span><h2 id="title-extract">Extract a ZIP</h2>
+          <h3 lang="ar" dir="rtl">فك الضغط قبل ما تشتغل</h3><p lang="ar" dir="rtl">فتح ZIP مش دايمًا معناه إنك فكّيته. اشتغل من الفولدر العادي اللي بيطلع بعد فك الضغط.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Windows</bdi><p>بالزر اليمين على ملف ZIP اختار <bdi class="ui-label" dir="ltr">Extract All…</bdi>. اختار المكان اللي عايزه واضغط <bdi class="ui-label" dir="ltr">Extract</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Mac</bdi><p>اضغط مرتين على ملف <bdi class="ui-label" dir="ltr">.zip</bdi> في Finder. هتلاقي الملفات أو الفولدر الناتج في نفس المكان.</p></li><li><bdi class="step-label" dir="ltr">Open the extracted folder</bdi><p>افتح الفولدر العادي الناتج، وبعدها افتح السلايدز أو الكود منه. خليك محافظ على ترتيب ملفات الأسبوع.</p></li><li><bdi class="step-label" dir="ltr">If it fails</bdi><p>اتأكد إن التحميل اكتمل. لو ظهر إن الأرشيف تالف، جرّب تنزّله تاني. لو صيغة الملف مش ZIP أو النظام مش قادر يفتحها، شوف خيار 7-Zip تحت.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/extract.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Extract a ZIP"><img src="../assets/basics/extract.svg" width="840" height="510" loading="lazy" alt="Extract a ZIP · Windows. Right-click ZIP. Extract All…. Choose destination. Extract"></a><a class="mac-illustration" href="../assets/basics/extract-mac.svg" target="_blank" rel="noopener" aria-label="Enlarge Mac illustration"><span>Mac · Finder</span><img src="../assets/basics/extract-mac.svg" width="840" height="510" loading="lazy" alt="Mac Finder: Double-click Lab 01.zip. Open the new Lab 01 folder. Work from this folder"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">سيب ZIP الأصلي موجود لحد ما تتأكد إن الملفات اتفكت وبتفتح. استخدم فولدر جديد للفك لو عندك نسخة قديمة عشان ما تستبدلش شغلك بالغلط.</p><div class="lesson-sources"><a href="https://support.microsoft.com/en-gb/windows/experience/storage-filemanagement/zip-and-unzip-files" target="_blank" rel="noopener">Microsoft · ZIP files ↗</a><a href="https://support.apple.com/en-bh/guide/mac-help/mchlp2528/mac" target="_blank" rel="noopener">Apple · ZIP files ↗</a></div></article><article class="lesson-card" id="7zip" aria-labelledby="title-7zip">
+          <div class="lesson-top"><span class="week-badge">10 / OPTIONAL · WINDOWS</span><h2 id="title-7zip">Optional: install &amp; use 7-Zip</h2>
+          <h3 lang="ar" dir="rtl">لو محتاج برنامج لفك الضغط</h3><p lang="ar" dir="rtl">جرّب طريقة النظام الأول. لو محتاج برنامج إضافي على Windows، استخدم 7-Zip من موقعه الرسمي. على Mac استخدم طريقة Finder اللي فوق لملفات ZIP.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Choose the installer</bdi><p>افتح لينك <bdi class="ui-label" dir="ltr">7-Zip · Official download</bdi> تحت. اعرف نوع جهازك من <bdi class="ui-label" dir="ltr">Settings → System → About → System type</bdi>. اختار <bdi class="ui-label" dir="ltr">x64</bdi> لجهاز Intel/AMD بنظام 64-bit، أو <bdi class="ui-label" dir="ltr">ARM64</bdi> لجهاز ARM، أو <bdi class="ui-label" dir="ltr">x86</bdi> لنظام 32-bit.</p></li><li><bdi class="step-label" dir="ltr">Install</bdi><p>نزّل ملف <bdi class="ui-label" dir="ltr">.exe</bdi> المناسب، افتحه من Downloads، واتبع خطوات <bdi class="ui-label" dir="ltr">Install</bdi> ثم <bdi class="ui-label" dir="ltr">Close</bdi>. على جهاز المعمل لو التثبيت محتاج صلاحيات، اطلب المساعدة من مسؤول المعمل.</p></li><li><bdi class="step-label" dir="ltr">Create a ZIP</bdi><p>بالزر اليمين على الفولدر اختار <bdi class="ui-label" dir="ltr">7-Zip → Add to archive…</bdi>؛ ممكن تحتاج <bdi class="ui-label" dir="ltr">Show more options</bdi> في Windows 11. اختار <bdi class="ui-label" dir="ltr">Archive format: zip</bdi> ثم <bdi class="ui-label" dir="ltr">OK</bdi>.</p></li><li><bdi class="step-label" dir="ltr">Extract</bdi><p>بالزر اليمين على الأرشيف اختار <bdi class="ui-label" dir="ltr">7-Zip → Extract files…</bdi>، وحدد فولدر جديد ثم <bdi class="ui-label" dir="ltr">OK</bdi>. لو قائمة 7-Zip مش ظاهرة، افتح <bdi class="ui-label" dir="ltr">7-Zip File Manager</bdi> من Start وحدد الملف واستخدم زر <bdi class="ui-label" dir="ltr">Extract</bdi>.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/7zip.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Optional: install &amp; use 7-Zip"><img src="../assets/basics/7zip.svg" width="840" height="510" loading="lazy" alt="7-Zip · Add to Archive · illustration. Archive: Lab 01.zip. Archive format: zip. OK"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">اختار zip لو المطلوب ZIP؛ امتداد .7z مختلف. مش محتاج تثبّت WinRAR و7-Zip مع بعض عشان تمشي مع الشرح ده.</p><div class="lesson-sources"><a href="https://www.7-zip.org/download.html" target="_blank" rel="noopener">7-Zip · Official download ↗</a></div></article><article class="lesson-card" id="check" aria-labelledby="title-check">
+          <div class="lesson-top"><span class="week-badge">11 / FINAL CHECK</span><h2 id="title-check">Before you send your work</h2>
+          <h3 lang="ar" dir="rtl">مراجعة سريعة قبل التسليم</h3><p lang="ar" dir="rtl">دقيقة مراجعة بتوفر عليك إنك تبعت ملف غلط أو نسخة قديمة.</p></div>
+          <div class="lesson-body"><div class="lesson-instructions" lang="ar" dir="rtl"><ol><li><bdi class="step-label" dir="ltr">Save</bdi><p>احفظ آخر تعديل، وافتح ملف الكود من مكانه واتأكد إن ده شغلك الحالي.</p></li><li><bdi class="step-label" dir="ltr">Match the instructions</bdi><p>راجع أسماء الملفات والفولدرات المطلوبة في الشيت، والامتدادات <bdi class="ui-label" dir="ltr">.cpp</bdi> أو <bdi class="ui-label" dir="ltr">.py</bdi>. الأسماء اللي في الشرح هنا للتجربة بس.</p></li><li><bdi class="step-label" dir="ltr">Check the ZIP</bdi><p>لو التسليم ZIP، فك نسخة منه في فولدر جديد وافتح الملفات اللي طلعت. اتأكد إنك حاطط ملفات الكود المطلوبة فعلًا، مش اختصار للفولدر أو ملفات التشغيل بس.</p></li><li><bdi class="step-label" dir="ltr">Keep a copy</bdi><p>احتفظ بنسخة من شغلك في مكان تقدر ترجع له، خصوصًا لو شغال على جهاز المعمل. اتبع طريقة وموعد التسليم المعلنين للكورس.</p></li></ol></div>
+          <figure class="lesson-figure"><a href="../assets/basics/check.svg" target="_blank" rel="noopener" aria-label="Enlarge illustration: Before you send your work"><img src="../assets/basics/check.svg" width="840" height="510" loading="lazy" alt="Ready to submit?. Latest changes saved. Required names checked. Code files open correctly. Submission rules checked"></a><figcaption>Illustration · Tap to enlarge<span lang="ar" dir="rtl">رسم توضيحي مبسط — اضغط للتكبير</span></figcaption></figure></div>
+          <p class="lesson-note" lang="ar" dir="rtl">لو خطوة مش ماشية، ابعت اسم البرنامج، وصورة للمشكلة، والرسالة اللي ظهرت. كده نقدر نساعدك أسرع.</p><div class="lesson-sources"></div></article>
+    <div class="basics-return"><p lang="ar" dir="rtl">كده جاهز ترجع لملفات اللاب وتجرّب بنفسك.</p><a class="button button-secondary" href="../ece122/">ECE122 materials</a><a class="button button-secondary" href="../gen241/">GEN241 materials</a></div></div></div></main>
+    <footer class="site-footer"><div class="footer-inner"><span>Ahmed Tolan · Teaching resources</span><span>Reference checked · 10 October 2026</span></div></footer><script>/* Progressive enhancement only: all navigation and downloads work without JS. */
+(() => {
+  const sections = [...document.querySelectorAll('.week-card[id], .lesson-card[id]')];
+  const links = [...document.querySelectorAll('.toc-link')];
+  const header = document.querySelector('.site-header');
+  if (!sections.length || !links.length || !header) return;
+  let scheduled = false;
+  function update() {
+    scheduled = false;
+    const marker = header.getBoundingClientRect().bottom + 80;
+    let current = sections[0];
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= marker) current = section;
+    }
+    // A short final week can reach the bottom before crossing the header marker.
+    if (window.scrollY > 0 && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+      current = sections[sections.length - 1];
+    }
+    for (const link of links) {
+      if (link.hash === '#' + current.id) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+  }
+  function schedule() {
+    if (!scheduled) { scheduled = true; window.requestAnimationFrame(update); }
+  }
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
+  window.addEventListener('hashchange', schedule);
+  window.addEventListener('load', schedule);
+  if (document.fonts) document.fonts.ready.then(schedule);
+  update();
+})();
+</script></body></html>

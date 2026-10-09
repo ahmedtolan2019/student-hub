@@ -1,6 +1,6 @@
 /* Progressive enhancement only: all navigation and downloads work without JS. */
 (() => {
-  const sections = [...document.querySelectorAll('.week-card[id]')];
+  const sections = [...document.querySelectorAll('.week-card[id], .lesson-card[id]')];
   const links = [...document.querySelectorAll('.toc-link')];
   const header = document.querySelector('.site-header');
   if (!sections.length || !links.length || !header) return;
