@@ -1,0 +1,23 @@
+GEN 241 | Sheet 2 | دفتر تعلّم للطلبة
+
+1. فك الضغط Extract All الأول. متفتحش index.html من جوّه ZIP.
+2. افتح index.html في Chrome أو Edge على الكمبيوتر. كل الملفات لازم تفضل معاه في نفس الفولدر.
+3. اختار سؤال من خريطة المسائل. السؤال الأصلي هيفضل ظاهر، وزر «الصفحة كاملة» يفتح سياقه.
+4. حاول تحدد HAVE وWANT وخطتك. لو الفكرة الرياضية ناقصة، افتح «طريق الأساسيات».
+5. افتح hint واحدة، جرّب تاني، وبعدها الشرح خطوة بخطوة. الأمثلة تتغير من الأزرار؛ الناتج المسجّل جاء من تشغيل C++ فعلي.
+6. اكتب الكود وجرّبه أنت. استخدم «اشرح واختبر نفسك» عشان تتأكد إنك تقدر تعيد الفكرة.
+7. «حفظ تقدّمي» بيحفظ في نفس المتصفح فقط، ومش بيسلّم للمعيد. من السجل نزّل نسخة JSON احتياطية بانتظام. تقدر تسترجعها بعد معاينة النسخة وتأكيد الاستبدال.
+8. لو المتصفح ما بيسمحش بحفظ الملفات المحلية، استخدم تصدير JSON قبل الإغلاق. تغيير المتصفح أو عنوان الصفحة أو مكانها ممكن يغيّر مكان الحفظ.
+9. «التشغيل والتسليم» يشرح التسمية والضغط حسب ملف الدكتور. موعد ورابط التسليم يتأكدوا من إعلان الدكتور.
+
+الأكواد أمثلة تعليمية بطباعة القيم الوسيطة. مش إثبات إنك حلّيت السؤال، ومش ملفاتك الشخصية للتسليم. Q16 له ملف أساسي يستخدم time(0) وملف fixed منفصل لتجربة الحساب.
+الملفات اللي بتتنزّل من زر «نزّل ملف C++» في فولدر code/walkthrough: نفس البرامج اللي بتمشي معاها سطر سطر في «الحل خطوة بخطوة». فولدر code/ فيه نسخ مختصرة بتطبع نفس الناتج بالظبط، ودي اللي اتسجّل منها execution-evidence.json.
+الشرح يوضح لبس Q3 وQ8 وQ15 صراحة. راجع المعيد في تفسير التصحيح قبل التسليم. الصور الأصلية لم يتم تغيير نصها.
+
+English
+Extract the ZIP, then open index.html with all accompanying files present.
+Choose a question, attempt it, visit Foundations if needed, reveal hints gradually, then inspect the guided explanation and recorded C++ runs.
+Save uses this browser only. Export JSON backups; Import previews and confirms replacement and retains a snapshot.
+This workbook does not submit your work or grade you. Read each source clarification and confirm unresolved marking rules with your TA.
+All examples were compiled with clang++ in C++98 mode. Windows/Dev-C++ execution was not performed.
+Downloads come from code/walkthrough: the same programs the step-by-step trace follows. code/ holds compact versions that print exactly the same output; execution-evidence.json was recorded from those.

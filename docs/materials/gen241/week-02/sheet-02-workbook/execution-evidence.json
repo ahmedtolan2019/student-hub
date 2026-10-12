@@ -1,0 +1,478 @@
+{
+  "builtAt": "2026-10-12T00:44:26.918706+00:00",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "flags": "-std=c++98 -Wall -Wextra -Werror -pedantic",
+  "questions": {
+    "1": {
+      "code": "// GEN 241 - Sheet 2 - Q1\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  temperature in Fahrenheit\n//   HAVE  Celsius double\n//   CONVERT  scale by 9.0/5 and add 32\n//   RELATE  f=(9.0/5)*c+32\n//   CHECK  test zero and a nonzero Celsius value\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double c; cin >> c;\n    // 1. keep fractional division\n    double ratio = 9.0 / 5;\n    double f = ratio * c + 32;\n    cout << \"ratio=\" << ratio << \"\\nf=\" << f << endl;\n    return 0;\n}\n",
+      "sourceHash": "2b872ae0f0658f04a1bf43af19d5ed39d07b3d173b0f1c20a632117803f2c242",
+      "cases": [
+        {
+          "input": "0",
+          "stdout": "ratio=1.8\nf=32\n",
+          "exitCode": 0
+        },
+        {
+          "input": "25",
+          "stdout": "ratio=1.8\nf=77\n",
+          "exitCode": 0
+        },
+        {
+          "input": "-40",
+          "stdout": "ratio=1.8\nf=-40\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "2": {
+      "code": "// GEN 241 - Sheet 2 - Q2\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  base area in square units; volume in cubic units\n//   HAVE  radius and length in one length unit\n//   CONVERT  no conversion when units match\n//   RELATE  area=PI*r*r; volume=area*length\n//   CHECK  double length, then double radius separately\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double r, length; cin >> r >> length;\n    if (r <= 0 || length <= 0) { cout << \"Invalid dimensions\" << endl; return 0; }\n    const double PI = 3.14159;\n    double area = r * r * PI;\n    double volume = area * length;\n    cout << \"area=\" << area << \"\\nvolume=\" << volume << endl;\n    return 0;\n}\n",
+      "sourceHash": "53d6c475f523f380103652415c1a5be5c60d032d62b24cec9368f1d6c33d6a94",
+      "cases": [
+        {
+          "input": "2 5",
+          "stdout": "area=12.5664\nvolume=62.8318\n",
+          "exitCode": 0
+        },
+        {
+          "input": "2 10",
+          "stdout": "area=12.5664\nvolume=125.664\n",
+          "exitCode": 0
+        },
+        {
+          "input": "4 5",
+          "stdout": "area=50.2654\nvolume=251.327\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "3": {
+      "code": "// GEN 241 - Sheet 2 - Q3\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  whole years, assumed months, remaining days\n//   HAVE  nonnegative whole days\n//   CONVERT  365-day years, explicitly assumed 30-day months\n//   RELATE  remove full years then split remaining days\n//   CHECK  reconstruct days; confirm months versus weeks\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    int days; cin >> days;\n    if (days < 0) { cout << \"Invalid days\" << endl; return 0; }\n    int years = days / 365;\n    int rem = days % 365;\n    int months = rem / 30;\n    int left = rem % 30;\n    cout << \"years=\" << years << \"\\nremaining=\" << rem << \"\\nmonths=\" << months << \"\\ndays=\" << left << endl;\n    return 0;\n}\n",
+      "sourceHash": "dd324b9dd04038e6a1324a1421653734f30843e2d9e3f53c63c03ac1b6305080",
+      "cases": [
+        {
+          "input": "500",
+          "stdout": "years=1\nremaining=135\nmonths=4\ndays=15\n",
+          "exitCode": 0
+        },
+        {
+          "input": "365",
+          "stdout": "years=1\nremaining=0\nmonths=0\ndays=0\n",
+          "exitCode": 0
+        },
+        {
+          "input": "29",
+          "stdout": "years=0\nremaining=29\nmonths=0\ndays=29\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0",
+          "stdout": "years=0\nremaining=0\nmonths=0\ndays=0\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "4": {
+      "code": "// GEN 241 - Sheet 2 - Q4\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  distance in length units\n//   HAVE  two coordinate pairs in one unit\n//   CONVERT  coordinates to differences\n//   RELATE  sqrt(dx*dx+dy*dy)\n//   CHECK  reverse points; distance should stay the same\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double x1,y1,x2,y2; cin >> x1 >> y1 >> x2 >> y2;\n    double dx=x2-x1, dy=y2-y1;\n    double squared=dx*dx+dy*dy;\n    double distance=sqrt(squared);\n    cout << \"dx=\" << dx << \"\\ndy=\" << dy << \"\\nsquared=\" << squared << \"\\ndistance=\" << distance << endl;\n    return 0;\n}\n",
+      "sourceHash": "b6b34ba697fc5bc2e6a784f2c4bc5c8618747006a23ed217ef5cc364af265c37",
+      "cases": [
+        {
+          "input": "0 0 4 3",
+          "stdout": "dx=4\ndy=3\nsquared=25\ndistance=5\n",
+          "exitCode": 0
+        },
+        {
+          "input": "4 3 0 0",
+          "stdout": "dx=-4\ndy=-3\nsquared=25\ndistance=5\n",
+          "exitCode": 0
+        },
+        {
+          "input": "2 2 2 2",
+          "stdout": "dx=0\ndy=0\nsquared=0\ndistance=0\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "5": {
+      "code": "// GEN 241 - Sheet 2 - Q5\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  slope as rise/run\n//   HAVE  two coordinate pairs\n//   CONVERT  coordinates to dx and dy\n//   RELATE  dy/dx when dx is nonzero\n//   CHECK  horizontal versus vertical line\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double x1,y1,x2,y2; cin >> x1 >> y1 >> x2 >> y2;\n    double dx=x2-x1, dy=y2-y1;\n    cout << \"dx=\" << dx << \"\\ndy=\" << dy << endl;\n    if (dx == 0) cout << \"Undefined slope\" << endl;\n    else cout << \"m=\" << dy/dx << endl;\n    return 0;\n}\n",
+      "sourceHash": "384a5aa218fabc99f89a14b5b6cd84f70fe952c113386d82c6f926587eb63ad7",
+      "cases": [
+        {
+          "input": "0 0 4 3",
+          "stdout": "dx=4\ndy=3\nm=0.75\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 3 4 0",
+          "stdout": "dx=4\ndy=-3\nm=-0.75\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 2 4 2",
+          "stdout": "dx=4\ndy=0\nm=0\n",
+          "exitCode": 0
+        },
+        {
+          "input": "2 0 2 3",
+          "stdout": "dx=0\ndy=3\nUndefined slope\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "6": {
+      "code": "// GEN 241 - Sheet 2 - Q6\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  regular polygon area in square units\n//   HAVE  integer n>=3 and side length\n//   CONVERT  use radians for tan\n//   RELATE  n*side*side/(4*tan(PI/n))\n//   CHECK  compare a square with side*side\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    int n; double side; cin >> n >> side;\n    if (n<3 || side<=0) { cout << \"Invalid polygon\" << endl; return 0; }\n    const double PI=3.14159;\n    double apothem=side/(2*tan(PI/n));\n    double area=n*side*side/(4*tan(PI/n));\n    cout << \"apothem=\" << apothem << \"\\narea=\" << area << endl;\n    return 0;\n}\n",
+      "sourceHash": "0b6db22d3106f5387b6f844c360bc03b4fcf06d897e1d94104f04dc1927305fa",
+      "cases": [
+        {
+          "input": "4 2",
+          "stdout": "apothem=1\narea=4.00001\n",
+          "exitCode": 0
+        },
+        {
+          "input": "6 2",
+          "stdout": "apothem=1.73205\narea=10.3923\n",
+          "exitCode": 0
+        },
+        {
+          "input": "6 4",
+          "stdout": "apothem=3.46411\narea=41.5693\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "7": {
+      "code": "// GEN 241 - Sheet 2 - Q7\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  valid triangle area or invalid message\n//   HAVE  three side lengths in one unit\n//   CONVERT  lengths to semiperimeter\n//   RELATE  validate all pair sums then apply Heron\n//   CHECK  valid, flat, impossible and fractional cases\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double a,b,c; cin >> a >> b >> c;\n    bool valid=a>0 && b>0 && c>0 && a+b>c && a+c>b && b+c>a;\n    cout << \"valid=\" << valid << endl;\n    if (valid) {\n        double s=(a+b+c)/2.0;\n        double area=sqrt(s*(s-a)*(s-b)*(s-c));\n        cout << \"s=\" << s << \"\\narea=\" << area << endl;\n    } else cout << \"Invalid input\" << endl;\n    return 0;\n}\n",
+      "sourceHash": "2e702cc4024c378a2c5a09f5ff23be9a034d5099e31155cbdc798c1a9cbc9db1",
+      "cases": [
+        {
+          "input": "3 4 5",
+          "stdout": "valid=1\ns=6\narea=6\n",
+          "exitCode": 0
+        },
+        {
+          "input": "1 2 3",
+          "stdout": "valid=0\nInvalid input\n",
+          "exitCode": 0
+        },
+        {
+          "input": "1 2 4",
+          "stdout": "valid=0\nInvalid input\n",
+          "exitCode": 0
+        },
+        {
+          "input": "1.5 2 2.5",
+          "stdout": "valid=1\ns=3\narea=1.5\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "8": {
+      "code": "// GEN 241 - Sheet 2 - Q8\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  trip cost in pounds\n//   HAVE  distance km; consumption L/100km; price pounds/L\n//   CONVERT  distance to 100km blocks, then litres\n//   RELATE  cost=(distance/100.0)*consumption*price\n//   CHECK  lower consumption must lower cost\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double km,consumption,price; cin >> km >> consumption >> price;\n    double blocks=km/100.0;\n    double litres=blocks*consumption;\n    double cost=litres*price;\n    cout << \"blocks=\" << blocks << \"\\nlitres=\" << litres << \"\\ncost=\" << cost << endl;\n    return 0;\n}\n",
+      "sourceHash": "b0245ef7cfef902349dc10182388868811af789d16753be0f5beac5a6ed0b657",
+      "cases": [
+        {
+          "input": "300 8 20",
+          "stdout": "blocks=3\nlitres=24\ncost=480\n",
+          "exitCode": 0
+        },
+        {
+          "input": "250 8 20",
+          "stdout": "blocks=2.5\nlitres=20\ncost=400\n",
+          "exitCode": 0
+        },
+        {
+          "input": "250 6 20",
+          "stdout": "blocks=2.5\nlitres=15\ncost=300\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "9": {
+      "code": "// GEN 241 - Sheet 2 - Q9\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  real roots or no-real-roots message\n//   HAVE  coefficients a,b,c including signs\n//   CONVERT  no unit conversion\n//   RELATE  branch on D=b*b-4*a*c before sqrt\n//   CHECK  substitute roots; test positive, zero, negative D\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double a,b,c; cin >> a >> b >> c;\n    if (a==0) { cout << \"Not a quadratic equation\" << endl; return 0; }\n    double D=b*b-4*a*c;\n    cout << \"D=\" << D << endl;\n    if (D>0) cout << \"r1=\" << (-b+sqrt(D))/(2*a) << \"\\nr2=\" << (-b-sqrt(D))/(2*a) << endl;\n    else if (D==0) cout << \"root=\" << -b/(2*a) << endl;\n    else cout << \"The equation has no real roots.\" << endl;\n    return 0;\n}\n",
+      "sourceHash": "97e6e9129d57251d35beac4e24883384b13056a71627a8a2c10869b677d41345",
+      "cases": [
+        {
+          "input": "1 -3 2",
+          "stdout": "D=1\nr1=2\nr2=1\n",
+          "exitCode": 0
+        },
+        {
+          "input": "1 -2 1",
+          "stdout": "D=0\nroot=1\n",
+          "exitCode": 0
+        },
+        {
+          "input": "1 0 1",
+          "stdout": "D=-4\nThe equation has no real roots.\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 2 1",
+          "stdout": "Not a quadratic equation\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "10": {
+      "code": "// GEN 241 - Sheet 2 - Q10\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  three integers in descending order\n//   HAVE  three integers, possibly equal or negative\n//   CONVERT  preserve original values during swaps\n//   RELATE  compare a,b then a,c then b,c\n//   CHECK  same multiset; first>=second>=third\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    int a,b,c,temp; cin >> a >> b >> c;\n    cout << \"start=\" << a << \",\" << b << \",\" << c << endl;\n    if(a<b) { temp=a; a=b; b=temp; }\n    cout << \"pair1=\" << a << \",\" << b << \",\" << c << endl;\n    if(a<c) { temp=a; a=c; c=temp; }\n    cout << \"largest=\" << a << \",\" << b << \",\" << c << endl;\n    if(b<c) { temp=b; b=c; c=temp; }\n    cout << \"order=\" << a << \",\" << b << \",\" << c << endl;\n    return 0;\n}\n",
+      "sourceHash": "0948d98805a7f91f4b01b274a341508d46df0680b5ad6f36af0daf336776a95d",
+      "cases": [
+        {
+          "input": "3 9 5",
+          "stdout": "start=3,9,5\npair1=9,3,5\nlargest=9,3,5\norder=9,5,3\n",
+          "exitCode": 0
+        },
+        {
+          "input": "4 4 2",
+          "stdout": "start=4,4,2\npair1=4,4,2\nlargest=4,4,2\norder=4,4,2\n",
+          "exitCode": 0
+        },
+        {
+          "input": "-3 -1 -5",
+          "stdout": "start=-3,-1,-5\npair1=-1,-3,-5\nlargest=-1,-3,-5\norder=-1,-3,-5\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "11": {
+      "code": "// GEN 241 - Sheet 2 - Q11\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  triangle type or invalid message\n//   HAVE  three positive edge lengths\n//   CONVERT  no unit conversion\n//   RELATE  validity then all equal, then any equal pair\n//   CHECK  equal pairs cannot rescue an invalid triangle\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double a,b,c; cin >> a >> b >> c;\n    bool valid=a>0 && b>0 && c>0 && a+b>c && a+c>b && b+c>a;\n    cout << \"valid=\" << valid << endl;\n    if(!valid) cout << \"Invalid triangle\" << endl;\n    else if(a==b && b==c) cout << \"Equilateral Triangle\" << endl;\n    else if(a==b || a==c || b==c) cout << \"Isosceles Triangle\" << endl;\n    else cout << \"Scalene Triangle\" << endl;\n    return 0;\n}\n",
+      "sourceHash": "ea0fe075331ef9593f1690c4a86c3d967547030e842a926c12fa1b6426fa47f0",
+      "cases": [
+        {
+          "input": "3 3 3",
+          "stdout": "valid=1\nEquilateral Triangle\n",
+          "exitCode": 0
+        },
+        {
+          "input": "3 3 4",
+          "stdout": "valid=1\nIsosceles Triangle\n",
+          "exitCode": 0
+        },
+        {
+          "input": "3 4 5",
+          "stdout": "valid=1\nScalene Triangle\n",
+          "exitCode": 0
+        },
+        {
+          "input": "2 2 5",
+          "stdout": "valid=0\nInvalid triangle\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "12": {
+      "code": "// GEN 241 - Sheet 2 - Q12\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  triangle area in square units\n//   HAVE  three coordinate pairs in one unit\n//   CONVERT  points to three distances, then semiperimeter\n//   RELATE  Heron from derived lengths\n//   CHECK  translation preserves area; scale changes area\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double x1,y1,x2,y2,x3,y3; cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;\n    double a=sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));\n    double b=sqrt((x3-x2)*(x3-x2)+(y3-y2)*(y3-y2));\n    double c=sqrt((x1-x3)*(x1-x3)+(y1-y3)*(y1-y3));\n    double s=(a+b+c)/2.0;\n    double area=sqrt(s*(s-a)*(s-b)*(s-c));\n    cout << \"a=\" << a << \"\\nb=\" << b << \"\\nc=\" << c << \"\\ns=\" << s << \"\\narea=\" << area << endl;\n    return 0;\n}\n",
+      "sourceHash": "eebcf0b42040f2f84f9c856e7eb7264810c3ab3e3b6b81d5541d47c6e2e85c9f",
+      "cases": [
+        {
+          "input": "0 0 4 0 0 3",
+          "stdout": "a=4\nb=5\nc=3\ns=6\narea=6\n",
+          "exitCode": 0
+        },
+        {
+          "input": "2 2 6 2 2 5",
+          "stdout": "a=4\nb=5\nc=3\ns=6\narea=6\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 0 8 0 0 6",
+          "stdout": "a=8\nb=10\nc=6\ns=12\narea=24\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 0 2 0 4 0",
+          "stdout": "a=2\nb=2\nc=4\ns=4\narea=0\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "13": {
+      "code": "// GEN 241 - Sheet 2 - Q13\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  digit sum or invalid message\n//   HAVE  integer input; accepted range 100..999\n//   CONVERT  integer division and remainder extract digits\n//   RELATE  n/100 + (n/10)%10 + n%10\n//   CHECK  test 99,100,999,1000\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    int n; cin >> n;\n    if(n<100 || n>999) { cout << \"Invalid three-digit integer\" << endl; return 0; }\n    int hundreds=n/100, tens=(n/10)%10, units=n%10;\n    cout << \"hundreds=\" << hundreds << \"\\ntens=\" << tens << \"\\nunits=\" << units << \"\\nsum=\" << hundreds+tens+units << endl;\n    return 0;\n}\n",
+      "sourceHash": "7c16ead2027b8531f9d0b359159a7859d678acb3a5b17b7d34e86601570769eb",
+      "cases": [
+        {
+          "input": "357",
+          "stdout": "hundreds=3\ntens=5\nunits=7\nsum=15\n",
+          "exitCode": 0
+        },
+        {
+          "input": "100",
+          "stdout": "hundreds=1\ntens=0\nunits=0\nsum=1\n",
+          "exitCode": 0
+        },
+        {
+          "input": "99",
+          "stdout": "Invalid three-digit integer\n",
+          "exitCode": 0
+        },
+        {
+          "input": "999",
+          "stdout": "hundreds=9\ntens=9\nunits=9\nsum=27\n",
+          "exitCode": 0
+        },
+        {
+          "input": "1000",
+          "stdout": "Invalid three-digit integer\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "14": {
+      "code": "// GEN 241 - Sheet 2 - Q14\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  point inside or outside including boundary\n//   HAVE  point x,y; centre (0,0); radius 10\n//   CONVERT  coordinates to distance\n//   RELATE  sqrt(x*x+y*y)<=10\n//   CHECK  test inside, outside, boundary and centre\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double x,y; cin >> x >> y;\n    double distance=sqrt(x*x+y*y);\n    cout << \"distance=\" << distance << endl;\n    if(distance<=10) cout << \"Inside (boundary included)\" << endl;\n    else cout << \"Outside\" << endl;\n    return 0;\n}\n",
+      "sourceHash": "b5c886576da28e1286c6baa8a627d7996396fc084bf57e42296b520ed3d8661c",
+      "cases": [
+        {
+          "input": "4 5",
+          "stdout": "distance=6.40312\nInside (boundary included)\n",
+          "exitCode": 0
+        },
+        {
+          "input": "9 9",
+          "stdout": "distance=12.7279\nOutside\n",
+          "exitCode": 0
+        },
+        {
+          "input": "6 8",
+          "stdout": "distance=10\nInside (boundary included)\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 0",
+          "stdout": "distance=0\nInside (boundary included)\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "15": {
+      "code": "// GEN 241 - Sheet 2 - Q15\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  geometric relation of circle2 to circle1\n//   HAVE  two centres and positive radii\n//   CONVERT  centres to distance d\n//   RELATE  directional containment then tangency/overlap/separation\n//   CHECK  reverse radii; clarify source hint before submission\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double x1,y1,r1,x2,y2,r2; cin >> x1 >> y1 >> r1 >> x2 >> y2 >> r2;\n    if(r1<=0 || r2<=0) { cout << \"Invalid radius\" << endl; return 0; }\n    double d=sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));\n    cout << \"distance=\" << d << \"\\nradiiSum=\" << r1+r2 << \"\\nabsoluteDifference=\" << fabs(r1-r2) << endl;\n    // Teaching clarification: directional geometry, not an approved marking rule.\n    if(d==0 && r1==r2) cout << \"Identical circles\" << endl;\n    else if(d+r2<=r1) cout << \"circle2 inside circle1\" << endl;\n    else if(d+r1<=r2) cout << \"circle1 inside circle2\" << endl;\n    else if(d>r1+r2) cout << \"Separate\" << endl;\n    else if(d==r1+r2) cout << \"External tangency\" << endl;\n    else cout << \"Overlap\" << endl;\n    return 0;\n}\n",
+      "sourceHash": "7bd4fde8f157c977907959efb223b544a67062f9615e35f9ea2439f545525f6a",
+      "cases": [
+        {
+          "input": "0 0 5 1 0 2",
+          "stdout": "distance=1\nradiiSum=7\nabsoluteDifference=3\ncircle2 inside circle1\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 0 5 6 0 3",
+          "stdout": "distance=6\nradiiSum=8\nabsoluteDifference=2\nOverlap\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 0 2 7 0 2",
+          "stdout": "distance=7\nradiiSum=4\nabsoluteDifference=0\nSeparate\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 0 2 0 0 5",
+          "stdout": "distance=0\nradiiSum=7\nabsoluteDifference=3\ncircle1 inside circle2\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 0 2 4 0 2",
+          "stdout": "distance=4\nradiiSum=4\nabsoluteDifference=0\nExternal tangency\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "16": {
+      "code": "// GEN 241 - Sheet 2 - Q16\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  local hour:minute:second in 12-hour format\n//   HAVE  elapsed seconds and integer GMT-hour offset\n//   CONVERT  seconds to minutes and hours; wrap hours\n//   RELATE  AM if hour24<12; display hour24%12, replacing 0 with 12\n//   CHECK  test midnight, noon, rollover and negative offset\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    long totalSeconds; int offset;\n    // Deterministic teaching harness: input fixed seconds and integer offset.\n    cin >> totalSeconds >> offset;\n    long second=totalSeconds%60;\n    long minute=(totalSeconds/60)%60;\n    long hour24=((totalSeconds/3600+offset)%24+24)%24;\n    long hour12=hour24%12;\n    if(hour12==0) hour12=12;\n    cout << \"second=\" << second << \"\\nminute=\" << minute << \"\\nhour24=\" << hour24 << \"\\nhour12=\" << hour12 << endl;\n    cout << \"time=\" << hour12 << \":\" << minute << \":\" << second << \" \";\n    if(hour24<12) cout << \"AM\" << endl; else cout << \"PM\" << endl;\n    return 0;\n}\n",
+      "sourceHash": "190de82de3b08de6cc76aa53a2d59eaa7aa5e289adccb2ccedb6ac1a659b6d0c",
+      "cases": [
+        {
+          "input": "0 0",
+          "stdout": "second=0\nminute=0\nhour24=0\nhour12=12\ntime=12:0:0 AM\n",
+          "exitCode": 0
+        },
+        {
+          "input": "43200 0",
+          "stdout": "second=0\nminute=0\nhour24=12\nhour12=12\ntime=12:0:0 PM\n",
+          "exitCode": 0
+        },
+        {
+          "input": "82800 2",
+          "stdout": "second=0\nminute=0\nhour24=1\nhour12=1\ntime=1:0:0 AM\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 -3",
+          "stdout": "second=0\nminute=0\nhour24=21\nhour12=9\ntime=9:0:0 PM\n",
+          "exitCode": 0
+        },
+        {
+          "input": "3661 0",
+          "stdout": "second=1\nminute=1\nhour24=1\nhour12=1\ntime=1:1:1 AM\n",
+          "exitCode": 0
+        }
+      ],
+      "testCodeFile": "code/Q_0216_fixed.cpp",
+      "liveCodeFile": "code/Q_0216.cpp"
+    },
+    "17": {
+      "code": "// GEN 241 - Sheet 2 - Q17\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  line equation in slope-intercept form\n//   HAVE  two coordinate pairs\n//   CONVERT  derive slope then intercept\n//   RELATE  m=dy/dx; b=y1-m*x1; format by signs\n//   CHECK  substitute both points and test m=1 with nonzero b\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double x1,y1,x2,y2; cin >> x1 >> y1 >> x2 >> y2;\n    if(x1==x2) {\n        if(y1==y2) cout << \"No unique line\" << endl;\n        else cout << \"Vertical line: x=\" << x1 << endl;\n        return 0;\n    }\n    double m=(y2-y1)/(x2-x1), b=y1-m*x1;\n    cout << \"m=\" << m << \"\\nb=\" << b << \"\\ny = \";\n    if(m==0) cout << b;\n    else {\n        if(m==1) cout << \"x\";\n        else if(m==-1) cout << \"-x\";\n        else cout << m << \"x\";\n        if(b>0) cout << \" + \" << b;\n        else if(b<0) cout << \" - \" << -b;\n    }\n    cout << endl;\n    return 0;\n}\n",
+      "sourceHash": "f9864f5f5332fcc3dea3980ea511cdb8b8e844b16caf559e4d4839a71087c155",
+      "cases": [
+        {
+          "input": "0 3 2 5",
+          "stdout": "m=1\nb=3\ny = x + 3\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 2 2 0",
+          "stdout": "m=-1\nb=2\ny = -x + 2\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 0 2 2",
+          "stdout": "m=1\nb=0\ny = x\n",
+          "exitCode": 0
+        },
+        {
+          "input": "0 3 2 3",
+          "stdout": "m=0\nb=3\ny = 3\n",
+          "exitCode": 0
+        },
+        {
+          "input": "2 0 2 3",
+          "stdout": "Vertical line: x=2\n",
+          "exitCode": 0
+        }
+      ]
+    },
+    "18": {
+      "code": "// GEN 241 - Sheet 2 - Q18\n// Worked learning example. Read the source note in the workbook.\n// PLAN\n//   WANT  BMI value and the sheet table label\n//   HAVE  fictional kg and height in cm\n//   CONVERT  cm/100.0 to metres before squaring\n//   RELATE  kg/(metres*metres), then ascending table bounds\n//   CHECK  test each exact threshold in the supplied table\n#include <iostream>\n#include <cmath>\n#include <ctime>\nusing namespace std;\n\nint main()\n{\n    double kg,cm; cin >> kg >> cm;\n    if(kg<=0 || cm<=0) { cout << \"Invalid input\" << endl; return 0; }\n    double metres=cm/100.0;\n    double bmi=kg/(metres*metres);\n    cout << \"metres=\" << metres << \"\\nbmi=\" << bmi << endl;\n    if(bmi<18.5) cout << \"Underweight\" << endl;\n    else if(bmi<25) cout << \"Normal\" << endl;\n    else if(bmi<30) cout << \"Overweight\" << endl;\n    else cout << \"Obese\" << endl;\n    return 0;\n}\n",
+      "sourceHash": "06dd6659bceafafaeaa698e13ab689a8d998a49e5d75b717ce2f6d15516ca680",
+      "cases": [
+        {
+          "input": "80 200",
+          "stdout": "metres=2\nbmi=20\nNormal\n",
+          "exitCode": 0
+        },
+        {
+          "input": "74 200",
+          "stdout": "metres=2\nbmi=18.5\nNormal\n",
+          "exitCode": 0
+        },
+        {
+          "input": "100 200",
+          "stdout": "metres=2\nbmi=25\nOverweight\n",
+          "exitCode": 0
+        },
+        {
+          "input": "120 200",
+          "stdout": "metres=2\nbmi=30\nObese\n",
+          "exitCode": 0
+        },
+        {
+          "input": "60 200",
+          "stdout": "metres=2\nbmi=15\nUnderweight\n",
+          "exitCode": 0
+        }
+      ]
+    }
+  },
+  "liveClockSmokeRun": {
+    "input": "0",
+    "stdout": "second=41\nminute=44\nhour24=0\nhour12=12\ntime=12:44:41 AM\n",
+    "exitCode": 0,
+    "note": "Live clock smoke run; deterministic arithmetic is tested separately."
+  }
+}

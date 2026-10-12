@@ -112,3 +112,16 @@ allowlist, and course ZIPs contain the same course materials as before.
 When updating this reference, verify Windows/Mac instructions against official
 documentation, keep platform differences visible, and verify the guide at desktop
 and phone sizes. Existing course file URLs and download behavior must stay intact.
+
+## GEN241 Sheet 2 workbook
+
+Weeks 2 and 3 also link the completed bilingual student workbook. Its reviewed
+75-file allowlist is `courses[].workbooks.sheet-02.files` in `catalog.json`,
+sourced only from `student-workbooks/sheet-02/public`. The workbook has original
+question images, illustrated foundations, student-authorized worked examples,
+recorded C++ traces, and local progress/JSON backups. Never add the adjacent
+private `review/`, `src/`, `build/`, or instructor preparation folders.
+
+The builder keeps the workbook folder intact in both week ZIPs and the course ZIP,
+and generates `downloads/GEN241-sheet-02-Workbook.zip` for a workbook-only download.
+The existing slides, guides, PDF and week links stay unchanged.

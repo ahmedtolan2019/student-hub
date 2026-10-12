@@ -123,8 +123,33 @@ def build_week(course, week):
         target = directory / 'starter-files' / path.name
         target.parent.mkdir(exist_ok=True)
         shutil.copyfile(path, target)
+    if week.get('workbook'):
+        key = week['workbook']
+        workbook = course['workbooks'][key]
+        workbook_dir = directory / f'{key}-workbook'
+        # Copy only individually reviewed public files from the catalog.
+        for item in workbook['files']:
+            relative = Path(item)
+            if relative.is_absolute() or '..' in relative.parts:
+                raise ValueError(f'Unsafe workbook path: {item}')
+            path = read_source(course, {'folder': workbook['folder']}, item)
+            if not path.is_relative_to((TEACHING / course['source'] / workbook['folder']).resolve()):
+                raise ValueError(f'Workbook source escapes its public folder: {item}')
+            target = workbook_dir / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(path, target)
+        if not (workbook_dir / 'index.html').is_file():
+            raise ValueError('Workbook allowlist must include index.html')
+        workbook_zip = OUT / 'downloads' / f"{course['code']}-{key}-Workbook.zip"
+        archive(workbook_zip, [workbook_dir / f for f in workbook['files']], workbook_dir,
+                f"{course['code']}-{key}-Workbook")
+        week['_workbook'] = {**workbook, 'path': (workbook_dir/'index.html').relative_to(OUT).as_posix(),
+                             'zip': workbook_zip.relative_to(OUT).as_posix()}
     readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['slides']} in a browser for the interactive slides.\nRead {names['guide']} for the study guide.\nPractice with {names['sheet']}.\n\nExtract the ZIP first and keep its files together so the slides and guide can link to each other.\nHTML contains the interactive activities. PDFs are reading and printing copies where available.\nThese are teaching materials. Follow the submission instructions and deadline announced in class.\n"
     (directory / 'README.txt').write_text(readme)
+    if week.get('_workbook'):
+        with (directory / 'README.txt').open('a') as f:
+            f.write(f"\nOpen {week['workbook']}-workbook/index.html for illustrated foundations and recorded C++ traces. Keep that folder intact.\n")
     files = [p for p in directory.rglob('*') if p.is_file()]
     bundle = OUT / 'downloads' / f"{course['code']}-Week-{week['number']:02}.zip"
     archive(bundle, files, directory, f"{course['code']}-Week-{week['number']:02}")
@@ -169,6 +194,16 @@ def week_panel(course, week, prefix):
     number = f"{week['number']:02}"
     download = link(prefix + week['_zip'], icon('down') + 'Download week ZIP', True, 'button button-secondary', f"Download {course['code']} week {number} ZIP")
     items = ''.join(resource(week, *args, prefix) for args in [('slides','Interactive slides','slides'),('guide','Study guide','book'),('sheet','Practice sheet','sheet')])
+    if week.get('_workbook'):
+        wb = week['_workbook']
+        actions = link(prefix + wb['path'], 'Open workbook' + icon('external'), css='pill pill-open',
+                       aria=f"Open Sheet 2 workbook, week {week['number']}")
+        actions += link(prefix + wb['zip'], icon('down') + 'Workbook ZIP', True, 'pill',
+                        f"Download Sheet 2 workbook, week {week['number']}")
+        items = f'''<div class="resource-row flex flex-wrap items-center justify-between gap-4">
+          <div class="resource-label flex items-center gap-3"><span class="resource-icon">{icon('book')}</span>
+          <div><h4>{ESC(wb['title'])}</h4><p>{ESC(wb['description'])}</p></div></div>
+          <div class="resource-actions flex flex-wrap gap-2">{actions}</div></div>''' + items
     extras = ''
     if week.get('_starter_zip'):
         starters = ''.join(link(prefix + week['_directory'] + '/starter-files/' + Path(s).name, ESC(Path(s).name), True, 'file-link') for s in week['starters'])
