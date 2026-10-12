@@ -5,7 +5,7 @@ Lab materials for the first semester of 2026/2027.
 **Student link:** https://ahmedtolan2019.github.io/student-hub/
 
 - [DSA](https://ahmedtolan2019.github.io/student-hub/dsa/): weeks 1 and 2
-- [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): week 1
+- [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1, 2 and 3
 - [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1, 2 and 3
 
 Students can open slides, guides and sheets online, download individual formats,
@@ -125,3 +125,17 @@ private `review/`, `src/`, `build/`, or instructor preparation folders.
 The builder keeps the workbook folder intact in both week ZIPs and the course ZIP,
 and generates `downloads/GEN241-sheet-02-Workbook.zip` for a workbook-only download.
 The existing slides, guides, PDF and week links stay unchanged.
+
+## ECE122 Sheets 2 and 3
+
+Weeks 2 and 3 publish the completed learning kit using the explicit 76-file
+`bundles.sheets-02-03.files` allowlist. Its source is only
+`ECE122-computer-programming-1/learning-kit/public`. The 99-slide deck includes
+the questions-and-conditions lesson on slides 30–58. Each week opens its own
+Guide and original sheet. Both ZIPs keep the complete kit together so all
+relative links work offline. HTML download actions supply that ZIP because
+the Guides need their companion files. The course ZIP includes both weeks.
+
+The code files under the public kit are the student worked examples linked
+from the Guides. Original reference archives, instructor reviews, presenter
+notes, authoring scripts and QA records are excluded.

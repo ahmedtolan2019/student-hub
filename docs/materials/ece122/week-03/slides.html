@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ECE122 · Python foundations · Sheets 2 and 3</title>
+
+
+
+<style>
+/* Palette copied from GEN 241's slides so both courses look the same. */
+:root {
+  color-scheme: light;
+  --bg: #f4f6f9; --surface: #ffffff; --surface-2: #eef1f6; --surface-3: #e2e7ee;
+  --ink: #111821; --ink-2: #435061; --ink-3: #5f6b7c;
+  --rule: #d9dfe7; --rule-strong: #b9c2ce;
+  --accent: #0f6e78; --accent-strong: #0b555d; --accent-soft: #e0f0f2; --on-accent: #ffffff;
+  --hot: #b4531f; --hot-ink: #93411a; --hot-soft: #fbeade;
+  --good: #1b7446; --good-soft: #e0f2e7;
+  --warn-ink: #7f4d00; --warn-soft: #fff1d6;
+  --code-bg: #f6f8fb; --code-ink: #1b2430;
+  --tok-key: #0b555d; --tok-str: #1b7446; --tok-num: #93411a; --tok-com: #6b7684; --tok-pre: #a2337a;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --font-alt: "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-pre: #f09ccd;
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b232e; --surface-3: #253041;
+  --ink: #e8ecf2; --ink-2: #b0b9c6; --ink-3: #8c97a6;
+  --rule: #283241; --rule-strong: #3a4657;
+  --accent: #5cc6d2; --accent-strong: #86dbe4; --accent-soft: #10323a; --on-accent: #08161a;
+  --hot: #e8894f; --hot-ink: #f0a271; --hot-soft: #3a2316;
+  --good: #52c98f; --good-soft: #14301f;
+  --warn-ink: #f3c46a; --warn-soft: #2d2412;
+  --code-bg: #111720; --code-ink: #dbe2ec;
+  --tok-key: #7fd8e4; --tok-str: #8fdcae; --tok-num: #ffb287; --tok-com: #7d8898; --tok-pre: #f09ccd;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 20px/1.5 var(--font-body); overflow: hidden; -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* The edge strips must not sit over the stage: they were swallowing clicks
+   meant for the leftmost tally button and the Parsons controls. The stage
+   takes its own clicks; the edges only work in the margin around it. */
+#viewport { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; z-index: 20; }
+/* z-index goes on the wrapper, not the stage: position:fixed makes #viewport
+   its own stacking context, so a z-index on #stage is scoped inside it. */
+#stage { width: 1280px; height: 720px; position: absolute; left: 0; top: 0; transform-origin: center center; background: var(--bg); pointer-events: auto; }
+.step { position: absolute; inset: 0; display: none; flex-direction: column; padding: 48px 64px 64px; }
+.step.on { display: flex; }
+.body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; }
+/* Flex children shrink by default. A code block has overflow:hidden, so a
+   squashed one silently clips its own text - never let them shrink. */
+.body > * { flex: none; }
+
+.kicker { font-family: var(--font-mono); font-size: 14px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; display: flex; align-items: center; gap: 12px; }
+.kicker .pill { background: var(--accent); color: var(--on-accent); border-radius: 999px; padding: 3px 11px; font-size: 12.5px; letter-spacing: .06em; }
+.kicker .pill.warn { background: var(--warn-line, #e0a126); color: #2a1e00; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: 44px; line-height: 1.1; letter-spacing: -.02em; margin: 0 0 14px; max-width: 26ch; }
+h2.small { font-size: 34px; max-width: 34ch; }
+p { margin: 0 0 14px; }
+p.big { font-size: 22px; line-height: 1.4; max-width: 48ch; }
+p.sub { font-size: 20px; color: var(--ink-2); margin: 0 0 16px; max-width: 52ch; }
+ul { margin: 6px 0 0; padding-left: 1.15em; }
+li { margin: 0 0 11px; font-size: 21px; line-height: 1.4; }
+li::marker { color: var(--accent); }
+code { font-family: var(--font-mono); }
+p code, li code { background: var(--surface-2); border: 1px solid var(--rule); border-radius: 4px; padding: .04em .28em; font-size: .9em; }
+.hot { color: var(--hot-ink); } .good { color: var(--good); } .acc { color: var(--accent); }
+
+pre.code { margin: 0; background: var(--code-bg); color: var(--code-ink); border: 1px solid var(--rule); border-radius: 8px; padding: 18px 22px; font: 400 21px/1.62 var(--font-mono); white-space: pre; overflow: hidden; tab-size: 4; }
+pre.code.small { font-size: 17px; }
+.tk-k { color: var(--tok-key); } .tk-s { color: var(--tok-str); } .tk-n { color: var(--tok-num); }
+.tk-c { color: var(--tok-com); font-style: italic; } .tk-p { color: var(--tok-pre); font-weight: 600; }
+
+/* ---------- options and voting ---------- */
+.opts { display: grid; gap: 6px; margin-top: 5px; }
+.opt { display: grid; grid-template-columns: 46px 1fr auto; gap: 16px; align-items: center; background: var(--surface); border: 2px solid var(--rule); border-radius: 10px; padding: 13px 18px; position: relative; overflow: hidden; }
+.opt .ltr { font-family: var(--font-mono); font-weight: 700; font-size: 21px; color: var(--ink-3); text-align: center; }
+.opt .txt { font-size: 18.5px; line-height: 1.35; }
+.opt .txt code { font-size: 20px; }
+.opt .cnt { font-family: var(--font-mono); font-weight: 600; font-size: 20px; color: var(--ink-3); min-width: 2.6em; text-align: right; }
+.opt .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent-soft); width: 0; transition: width .35s ease; z-index: 0; }
+.opt > * { position: relative; z-index: 1; }
+body.revealed .opt.right { border-color: var(--good); }
+body.revealed .opt.right .ltr { color: var(--good); }
+body.revealed .opt.right .fill { background: var(--good-soft); }
+body.revealed .opt.wrong { opacity: .62; }
+/* H keeps the split hidden until the reveal, for when you would rather the
+   room reasoned than followed the biggest bar. */
+body.blind .opt .fill { width: 0 !important; }
+body.blind .opt .cnt { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { .opt .fill { transition: none; } }
+
+.voterow { display: flex; align-items: center; gap: 9px; margin-top: 11px; flex-wrap: wrap; }
+.tallybtn { appearance: none; cursor: pointer; font: 600 17px/1 var(--font-mono); background: var(--surface); color: var(--ink); border: 2px solid var(--rule-strong); border-radius: 8px; padding: 9px 14px; min-width: 46px; }
+.tallybtn:hover { border-color: var(--accent); color: var(--accent); }
+.tallybtn .n { font-size: 13px; color: var(--ink-3); display: block; margin-top: 3px; }
+.vcount { font: 500 15px/1 var(--font-mono); color: var(--ink-3); }
+.voterow .btn { font-size: 15px; padding: 9px 14px; }
+
+
+.why { margin-top: 16px; display: none; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 20px; }
+body.revealed .why { display: block; }
+.why p { font-size: 18.5px; line-height: 1.45; margin: 0 0 9px; }
+.why p:last-child { margin: 0; }
+.why .w-l { font-family: var(--font-mono); font-weight: 700; color: var(--hot-ink); }
+.why .w-l.ok { color: var(--good); }
+
+/* ---------- parsons ---------- */
+.parsons { display: grid; gap: 5px; margin-top: 6px; }
+
+/* ---------- plan builder: five lines filled in with the room ---------- */
+.pb { display: grid; gap: 7px; margin-top: 8px; }
+.pbrow { display: grid; grid-template-columns: 146px 1fr; gap: 16px; align-items: start;
+  background: var(--surface); border: 2px solid var(--rule); border-radius: 8px; padding: 8px 15px; }
+.pbrow .k { font: 700 15px/1.25 var(--font-mono); color: var(--accent); letter-spacing: .05em; }
+.pbrow .k small { display: block; font: 400 12.5px/1.3 var(--font-body); color: var(--ink-3); letter-spacing: 0; margin-top: 2px; }
+.pbrow .v { font-size: 18px; line-height: 1.35; min-height: 25px; }
+.pbrow .v.blank { border-bottom: 2px dashed var(--rule-strong); min-height: 22px; }
+.pbrow.on { border-color: var(--accent); background: var(--accent-soft); }
+.pbrow.on .v { font-weight: 600; }
+.pbq { background: var(--surface-2); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0;
+  padding: 10px 16px; margin: 0 0 4px; font-size: 18.5px; line-height: 1.4; }
+.pbnote { font-size: 16.5px; color: var(--ink-2); margin: 10px 0 0; }
+
+/* ---------- code builder: the plan turned into code, a block at a time ---------- */
+.cbwrap { display: grid; gap: 8px; margin-top: 6px; }
+.cbcode { margin: 0; background: var(--code-bg); color: var(--code-ink); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 10px 16px; font: 400 15px/1.46 var(--font-mono); white-space: pre;
+  overflow: hidden; tab-size: 4; min-height: 56px; }
+.cbcode .ghost { color: var(--ink-3); font-style: italic; opacity: .7; }
+.cbcode .fresh { background: var(--accent-soft); border-radius: 3px; }
+.cbwhy { display: grid; grid-template-columns: auto 1fr; gap: 13px; align-items: start;
+  background: var(--surface); border: 2px solid var(--accent); border-radius: 8px; padding: 9px 14px; }
+.cbwhy.none { border-color: var(--rule); border-style: dashed; }
+.cbfrom { font: 700 13px/1 var(--font-mono); letter-spacing: .06em; color: var(--on-accent);
+  background: var(--accent); border-radius: 999px; padding: 6px 11px; white-space: nowrap; }
+.cbfrom.plain { background: var(--surface-3); color: var(--ink-2); }
+.cbwhy p { margin: 0; font-size: 17px; line-height: 1.38; }
+.cbwhy p b { font-weight: 700; }
+.pline { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: center; background: var(--surface); border: 2px solid var(--rule); border-radius: 7px; padding: 7px 12px; cursor: pointer; font-family: var(--font-mono); font-size: 18px; white-space: pre; }
+.pline .h { color: var(--ink-3); font-size: 14px; text-align: center; }
+.pline.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+.pline.ok { border-color: var(--good); background: var(--good-soft); }
+.pline.bad { border-color: var(--hot); background: var(--hot-soft); }
+.pbtns { display: flex; gap: 9px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+
+/* ---------- clinic checklist ---------- */
+.clinic { display: grid; gap: 10px; margin-top: 4px; }
+.clinic li { list-style: none; display: grid; grid-template-columns: 34px 1fr; gap: 14px; align-items: start; background: var(--surface); border: 1px solid var(--rule); border-radius: 9px; padding: 12px 16px; margin: 0; font-size: 20px; }
+.clinic .n { font-family: var(--font-mono); font-weight: 700; color: var(--accent); }
+.clinic .d { display: block; font-size: 16.5px; color: var(--ink-2); margin-top: 3px; line-height: 1.4; }
+
+.ar { direction: rtl; text-align: right; font-family: var(--font-alt); font-size: 21px; line-height: 1.8; color: var(--ink-2); margin-top: 16px; }
+.ar .ltr { direction: ltr; unicode-bidi: isolate; font-family: var(--font-mono); font-size: .86em; }
+
+.callout { background: var(--warn-soft); color: var(--warn-ink); border-radius: 10px; padding: 16px 20px; margin-top: 16px; font-size: 20px; }
+.callout.acc { background: var(--accent-soft); color: var(--ink); }
+
+/* ---------- fitting the 1280x720 stage ----------
+   Voting and revealing are two different moments, so they get two different
+   layouts. While voting, the question and the options carry the screen. On
+   reveal, the vote controls go away and the explanations take their place -
+   otherwise everything stacks and spills off the bottom on a projector. */
+.opt { padding: 8px 17px; }
+
+/* Nothing changes on screen when you start tallying: students may still be
+   reading the question, and text that jumps is text they stop trusting. The
+   compression that used to live here was only needed to make room for a
+   branch card, and that card is gone. */
+
+body.revealed .step.on p.sub,
+body.revealed .step.on .voterow { display: none; }
+body.revealed .step.on h2 { font-size: 29px; margin-bottom: 8px; }
+body.revealed .step.on p.big { font-size: 19.5px; margin-bottom: 10px; max-width: 60ch; }
+body.revealed .step.on pre.code { font-size: 15.5px; padding: 10px 15px; line-height: 1.42; }
+body.revealed .step.on .opts { gap: 5px; margin-top: 3px; }
+body.revealed .step.on .opt { padding: 7px 16px; }
+body.revealed .step.on .opt .txt { font-size: 18px; }
+body.revealed .step.on .opt .ltr { font-size: 21px; }
+body.revealed .step.on .why { margin-top: 10px; padding: 11px 17px; }
+body.revealed .step.on .why p { font-size: 16.5px; line-height: 1.38; margin-bottom: 5px; }
+
+/* the setup clinic is seven items; keep them compact enough to project */
+.clinic { gap: 7px; }
+.clinic li { padding: 8px 15px; font-size: 18px; }
+.clinic .d { font-size: 15px; margin-top: 2px; }
+
+/* parsons: ten lines plus controls plus a note */
+.pline { padding: 5px 12px; font-size: 17px; }
+/* plan steps are sentences, not code */
+.pline.prose { font-family: var(--font-body); font-size: 18.5px; white-space: normal; line-height: 1.35; padding: 7px 14px; }
+.pline.prose b { font-family: var(--font-mono); font-weight: 700; color: var(--accent); font-size: .88em; letter-spacing: .05em; }
+.parsons { gap: 5px; }
+.pbtns { margin-top: 11px; }
+.pbtns .btn { font-size: 16px; padding: 9px 14px; }
+.pnote { font-size: 16.5px; color: var(--ink-2); margin: 10px 0 0; }
+
+.callout { padding: 12px 18px; font-size: 18px; margin-top: 12px; }
+.ar { font-size: 19px; line-height: 1.7; margin-top: 12px; }
+
+/* ---------- illustrations and "open" buttons ----------
+   A figure is inline SVG drawn with the page's own colour tokens, so it works
+   in both themes. An open button takes the room somewhere else - the sheet,
+   the lecture, a guide chapter - in a new tab, and you come back with the
+   browser's tab switcher. Neither may ever depend on which answer is right. */
+.figwrap { margin: 12px 0 2px; }
+.figwrap svg { display: block; width: 100%; height: auto; max-height: 300px; }
+.figwrap.tall svg { max-height: 450px; }
+.figwrap svg text { font-family: var(--font-body); }
+.figwrap svg .mono { font-family: var(--font-mono); }
+.figcap { font-size: 16.5px; color: var(--ink-2); margin: 8px 0 0; }
+.openrow { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; align-items: center; }
+.openrow .lbl { font: 600 12.5px/1 var(--font-mono); letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); margin-right: 3px; }
+.openbtn { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; font: 600 15.5px/1 var(--font-body);
+  color: var(--accent); background: var(--surface); border: 2px solid var(--accent); border-radius: 8px; padding: 8px 13px; }
+.openbtn:hover { background: var(--accent-soft); }
+.openbtn::after { content: "\2197"; font-size: 13px; }
+
+/* ---------- footer, timer, hud ---------- */
+.step footer { position: absolute; left: 64px; right: 64px; bottom: 22px; display: flex; align-items: center; gap: 16px; font: 500 14px/1 var(--font-mono); color: var(--ink-3); letter-spacing: .04em; }
+.step footer .sp { flex: 1; }
+#bar { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--accent); transition: width .2s ease; z-index: 5; }
+
+#timer { position: fixed; right: 18px; bottom: 18px; z-index: 30; background: var(--ink); color: var(--bg); border-radius: 12px; padding: 12px 20px; font: 700 40px/1 var(--font-mono); display: none; letter-spacing: .02em; }
+body.timing #timer { display: block; }
+#timer.low { background: var(--hot); color: #fff; }
+
+#hud { position: fixed; right: 14px; top: 14px; z-index: 25; display: flex; gap: 8px; opacity: .28; transition: opacity .15s; }
+#hud:hover { opacity: 1; }
+#hud button { appearance: none; cursor: pointer; white-space: nowrap; background: var(--surface); color: var(--ink-2); border: 1px solid var(--rule-strong); border-radius: 6px; padding: 7px 11px; font: 500 13px/1 var(--font-body); }
+#hud #btn-prev, #hud #btn-next { font: 600 17px/0.8 var(--font-body); padding: 5px 12px; }
+#hud button:hover { border-color: var(--accent); color: var(--accent); }
+.btn { appearance: none; cursor: pointer; font: 600 17px/1 var(--font-body); background: var(--surface); color: var(--ink); border: 2px solid var(--rule-strong); border-radius: 8px; padding: 11px 17px; }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--on-accent); }
+.btn:disabled { opacity: .4; cursor: default; }
+#edge-l, #edge-r { position: fixed; top: 0; bottom: 0; width: 9%; z-index: 15; cursor: pointer; }
+#edge-l { left: 0; } #edge-r { right: 0; }
+body.overview-on #edge-l, body.overview-on #edge-r { display: none; }
+
+#overview { position: fixed; inset: 0; z-index: 30; background: var(--bg); overflow-y: auto; padding: 26px; display: none; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; align-content: start; }
+body.overview-on #overview { display: grid; }
+#overview button { appearance: none; text-align: left; cursor: pointer; font: inherit; color: inherit; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; display: grid; gap: 5px; min-height: 92px; align-content: start; }
+#overview button:hover, #overview button.cur { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+#overview .n { font: 600 12px/1 var(--font-mono); color: var(--ink-3); }
+#overview .t { font-family: var(--font-display); font-weight: 600; font-size: 15px; line-height: 1.25; }
+#overview .k { font: 500 11.5px/1 var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: .05em; }
+
+.helpbox { position: fixed; inset: 0; z-index: 40; display: none; place-items: center; background: color-mix(in srgb, var(--bg) 88%, transparent); }
+body.help-on .helpbox { display: grid; }
+.helpbox > div { background: var(--surface); border: 1px solid var(--rule-strong); border-radius: 12px; padding: 26px 30px; max-width: 480px; }
+.helpbox h3 { font-family: var(--font-display); margin: 0 0 14px; font-size: 21px; }
+.helpbox dl { display: grid; grid-template-columns: auto 1fr; gap: 9px 16px; margin: 0; font-size: 15.5px; align-items: baseline; }
+.helpbox dt { text-align: right; } .helpbox dd { margin: 0; color: var(--ink-2); }
+kbd { font: 500 12.5px/1 var(--font-mono); border: 1px solid var(--rule-strong); border-bottom-width: 2px; border-radius: 4px; padding: 2px 6px; background: var(--surface-2); white-space: nowrap; }
+
+:root {--font-display:system-ui,sans-serif;--font-body:system-ui,sans-serif;--font-alt:Tahoma,system-ui,sans-serif;--bg:#f7f5ef;--accent:#2b675d;--accent-strong:#1f4e46;--accent-soft:#e2eeeb;} .codeopts{display:grid;grid-template-columns:1.15fr 1fr;gap:20px;align-items:start}.codeopts .opts{margin:0}.opt .txt code{white-space:pre-wrap;display:block}.codeopts pre.code{font-size:19px;line-height:1.5}.kind-predict .ar{display:none}.why p{margin-bottom:4px}.figwrap svg{max-height:280px}.kind-predict .why{padding:12px 16px}.kind-predict .body>.big{font-size:18px;margin:8px 0 0!important;}
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <button type="button" id="btn-prev" aria-label="Previous step">&lsaquo;</button>
+  <button type="button" id="btn-next" aria-label="Next step">&rsaquo;</button>
+  <button type="button" id="btn-overview">All steps <kbd>O</kbd></button>
+  <button type="button" id="btn-theme">Theme <kbd>T</kbd></button>
+  <button type="button" id="btn-help">?</button>
+</div>
+<div id="edge-l" title="Back" aria-hidden="true"></div>
+<div id="edge-r" title="Forward" aria-hidden="true"></div>
+<div id="bar"></div>
+<div id="timer" aria-live="off">0:00</div>
+
+<div id="viewport"><main id="stage" aria-live="polite"></main></div>
+<div id="overview" role="list" aria-label="All steps"></div>
+
+<div class="helpbox" role="dialog" aria-label="Keyboard shortcuts"><div>
+  <h3>Driving this console</h3>
+  <dl>
+    <dt><kbd>→</kbd> <kbd>space</kbd></dt><dd>Next step</dd>
+    <dt><kbd>←</kbd></dt><dd>Back</dd>
+    <dt><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> <kbd>4</kbd></dt><dd>Add a vote to A / B / C / D</dd>
+    <dt><kbd>0</kbd></dt><dd>Clear the votes on this question</dd>
+    <dt><kbd>Enter</kbd></dt><dd>Reveal the answer</dd>
+    <dt><kbd>H</kbd></dt><dd>Hide the split until the reveal</dd>
+    <dt><kbd>S</kbd></dt><dd>Start / stop the timer</dd>
+    <dt><kbd>O</kbd></dt><dd>All steps, to jump</dd>
+    <dt><kbd>T</kbd> <kbd>F</kbd></dt><dd>Light-dark / fullscreen</dd>
+  </dl>
+  <p style="margin:16px 0 0; font-size:14px; color:var(--ink-3)">Students vote with
+  <strong>fingers</strong> - one to four, held against the chest, everyone at the same moment.
+  Count the room and tap the tally. <strong>Nothing on screen depends on which answer is correct</strong>
+  until you press <kbd>Enter</kbd>, so read the bars yourself and say the next line out loud
+  (the thresholds are in RUN-SHEET.md). On a plan step, <kbd>Enter</kbd> reveals the next line.</p>
+</div></div>
+
+<script>
+(function () {
+"use strict";
+
+/* ===========================================================================
+   THE LAB. Edit this array to change the session; everything else is engine.
+
+   type: "note"    a plain card - instructions, a wrap-up, a transition
+         "clinic"  a numbered checklist to work through with the room
+         "concept" a multiple-choice question to vote on
+         "predict" same, but the options are "what will this code print?"
+         "parsons" jumbled correct code for the class to put in order
+         "task"    something they do at their machines, usually in pairs
+         "planbuild" the five-line plan, one row revealed per Enter;
+                   `template: true` shows the blank frame to copy
+         "codebuild" the program a block at a time, each block tagged with
+                   the plan line (`from`) it came from
+
+   Any step may also carry:
+     figure  inline SVG, drawn with var(--ink), var(--accent) and friends so
+             it works in both themes. Put the picture of an answer on the step
+             AFTER its vote, never on the vote itself.
+     tall    true lets the figure grow to 450px high instead of 300px - for
+             a picture of a screen, with little text on the step.
+     figcap  one-sentence caption under the figure.
+     callout a highlighted line at the bottom.
+     open    [["label", "relative/path.pdf#page=N"], ...] - buttons that open
+             the sheet, the lecture or a guide chapter in a new tab. The slides
+             are where the session starts; everything else is opened from
+             here. Never link a solution file: the room can read it.
+
+   For concept/predict: put the REAL misconceptions in the wrong options, and
+   aim for a question where roughly 40-60% get it right first time. `why`
+   explains every option, right and wrong - the tempting-wrong explanation is
+   the part they remember.
+   =========================================================================== */
+/* Inline SVG figures, drawn with the page's colour tokens so they work in both
+   themes. The PyCharm pictures use PyCharm's own dark colours on purpose: that
+   is what students see. */
+var FIG = {};
+var LAB = [{"type": "note", "title": "Python foundations for Sheets 2 and 3", "lead": "Computer Programming 1 · ECE122 · Ahmed Tolan", "body": ["This week: Sheet 3. Sheet 2 is the foundations and revision companion.", "Predict → explain → trace → change one input → test independently."], "ar": "ابدأ بالفكرة والمعطيات، وبعدها اكتب Python. لكل شيت Guide منفصل فيه كل الأسئلة."}, {"type": "note", "title": "How to use these slides", "lead": "Use ← / → to move and Enter to reveal one step.", "body": ["Click an option to record a vote. O opens the index; F opens fullscreen.", "The Guide links open the original question, foundations, and recorded Python traces."], "ar": "السلايدز للمناقشة. الـGuide للمذاكرة الفردية، مع حفظ محاولتك ونسخة JSON.", "open": [["Sheet 2 Guide", "sheet-02/index.html"], ["Sheet 3 Guide", "sheet-03/index.html"]]}, {"type": "clinic", "title": "Save, run, then find your file", "items": [["Folder", "File Explorer: Ctrl+Shift+N or right-click → New → Folder. Use a clear Sheet_03 practice folder."], ["Python file", "PyCharm project panel → right-click folder → New → Python File. Save Q_0301.py. Ctrl+S or File → Save All."], ["Run", "Right-click the file → Run. Shift+F10 reruns the current run configuration. Check which file is selected."], ["Input", "Type in the Run console when the program asks. Do not type answers into the code editor."]], "ar": "الأسماء هنا أمثلة للتدريب، مش إعلان لقواعد التسليم. اتبع تعليمات الدكتور في التسمية والرفع."}, {"type": "predict", "title": "A variable stores the latest value", "code": "x = 4\nx = x + 3\nprint(x)", "q": "Predict first. Vote, discuss, then reveal.", "opts": ["<code>4</code>", "<code>x + 3</code>", "<code>Error</code>", "<code>7</code>"], "ok": 3, "why": ["Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "The right side uses the old x, then assignment replaces x."], "ar": "علامة = تخزين، مش معادلة رياضية لازم تبقى صحيحة في الطرفين."}, {"type": "note", "title": "int, float, str and bool", "lead": "A value has a type that controls its operations.", "body": ["int: a whole-number value. float: a numerical value with floating precision.", "str: text, even when its characters look like digits. bool: True or False."], "ar": "عدد الأضلاع int، طول الضلع غالبًا float، والحرف str، ونتيجة المقارنة bool."}, {"type": "predict", "title": "Text addition and numeric addition", "code": "print(\"3\" + \"4\")\nprint(3 + 4)", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>34 | 34</code>", "<code>Error</code>", "<code>34 | 7</code>", "<code>7 | 7</code>"], "ok": 2, "why": ["Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "For str, + joins text. For numbers, + performs addition.", "Check the operation and value types."], "ar": "وجود quotes غيّر نوع القيم، فغيّر معنى +."}, {"type": "note", "title": "Read the exact input format", "lead": "input() returns text. The course uses eval(input(...)) for numeric expressions.", "body": ["For x, y = eval(input(...)), type two values separated by a comma: <code>3, 4</code>.", "For a character, <code>ch = input(...)</code> reads <code>@</code> directly.", "Use numeric inputs you type yourself with eval. In ordinary numeric-only programs, int or float gives a narrower conversion."], "ar": "الـGuide موضح فرق Q11 في Sheet 2: المرجع يستخدم eval فيحتاج quotes؛ نسختنا تقرأ الحرف مباشرة."}, {"type": "predict", "title": "Division, floor division and remainder", "code": "print(7 / 2)\nprint(7 // 2)\nprint(7 % 2)", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>3 | 4 | 1</code>", "<code>3.5 | 3 | 1</code>", "<code>3 | 3 | 1</code>", "<code>3.5 | 3.5 | 0</code>"], "ok": 1, "why": ["This code runs successfully; trace the actual operations.", "/ returns ordinary division; // floors the quotient; % is the remainder.", "Check the operation and value types.", "Follow the statements in execution order."], "ar": "في القوانين استخدم /؛ // مش مجرد طريقة تانية لكتابة القسمة."}, {"type": "predict", "title": "Powers and grouping", "code": "print(2 ** 3)\nprint(12 / (2 * 3))", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>8 | 2.0</code>", "<code>6 | 18.0</code>", "<code>8 | 18.0</code>", "<code>6 | 2.0</code>"], "ok": 0, "why": ["** is exponentiation. Parentheses group the whole denominator.", "Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations."], "ar": "خط الكسر الطويل في الشيت يتحول لقوسين في الكود. الضرب لازم يتكتب * صراحة."}, {"type": "note", "title": "Translate one formula at a time", "lead": "Name intermediate values so you can inspect them.", "body": ["<code>sqrt(a² + 4h²)</code> → <code>math.sqrt(a**2 + 4*h**2)</code>", "<code>a² / (2h)</code> → <code>a**2 / (2*h)</code>", "<code>ln(z)</code> → <code>math.log(z)</code>"], "ar": "افتح القوس واقفله مع نفس الجزء من المعادلة. math.log الطبيعي مش log10."}, {"type": "predict", "title": "Formatting changes display", "code": "x = 2 / 3\nprint(format(x, \".2f\"))\nprint(x > 0.66)", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>0.67 | False</code>", "<code>0.66 | True</code>", "<code>2/3 | True</code>", "<code>0.67 | True</code>"], "ok": 3, "why": ["Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "format makes display text; x retains its original numerical value."], "ar": "التقريب في الطباعة فقط. متصنّفش رقم حسب النسخة المقربة منه."}, {"type": "note", "title": "Units before formulas", "lead": "Write every input unit next to its name.", "body": ["Price / kg → price per kg. kg / price is a different quantity.", "Length squared produces area units. Latitude/longitude are angles.", "In Sheet 3 Q14, height is in metres; the supplied reference reads centimetres."], "ar": "الوحدة جزء من المعطيات. اكتبها قبل التعويض عشان تكتشف الضرب والقسمة في الاتجاه الغلط."}, {"type": "concept", "title": "Radius, side or full width?", "q": "In the ellipse drawing, what does a measure?", "opts": ["Perimeter", "Area", "Centre to edge along the horizontal axis", "Full width"], "ok": 2, "why": ["Perimeter goes around the entire boundary.", "Area measures the interior and has squared units.", "a is a semi-axis. Full width is twice a.", "Full width is 2a."], "ar": "الحرف لوحده مش كفاية؛ اقرا مكانه في الرسم."}, {"type": "note", "title": "Read geometric labels", "lead": "Different questions can reuse a letter for different lengths.", "body": [], "ar": "في Q7، a نصف عرض القاعدة. ممنوع تنقل معنى الحرف من سؤال للتاني.", "figure": "<svg viewBox=\"0 0 500 340\" role=\"img\" aria-label=\"Ellipse perimeter\" style=\"width:100%;max-height:340px;direction:ltr;font-family:system-ui\"><ellipse cx=\"250\" cy=\"155\" rx=\"180\" ry=\"70\" fill=\"#e2eeeb\" stroke=\"#2b675d\" stroke-width=\"3\"/><line x1=\"250\" y1=\"155\" x2=\"430\" y2=\"155\" stroke=\"#a8651a\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"250\" y1=\"155\" x2=\"250\" y2=\"85\" stroke=\"#7a5cc7\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><text x=\"340\" y=\"180\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">a = 18</text><text x=\"280\" y=\"120\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">b = 7</text><text x=\"250\" y=\"295\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">semi-axes · full width = 2a</text></svg>", "figcap": "Sheet 2 Q5: a and b are semi-axes. Q6 uses b for the full base width."}, {"type": "note", "title": "Degrees and radians", "lead": "A full turn is 360° or 2π radians.", "body": ["Python sin, cos and tan take radians.", "Use <code>math.radians(angle)</code> before trigonometry on degree inputs.", "acos returns radians; use <code>math.degrees(...)</code> for degree output."], "ar": "radian وdegree وحدتين لنفس الزاوية. acos عكس cos، مش 1/cos."}, {"type": "predict", "title": "Convert the angle before sine", "code": "import math\nprint(format(math.sin(math.radians(30)), \".3f\"))", "q": "Predict first. Vote, discuss, then reveal.", "opts": ["<code>1.000</code>", "<code>0.500</code>", "<code>30.000</code>", "<code>0.000</code>"], "ok": 1, "why": ["This code runs successfully; trace the actual operations.", "radians converts degrees; sin uses that radian value.", "Check the operation and value types.", "Follow the statements in execution order."], "ar": "متدخلش 30 مباشرة لو المقصود 30 درجة."}, {"type": "note", "title": "Sine, cosine and tangent are ratios", "lead": "Choose one acute angle in a right triangle.", "body": ["sin(angle) = opposite / hypotenuse. cos(angle) = adjacent / hypotenuse.", "tan(angle) = opposite / adjacent. The hypotenuse is opposite the right angle.", "acos takes a cosine value and recovers an angle. Its real input must lie between −1 and 1."], "ar": "سمّي الأضلاع بالنسبة للزاوية المختارة. لو غيّرت الزاوية، المقابل والمجاور بيتبادلوا."}, {"type": "predict", "title": "Recover an angle from a ratio", "code": "import math\ncosine = 3 / 5\nangle = math.degrees(math.acos(cosine))\nprint(format(angle, \".2f\"))", "q": "Predict first. Vote, discuss, then reveal.", "opts": ["<code>53.13</code>", "<code>0.60</code>", "<code>3.00</code>", "<code>60.00</code>"], "ok": 0, "why": ["acos recovers a radian angle from the ratio; degrees converts it for display.", "Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations."], "ar": "الـratio عدد بدون وحدة. الزاوية الناتجة ليها وحدة، فمحتاجين التحويل."}, {"type": "note", "title": "A logarithm reverses an exponential", "lead": "ln(z) asks which exponent of e produces z.", "body": ["If z=e**t, then ln(z)=t. In Python: math.log(z).", "The logarithm argument must be positive. Never replace ln with log10 in a formula.", "In the arc formulas, lengths cancel inside log, leaving a dimensionless ratio."], "ar": "مش محتاج تشتق قانون القوس عشان تطبّقه. محتاج تفهم أجزاءه، وحداته، ومجال الدوال."}, {"type": "predict", "title": "Natural logarithm in Python", "code": "import math\nprint(format(math.log(math.e**2), \".2f\"))", "q": "Predict first. Vote, discuss, then reveal.", "opts": ["<code>1.00</code>", "<code>2.72</code>", "<code>0.30</code>", "<code>2.00</code>"], "ok": 3, "why": ["Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "The natural logarithm reverses exponentiation with base e."], "ar": "هنا بنسأل e مرفوع لأي أس يدي القيمة المدخلة؟"}, {"type": "note", "title": "A regular polygon is made of triangles", "lead": "Join the centre to every vertex.", "body": [], "ar": "ده سبب القانون. في Q2 وQ3 المدخل طول الضلع؛ بنحتاج apothem بدل نصف القطر.", "figure": "<svg viewBox=\"0 0 500 340\" role=\"img\" aria-label=\"Pentagon from its radius\" style=\"width:100%;max-height:340px;direction:ltr;font-family:system-ui\"><polygon points=\"250,70 330.83980388508803,128.73355547812946 299.96174644486024,223.76644452187054 200.0382535551398,223.76644452187054 169.16019611491194,128.7335554781295\" fill=\"#e2eeeb\" stroke=\"#2b675d\" stroke-width=\"3\"/><line x1=\"250\" y1=\"155\" x2=\"250\" y2=\"70\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"250\" y1=\"155\" x2=\"330.83980388508803\" y2=\"128.73355547812946\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"250\" y1=\"155\" x2=\"299.96174644486024\" y2=\"223.76644452187054\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"250\" y1=\"155\" x2=\"200.0382535551398\" y2=\"223.76644452187054\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"250\" y1=\"155\" x2=\"169.16019611491194\" y2=\"128.7335554781295\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"250\" y1=\"155\" x2=\"250\" y2=\"70\" stroke=\"#a8651a\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><text x=\"275\" y=\"112\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">r</text><text x=\"306.419901942544\" y=\"89.36677773906473\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">s</text><text x=\"250\" y=\"285\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">n = 5 · central angle = 2π/n</text></svg>", "figcap": "Area from radius: n × r² × sin(2π/n) / 2. The pentagon has n=5."}, {"type": "note", "title": "Coordinates and distance", "lead": "Distance = sqrt(Δx² + Δy²).", "body": [], "ar": "x أفقي وy رأسي. الطرح قبل التربيع. المسافة موجبة حتى لو فرق الإحداثيات سالب.", "figure": "<svg viewBox=\"0 0 500 340\" role=\"img\" aria-label=\"Triangle coordinates, sides and angles\" style=\"width:100%;max-height:340px;direction:ltr;font-family:system-ui\"><line x1=\"40\" y1=\"240\" x2=\"470\" y2=\"240\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"70\" y1=\"270\" x2=\"70\" y2=\"40\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><text x=\"470\" y=\"230\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">x</text><text x=\"84\" y=\"35\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">y</text><polygon points=\"70,240 197.5,240 70,70\" fill=\"#2b675d15\" stroke=\"#2b675d\" stroke-width=\"2\"/><circle cx=\"70\" cy=\"240\" r=\"4\" fill=\"#a8651a\"/><text x=\"82\" y=\"228\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">A</text><circle cx=\"197.5\" cy=\"240\" r=\"4\" fill=\"#a8651a\"/><text x=\"209.5\" y=\"228\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">B</text><circle cx=\"70\" cy=\"70\" r=\"4\" fill=\"#a8651a\"/><text x=\"82\" y=\"58\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">C</text><text x=\"250\" y=\"290\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">Δx² + Δy² → distance²</text></svg>", "figcap": "Distance is unchanged by translating both points equally."}, {"type": "note", "title": "Triangle sides and opposite angles", "lead": "Side a lies opposite angle A.", "body": ["Cosine law: <code>cos(A)=(b²+c²−a²)/(2bc)</code>.", "Use acos, then convert to degrees. Repeat for B and C.", "Check that the three angles add to approximately a straight angle."], "ar": "في Sheet 2 Q4 بنطلع الأضلاع من الإحداثيات الأول. Sheet 3 Q9 الأضلاع معطاة مباشرة."}, {"type": "concept", "title": "Can these sides form a triangle?", "q": "Choose the correct validity rule.", "opts": ["One positive side is enough", "Any three numbers", "All sides positive and every pair sums to more than the third", "a+b >= c is enough"], "ok": 2, "why": ["All lengths must be positive.", "Negative and degenerate lengths are invalid.", "Strict inequalities exclude a flat shape.", "One inequality misses other impossible cases; equality is flat."], "ar": "الأمثلة المرجعية فيها >=. الـGuide بيوضح الفرق ويختبر الحالة المسطحة."}, {"type": "note", "title": "Heron’s formula", "lead": "First validate; then compute semiperimeter and area.", "body": ["<code>s=(a+b+c)/2</code> is half the perimeter, not a side.", "<code>area=sqrt(s*(s-a)*(s-b)*(s-c))</code>.", "The printed Sheet 3 formula repeats (s-b). The final factor should be (s-c), as in its code."], "ar": "التصحيح ظاهر ومفصول عن صورة السؤال الأصلي. متحسبش الجذر قبل اختبار المثلث."}, {"type": "note", "title": "Latitude and longitude", "lead": "North/south is latitude; east/west is longitude.", "body": [], "ar": "لندن غرب، لذلك longitude سالب. المسافة قوس على كرة، مش طريق على الخريطة.", "figure": "<svg viewBox=\"0 0 500 370\" role=\"img\" aria-label=\"Latitude, longitude and distance\" style=\"width:100%;max-height:340px;direction:ltr;font-family:system-ui\"><circle cx=\"250\" cy=\"150\" r=\"100\" fill=\"#2b675d12\" stroke=\"#2b675d\" stroke-width=\"2\"/><ellipse cx=\"250\" cy=\"150\" rx=\"100\" ry=\"28\" fill=\"none\" stroke=\"#a8651a\"/><ellipse cx=\"250\" cy=\"150\" rx=\"35\" ry=\"100\" fill=\"none\" stroke=\"#7a5cc7\"/><text x=\"250\" y=\"30\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">N: + latitude</text><text x=\"250\" y=\"285\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">S: − latitude</text><text x=\"80\" y=\"150\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">W: − lon</text><text x=\"420\" y=\"150\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">E: + lon</text><text x=\"250\" y=\"320\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">schematic · d = R × central angle</text><text x=\"250\" y=\"350\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">P1: 30.116, 31.417 · P2: 51.468, -0.459</text></svg>", "figcap": "Schematic globe. North/east are positive; south/west are negative."}, {"type": "planbuild", "title": "Plan the airport-distance problem", "question": "Sheet 2 Q9: calculate the great-circle distance between the supplied airports.", "rows": [["WANT", "target + unit", "Arc distance in km"], ["HAVE", "inputs", "Two latitude/longitude pairs in degrees; the sheet’s Earth radius"], ["CONVERT", "units", "West longitude is negative; convert angles to radians"], ["RELATE", "formula", "Compute the cosine expression; acos gives central angle; multiply by R"], ["CHECK", "independent check", "Reverse the two points. The distance must stay the same."]], "ar": "كشف WANT وHAVE لوحده مش كفاية؛ لازم تختار تحويل الوحدة والعلاقة."}, {"type": "note", "title": "Scientific notation and inverse square", "lead": "Use e notation for very large and very small numbers.", "body": ["<code>5.97e24</code> means <code>5.97 × 10**24</code>.", "Sheet 2 Q8 uses <code>F=G*m1*m2/d**2</code> in the reference.", "The printed formula lacks the square. The Guide explicitly follows the reference and checks the supplied data."], "ar": "المسافة بالمتر مع G المكتوب. مضاعفة المسافة تكبّر المقام بعامل مربع المضاعفة."}, {"type": "predict", "title": "A character has a number", "code": "print(chr(97))\nprint(ord(\"@\"))", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>A | 64</code>", "<code>a | 64</code>", "<code>97 | @</code>", "<code>a | 97</code>"], "ok": 1, "why": ["This code runs successfully; trace the actual operations.", "chr maps a code to text; ord maps a single character to its code.", "Check the operation and value types.", "Follow the statements in execution order."], "ar": "chr محتاج int، وord محتاج str طوله حرف واحد. المسافة كمان حرف."}, {"type": "note", "title": "Questions with a yes or no answer", "lead": "A condition asks a precise question about the current values.", "body": ["“What is the price?” asks for a value.", "“Is the price greater than my budget?” asks for yes or no.", "For our comparison questions, Python answers <code>True</code> or <code>False</code>."], "ar": "قبل ما نقرر هنعمل إيه، لازم نعرف نسأل إيه. هل السعر أكبر من الميزانية؟ آه أو لأ.", "section": "Questions and conditions"}, {"type": "concept", "title": "A question the program can answer", "q": "We know price and budget. Which question is precise enough?", "opts": ["Is price greater than budget?", "Is it expensive?", "What is the price?", "Buy it."], "ok": 0, "why": ["The two quantities and the comparison are specified.", "“Expensive” needs a rule, such as exceeding this budget.", "This asks for a number, not a yes/no answer.", "This is an action, not a question."], "ar": "اختار سؤال إجابته آه أو لأ، ومعناه محدد بالبيانات اللي معانا.", "section": "Questions and conditions"}, {"type": "note", "title": "Words become a comparison", "lead": "“Is the price greater than the budget?”", "body": ["The value being tested: <code>price</code>. The comparison value: <code>budget</code>.", "“Greater than” becomes <code>&gt;</code>. The whole question is <code>price &gt; budget</code>.", "The expression answers the question. We have not chosen an action yet."], "ar": "قسّم الجملة: بقارن إيه بإيه؟ وبسأل عن علاقة إيه بينهم؟ مش بنكتب علامة استفهام في Python.", "section": "Questions and conditions"}, {"type": "note", "title": "Greater, smaller and the boundary", "lead": "The wording decides whether equality is allowed.", "body": ["Greater / more than: <code>a &gt; b</code>. Smaller / less than: <code>a &lt; b</code>.", "At least / no less than: <code>a &gt;= b</code>. At most / no more than: <code>a &lt;= b</code>.", "To test the boundary, give a and b the same value."], "ar": "أكبر من غير أكبر من أو يساوي. “على الأقل” بتقبل الحد نفسه، و“بحد أقصى” بتقبله برضه.", "section": "Questions and conditions"}, {"type": "predict", "title": "Does the boundary count?", "code": "price = 50\nbudget = 50\nprint(price > budget)\nprint(price <= budget)", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>True | True</code>", "<code>False | False</code>", "<code>True | False</code>", "<code>False | True</code>"], "ok": 3, "why": ["Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "Equal values make > false and <= true. “Within budget” includes equality."], "ar": "اسألهم عن الإجابتين قبل التشغيل. غيّر السعر فوق الحد وتحته، وخليهم يتوقعوا تاني.", "section": "Questions and conditions"}, {"type": "note", "title": "Equal and not equal", "lead": "Two equals signs ask a question. One stores a value.", "body": ["<code>answer = 12</code> stores a value in answer.", "<code>answer == expected</code> asks “Are they equal?”", "<code>answer != expected</code> asks “Are they different?”"], "ar": "اقرا = بصوت “خزّن”. واقرا == بصوت “هل يساوي؟”. إجابة السؤال قيمة bool، مش تعديل للمتغير.", "section": "Questions and conditions"}, {"type": "predict", "title": "Asking does not change the value", "code": "answer = 12\nexpected = 15\nprint(answer == expected)\nprint(answer != expected)\nprint(answer)", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>True | False | 12</code>", "<code>False | False | 12</code>", "<code>False | True | 12</code>", "<code>False | True | 15</code>"], "ok": 2, "why": ["Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "The comparisons return False and True. Neither assigns a new value to answer.", "Check the operation and value types."], "ar": "قارن، وبعدها بص لقيمة answer. السؤال ما غيّرش القيمة.", "section": "Questions and conditions"}, {"type": "concept", "title": "Writing “at least” in Python", "q": "A pass requires a score of at least 50. Which expression asks whether the score qualifies?", "opts": ["<code>score &lt;= 50</code>", "<code>score &gt;= 50</code>", "<code>score &gt; 50</code>", "<code>score == 50</code>"], "ok": 1, "why": ["<= points toward smaller scores.", ">= includes the boundary and every greater score.", "> wrongly rejects the boundary.", "== accepts only the boundary and rejects higher scores."], "ar": "اكتبوا التعبير الأول في الكشكول، وبعدها اختاروا. جرّبوا قيمة أقل، وقيمة مساوية، وقيمة أكبر.", "section": "Questions and conditions"}, {"type": "note", "title": "One question made of two tests", "lead": "A rectangle needs both coordinate bounds to hold.", "body": ["First test: <code>abs(x) &lt;= 5</code>. Second test: <code>abs(y) &lt;= 2.5</code>.", "Combined question: <code>(abs(x) &lt;= 5) and (abs(y) &lt;= 2.5)</code>.", "<code>and</code> answers True only when both tests answer True."], "ar": "لازم الشرطين مع بعض. لو حد واحد اتكسر، النقطة برّه. الأقواس هنا عشان نشوف كل سؤال لوحده.", "section": "Questions and conditions"}, {"type": "predict", "title": "One true test is not enough for and", "code": "x = 4\ny = 3\nprint(abs(x) <= 5)\nprint(abs(y) <= 2.5)\nprint((abs(x) <= 5) and (abs(y) <= 2.5))", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>True | False | False</code>", "<code>True | False | True</code>", "<code>True | True | True</code>", "<code>False | False | False</code>"], "ok": 0, "why": ["The horizontal test passes, but the vertical test fails. Both are required.", "Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations."], "ar": "خلي الطالب يقول نتيجة كل سؤال صغير، وبعدها نتيجة السؤال المركب.", "section": "Questions and conditions"}, {"type": "note", "title": "Either test can be enough", "lead": "A rectangle point is outside if it exceeds either bound.", "body": ["<code>(abs(x) &gt; 5) or (abs(y) &gt; 2.5)</code>.", "<code>or</code> answers True when at least one test answers True.", "Both tests may be True. “Or” in Python includes that case."], "ar": "برّه المستطيل يكفي تجاوز أي حد، ومسموح تتجاوز الاتنين. or مش معناها واحد بس بالضرورة.", "section": "Questions and conditions"}, {"type": "predict", "title": "What if both tests answer yes?", "code": "x = 6\ny = 3\nprint(abs(x) > 5)\nprint(abs(y) > 2.5)\nprint((abs(x) > 5) or (abs(y) > 2.5))", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>True | True | False</code>", "<code>False | False | False</code>", "<code>True | False | True</code>", "<code>True | True | True</code>"], "ok": 3, "why": ["Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "Both tests are True, so “at least one is True” is also satisfied."], "ar": "ارجع لمعنى “واحد على الأقل”. لو الاتنين آه، الإجابة المركبة لسه آه.", "section": "Questions and conditions"}, {"type": "predict", "title": "All answers for and and or", "code": "print(True and True, True or True)\nprint(True and False, True or False)\nprint(False and True, False or True)\nprint(False and False, False or False)", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>True False | False True | False True | False False</code>", "<code>True True | True True | True True | False False</code>", "<code>True True | False True | False True | False False</code>", "<code>True True | False True | False True | False True</code>"], "ok": 2, "why": ["Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "Each line prints AND then OR. AND needs both; OR needs at least one. Only two False tests make OR false.", "Check the operation and value types."], "ar": "اقرأ كل سطر كتجربتين. الأول and وبعده or. خلوهم يبنوا الجدول قبل كشفه.", "section": "Questions and conditions"}, {"type": "concept", "title": "Writing an inclusive range", "q": "Ask whether x is between 0 and 10, including both endpoints.", "opts": ["<code>x == 0 or 10</code>", "<code>(x &gt;= 0) and (x &lt;= 10)</code>", "<code>(x &gt;= 0) or (x &lt;= 10)</code>", "<code>(x &gt; 0) and (x &lt; 10)</code>"], "ok": 1, "why": ["Write a complete comparison on each side. Here 10 alone is not the second comparison.", "Both limits must hold, including equality.", "This accepts values beyond either end because the other test passes.", "Strict comparisons exclude the endpoints."], "ar": "العدد لازم يحقق الحد الأدنى والحد الأقصى مع بعض. اكتب سؤال كامل على كل جنب من and أو or.", "section": "Questions and conditions"}, {"type": "task", "title": "Your questions before any actions", "lead": "Write only expressions in your notebook. Then test each boundary.", "body": ["“Is the answer different from the expected answer?”", "“Are both package weights positive?”", "“Is either package weight zero or negative?”"], "ar": "لسه مش محتاجين if. لكل سؤال اكتب حالة إجابتها True وحالة إجابتها False، واشرح اختيارك.", "section": "Questions and conditions"}, {"type": "codebuild", "title": "Review the questions one at a time", "question": "Compare your expressions before revealing the next one.", "steps": [{"code": "answer != expected", "from": "Different", "why": "!= asks whether the values differ."}, {"code": "(w1 > 0) and (w2 > 0)", "from": "Both positive", "why": "Both complete comparisons must be True."}, {"code": "(w1 <= 0) or (w2 <= 0)", "from": "Either invalid", "why": "One nonpositive weight is enough to reject the input."}], "ar": "بعد المقارنة، شغّل كل تعبير باستخدام print على قيم أنت مختارها. تعريف المتغيرات لازم يسبق استخدامها.", "section": "Questions and conditions"}, {"type": "note", "title": "Using the answer with if", "lead": "Now the answer can control an action.", "body": ["<code>if score &gt;= 50:</code> asks the question.", "True: run the indented statements. False: skip that block.", "A colon ends the header. Indentation shows which actions belong to it."], "ar": "السؤال زي ما هو. if بتستخدم إجابته: لو آه نفّذ البلوك، ولو لأ عدّيه وكمّل.", "section": "Questions and conditions"}, {"type": "predict", "title": "A true answer runs the block", "code": "score = 60\nif score >= 50:\n    print(\"Pass\")\nprint(\"Finished\")", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>Pass | Finished</code>", "<code>Pass</code>", "<code>Finished</code>", "<code>True | Finished</code>"], "ok": 0, "why": ["The condition is True, so Pass runs. Finished is outside the block and runs next.", "Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations."], "ar": "if مش بتطبع True لوحدها. هي بتستخدم الإجابة لتختار التنفيذ.", "section": "Questions and conditions"}, {"type": "predict", "title": "A false answer skips the block", "code": "score = 49\nif score >= 50:\n    print(\"Pass\")\nprint(\"Finished\")", "q": "Predict first. Vote, discuss, then reveal.", "opts": ["<code>Pass | Finished</code>", "<code>False | Finished</code>", "<code>No output</code>", "<code>Finished</code>"], "ok": 3, "why": ["Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "The condition is False, so Pass is skipped. Finished still runs after the block."], "ar": "False مش معناها البرنامج يقف، ومش لازم يبقى فيه else. شوف السطر اللي خارج المسافات.", "section": "Questions and conditions"}, {"type": "codebuild", "title": "An action for each answer", "question": "What should happen when the score does not reach the pass mark?", "steps": [{"code": "score = 49", "from": "Value", "why": "Use a concrete input, then try a passing score."}, {"code": "if score >= 50:\n    print(\"Pass\")", "from": "Yes", "why": "This block runs when the comparison is True."}, {"code": "else:\n    print(\"Try again\")", "from": "No", "why": "No new condition: every score that failed this test goes here."}, {"code": "print(\"Finished\")", "from": "Continue", "why": "This unindented statement follows either branch."}], "ar": "else معناها “غير كده”. مفيش سؤال بعدها. البلوك ممكن يطبع أو يحسب أو يخزّن قيمة.", "section": "Questions and conditions"}, {"type": "note", "title": "Several questions for one decision", "lead": "Which package has the lower price per kilogram?", "body": ["Ask: “Is package 1 cheaper?” Yes: choose package 1.", "If no, ask: “Is package 2 cheaper?” Yes: choose package 2.", "If both answers are no, the unit prices are equal. Report a tie."], "ar": "بنفترض أوزان موجبة وأسعار رقمية عادية وبنقارن نفس الوحدة. اقرأ الأسئلة بالكلام قبل الكود.", "section": "Questions and conditions"}, {"type": "concept", "title": "What does the first no tell us?", "q": "The answer to “Is package 1 cheaper?” is no. What can we conclude?", "opts": ["The prices must tie.", "The program must stop.", "Package 2 may be cheaper, or the prices may tie.", "Package 2 must be cheaper."], "ok": 2, "why": ["Package 2 could still be cheaper.", "A false condition determines a path; it does not stop the program.", "The first no leaves both possibilities. We need another question to distinguish them.", "A tie also makes the first question false."], "ar": "فكّروا في الاحتمالات اللي لسه موجودة بعد أول إجابة. متقفزوش للقرار.", "section": "Questions and conditions"}, {"type": "codebuild", "title": "The next question uses elif", "question": "u1 and u2 are comparable unit prices. Python spells “else if” as elif.", "steps": [{"code": "if u1 < u2:\n    print(\"Package 1\")", "from": "First question", "why": "If True, choose package 1 and skip the remaining branches."}, {"code": "elif u2 < u1:\n    print(\"Package 2\")", "from": "Next question", "why": "Ask this only if the earlier condition was False."}, {"code": "else:\n    print(\"Equal unit price\")", "from": "Remaining case", "why": "Both comparisons were False. For ordinary numeric prices, equality remains."}], "ar": "ممكن تزود elif لو فيه أسئلة تانية. أول True يختار بلوك واحد، وبعده السلسلة تخلص. else بلا شرط.", "section": "Questions and conditions"}, {"type": "predict", "title": "Following the questions in order", "code": "u1, u2 = 60, 50\nif u1 < u2:\n    print(\"Package 1\")\nelif u2 < u1:\n    print(\"Package 2\")\nelse:\n    print(\"Equal unit price\")", "q": "Predict first. Vote, discuss, then reveal.", "opts": ["<code>Equal unit price</code>", "<code>Package 2</code>", "<code>Package 1</code>", "<code>Package 2 | Equal unit price</code>"], "ok": 1, "why": ["This code runs successfully; trace the actual operations.", "60 < 50 is False, so ask the next question. 50 < 60 is True: run Package 2 and skip else.", "Check the operation and value types.", "Follow the statements in execution order."], "ar": "قبل ما يكشفوا الناتج، خلوهم يقولوا نتيجة كل سؤال تم الوصول له، وأنهي بلوك اتنفّذ.", "section": "Questions and conditions"}, {"type": "predict", "title": "No question is left at else", "code": "u1, u2 = 50, 50\nif u1 < u2:\n    print(\"Package 1\")\nelif u2 < u1:\n    print(\"Package 2\")\nelse:\n    print(\"Equal unit price\")", "q": "Predict first. Vote, discuss, then reveal.", "opts": ["<code>Equal unit price</code>", "<code>Package 2</code>", "<code>No output</code>", "<code>Package 1 | Package 2</code>"], "ok": 0, "why": ["Both strict comparisons are False. The remaining branch runs without another comparison.", "Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations."], "ar": "else مش سؤال إجابته True. هي المسار اللي وصلنا له لأن كل الشروط اللي قبله False.", "section": "Questions and conditions"}, {"type": "note", "title": "What else tells us", "lead": "else contains no question of its own.", "body": ["It runs only when every earlier condition in this chain is False.", "What that means depends on those conditions and the allowed input values.", "If there is no else and all tests fail, the program continues after the chain."], "ar": "بعد “هل موجب؟” وحدها، else تشمل الصفر والسالب. بعد “هل موجب؟” ثم “هل سالب؟”، المتبقي صفر للأعداد العادية.", "section": "Questions and conditions"}, {"type": "predict", "title": "The first true answer ends the chain", "code": "x = 25\nif x < 18.5:\n    print(\"A\")\nelif x < 25:\n    print(\"B\")\nelif x < 30:\n    print(\"C\")\nelse:\n    print(\"D\")", "q": "Predict first. Vote, discuss, then reveal.", "opts": ["<code>B</code>", "<code>B | C</code>", "<code>C | D</code>", "<code>C</code>"], "ok": 3, "why": ["Check the operation and value types.", "Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "The first two comparisons are False. x < 30 is True, so only C runs. The chain ends there."], "ar": "اختبر الحد بالضبط. الوصول لسؤال جديد معناه إن كل اللي قبله كانت إجابته لأ.", "section": "Questions and conditions"}, {"type": "predict", "title": "Independent if statements ask again", "code": "x = 3\nif x > 0:\n    print(\"positive\")\nif x < 10:\n    print(\"small\")", "q": "Predict first. The | symbol separates output lines.", "opts": ["<code>small</code>", "<code>Error</code>", "<code>positive | small</code>", "<code>positive</code>"], "ok": 2, "why": ["Follow the statements in execution order.", "This code runs successfully; trace the actual operations.", "These are two separate if statements, so both questions are reached and both blocks run.", "Check the operation and value types."], "ar": "سلسلة elif قرار واحد من بدائل. لكن if جديدة سؤال مستقل، وممكن نحتاج ننفّذ أكتر من بلوك.", "section": "Questions and conditions"}, {"type": "task", "title": "A decision you can explain", "lead": "Classify an ordinary number as positive, negative or zero.", "body": ["Write the yes/no questions in plain words, then as Python comparisons.", "Choose the action after each True answer. Use else for what remains.", "Test a positive value, a negative value and zero. Explain why else needs no question."], "ar": "خليهم يكتبوا بنفسهم قبل المساعدة. اسأل: لو حذفنا سؤال السالب، هل ينفع نسمي else صفر؟", "section": "Questions and conditions"}, {"type": "concept", "title": "and versus or", "q": "A point is inside a centred rectangle when...", "opts": ["y is positive", "Both horizontal AND vertical bounds hold", "Either bound holds", "x is positive"], "ok": 1, "why": ["Negative y can be inside.", "Both bounds define the rectangle.", "Either bound admits points outside the other edge.", "Negative x can be inside."], "ar": "برّه المستطيل يكفي كسر حد واحد؛ جوّه لازم كل الحدود تتحقق."}, {"type": "note", "title": "A centred rectangle uses half-dimensions", "lead": "Absolute value removes the direction of the distance.", "body": [], "ar": "العرض كله مش المسافة من المركز لليمين. نفس الفكرة فوق وتحت.", "figure": "<svg viewBox=\"0 0 500 340\" role=\"img\" aria-label=\"Point in a rectangle\" style=\"width:100%;max-height:340px;direction:ltr;font-family:system-ui\"><line x1=\"40\" y1=\"155\" x2=\"470\" y2=\"155\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"240\" y1=\"270\" x2=\"240\" y2=\"40\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><text x=\"470\" y=\"145\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">x</text><text x=\"254\" y=\"35\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">y</text><rect x=\"70\" y=\"70\" width=\"340\" height=\"170\" fill=\"#e2eeeb\" stroke=\"#2b675d\"/><text x=\"250\" y=\"60\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">width = 10 · height = 5</text><circle cx=\"308\" cy=\"87\" r=\"4\" fill=\"#a8651a\"/><text x=\"323\" y=\"75\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">P(2,2)</text></svg>", "figcap": "Inside: abs(x)<=width/2 and abs(y)<=height/2, including the boundary."}, {"type": "note", "title": "The circle needs total distance", "lead": "Pythagoras combines both coordinate differences.", "body": [], "ar": "فحص x وy منفصلين ممكن يعمل مربع. الدائرة بتقيس البعد عن المركز.", "figure": "<svg viewBox=\"0 0 500 340\" role=\"img\" aria-label=\"Point in a circle\" style=\"width:100%;max-height:340px;direction:ltr;font-family:system-ui\"><line x1=\"40\" y1=\"155\" x2=\"470\" y2=\"155\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"155\" y1=\"270\" x2=\"155\" y2=\"40\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><text x=\"470\" y=\"145\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">x</text><text x=\"169\" y=\"35\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">y</text><circle cx=\"155\" cy=\"155\" r=\"85\" fill=\"#2b675d12\" stroke=\"#2b675d\" stroke-width=\"2\"/><line x1=\"155\" y1=\"155\" x2=\"206\" y2=\"87\" stroke=\"#a8651a\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><text x=\"350\" y=\"60\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">radius = 10</text><circle cx=\"206\" cy=\"87\" r=\"4\" fill=\"#a8651a\"/><text x=\"221\" y=\"75\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">P(6,8)</text></svg>", "figcap": "Sheet 3 Q10 includes d=radius. Change the point in the Guide and compare the trace."}, {"type": "note", "title": "A triangle region needs three boundaries", "lead": "The sloped edge is y=-0.5x+100.", "body": [], "ar": "تحت الخط وحده مش كفاية. لازم كمان النقطة يمين محور y وفوق محور x.", "figure": "<svg viewBox=\"0 0 500 340\" role=\"img\" aria-label=\"Point in a right triangle\" style=\"width:100%;max-height:340px;direction:ltr;font-family:system-ui\"><line x1=\"40\" y1=\"240\" x2=\"470\" y2=\"240\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"70\" y1=\"270\" x2=\"70\" y2=\"40\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><text x=\"470\" y=\"230\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">x</text><text x=\"84\" y=\"35\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">y</text><polygon points=\"70,240 410,240 70,70\" fill=\"#e2eeeb\" stroke=\"#2b675d\"/><text x=\"250\" y=\"60\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">y = -0.5x + 100</text><circle cx=\"240\" cy=\"155\" r=\"4\" fill=\"#a8651a\"/><text x=\"255\" y=\"143\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">P(100,50)</text></svg>", "figcap": "Inside: x>=0 and y>=0 and y<=-0.5*x+100."}, {"type": "note", "title": "Containment has a direction", "lead": "Second circle inside first: d+r2<=r1.", "body": [], "ar": "الفرق المطلق يكتشف احتواء بدون اتجاه. قول مين جوّه مين بدقة.", "figure": "<svg viewBox=\"0 0 500 340\" role=\"img\" aria-label=\"Two-circle relationship\" style=\"width:100%;max-height:340px;direction:ltr;font-family:system-ui\"><line x1=\"40\" y1=\"155\" x2=\"470\" y2=\"155\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><line x1=\"155\" y1=\"270\" x2=\"155\" y2=\"40\" stroke=\"#a9b7b0\" stroke-width=\"2.5\" stroke-dasharray=\"\"/><text x=\"470\" y=\"145\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">x</text><text x=\"169\" y=\"35\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">y</text><circle cx=\"155\" cy=\"155\" r=\"85\" fill=\"#2b675d12\" stroke=\"#2b675d\" stroke-width=\"2\"/><circle cx=\"172\" cy=\"155\" r=\"34\" fill=\"#7a5cc712\" stroke=\"#7a5cc7\" stroke-width=\"2\"/><line x1=\"155\" y1=\"155\" x2=\"172\" y2=\"155\" stroke=\"#a8651a\" stroke-width=\"2.5\" stroke-dasharray=\"5 4\"/><text x=\"250\" y=\"30\" fill=\"#1f2f2b\" font-size=\"16\" text-anchor=\"middle\">r1 = 5 · r2 = 2 · d between centres</text></svg>", "figcap": "Swapping the circles must reverse containment direction. Equality includes internal tangency."}, {"type": "planbuild", "title": "Plan the rice-package comparison", "question": "Sheet 3 Q2: compare two packages with different weights and prices.", "rows": [["WANT", "target", "The better price per kilogram, or a tie"], ["HAVE", "inputs", "Weight and price of package 1; weight and price of package 2"], ["CONVERT", "units", "Both weights in kg and prices in the same currency"], ["RELATE", "calculation", "unit1=p1/w1 and unit2=p2/w2; choose the smaller"], ["CHECK", "test", "Doubling one package’s price and weight should preserve its unit price"]], "ar": "ابدأ بخطتك في الكشكول. السعر الإجمالي الأصغر مش شرط يبقى أفضل."}, {"type": "codebuild", "title": "Turn the rice plan into Python", "question": "Each block comes from a named part of the plan.", "steps": [{"code": "w1, p1 = eval(input(\"Weight, price 1: \"))\nw2, p2 = eval(input(\"Weight, price 2: \"))", "why": "Read each pair with a comma.", "from": "HAVE"}, {"code": "u1 = p1 / w1\nu2 = p2 / w2", "why": "Assume positive weights for this first version; guard invalid weights in the Guide.", "from": "RELATE"}, {"code": "if u1 < u2:\n    print(\"Package 1\")\nelif u2 < u1:\n    print(\"Package 2\")\nelse:\n    print(\"Equal unit price\")", "why": "The third branch represents a tie, not an automatic win for package 2.", "from": "WANT"}], "ar": "خلي الوحدات جنب المتغيرات في خطتك. جرّب التعادل بعد حالة فيها فرق."}, {"type": "note", "title": "Swap without losing a value", "lead": "Python evaluates the right side before assigning the left side.", "body": ["<code>a,b=b,a</code> preserves both old values.", "<code>a=b; b=a</code> loses the old a before the second assignment.", "For three values: compare first pair, last pair, then first pair again."], "ar": "بدّل القيمتين كعملية واحدة؛ افحص كل زوج مستقل."}, {"type": "note", "title": "Random quizzes need a valid interval", "lead": "randint includes both endpoints.", "body": ["Three-digit positive integers: <code>randint(100,999)</code>.", "Two-digit positive integers: <code>randint(10,99)</code>.", "Ask first, then compare the answer using ==."], "ar": "المرجع يبدأ من صفر؛ ده لا يضمن عدد الخانات. التتبّع يثبّت السحبات للاختبار فقط."}, {"type": "note", "title": "Cramer’s rule and the denominator", "lead": "Compute D before any division.", "body": ["<code>D=a1*b2-b1*a2</code>. D nonzero gives a unique solution.", "Substitute x and y into both original equations to check.", "D=0 means no unique solution. The assignment’s message says no solution, but coincident lines have infinitely many."], "ar": "بنوضح الفرق الرياضي من غير تغيير نص السؤال الأصلي."}, {"type": "note", "title": "Quadratic roots depend on the discriminant", "lead": "Check a!=0, then classify D=b²−4ac.", "body": ["D>0: two distinct real roots. D=0: one repeated root.", "D<0: real part plus/minus an imaginary part. Use sqrt(-D) for its magnitude.", "Do not call math.sqrt(D) before checking its sign."], "ar": "في الهندسة j هو الرمز التخيلي. الملف التعليمي بيوضح الجذرين وبيحمي a=0."}, {"type": "task", "title": "Independent practice for this week", "lead": "Close the worked solution. Write your own plan and code.", "body": ["Everyone: Sheet 3 Q2, including a tie.", "Independent transfer: Sheet 3 Q11, including a negative boundary point.", "Extension: Sheet 3 Q12 or Q13. Record your prediction, input and actual output."], "ar": "افتح المساعدة لو محتاج، وبعدها اقفلها وجرّب مدخل جديد بنفسك.", "open": [["Sheet 3 Guide", "sheet-03/index.html"]]}, {"type": "note", "title": "Errors are evidence", "lead": "Read the error type and the line before changing code.", "body": ["SyntaxError / IndentationError: check punctuation and block indentation.", "NameError: inspect spelling and whether assignment ran first.", "ZeroDivisionError / ValueError: inspect the input domain and choose a guard before the operation."], "ar": "غيّر حاجة واحدة في كل مرة. بعد الإصلاح أعد الحالة اللي فشلت وحالة كانت شغالة."}, {"type": "note", "title": "Save a record of your own test", "lead": "A revealed explanation is not an independent solution.", "body": ["Write input, predicted output, actual output and what you changed.", "Save .py files in the folder you can find. Recreate the ZIP after edits.", "Use the lecturer’s announced naming, upload location and deadline."], "ar": "الـGuide يحفظ محاولتك في نفس المتصفح، وJSON ينقل السجل لجهاز تاني. بياناتك مش بتتبعت تلقائيًا."}, {"type": "note", "title": "Question-by-question examples", "lead": "The following slides are a reference appendix, not one long lab session.", "body": ["Each question has its prerequisite and a verified example.", "Use the Guide for the full original source, gradual hints and the statement trace."], "ar": "ارجع للجزء اللي محتاجه وقت المذاكرة. مش مطلوب نشرح كل الملحق في سكشن واحد."}, {"type": "note", "title": "Sheet 2 · Q1 · Pentagon from its radius", "lead": "A regular polygon has equal sides and angles. Joining its centre to each vertex creates equal triangles. r is centre-to-vertex distance, not a side. Add the triangle areas. One full turn is 2π radians.", "body": ["<b>Input:</b> <code>2</code>", "<b>Recorded example:</b> <code>s = 2.35114 · area = 9.51057</code>", "<b>Output:</b> <code>The side length is      2.351 | The area of the pentagon is      9.511</code>"], "ar": "قبل التعويض، علّم المركز والرأس والضلع في الرسم. مساحة المثلث بضلعين r وزاوية بينهما θ هي r² sin(θ)/2. للخماسي نكررها خمس مرات.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q1"]]}, {"type": "note", "title": "Sheet 2 · Q2 · Pentagon from its side", "lead": "s is a side. The apothem is perpendicular from centre to side. Half a central triangle is right-angled: tan(π/5) = (s/2)/apothem. Area is perimeter × apothem / 2.", "body": ["<b>Input:</b> <code>2</code>", "<b>Recorded example:</b> <code>area = 6.88191</code>", "<b>Output:</b> <code>The area of the pentagon is      6.882</code>"], "ar": "ابدأ بمربع الضلع في البسط، وحط المقام كله بين أقواس. tan بتاخد radian. وحدة المساحة هي مربع وحدة s.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q2"]]}, {"type": "note", "title": "Sheet 2 · Q3 · Regular polygon", "lead": "n is an integer count of at least 3 sides. The pentagon method extends to any regular polygon: n triangles and perimeter n*s.", "body": ["<b>Input:</b> <code>4 | 2</code>", "<b>Recorded example:</b> <code>area = 4</code>", "<b>Output:</b> <code>The area of the polygon is      4.000</code>"], "ar": "اختبر n=4 عشان تراجع الناتج بمعادلة المربع s*s، وبعدها ارجع لخماسي. ده اختبار مستقل للقانون.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q3"]]}, {"type": "note", "title": "Sheet 2 · Q4 · Triangle coordinates, sides and angles", "lead": "A point is an ordered pair x,y. Δx is horizontal change and Δy vertical change. Pythagoras turns these into distance. Side a is opposite vertex A.", "body": ["<b>Input:</b> <code>0,0,3,0,0,4</code>", "<b>Recorded example:</b> <code>c = 3 · A = 90 · B = 53.1301 · C = 36.8699</code>", "<b>Output:</b> <code>Side lengths: 5.0 4.0 3.0 | The three angles are  A =  90.00      B =  53.13      C =  36.87</code>"], "ar": "ابدأ بمثلث رؤوسه (0,0)، (3,0)، (0,4). ارسمه قبل الحساب. احسب المسافات، وبعدين acos يرجع زاوية بالراديان؛ degrees يحوّلها لدرجات.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q4"]]}, {"type": "note", "title": "Sheet 2 · Q5 · Ellipse perimeter", "lead": "An ellipse is a stretched circle. a and b are semi-axes, measured from centre to edge, not full width and height. Perimeter is distance around the edge, distinct from area.", "body": ["<b>Input:</b> <code>18,7</code>", "<b>Recorded example:</b> <code>PI = 3.14159 · p = 82.3883</code>", "<b>Output:</b> <code>Perimeter of the ellipse = 82.39</code>"], "ar": "احسب 3*(a+b)، وبعدين الجذر sqrt((3*a+b)*(a+3*b))، اطرح واضرب في π. دي صيغة تقريبية للمحيط. لو a=b يبقى الشكل دايرة.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q5"]]}, {"type": "note", "title": "Sheet 2 · Q6 · Arc length from a and b", "lead": "This is an open curve, not a closed perimeter. The diagram labels a as peak height and b as the full base width. ln is the natural logarithm, math.log in Python.", "body": ["<b>Input:</b> <code>11,9</code>", "<b>Recorded example:</b> <code>x1 = 44.911 · x2 = 0.920455 · L_ABC = 24.5637</code>", "<b>Output:</b> <code>Length of arc ABC = 24.56</code>"], "ar": "قسّم المعادلة الطويلة لثلاث كميات: جذر، معامل اللوغاريتم، والعدد جوّه log. لازم العدد جوّه log يبقى موجب.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q6"]]}, {"type": "note", "title": "Sheet 2 · Q7 · Arc length from a and h", "lead": "Here a is half the base width and h is peak height. The meaning of a symbol can change between questions. This formula has a square root inside the logarithm and another outside.", "body": ["<b>Input:</b> <code>8,13</code>", "<b>Recorded example:</b> <code>x1 = 27.2029 · x2 = 2.46154 · x3 = 3.25 · L_ABC = 31.8667</code>", "<b>Output:</b> <code>Length of arc ABC = 31.87</code>"], "ar": "عرّف x1 للجذر الأول، x2 للمعامل وx3 للنسبة 2*h/a. اكتب كل جزء وشغّله لوحده قبل جمعهم.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q7"]]}, {"type": "note", "title": "Sheet 2 · Q8 · Gravity and scientific notation", "lead": "Mass is in kg, distance in m and force in N. 5.97e24 means 5.97 times 10 to power 24. Gravitational force uses distance squared in the denominator.", "body": ["<b>Input:</b> <code>5.97e24 | 7.3e22 | 3.84e8</code>", "<b>Recorded example:</b> <code>G = 6.6743e-11 · M1 = 5.97e+24 · M2 = 7.3e+22 · force = 1.97261e+20</code>", "<b>Output:</b> <code>The force between the two bodies =   1.973e+20 Newtons</code>"], "ar": "ابدأ بالوحدات قبل الأرقام الكبيرة. لو الكتل ثابتة والمسافة اتضاعفت، المقام يتربع والقوة تقل. جرّب بيانات الأرض والقمر من الشيت.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q8"]]}, {"type": "note", "title": "Sheet 2 · Q9 · Latitude, longitude and distance", "lead": "Latitude measures north/south of the equator; longitude east/west of the prime meridian. North/east are positive, south/west negative. The result is an arc on a sphere, not a chord or travel route.", "body": ["<b>Input:</b> <code>30.116,31.417 | 51.468,-0.459</code>", "<b>Recorded example:</b> <code>radius = 6371.01 · d1 = 0.392501 · d2 = 0.457596 · distance = 3533.53</code>", "<b>Output:</b> <code>The distance between the two points is    3533.53 km</code>"], "ar": "لندن غرب خط الصفر، فاكتب longitude بالسالب. حوّل الدرجات لـradians قبل sin وcos. acos يرجّع الزاوية المركزية؛ ضربها في R يدي km.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q9"]]}, {"type": "note", "title": "Sheet 2 · Q10 · ASCII number to character", "lead": "Characters have numeric codes. chr accepts an integer and returns a character string. The requested ASCII range is 32 through 126 inclusive. Space is a character too.", "body": ["<b>Input:</b> <code>97</code>", "<b>Recorded example:</b> <code>The character is a</code>", "<b>Output:</b> <code>The character is a</code>"], "ar": "جرّب كود حرف، وبعدين كود المسافة. الناتج ممكن يبقى مش واضح بصريًا رغم إنه موجود.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q10"]]}, {"type": "note", "title": "Sheet 2 · Q11 · Character to ASCII number", "lead": "ord reverses chr: one character goes in and its integer code comes out. input already returns str, so a character needs no numeric conversion.", "body": ["<b>Input:</b> <code>@</code>", "<b>Recorded example:</b> <code>Chr = @</code>", "<b>Output:</b> <code>The corresponding decimal ASCII code is 64</code>"], "ar": "اقرا @ كما هو من input، وبعدين ord. لو كتبت حرفين، الدالة مش هتختار واحد منهم؛ هتطلع TypeError.", "optional": true, "open": [["Open this question", "sheet-02/index.html#q11"]]}, {"type": "note", "title": "Sheet 3 · Q1 · Ordering three values", "lead": "Ascending means smallest first. A comparison returns True or False. A swap exchanges values without losing either. Python evaluates the right side before assigning the left side.", "body": ["<b>Input:</b> <code>3,1,2</code>", "<b>Recorded example:</b> <code>2 | 3</code>", "<b>Output:</b> <code>2 | 3</code>"], "ar": "قارن أول اتنين، ثم آخر اتنين، ثم أول اتنين تاني. بعد التبديل التاني ممكن أول زوج يحتاج مراجعة.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q1"]]}, {"type": "note", "title": "Sheet 3 · Q2 · Price per kilogram", "lead": "Total price alone is unfair when weights differ. Unit price is price/weight. Both weights must use the same unit.", "body": ["<b>Input:</b> <code>2,60 | 3,105</code>", "<b>Recorded example:</b> <code>pricePerKilo1 = 30 · pricePerKilo2 = 35</code>", "<b>Output:</b> <code>Price per kg: 30.0 35.0 | Package 1 has a better price</code>"], "ar": "عبوة أرخص إجمالًا ممكن تكون أغلى لكل kg. اقسم السعر على الوزن، وقارن الناتجين، وخلي فيه حالة تعادل.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q2"]]}, {"type": "note", "title": "Sheet 3 · Q3 · Random addition quiz", "lead": "randint chooses an integer including both endpoints. Generate two values, ask for an answer, then compare it with the computed result.", "body": ["<b>Input:</b> <code>1099</code>", "<b>Recorded example:</b> <code>num1 = 100 · num2 = 999</code>", "<b>Output:</b> <code>You are correct!</code>"], "ar": "تتبّع الـGuide يستخدم مولّدًا مُتحكّمًا فيه بأرقام ثابتة للاختبار. ملف Python القابل للتنزيل يستخدم random الطبيعي. جرّب إجابة صح وإجابة غلط لنفس الرقمين.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q3"]]}, {"type": "note", "title": "Sheet 3 · Q4 · Random multiplication quiz", "lead": "randint chooses an integer including both endpoints. Generate two values, ask for an answer, then compare it with the computed result.", "body": ["<b>Input:</b> <code>990</code>", "<b>Recorded example:</b> <code>num1 = 10 · num2 = 99</code>", "<b>Output:</b> <code>You are correct!</code>"], "ar": "تتبّع الـGuide يستخدم مولّدًا مُتحكّمًا فيه بأرقام ثابتة للاختبار. ملف Python القابل للتنزيل يستخدم random الطبيعي. جرّب إجابة صح وإجابة غلط لنفس الرقمين.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q4"]]}, {"type": "note", "title": "Sheet 3 · Q5 · Currency conversion and units", "lead": "Define rate as EGP per USD. Multiply USD by rate for EGP; divide for the reverse direction. These are practice rates, not current exchange rates.", "body": ["<b>Input:</b> <code>50 | 0 | 10</code>", "<b>Recorded example:</b> <code>exchange_rate = 50 · conversion = 0 · EGP = 500</code>", "<b>Output:</b> <code>500.00 EGP</code>"], "ar": "اكتب الوحدات جنب العملية: USD × EGP/USD = EGP. الوحدات بتكشف اتجاه التحويل قبل ما تكتب الكود.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q5"]]}, {"type": "note", "title": "Sheet 3 · Q6 · Two equations and two unknowns", "lead": "Each equation is a line. A shared x,y satisfies both. Determinant D=a1*b2-b1*a2 identifies a unique intersection. D=0 means no unique solution: parallel lines or coincident lines.", "body": ["<b>Input:</b> <code>1,1,3,1,-1,1</code>", "<b>Recorded example:</b> <code>D = -2 · x = 2 · y = 1</code>", "<b>Output:</b> <code>The solution to the equation is X = 2.0 Y = 1.0</code>"], "ar": "في المثال x+y=3 وx-y=1. بعد الحل عوّض بالقيم في المعادلتين، مش بس في صيغة Cramer.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q6"]]}, {"type": "note", "title": "Sheet 3 · Q7 · Quadratic equation", "lead": "For a*x²+b*x+c=0, a must be nonzero. D=b²-4ac. Positive gives two real roots, zero a repeated root and negative a complex conjugate pair. Engineers use j for sqrt(-1).", "body": ["<b>Input:</b> <code>1,-3,2</code>", "<b>Recorded example:</b> <code>disc = 1 · r1 = 2 · r2 = 1</code>", "<b>Output:</b> <code>Discriminant: 1 | Two real roots: 2.00 1.00</code>"], "ar": "اختار فرع D قبل sqrt. في الحالة السالبة احسب sqrt(-D) للجزء التخيلي. المقام 2*a كله داخل قوسين.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q7"]]}, {"type": "note", "title": "Sheet 3 · Q8 · Triangle validity and area", "lead": "A triangle needs positive sides and every pair’s sum strictly greater than the third. Equality forms a flat line. Validate before computing area or angles.", "body": ["<b>Input:</b> <code>3,4,5</code>", "<b>Recorded example:</b> <code>s = 6 · area = 6</code>", "<b>Output:</b> <code>The area =  6.00</code>"], "ar": "في Q8، s نصف المحيط وHeron يحسب المساحة. في Q9، A الزاوية المقابلة للضلع a؛ acos يرجّع radian وبعده degrees.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q8"]]}, {"type": "note", "title": "Sheet 3 · Q9 · Triangle angles", "lead": "A triangle needs positive sides and every pair’s sum strictly greater than the third. Equality forms a flat line. Validate before computing area or angles.", "body": ["<b>Input:</b> <code>3,4,5</code>", "<b>Recorded example:</b> <code>A = 0.643501 · B = 0.927295 · C = 1.5708</code>", "<b>Output:</b> <code>Angle B =  53.13    | Angle C =  90.00</code>"], "ar": "في Q8، s نصف المحيط وHeron يحسب المساحة. في Q9، A الزاوية المقابلة للضلع a؛ acos يرجّع radian وبعده degrees.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q9"]]}, {"type": "note", "title": "Sheet 3 · Q10 · Point in a circle", "lead": "The centre is (0,0); radius is distance to the boundary. d=sqrt(x²+y²). Separate x/y limits alone describe a box, not a circle.", "body": ["<b>Input:</b> <code>4,5</code>", "<b>Recorded example:</b> <code>d = 6.40312</code>", "<b>Output:</b> <code>The point(4.0, 5.0) is in the circle</code>"], "ar": "جرّب نقطة على الحافة، مش بس جوّه وبرّه. الشيت بيضم الحافة، لذلك نستخدم <=.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q10"]]}, {"type": "note", "title": "Sheet 3 · Q11 · Point in a rectangle", "lead": "The rectangle is centred at the origin. Half the width lies on each side; half the height above/below. abs measures distance without direction.", "body": ["<b>Input:</b> <code>2,2</code>", "<b>Recorded example:</b> <code>Inside rectangle, boundary included</code>", "<b>Output:</b> <code>Inside rectangle, boundary included</code>"], "ar": "لازم الشرطان يتحققوا معًا: abs(x)<=width/2 وabs(y)<=height/2. نقطة تحقق واحد بس تبقى خارج.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q11"]]}, {"type": "note", "title": "Sheet 3 · Q12 · Point in a right triangle", "lead": "The region has three boundaries: the axes and a sloped line joining (200,0) to (0,100). Slope is Δy/Δx, giving y=-0.5*x+100.", "body": ["<b>Input:</b> <code>50,20</code>", "<b>Recorded example:</b> <code>The point (50, 20) is INSIDE the triangle.</code>", "<b>Output:</b> <code>The point (50, 20) is INSIDE the triangle.</code>"], "ar": "عند x معين، الخط يحدد أعلى y مسموح. لكن اختبار تحت الخط وحده يسمح بنقط سالبة؛ لازم x>=0 وy>=0 كمان.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q12"]]}, {"type": "note", "title": "Sheet 3 · Q13 · Two-circle relationship", "lead": "Find centre distance d. r1+r2 is the external tangency threshold. Circle 2 inside 1 requires d+r2<=r1; absolute radius difference alone does not identify direction.", "body": ["<b>Input:</b> <code>0,0,5 | 1,0,2</code>", "<b>Recorded example:</b> <code>distance = 1</code>", "<b>Output:</b> <code>circle2 is inside circle1, internal touch included</code>"], "ar": "ابدأ بالتطابق، ثم الاحتواء في الاتجاهين، ثم التداخل أو التلامس، وأخيرًا الانفصال. جرّب تبديل الدائرتين.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q13"]]}, {"type": "note", "title": "Sheet 3 · Q14 · Units and category boundaries", "lead": "This is interval-classification practice. Weight is kilograms and height metres; bmi=weight/height**2. Check thresholds in ascending order so elif selects one branch.", "body": ["<b>Input:</b> <code>18 | 1</code>", "<b>Recorded example:</b> <code>bmi = 18 · category = Underweight</code>", "<b>Output:</b> <code>BMI: 18.0 Underweight</code>"], "ar": "اختبر نفس الحد بالضبط، مش رقم بعيد عنه. القيمة 25 تدخل الفرع اللي يبدأ عند 25، وليس الفرع الذي ينتهي قبله.", "optional": true, "open": [["Open this question", "sheet-03/index.html#q14"]]}, {"type": "note", "title": "Sources and use", "lead": "The original course PDFs and code archives are preserved.", "body": ["Sheet 2 and Sheet 3: Prof. Mahmoud M. Khater, Computer Programming 1, ECE122.", "Python 3.14 documentation: math, random, and built-in functions. Numerical examples executed with Python 3.14.6.", "Teaching explanations and corrections are labelled in each Guide. Windows/PyCharm operation was not executed here."], "ar": "خلي ملاحظات اختلاف المرجع معاك وقت التحضير. المادة دي مش بديل عن تعليمات الدكتور."}];
+
+/* =========================== engine below =========================== */
+
+var $ = function (s, r) { return (r || document).querySelector(s); };
+var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+/* tiny Python highlighter */
+function hl(code) {
+  var re = /(#[^\n]*)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*')|(\b\d+(?:\.\d+)?(?:[eE][+-]?\d+)?\b)|([A-Za-z_][A-Za-z0-9_]*)/g;
+  var KW = " if elif else for while def return import from as in and or not True False None ".split(" ");
+  var BI = " print input eval int float format str round abs len range ".split(" ");
+  var out = "", last = 0, m;
+  while ((m = re.exec(code))) {
+    out += esc(code.slice(last, m.index));
+    var t = m[0], c = "";
+    if (m[1]) c = "tk-c"; else if (m[2]) c = "tk-s"; else if (m[3]) c = "tk-n";
+    else if (m[4]) { if (KW.indexOf(t) >= 0) c = "tk-k"; else if (BI.indexOf(t) >= 0) c = "tk-p"; }
+    out += c ? '<span class="' + c + '">' + esc(t) + "</span>" : esc(t);
+    last = re.lastIndex;
+  }
+  return out + esc(code.slice(last));
+}
+
+var LETTERS = ["A", "B", "C", "D", "E"];
+var stage = $("#stage");
+var cur = 0;
+var votes = {};        /* step index -> array of counts */
+var parsonsState = {}; /* step index -> current order */
+
+function isQuestion(s) { return s.type === "concept" || s.type === "predict"; }
+
+function fit() {
+  var k = Math.min((window.innerWidth - 24) / 1280, (window.innerHeight - 24) / 720);
+  // Centre explicitly: a grid centres an item wider than the window by pinning
+  // it to the left edge, which throws a narrow window's stage off screen.
+  stage.style.left = (window.innerWidth - 1280) / 2 + "px";
+  stage.style.top = (window.innerHeight - 720) / 2 + "px";
+  stage.style.transform = "scale(" + k + ")";
+}
+
+/* ---------- build every step once ---------- */
+LAB.forEach(function (s, i) {
+  var el = document.createElement("section");
+  el.className = "step kind-" + s.type;
+  el.dataset.i = i;
+  var h = '<div class="body">';
+
+  h += '<p class="kicker"><span class="pill' + (isQuestion(s) ? "" : " warn") + '">' + esc(s.kicker || s.type) + "</span>" +
+       (s.mins ? "<span>" + s.mins + " min</span>" : "") +
+       (s.optional ? "<span>cut this first if you are short of time</span>" : "") + "</p>";
+  h += "<h2" + ((s.title || "").length > 34 ? ' class="small"' : "") + ">" + esc(s.title) + "</h2>";
+  if (s.lead) h += '<p class="sub">' + s.lead + "</p>";
+  if (s.quote) h += '<p class="big"><b class="acc">' + esc(s.quote) + "</b></p>";
+  if (s.code) h += '<pre class="code' + (s.code.length > 60 ? " small" : "") + '">' + hl(s.code) + "</pre>";
+  if (s.q) h += '<p class="big" style="margin-top:10px">' + s.q + "</p>";
+
+  if (s.body) h += "<ul>" + s.body.map(function (b) { return "<li>" + b + "</li>"; }).join("") + "</ul>";
+
+  if (s.items) {
+    h += '<ul class="clinic">' + s.items.map(function (it, n) {
+      return '<li><span class="n">' + (n + 1) + "</span><span><b>" + it[0] + '</b><span class="d">' + it[1] + "</span></span></li>";
+    }).join("") + "</ul>";
+  }
+
+  if (isQuestion(s)) {
+    h += '<div class="opts">' + s.opts.map(function (o, n) {
+      return '<div class="opt" data-n="' + n + '"><span class="fill"></span>' +
+             '<span class="ltr">' + LETTERS[n] + '</span><span class="txt">' + o + '</span>' +
+             '<span class="cnt">0</span></div>';
+    }).join("") + "</div>";
+    h += '<div class="voterow">' + s.opts.map(function (o, n) {
+      return '<button type="button" class="tallybtn" data-n="' + n + '">' + LETTERS[n] + "</button>";
+    }).join("") + '<button type="button" class="btn" data-act="clear">Clear</button>' +
+       '<button type="button" class="btn primary" data-act="reveal">Reveal</button>' +
+       '<span class="vcount"></span></div>';
+    h += '<div class="why">' + s.opts.map(function (o, n) {
+      return "<p><span class=\"w-l" + (n === s.ok ? " ok" : "") + "\">" + LETTERS[n] + "</span> " + s.why[n] + "</p>";
+    }).join("") + "</div>";
+  }
+
+  if (s.type === "codebuild") {
+    if (s.question) h += '<p class="pbq">' + s.question + "</p>";
+    h += '<div class="cbwrap"><pre class="cbcode"></pre><div class="cbwhy none"></div></div>';
+    h += '<div class="pbtns">' +
+         '<button type="button" class="btn primary" data-act="cb-next">Write the next line</button>' +
+         '<button type="button" class="btn" data-act="cb-all">All blocks</button>' +
+         '<button type="button" class="btn" data-act="cb-reset">Start again</button></div>';
+    if (s.note) h += '<p class="pbnote">' + s.note + "</p>";
+  }
+
+  if (s.type === "planbuild") {
+    if (s.question) h += '<p class="pbq">' + s.question + "</p>";
+    h += '<div class="pb"></div>';
+    if (!s.template) {
+      h += '<div class="pbtns">' +
+           '<button type="button" class="btn primary" data-act="pb-next">Reveal the next line</button>' +
+           '<button type="button" class="btn" data-act="pb-all">All five</button>' +
+           '<button type="button" class="btn" data-act="pb-reset">Blank again</button></div>';
+    }
+    if (s.note) h += '<p class="pbnote">' + s.note + "</p>";
+  }
+
+  if (s.type === "parsons" || s.type === "plan") {
+    h += '<div class="parsons' + (s.type === "plan" ? " prose" : "") + '"></div>';
+    h += '<div class="pbtns">' +
+         '<button type="button" class="btn" data-act="up">Move up</button>' +
+         '<button type="button" class="btn" data-act="down">Move down</button>' +
+         '<button type="button" class="btn primary" data-act="check">Check</button>' +
+         '<button type="button" class="btn" data-act="shuffle">Scramble again</button>' +
+         '<span class="cnt" style="font:500 17px var(--font-body);color:var(--ink-3)"></span></div>';
+    if (s.note) h += '<p class="pnote">' + s.note + "</p>";
+  }
+
+  if (s.figure) h += '<div class="figwrap' + (s.tall ? " tall" : "") + '">' + s.figure + "</div>" + (s.figcap ? '<p class="figcap">' + s.figcap + "</p>" : "");
+  if (s.callout) h += '<div class="callout">' + s.callout + "</div>";
+  if (s.open) h += '<div class="openrow"><span class="lbl">Open</span>' + s.open.map(function (o) {
+    return '<a class="openbtn" href="' + o[1] + '" target="_blank" rel="noopener">' + o[0] + "</a>";
+  }).join("") + "</div>";
+  if (s.ar) h += '<p class="ar" lang="ar" dir="rtl">' + s.ar + "</p>";
+
+  h += "</div>";
+  h += '<footer><span>ECE122 · Sheets 2 & 3</span><span class="sp"></span><span>' + (i + 1) + " / " + LAB.length + "</span></footer>";
+  el.innerHTML = h;
+  if(s.type === "predict"){var co=document.createElement("div");co.className="codeopts";var code=el.querySelector("pre.code"),opts=el.querySelector(".opts");if(code&&opts){code.before(co);co.append(code,opts);}}
+  stage.appendChild(el);
+});
+
+/* ---------- voting ---------- */
+function tallyOf(i) {
+  if (!votes[i]) votes[i] = LAB[i].opts.map(function () { return 0; });
+  return votes[i];
+}
+function paintVotes(i) {
+  var s = LAB[i], el = stage.children[i], t = tallyOf(i);
+  var total = t.reduce(function (a, b) { return a + b; }, 0);
+  $$(".opt", el).forEach(function (o, n) {
+    $(".cnt", o).textContent = t[n];
+    $(".fill", o).style.width = total ? (t[n] / total * 100) + "%" : "0";
+    o.classList.toggle("right", n === s.ok);
+    o.classList.toggle("wrong", n !== s.ok);
+  });
+  document.body.classList.toggle("tallied", total > 0);
+  /* Nothing on screen may depend on WHICH option is correct - not the wording,
+     and not which of several messages appears. A card that says "nearly everyone
+     agrees" tells the room the answer is the tallest bar; one that says "let us
+     look at this again" tells them it is not. So the console shows the split and
+     the vote count and nothing else. You read the split yourself and say what
+     happens next out loud; the thresholds are in RUN-SHEET.md. */
+  var vc = $(".vcount", el);
+  if (total > 0) {
+    if (vc) vc.textContent = total + (total === 1 ? " vote" : " votes");
+  } else if (vc) { vc.textContent = ""; }
+}
+
+/* ---------- plan builder ----------
+   The five lines start blank and are filled in one at a time, so you can ask
+   the room "what does it want?" and only then show the agreed answer. There is
+   no paper version: the lab has no printers, so students copy the frame into
+   their own notebooks. */
+var pbShown = {};
+function paintPB(i) {
+  var s = LAB[i], el = stage.children[i], box = $(".pb", el);
+  var n = s.template ? 0 : (pbShown[i] || 0);
+  box.innerHTML = s.rows.map(function (r, k) {
+    var on = k < n;
+    return '<div class="pbrow' + (on ? " on" : "") + '">' +
+      '<div class="k">' + r[0] + "<small>" + r[1] + "</small></div>" +
+      '<div class="v' + (on ? "" : " blank") + '">' + (on ? r[2] : "&nbsp;") + "</div></div>";
+  }).join("");
+  var next = $('[data-act="pb-next"]', el);
+  if (next) {
+    next.disabled = n >= s.rows.length;
+    next.textContent = n === 0 ? "Reveal the first line"
+      : n >= s.rows.length ? "All five are up" : "Reveal the next line";
+  }
+}
+
+/* ---------- code builder ----------
+   The program is written a block at a time, and every block says which line of
+   the plan it came from. That tag is the point: it is what connects "I know
+   what has to happen" to "here is the Python that does it". */
+var cbShown = {};
+function paintCB(i) {
+  var s = LAB[i], el = stage.children[i];
+  var n = cbShown[i] || 0;
+  var code = $(".cbcode", el), why = $(".cbwhy", el);
+
+  if (n === 0) {
+    code.innerHTML = '<span class="ghost">nothing typed yet</span>';
+  } else {
+    var done = s.steps.slice(0, n - 1).map(function (b) { return b.code; }).join("\n");
+    var fresh = s.steps[n - 1].code;
+    code.innerHTML = (done ? hl(done) + "\n" : "") + '<span class="fresh">' + hl(fresh) + "</span>";
+  }
+
+  if (n === 0) {
+    why.className = "cbwhy none";
+    why.innerHTML = '<span class="cbfrom plain">plan</span><p>Explain the task in words. Then reveal the next expression or code block.</p>';
+  } else {
+    var b = s.steps[n - 1];
+    why.className = "cbwhy";
+    why.innerHTML = '<span class="cbfrom' + (b.from ? "" : " plain") + '">' + (b.from || "header") + "</span><p>" + b.why + "</p>";
+  }
+
+  var next = $('[data-act="cb-next"]', el);
+  if (next) {
+    next.disabled = n >= s.steps.length;
+    next.textContent = n === 0 ? "Write the first line"
+      : n >= s.steps.length ? "All blocks shown" : "Write the next line";
+  }
+}
+
+/* ---------- parsons ---------- */
+function shuffle(a, seed) {
+  var r = seed || 7, out = a.slice();
+  for (var i = out.length - 1; i > 0; i--) {
+    r = (r * 1103515245 + 12345) & 0x7fffffff;
+    var j = r % (i + 1);
+    var tmp = out[i]; out[i] = out[j]; out[j] = tmp;
+  }
+  return out;
+}
+function paintParsons(i) {
+  var el = stage.children[i], box = $(".parsons", el), st = parsonsState[i];
+  var prose = LAB[i].type === "plan";
+  box.innerHTML = st.order.map(function (idx, pos) {
+    var line = LAB[i].lines[idx];
+    return '<div class="pline' + (prose ? " prose" : "") + (st.sel === pos ? " sel" : "") +
+           (st.marks ? (st.marks[pos] ? " ok" : " bad") : "") +
+           '" data-pos="' + pos + '"><span class="h">' + (pos + 1) + "</span><span>" +
+           (line === "" ? "&nbsp;" : (prose ? line : hl(line))) + "</span></div>";
+  }).join("");
+  if (st.marks) {
+    var right = st.marks.filter(Boolean).length;
+    $(".pbtns .cnt", el).textContent = right + " of " + st.marks.length + " in the right place";
+  } else {
+    $(".pbtns .cnt", el).textContent = "";
+  }
+}
+function initParsons(i, seed) {
+  var n = LAB[i].lines.length;
+  var ideal = []; for (var k = 0; k < n; k++) ideal.push(k);
+  /* the first scramble is the same every time, so a rehearsal matches the lab;
+     "Scramble again" uses a fresh seed */
+  parsonsState[i] = { order: shuffle(ideal, seed || (11 + i)), sel: null, marks: null };
+}
+
+/* ---------- navigation ---------- */
+function show(n) {
+  cur = Math.max(0, Math.min(LAB.length - 1, n));
+  $$(".step", stage).forEach(function (el, i) { el.classList.toggle("on", i === cur); });
+  $("#bar").style.width = ((cur + 1) / LAB.length * 100) + "%";
+  $$("#overview button").forEach(function (b, i) { b.classList.toggle("cur", i === cur); });
+  document.body.classList.remove("revealed", "tallied");
+  var s = LAB[cur];
+  if (isQuestion(s)) paintVotes(cur);
+  if (s.type === "parsons" || s.type === "plan") { if (!parsonsState[cur]) initParsons(cur); paintParsons(cur); }
+  if (s.type === "planbuild") paintPB(cur);
+  if (s.type === "codebuild") paintCB(cur);
+  try { history.replaceState(null, "", "#" + (cur + 1)); } catch (e) { location.hash = cur + 1; }
+  fit();
+}
+function reveal() { if (isQuestion(LAB[cur])) document.body.classList.add("revealed"); }
+
+/* ---------- timer ---------- */
+var tHandle = null, tLeft = 0;
+function paintTimer() {
+  var m = Math.floor(Math.abs(tLeft) / 60), s = Math.abs(tLeft) % 60;
+  $("#timer").textContent = (tLeft < 0 ? "-" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+  $("#timer").classList.toggle("low", tLeft <= 10);
+}
+function startTimer(mins) {
+  stopTimer();
+  tLeft = Math.round((mins || 2) * 60);
+  document.body.classList.add("timing");
+  paintTimer();
+  tHandle = setInterval(function () { tLeft--; paintTimer(); }, 1000);
+}
+function stopTimer() {
+  if (tHandle) clearInterval(tHandle);
+  tHandle = null;
+  document.body.classList.remove("timing");
+}
+
+/* ---------- overview ---------- */
+var ov = $("#overview");
+LAB.forEach(function (s, i) {
+  var b = document.createElement("button");
+  b.type = "button";
+  b.innerHTML = '<span class="n">' + (i + 1) + (s.mins ? " · " + s.mins + " min" : "") + (s.optional ? " · optional" : "") + '</span>' +
+                '<span class="k">' + esc(s.type) + '</span><span class="t"></span>';
+  $(".t", b).textContent = s.title;
+  b.addEventListener("click", function () { show(i); document.body.classList.remove("overview-on"); });
+  ov.appendChild(b);
+});
+
+/* ---------- events ---------- */
+stage.addEventListener("click", function (e) {
+  var i = cur, s = LAB[i];
+  var tb = e.target.closest(".tallybtn");
+  if (tb) { tallyOf(i)[+tb.dataset.n]++; paintVotes(i); return; }
+  var act = e.target.closest("[data-act]");
+  if (act) {
+    var a = act.dataset.act;
+    if (a === "clear") { votes[i] = null; paintVotes(i); document.body.classList.remove("revealed"); }
+    if (a === "reveal") reveal();
+    if (a === "pb-next")  { pbShown[i] = Math.min(LAB[i].rows.length, (pbShown[i] || 0) + 1); paintPB(i); return; }
+    if (a === "pb-all")   { pbShown[i] = LAB[i].rows.length; paintPB(i); return; }
+    if (a === "pb-reset") { pbShown[i] = 0; paintPB(i); return; }
+    if (a === "cb-next")  { cbShown[i] = Math.min(LAB[i].steps.length, (cbShown[i] || 0) + 1); paintCB(i); return; }
+    if (a === "cb-all")   { cbShown[i] = LAB[i].steps.length; paintCB(i); return; }
+    if (a === "cb-reset") { cbShown[i] = 0; paintCB(i); return; }
+    if (a === "shuffle") { initParsons(i, (Date.now() % 100000) + 1); paintParsons(i); }
+    if (a === "check") {
+      var st = parsonsState[i];
+      st.marks = st.order.map(function (idx, pos) { return idx === pos; });
+      paintParsons(i);
+    }
+    if (a === "up" || a === "down") {
+      var s2 = parsonsState[i];
+      if (s2.sel === null) return;
+      var to = s2.sel + (a === "up" ? -1 : 1);
+      if (to < 0 || to >= s2.order.length) return;
+      var t2 = s2.order[s2.sel]; s2.order[s2.sel] = s2.order[to]; s2.order[to] = t2;
+      s2.sel = to; s2.marks = null;
+      paintParsons(i);
+    }
+    return;
+  }
+  var pl = e.target.closest(".pline");
+  if (pl) {
+    var st3 = parsonsState[i];
+    st3.sel = (st3.sel === +pl.dataset.pos) ? null : +pl.dataset.pos;
+    paintParsons(i);
+    return;
+  }
+  var opt = e.target.closest(".opt");
+  if (opt && isQuestion(s)) { tallyOf(i)[+opt.dataset.n]++; paintVotes(i); }
+});
+
+document.addEventListener("keydown", function (e) {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  var k = e.key, s = LAB[cur];
+  if (k === "Escape") { document.body.classList.remove("overview-on", "help-on"); return; }
+  if (k === "ArrowRight" || k === " " || k === "PageDown") { e.preventDefault(); show(cur + 1); }
+  else if (k === "ArrowLeft" || k === "PageUp") { e.preventDefault(); show(cur - 1); }
+  else if (k === "Home") { show(0); }
+  else if (k === "End") { show(LAB.length - 1); }
+  else if (k === "Enter") {
+    e.preventDefault();
+    if (s.type === "planbuild" && !s.template) { pbShown[cur] = Math.min(s.rows.length, (pbShown[cur] || 0) + 1); paintPB(cur); }
+    else if (s.type === "codebuild") { cbShown[cur] = Math.min(s.steps.length, (cbShown[cur] || 0) + 1); paintCB(cur); }
+    else reveal();
+  }
+  else if (k >= "1" && k <= "4" && isQuestion(s)) { tallyOf(cur)[+k - 1]++; paintVotes(cur); }
+  else if (k === "0" && isQuestion(s)) { votes[cur] = null; paintVotes(cur); document.body.classList.remove("revealed"); }
+  else if (k === "s" || k === "S") {
+    if (document.body.classList.contains("timing")) stopTimer();
+    else startTimer(s.type === "task" ? 5 : 2);
+  }
+  else if (k === "h" || k === "H") { document.body.classList.toggle("blind"); }
+  else if (k === "o" || k === "O") { document.body.classList.toggle("overview-on"); }
+  else if (k === "t" || k === "T") {
+    var d = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", d);
+    try { localStorage.setItem("ece122-lab-theme", d); } catch (err) { /* private window */ }
+  }
+  else if (k === "f" || k === "F") {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+  }
+  else if (k === "?") { document.body.classList.add("help-on"); }
+});
+
+$("#edge-l").addEventListener("click", function () { show(cur - 1); });
+$("#edge-r").addEventListener("click", function () { show(cur + 1); });
+$("#btn-prev").addEventListener("click", function () { show(cur - 1); });
+$("#btn-next").addEventListener("click", function () { show(cur + 1); });
+$("#btn-overview").addEventListener("click", function () { document.body.classList.toggle("overview-on"); });
+$("#btn-theme").addEventListener("click", function () {
+  var d = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", d);
+  try { localStorage.setItem("ece122-lab-theme", d); } catch (err) { /* private window */ }
+});
+$("#btn-help").addEventListener("click", function () { document.body.classList.add("help-on"); });
+$(".helpbox").addEventListener("click", function () { document.body.classList.remove("help-on"); });
+window.addEventListener("resize", fit);
+
+try {
+  var th = localStorage.getItem("ece122-lab-theme");
+  if (th) document.documentElement.setAttribute("data-theme", th);
+} catch (e) { /* private window: system theme is fine */ }
+
+var start = parseInt((location.hash || "").replace("#", ""), 10);
+show(isFinite(start) && start > 0 ? start - 1 : 0);
+fit();
+
+window.sessionConsole = { SESSION: LAB, show: show };
+window.labConsole = { LAB: LAB, show: show, votes: votes, paintVotes: paintVotes, parsonsState: parsonsState };
+})();
+</script>
+</body>
+</html>

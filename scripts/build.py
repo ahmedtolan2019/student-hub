@@ -97,6 +97,21 @@ def archive(target, files, base, prefix):
 def build_week(course, week):
     directory = OUT / 'materials' / course['id'] / f"week-{week['number']:02}"
     directory.mkdir(parents=True)
+    if week['kind'] == 'bundle':
+        bundle = course['bundles'][week['bundle']]
+        if week['folder'] != bundle['folder']:
+            raise ValueError('Bundle folder must match its reviewed source')
+        for item in bundle['files']:
+            relative = Path(item)
+            if relative.is_absolute() or '..' in relative.parts:
+                raise ValueError(f'Unsafe bundle path: {item}')
+            path = read_source(course, week, item)
+            target = directory / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(path, target)
+        for key in ('slides', 'guide', 'sheet'):
+            if week[key] not in bundle['files']:
+                raise ValueError(f'Unlisted bundle resource: {week[key]}')
     resolved = {k: read_source(course, week, week[k]) for k in ('slides','guide','guide_pdf','sheet','sheet_pdf') if k in week}
     # Detect old student HTML rather than silently publishing an earlier lesson.
     if week['kind'] == 'student':
@@ -107,7 +122,7 @@ def build_week(course, week):
     extras = [(entry, read_source(course, week, entry['source'])) for entry in week.get('extras', [])]
     names = {}
     for key, path in resolved.items():
-        name = path.name
+        name = week[key] if week['kind'] == 'bundle' else path.name
         if week['kind'] == 'gen241' and key in ('slides','guide'):
             name = f"GEN241 Week {week['number']:02} - {key.title()}.html"
         names[key] = name
@@ -178,7 +193,10 @@ def resource(week, kind, title, symbol, prefix):
     open_label = 'Open PDF' if is_pdf else 'Open web'
     save_label = 'Get PDF' if is_pdf else 'Get HTML'
     actions = link(path, open_label + icon('external'), css='pill pill-open', aria=f'Open {context}')
-    actions += link(path, icon('down') + save_label, True, 'pill', f'Download {context}')
+    if week['kind'] == 'bundle' and not is_pdf:
+        actions += link(prefix + week['_zip'], icon('down') + 'Get ZIP', True, 'pill', f'Download {context} with supporting files')
+    else:
+        actions += link(path, icon('down') + save_label, True, 'pill', f'Download {context}')
     if pdf:
         pdf_path = prefix + week['_directory'] + '/' + pdf
         actions += link(pdf_path, 'Open PDF' + icon('external'), css='pill', aria=f'Open {context} PDF')
