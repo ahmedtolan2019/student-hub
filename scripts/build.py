@@ -110,7 +110,7 @@ def build_week(course, week):
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(path, target)
         for key in ('slides', 'guide', 'sheet'):
-            if week[key] not in bundle['files']:
+            if key in week and week[key] not in bundle['files']:
                 raise ValueError(f'Unlisted bundle resource: {week[key]}')
     resolved = {k: read_source(course, week, week[k]) for k in ('slides','guide','guide_pdf','sheet','sheet_pdf') if k in week}
     # Detect old student HTML rather than silently publishing an earlier lesson.
@@ -160,7 +160,10 @@ def build_week(course, week):
                 f"{course['code']}-{key}-Workbook")
         week['_workbook'] = {**workbook, 'path': (workbook_dir/'index.html').relative_to(OUT).as_posix(),
                              'zip': workbook_zip.relative_to(OUT).as_posix()}
-    readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['slides']} in a browser for the interactive slides.\nRead {names['guide']} for the study guide.\nPractice with {names['sheet']}.\n\nExtract the ZIP first and keep its files together so the slides and guide can link to each other.\nHTML contains the interactive activities. PDFs are reading and printing copies where available.\nThese are teaching materials. Follow the submission instructions and deadline announced in class.\n"
+    if 'guide' not in names and 'sheet' not in names:
+        readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['slides']} in a browser for the complete interactive whiteboard lesson.\nRead START-HERE.txt for setup, worked code and practice instructions.\nThe practice tasks are inside the whiteboard; there is no separate sheet.\n\nExtract the ZIP first and keep code/ and practice/ beside the HTML file.\nNo third-party Python libraries are needed.\nFollow the submission instructions and deadline announced in class.\n"
+    else:
+        readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['slides']} in a browser for the interactive slides.\nRead {names['guide']} for the study guide.\nPractice with {names['sheet']}.\n\nExtract the ZIP first and keep its files together so the slides and guide can link to each other.\nHTML contains the interactive activities. PDFs are reading and printing copies where available.\nThese are teaching materials. Follow the submission instructions and deadline announced in class.\n"
     (directory / 'README.txt').write_text(readme)
     if week.get('_workbook'):
         with (directory / 'README.txt').open('a') as f:
@@ -211,7 +214,9 @@ def resource(week, kind, title, symbol, prefix):
 def week_panel(course, week, prefix):
     number = f"{week['number']:02}"
     download = link(prefix + week['_zip'], icon('down') + 'Download week ZIP', True, 'button button-secondary', f"Download {course['code']} week {number} ZIP")
-    items = ''.join(resource(week, *args, prefix) for args in [('slides','Interactive slides','slides'),('guide','Study guide','book'),('sheet','Practice sheet','sheet')])
+    rows = [('slides','Interactive slides','slides'),('guide','Study guide','book'),('sheet','Practice sheet','sheet')]
+    items = ''.join(resource(week, kind, week.get('resource_titles', {}).get(kind, title), symbol, prefix)
+                    for kind, title, symbol in rows if kind in week['_names'])
     if week.get('_workbook'):
         wb = week['_workbook']
         actions = link(prefix + wb['path'], 'Open workbook' + icon('external'), css='pill pill-open',
@@ -319,7 +324,7 @@ def validate_site():
         parser = Links(); contents = path.read_text(); parser.feed(contents)
         # Includes navigation targets declared inside the slide data, not just HTML anchors.
         targets = list(parser.links)
-        for match in re.finditer(r'open:\s*(\[\s*\[.*?\]\s*\])', contents):
+        for match in re.finditer(r'(?:\bopen|"open"):\s*(\[\s*\[.*?\]\s*\])', contents):
             targets.extend(target for _, target in json.loads(match[1]))
         for target in targets:
             parsed = urlsplit(target)

@@ -11,8 +11,27 @@
         {"number": 2, "folder": "week-02-algorithms-and-data", "title": "Algorithms and data", "description": "Python foundations, algorithm representations and complexity.", "kind": "student",
           "slides": "student/DSA-Lab-02-Slides.html", "guide": "student/DSA-Lab-02-Guide.html", "guide_pdf": "student/DSA-Lab-02-Guide.pdf", "sheet": "student/sheet-02.html", "sheet_pdf": "student/sheet-02.pdf",
           "extras": [{"source": "student/FONT-LICENSES.txt", "label": "Font licenses", "hidden": true}],
-          "starters": ["student/starter-files/q00_ready.py", "student/starter-files/q02_larger.py", "student/starter-files/q04_count.py", "student/starter-files/q05_below.py", "student/starter-files/README.txt"]}
-      ]
+          "starters": ["student/starter-files/q00_ready.py", "student/starter-files/q02_larger.py", "student/starter-files/q04_count.py", "student/starter-files/q05_below.py", "student/starter-files/README.txt"]},
+        {"number": 3, "folder": "week-03-lists-and-search/student", "title": "Lists and search", "description": "Whiteboard lesson: list operations, algorithm design with pseudocode, a focused Python brief, linear search, time and space complexity. Includes code and practice, with an optional binary-search extension.", "kind": "bundle", "bundle": "week-03-lists-and-search",
+          "slides": "DSA-Lab-03-Whiteboard.html", "resource_titles": {"slides": "Interactive whiteboard"}, "extras": []}
+      ],
+      "bundles": {
+        "week-03-lists-and-search": {
+          "folder": "week-03-lists-and-search/student",
+          "files": [
+            "DSA-Lab-03-Whiteboard.html",
+            "START-HERE.txt",
+            "code/searches.py",
+            "code/01_list_operations.py",
+            "code/02_order_lookup.py",
+            "code/03_binary_lookup.py",
+            "code/expected-output.txt",
+            "practice/task_a_lookup.py",
+            "practice/task_b_cancel.py",
+            "practice/task_c_binary.py"
+          ]
+        }
+      }
     },
     {
       "id": "ece122",

@@ -4,7 +4,7 @@ Lab materials for the first semester of 2026/2027.
 
 **Student link:** https://ahmedtolan2019.github.io/student-hub/
 
-- [DSA](https://ahmedtolan2019.github.io/student-hub/dsa/): weeks 1 and 2
+- [DSA](https://ahmedtolan2019.github.io/student-hub/dsa/): weeks 1, 2 and 3
 - [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1, 2 and 3
 - [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1, 2 and 3
 
@@ -12,6 +12,13 @@ Students can open slides, guides and sheets online, download individual formats,
 or download a week or whole course as a ZIP. Extract a ZIP and keep its files
 together. HTML contains the interactive activities. PDFs are included where already
 available. DSA Week 2 includes starter files, individually and as a ZIP.
+
+DSA Week 3 uses one interactive whiteboard as the lesson and practice guide.
+Its reviewed ten-file bundle contains the whiteboard, setup instructions,
+worked Python examples and incomplete practice tasks. The week/course ZIPs
+keep `code/` and `practice/` beside the HTML so the links work offline. There
+is no separate Week 3 sheet. Private presenter notes, solutions, book sources
+and QA files are excluded. The existing DSA course link stays the same.
 
 ## Update the student link
 

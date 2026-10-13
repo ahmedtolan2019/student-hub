@@ -1,0 +1,42 @@
+DSA Week 3 · Lists and search · Ahmed Tolan
+
+1. Right-click the ZIP, choose Extract All, then Extract.
+2. Open DSA-Lab-03-Whiteboard.html in your browser. Keep the whole folder.
+3. Enter or Right reveals a step. Left goes back. O shows all boards.
+   L switches English/Arabic. T changes theme. F fills the screen.
+   Buttons provide the same navigation. Use board 34 as the core stopping point.
+4. PyCharm: File > Open > choose this extracted folder.
+5. In Project, open code/01_list_operations.py.
+   Right-click the file > Run. On Windows, Ctrl+Shift+F10 runs the current file.
+6. If no Python interpreter is selected, use File > Settings > Project >
+   Python Interpreter and choose installed Python. Menu labels vary by version.
+7. code/ contains worked examples. Keep searches.py beside the lookup files.
+8. practice/ contains deliberately incomplete tasks. Their initial output may
+   fail the expected cases. Complete Task A, then Task B. Task C is optional.
+
+No pip install, NumPy or internet is needed. Public source links need internet.
+No deadline or submission method is defined by this pack; use your instructor's
+actual class instructions.
+
+بداية اللاب
+فكّ الـZIP: كليك يمين، بعدها Extract All وبعدها Extract.
+افتح DSA-Lab-03-Whiteboard.html في المتصفح. اضغط L للعربي.
+السبورة هي الشرح كله، ومش محتاج شيت منفصل.
+Enter أو السهم اليمين يكشف خطوة. السهم الشمال يرجع خطوة. O يفتح كل السبورات.
+من PyCharm افتح File وبعدها Open واختار الفولدر اللي فكّيته.
+افتح أول ملف في code، وكليك يمين عليه وبعدها Run.
+الاختصار على Windows هو Ctrl+Shift+F10.
+لو Python مش متحدد اختاره من Python Interpreter في Settings.
+ملفات practice ناقصة عمدًا عشان تكملها. اقرأ التعليقات والنتائج المطلوبة.
+الأمثلة مش محتاجة أي libraries إضافية أو اتصال بالنت.
+
+ALGORITHM DESIGN
+Before implementing, state the specification (inputs, output, assumptions and
+mutation). Write pseudocode, trace an example, explain correctness and why it
+stops, and analyze time and auxiliary space. Then translate to Python and test.
+Pseudocode symbols are explained on the whiteboard; do not run pseudocode in
+PyCharm. Practice files contain a design template to complete.
+
+قبل التنفيذ: حدّد المواصفات، اكتب pseudocode واتتبّع مثال، فسّر صحة النتيجة
+وليه الخوارزمية بتقف، وحلّل الوقت والمساحة الإضافية. بعدها نفّذ بـPython
+واختبر. رموز الـpseudocode مشروحة على السبورة؛ مش بنشغّلها في PyCharm.
