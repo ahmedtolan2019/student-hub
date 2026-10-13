@@ -128,13 +128,18 @@ The existing slides, guides, PDF and week links stay unchanged.
 
 ## ECE122 Sheets 2 and 3
 
-Weeks 2 and 3 publish the completed learning kit using the explicit 76-file
+Weeks 2 and 3 publish the completed learning kit using the explicit
 `bundles.sheets-02-03.files` allowlist. Its source is only
-`ECE122-computer-programming-1/learning-kit/public`. The 99-slide deck includes
-the questions-and-conditions lesson on slides 30–58. Each week opens its own
-Guide and original sheet. Both ZIPs keep the complete kit together so all
-relative links work offline. HTML download actions supply that ZIP because
-the Guides need their companion files. The course ZIP includes both weeks.
+`ECE122-computer-programming-1/learning-kit/public`. The interactive whiteboard
+deck builds questions, comparisons and decisions one step at a time. The Guides
+cover all 25 questions with source highlights, visual explanations, plans,
+progressive code, recorded execution and independent practice. The original
+Lecture 4 handout is included unchanged.
+
+Each week opens its own Guide and original sheet. Both ZIPs keep the complete
+kit together so relative links work offline. HTML download actions supply that
+ZIP because the Guides need their companion files. The course ZIP includes
+both weeks. Existing course, week, Guide and slide URLs are preserved.
 
 The code files under the public kit are the student worked examples linked
 from the Guides. Original reference archives, instructor reviews, presenter

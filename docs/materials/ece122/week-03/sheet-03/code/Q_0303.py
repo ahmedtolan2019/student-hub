@@ -1,23 +1,22 @@
 # Sheet (3), Q #03
 # Learning version; see the Guide note for differences from the reference.
 # PLAN
-# WANT: Random addition quiz
-# HAVE: answer; units and valid domain are in the Guide.
-# CONVERT: Keep the units named in this question.
-# RELATE: Compare answer with num1 + num2 using ==.
-# CHECK: Test both interval endpoints and correct/incorrect answers.
-# 1. Read inputs; 2. relate values; 3. display and check.
+#   WANT     whether the student’s sum is correct
+#   HAVE     two random 3-digit numbers and the student’s answer
+#   CONVERT  3 digits = 100 to 999
+#   RELATE   answer == num1 + num2
+#   CHECK    try a right and a wrong answer for the same two numbers
 
 import random
 
-# Generate two random three-digit integers
+# 1. two three-digit numbers
 num1 = random.randint(100, 999)
 num2 = random.randint(100, 999)
 
-# Ask the student before checking the answer
+# 2. ask the student
 answer = eval(input("What is "+ str(num1) + " + " + str(num2) + " ? "))
 
-# Check the answer and display the result
+# 3. compare with the true sum
 if num1 + num2 == answer:
     print("You are correct!")
 

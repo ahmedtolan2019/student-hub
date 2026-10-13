@@ -1,17 +1,16 @@
 # Sheet (3), Q #12
 # Learning version; see the Guide note for differences from the reference.
 # PLAN
-# WANT: Point in a right triangle
-# HAVE: x, y; units and valid domain are in the Guide.
-# CONVERT: Keep the units named in this question.
-# RELATE: x>=0 and y>=0 and y<=-0.5*x+100.
-# CHECK: Test on the hypotenuse, above it and with a negative coordinate.
-# 1. Read inputs; 2. relate values; 3. display and check.
+#   WANT     whether the point is inside the triangle
+#   HAVE     x and y; the vertices (0, 0), (200, 0), (0, 100)
+#   CONVERT  none
+#   RELATE   x ≥ 0 and y ≥ 0 and y ≤ −0.5x + 100
+#   CHECK    (100, 50) is on the slanted edge: inside; (100, 60) above it: outside
 
-# Prompt the user to enter a point's coordinates
+# 1. read the point
 x, y = eval(input("Enter a point with two coordinates (x,y): "))
 
-# Check if the point satisfies all three boundaries of the triangle
+# 2. all three edges at once
 if x >= 0 and y >= 0 and y <= (-0.5 * x + 100):
     print(f"The point ({x}, {y}) is INSIDE the triangle.")
 else:

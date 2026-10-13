@@ -1,13 +1,14 @@
 # Sheet (2), Q #10
 # Learning version; see the Guide note for differences from the reference.
 # PLAN
-# WANT: ASCII number to character
-# HAVE: code; units and valid domain are in the Guide.
-# CONVERT: Keep the units named in this question.
-# RELATE: Print chr(code) with a label.
-# CHECK: Test the first and last values in the range.
-# 1. Read inputs; 2. relate values; 3. display and check.
+#   WANT     the character for the given code
+#   HAVE     a whole number from 32 to 126
+#   CONVERT  none
+#   RELATE   chr(code)
+#   CHECK    97 → a; 32 → a space (present but invisible)
 
+# 1. read the code
 code = eval(input("Enter an ASCII code (32 : 126): "))
-# Print the equivalent character
+
+# 2. show its character
 print("The character is", chr(code))

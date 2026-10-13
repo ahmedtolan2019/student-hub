@@ -48,7 +48,7 @@
           "number": 3,
           "folder": "learning-kit/public",
           "title": "Questions, conditions and decisions",
-          "description": "Sheet 3: yes/no questions, comparisons, and/or, if, elif and else.",
+          "description": "Sheet 3: whiteboard explanations, yes/no questions, comparisons, and/or/not, if, elif and else. Includes Lecture 4.",
           "kind": "bundle",
           "bundle": "sheets-02-03",
           "slides": "slides.html",
@@ -70,7 +70,6 @@
             "sheet-02/assets/q02-p1.png",
             "sheet-02/assets/q03-p1.png",
             "sheet-02/assets/q04-p1.png",
-            "sheet-02/assets/q04-p2.png",
             "sheet-02/assets/q05-p2.png",
             "sheet-02/assets/q06-p2.png",
             "sheet-02/assets/q07-p2.png",
@@ -91,7 +90,6 @@
             "sheet-02/code/Q_0210.py",
             "sheet-02/code/Q_0211.py",
             "sheet-02/data.js",
-            "sheet-02/diagrams.js",
             "sheet-02/index.html",
             "sheet-02/sheet-02.pdf",
             "sheet-02/styles.css",
@@ -132,11 +130,13 @@
             "sheet-03/code/Q_0313.py",
             "sheet-03/code/Q_0314.py",
             "sheet-03/data.js",
-            "sheet-03/diagrams.js",
             "sheet-03/index.html",
             "sheet-03/sheet-03.pdf",
             "sheet-03/styles.css",
-            "slides.html"
+            "slides.html",
+            "lectures/ECE122-Lecture-04-Selection.pdf",
+            "sheet-02/board.js",
+            "sheet-03/board.js"
           ]
         }
       }

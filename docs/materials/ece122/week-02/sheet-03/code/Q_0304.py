@@ -1,23 +1,22 @@
 # Sheet (3), Q #04
 # Learning version; see the Guide note for differences from the reference.
 # PLAN
-# WANT: Random multiplication quiz
-# HAVE: answer; units and valid domain are in the Guide.
-# CONVERT: Keep the units named in this question.
-# RELATE: Compare answer with num1 * num2 using ==.
-# CHECK: Test both interval endpoints and correct/incorrect answers.
-# 1. Read inputs; 2. relate values; 3. display and check.
+#   WANT     whether the student’s product is correct
+#   HAVE     two random 2-digit numbers and the student’s answer
+#   CONVERT  2 digits = 10 to 99
+#   RELATE   answer == num1 * num2
+#   CHECK    the largest product is 99 × 99 = 9801
 
 import random
 
-# Generate two random two-digit integers
+# 1. two two-digit numbers
 num1 = random.randint(10, 99)
 num2 = random.randint(10, 99)
 
-# Ask the student before checking the answer
+# 2. ask the student
 answer = eval(input("What is "+ str(num1) + " * " + str(num2) + " ? "))
 
-# Check the answer and display the result
+# 3. compare with the true product
 if num1 * num2 == answer:
     print("You are correct!")
 
