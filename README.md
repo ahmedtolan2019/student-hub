@@ -14,8 +14,8 @@ together. HTML contains the interactive activities. PDFs are included where alre
 available. DSA Week 2 includes starter files, individually and as a ZIP.
 
 DSA Week 3 uses one interactive whiteboard as the lesson and practice guide.
-Its reviewed ten-file bundle contains the whiteboard, setup instructions,
-worked Python examples and incomplete practice tasks. The week/course ZIPs
+Its reviewed eleven-file bundle contains the whiteboard, a minimal Python readiness
+check, setup instructions, worked Python examples and incomplete practice tasks. The week/course ZIPs
 keep `code/` and `practice/` beside the HTML so the links work offline. There
 is no separate Week 3 sheet. Private presenter notes, solutions, book sources
 and QA files are excluded. The existing DSA course link stays the same.

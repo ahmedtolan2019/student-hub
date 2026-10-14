@@ -1,3 +1,6 @@
+00_ready.py
+Python is ready
+
 01_list_operations.py
 Start: [42, 17, 63, 23]
 Index 1: 17

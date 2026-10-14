@@ -22,6 +22,7 @@
             "DSA-Lab-03-Whiteboard.html",
             "START-HERE.txt",
             "code/searches.py",
+            "code/00_ready.py",
             "code/01_list_operations.py",
             "code/02_order_lookup.py",
             "code/03_binary_lookup.py",
