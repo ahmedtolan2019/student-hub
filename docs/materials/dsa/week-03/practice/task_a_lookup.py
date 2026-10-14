@@ -1,11 +1,12 @@
 # Core practice A. Implement the first-match contract from the whiteboard.
 # Do not use .index(), 'in' as a search shortcut, or an imported search.
-# ALGORITHM DESIGN (complete before implementation)
-# Specification: inputs, output, preconditions, postconditions, mutation.
-# Pseudocode: language-independent steps using the board's notation.
-# Correctness: why the result follows; why the algorithm terminates.
-# Analysis: define n; worst-case time and auxiliary space, with reasons.
-# Test cases: inputs -> expected results, including boundary cases.
+# INDEPENDENT ATTEMPT
+# Fold the worked function with the arrow beside its def line number in PyCharm.
+# Keep the definition: folding hides its body without disabling it.
+# Write your own loop, run the tests, then explain aloud:
+# why return -1 is outside the loop; why worst-case work grows with n.
+# EARLY FINISHER: write pseudocode, trace a case and add a test.
+# The full specification/design/correctness/analysis cycle is on the whiteboard.
 
 def find_order(ids, target):
     # TODO: replace this placeholder with your loop and decisions.

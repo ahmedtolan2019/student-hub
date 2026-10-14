@@ -13,6 +13,10 @@ The instructor projects the local whiteboard. Students type the visible code.
 6. Type examples in lab03.py as they appear. Put function calls below definitions.
    Use the same file for your find_order and, optionally, cancel_order/find_sorted.
    All task requirements and test calls are on the whiteboard. No import is needed.
+7. Each Run repeats the whole file. Read the last output lines for the current
+   example. Keep earlier definitions and list setup. Before independent practice,
+   hover beside the worked def line number and click its folding arrow. Folding
+   hides the body but keeps the function available.
 
 اللاب على أجهزة أوفلاين ومن غير ملفات جاهزة
 المدرّس بيعرض السبورة من جهازه، والطالب بيكتب الكود اللي عليها.
@@ -22,6 +26,9 @@ The instructor projects the local whiteboard. Students type the visible code.
 الاختصار على Windows هو Ctrl+Shift+F10 والحفظ Ctrl+S.
 الدوال والاستدعاءات والتمارين كلها في lab03.py. اكتب النداء تحت تعريف الدالة.
 المطلوب والاختبارات ظاهرين على السبورة؛ مفيش ZIP أو شيت مطلوبين في المعمل.
+كل Run بتعيد الملف كله؛ اقرا آخر سطور للمثال الحالي وسيب التعريفات والتجهيز السابق.
+قبل التطبيق المستقل، حرّك الماوس جنب رقم سطر def واضغط سهم الطي.
+ده بيخفي جسم المثال، لكن الدالة تفضل شغالة.
 
 LESSON ROUTE
 Memory and contiguous reference slots, list syntax and functions, storage growth,
@@ -66,6 +73,13 @@ beginning with #. Pseudocode itself is not runnable Python.
 قبل التنفيذ حدّد المواصفات، واكتب pseudocode واتتبّع مثال، وفسّر صحة النتيجة
 وليه الخوارزمية بتقف، وحلّل الوقت والمساحة الإضافية. بعدها نفّذ واختبر.
 اكتب التصميم على ورقة أو comments بتبدأ بـ#؛ الـpseudocode مش كود Python.
+
+The short A/C practice uses the design already discussed: implement, test and give
+two oral reasons. A new written design/trace is for early finishers or later review.
+في تطبيق A وC القصير هنستخدم التصميم اللي شرحناه: تنفيذ واختبار وتفسير شفهي.
+كتابة تصميم وتتبّع جديد للي يخلص بدري أو للمراجعة بعد اللاب.
+
+PyCharm folding reference: https://www.jetbrains.com/help/pycharm/working-with-source-code.html#expand-or-collapse-code-elements
 
 No deadline or submission method is defined here. Follow your instructor's actual
 class instructions. اللاب ده ما حددش تسليم أو درجات؛ اتبع تعليمات المدرّس الفعلية.
