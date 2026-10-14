@@ -1,52 +1,68 @@
 DSA Week 3 · Lists and search · Ahmed Tolan
 
-1. Right-click the ZIP, choose Extract All, then Extract.
-2. Open DSA-Lab-03-Whiteboard.html in your browser. Keep the whole folder.
-3. Enter or Right reveals a step. Left goes back. O shows all boards.
-   L switches English/Arabic. T changes theme. F fills the screen.
-   Buttons provide the same navigation. Use board 31 as the core stopping point.
-4. PyCharm: File > Open > choose this extracted folder.
-5. In Project, open code/00_ready.py.
-   Right-click the file > Run. On Windows, Ctrl+Shift+F10 runs the current file.
-6. If no Python interpreter is selected, use File > Settings > Project >
-   Python Interpreter and choose installed Python. Menu labels vary by version.
-7. code/ contains worked examples. Keep searches.py beside the lookup files.
-8. practice/ contains deliberately incomplete tasks. Their initial output may
-   fail the expected cases. Complete Task A, then Task B. Task C is optional.
+IN THE COMPUTER LAB: NO INTERNET OR SUPPLIED FILES
+The instructor projects the local whiteboard. Students type the visible code.
+1. PyCharm > New Project, or File > New Project. Name the folder DSA_Week03.
+2. Choose Previously configured interpreter / Existing interpreter. Select the
+   installed Python and Create. Labels vary by version. Ask the instructor if
+   no installed interpreter appears. No download or package installation is needed.
+3. Right-click the project folder > New > Python File > lab03.
+4. Type: print("Python is ready")
+5. Right-click in the editor > Run lab03. Windows: Ctrl+Shift+F10.
+   Ctrl+S saves the file. The result should be: Python is ready
+6. Type examples in lab03.py as they appear. Put function calls below definitions.
+   Use the same file for your find_order and, optionally, cancel_order/find_sorted.
+   All task requirements and test calls are on the whiteboard. No import is needed.
 
-Follow the boards in order: list basics and function calls, list operations,
-search specification and pseudocode, trace and correctness, time/space analysis,
-then Python implementation, tests and practice. Stop at board 31 for the core lab.
-Boards 32–44 are an optional 35-minute binary-search extension.
-Boards 45–48 are reference material. 01_list_operations.py is for the list lesson;
-00_ready.py only checks that Python runs.
+اللاب على أجهزة أوفلاين ومن غير ملفات جاهزة
+المدرّس بيعرض السبورة من جهازه، والطالب بيكتب الكود اللي عليها.
+من PyCharm اعمل New Project باسم DSA_Week03 واختار Python المثبت على الجهاز.
+كليك يمين على فولدر المشروع، New ثم Python File واكتب lab03.
+اكتب print("Python is ready") وشغّل بكليك يمين جوّه المحرر ثم Run lab03.
+الاختصار على Windows هو Ctrl+Shift+F10 والحفظ Ctrl+S.
+الدوال والاستدعاءات والتمارين كلها في lab03.py. اكتب النداء تحت تعريف الدالة.
+المطلوب والاختبارات ظاهرين على السبورة؛ مفيش ZIP أو شيت مطلوبين في المعمل.
 
-No pip install, NumPy or internet is needed. Public source links need internet.
-No deadline or submission method is defined by this pack; use your instructor's
-actual class instructions.
+LESSON ROUTE
+Memory and contiguous reference slots, list syntax and functions, storage growth,
+list operations, search specification, pseudocode, trace and correctness, time and
+auxiliary space, Python implementation, debugging, tests, then independent lookup.
+Core: boards 1–34, 90 minutes. Stop at the Exit check.
+Optional cancellation challenge: boards 35–36, 10 additional minutes.
+Optional binary-search extension: boards 37–49, 35 additional minutes.
+After-lab references: boards 50–52.
+The memory capacities and addresses are illustrations, not measured allocations.
 
-بداية اللاب
-فكّ الـZIP: كليك يمين، بعدها Extract All وبعدها Extract.
-افتح DSA-Lab-03-Whiteboard.html في المتصفح. اضغط L للعربي.
-السبورة هي الشرح كله، ومش محتاج شيت منفصل.
-امشي بالترتيب: أساسيات الـlist والدوال، العمليات، تصميم البحث وتتبّعه وتبرير صحته،
-تحليل الوقت والمساحة، وبعدها كود Python والاختبارات والتطبيق.
-الجزء الأساسي بيقف عند سبورة 31. من 32 لـ44 امتداد اختياري 35 دقيقة، ومن 45 لـ48 مرجع.
-Enter أو السهم اليمين يكشف خطوة. السهم الشمال يرجع خطوة. O يفتح كل السبورات.
-من PyCharm افتح File وبعدها Open واختار الفولدر اللي فكّيته.
-افتح code/00_ready.py، وكليك يمين عليه وبعدها Run. المفروض يظهر Python is ready.
-الاختصار على Windows هو Ctrl+Shift+F10.
-لو Python مش متحدد اختاره من Python Interpreter في Settings.
-ملفات practice ناقصة عمدًا عشان تكملها. اقرأ التعليقات والنتائج المطلوبة.
-الأمثلة مش محتاجة أي libraries إضافية أو اتصال بالنت.
+AFTER THE LAB: OPTIONAL DOWNLOADS FOR REVIEW
+When internet is available, use the DSA student page and download Week 3 ZIP.
+Right-click the ZIP > Extract All > Extract. Keep the extracted folder together.
+Open DSA-Lab-03-Whiteboard.html in a browser. It then works offline.
+PyCharm > File > Open opens the extracted folder. Choose installed Python.
+code/ contains worked examples; keep searches.py beside the lookup files that
+import it. 00_ready.py is a one-line readiness example. practice/ contains
+incomplete tasks and expected results; initial outputs may fail until you solve them.
+These files are optional review aids, not prerequisites for attending the lab.
+Source links need internet. No NumPy, pip install or extra library is needed.
+
+بعد اللاب ولما النت يبقى متاح، تقدر تنزّل Week 3 ZIP من صفحة الطلبة للمراجعة.
+كليك يمين على الملف، Extract All ثم Extract. احتفظ بالفولدر كامل.
+افتح HTML للمراجعة أو افتح الفولدر من PyCharm عن طريق File ثم Open.
+code أمثلة مشروحة، وpractice مهام ناقصة تحلها. الملفات دي مش شرط لدخول اللاب.
+
+CONTROLS
+Enter or Right reveals a step. Left goes back. O shows all boards.
+L switches English/Arabic. T changes theme. F fills the screen.
+Buttons provide the same navigation.
 
 ALGORITHM DESIGN
-Before implementing, state the specification (inputs, output, assumptions and
-mutation). Write pseudocode, trace an example, explain correctness and why it
-stops, and analyze time and auxiliary space. Then translate to Python and test.
-Pseudocode symbols are explained on the whiteboard; do not run pseudocode in
-PyCharm. Practice files contain a design template to complete.
+State the specification: inputs, output, assumptions and mutation. Write pseudocode,
+trace an example, explain correctness and termination, and analyze time and auxiliary
+space. Then translate to Python and test. Write design notes on paper or as comments
+beginning with #. Pseudocode itself is not runnable Python.
 
-قبل التنفيذ: حدّد المواصفات، اكتب pseudocode واتتبّع مثال، فسّر صحة النتيجة
-وليه الخوارزمية بتقف، وحلّل الوقت والمساحة الإضافية. بعدها نفّذ بـPython
-واختبر. رموز الـpseudocode مشروحة على السبورة؛ مش بنشغّلها في PyCharm.
+قبل التنفيذ حدّد المواصفات، واكتب pseudocode واتتبّع مثال، وفسّر صحة النتيجة
+وليه الخوارزمية بتقف، وحلّل الوقت والمساحة الإضافية. بعدها نفّذ واختبر.
+اكتب التصميم على ورقة أو comments بتبدأ بـ#؛ الـpseudocode مش كود Python.
+
+No deadline or submission method is defined here. Follow your instructor's actual
+class instructions. اللاب ده ما حددش تسليم أو درجات؛ اتبع تعليمات المدرّس الفعلية.

@@ -13,7 +13,9 @@ or download a week or whole course as a ZIP. Extract a ZIP and keep its files
 together. HTML contains the interactive activities. PDFs are included where already
 available. DSA Week 2 includes starter files, individually and as a ZIP.
 
-DSA Week 3 uses one interactive whiteboard as the lesson and practice guide.
+DSA Week 3 uses one interactive whiteboard as the lesson and practice guide. In the
+offline classroom, students create one Python file and type the displayed code and
+tests; no ZIP or supplied files are required. The downloadable kit is for later review.
 Its reviewed eleven-file bundle contains the whiteboard, a minimal Python readiness
 check, setup instructions, worked Python examples and incomplete practice tasks. The week/course ZIPs
 keep `code/` and `practice/` beside the HTML so the links work offline. There
