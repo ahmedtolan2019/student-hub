@@ -29,8 +29,11 @@ list operations, search specification, pseudocode, trace and correctness, time a
 auxiliary space, Python implementation, debugging, tests, then independent lookup.
 Core: boards 1–34, 90 minutes. Stop at the Exit check.
 Optional cancellation challenge: boards 35–36, 10 additional minutes.
-Optional binary-search extension: boards 37–49, 35 additional minutes.
-After-lab references: boards 50–52.
+Optional binary-search extension: boards 37–50, 35 additional minutes.
+After-lab references: boards 51–54, including the visual meaning of amortized cost.
+Binary search: sorted input, moving low/mid/high markers, successful and missing
+targets, invariant (what stays true), variant (what decreases), halving/log n,
+then the Python needed to implement and test the algorithm.
 The memory capacities and addresses are illustrations, not measured allocations.
 
 AFTER THE LAB: OPTIONAL DOWNLOADS FOR REVIEW
