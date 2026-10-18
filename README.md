@@ -6,7 +6,7 @@ Lab materials for the first semester of 2026/2027.
 
 - [DSA](https://ahmedtolan2019.github.io/student-hub/dsa/): weeks 1, 2 and 3
 - [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1, 2 and 3
-- [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1, 2 and 3
+- [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1–4
 
 Students can open slides, guides and sheets online, download individual formats,
 or download a week or whole course as a ZIP. Extract a ZIP and keep its files
@@ -153,3 +153,16 @@ both weeks. Existing course, week, Guide and slide URLs are preserved.
 The code files under the public kit are the student worked examples linked
 from the Guides. Original reference archives, instructor reviews, presenter
 notes, authoring scripts and QA records are excluded.
+
+## GEN241 Sheet 3
+
+Week 4 publishes the six-part bilingual whiteboard and a separate complete study
+Guide for all ten questions. The Guide includes prerequisite explanations, diagrams,
+five-line plans, practice with feedback, reference code and recorded outputs.
+The programs were built and checked on macOS with Apple Clang in C++98 mode.
+
+The six-file allowlist is `courses[].bundles.sheet-03.files`, sourced only from
+`GEN241-computer-language-and-applications/week-04-loops/student`. Original Sheet 3
+and Lecture 5 PDFs are included unchanged. The week and course ZIPs keep both HTML
+files and PDFs together. Authoring files, compiler binaries, QA reports and private
+execution records are excluded. Existing week and course URLs remain unchanged.

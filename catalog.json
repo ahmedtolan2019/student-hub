@@ -257,8 +257,42 @@
           "extras": [{"source": "../course-materials/lectures/03-GEN_241_03.pdf", "label": "Lecture 3"}, {"source": "../course-materials/submission-rules.pdf", "label": "Submission rules"}]},
         {"number": 3, "folder": "week-03-selection-if-else", "title": "Selection with if / else", "description": "Conditions, decisions and solving Sheet 2, part 2.", "kind": "gen241", "workbook": "sheet-02",
           "slides": "slides/index.html", "guide": "guide/index.html", "guide_pdf": "../exports/GEN241 Week 03 - Guide.pdf", "sheet": "../course-materials/sheets/sheet-02.pdf",
-          "extras": [{"source": "../course-materials/lectures/03-GEN_241_03.pdf", "label": "Lecture 3"}, {"source": "../course-materials/submission-rules.pdf", "label": "Submission rules"}]}
-      ]
+          "extras": [{"source": "../course-materials/lectures/03-GEN_241_03.pdf", "label": "Lecture 3"}, {"source": "../course-materials/submission-rules.pdf", "label": "Submission rules"}]},
+        {
+          "number": 4,
+          "folder": "week-04-loops/student",
+          "title": "Math functions, geometry and loops",
+          "description": "Sheet 3: radians, geometry, random points, loops, products, series and GCD. Bilingual whiteboard lesson and complete study Guide.",
+          "kind": "bundle",
+          "bundle": "sheet-03",
+          "slides": "slides.html",
+          "guide": "guide.html",
+          "sheet": "sheet-03.pdf",
+          "resource_titles": {
+            "slides": "Interactive whiteboard",
+            "guide": "Sheet 3 study Guide"
+          },
+          "extras": [
+            {
+              "source": "lecture-05.pdf",
+              "label": "Lecture 5"
+            }
+          ]
+        }
+      ],
+      "bundles": {
+        "sheet-03": {
+          "folder": "week-04-loops/student",
+          "files": [
+            "slides.html",
+            "guide.html",
+            "sheet-03.pdf",
+            "lecture-05.pdf",
+            "START-HERE.txt",
+            "FONT-LICENSES.txt"
+          ]
+        }
+      }
     }
   ]
 }
