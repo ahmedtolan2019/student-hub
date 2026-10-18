@@ -160,6 +160,9 @@ Week 4 publishes the six-part bilingual whiteboard and a separate complete study
 Guide for all ten questions. The Guide includes prerequisite explanations, diagrams,
 five-line plans, practice with feedback, reference code and recorded outputs.
 The programs were built and checked on macOS with Apple Clang in C++98 mode.
+C++ blocks include syntax colors and step-based line focus; the loop trace and
+pentagon visit marker move with the learner’s navigation. The Guide explains the
+supplied reference methods, including nested loops and equivalent alternatives.
 
 The six-file allowlist is `courses[].bundles.sheet-03.files`, sourced only from
 `GEN241-computer-language-and-applications/week-04-loops/student`. Original Sheet 3
