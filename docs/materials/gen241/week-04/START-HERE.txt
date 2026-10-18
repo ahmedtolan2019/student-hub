@@ -1,8 +1,9 @@
 GEN241 - Sheet 3
 
-Open slides.html for the six-part whiteboard lesson.
+Open slides.html for the rebuilt six-part explanation and guided traces.
+Recommended question order: 1,2,3,6,7,5,4,8,9,10.
 Open guide.html for foundations, question plans, interactive practice and reference examples.
-The explanation for every board is under E; the revision summary is under S.
+Main boards explain the reasons step by step. E adds the full explanation; the revision summary is under S.
 Use L to switch Arabic/English and T for theme.
 Extract the ZIP first and keep its files together. These HTML files work offline.
 lecture-05.pdf and sheet-03.pdf are the supplied course sources.

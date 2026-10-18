@@ -262,7 +262,7 @@
           "number": 4,
           "folder": "week-04-loops/student",
           "title": "Math functions, geometry and loops",
-          "description": "Sheet 3: radians, geometry, random points, loops, products, series and GCD. Bilingual whiteboard lesson and complete study Guide.",
+          "description": "Sheet 3 explained from the foundations: why each concept is needed, worked calculations, animated C++ traces, practice and a complete bilingual study Guide.",
           "kind": "bundle",
           "bundle": "sheet-03",
           "slides": "slides.html",
