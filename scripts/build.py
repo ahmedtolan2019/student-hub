@@ -162,6 +162,8 @@ def build_week(course, week):
                              'zip': workbook_zip.relative_to(OUT).as_posix()}
     if 'guide' not in names and 'sheet' not in names:
         readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['slides']} in a browser for the complete interactive whiteboard lesson.\nRead START-HERE.txt for setup, worked code and practice instructions.\nThe practice tasks are inside the whiteboard; there is no separate sheet.\n\nExtract the ZIP first and keep code/ and practice/ beside the HTML file.\nNo third-party Python libraries are needed.\nFollow the submission instructions and deadline announced in class.\n"
+    elif 'slides' not in names:
+        readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['guide']} for the question-by-question study guide.\nPractice with {names['sheet']}.\n\nThe guide includes the original question images, background, C++ explanations, worked examples and common mistakes.\nHTML contains the interactive steps; the PDF is a reading copy.\nExtract the ZIP first and keep its files together. Follow the submission instructions and deadline announced in class.\n"
     else:
         readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['slides']} in a browser for the interactive slides.\nRead {names['guide']} for the study guide.\nPractice with {names['sheet']}.\n\nExtract the ZIP first and keep its files together so the slides and guide can link to each other.\nHTML contains the interactive activities. PDFs are reading and printing copies where available.\nThese are teaching materials. Follow the submission instructions and deadline announced in class.\n"
     (directory / 'README.txt').write_text(readme)

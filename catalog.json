@@ -278,9 +278,33 @@
               "label": "Lecture 5"
             }
           ]
+        },
+        {
+          "number": 5,
+          "folder": "week-05-repeating-structures/student",
+          "title": "Repeating structures and applications",
+          "description": "Sheet 4 question by question: original questions, background concepts, C++ built step by step, alternatives, recorded results and common mistakes.",
+          "kind": "bundle",
+          "bundle": "sheet-04",
+          "guide": "guide.html",
+          "guide_pdf": "guide.pdf",
+          "sheet": "sheet-04.pdf",
+          "resource_titles": {
+            "guide": "Sheet 4 question Guide"
+          },
+          "extras": [
+            {
+              "source": "lecture-06.pdf",
+              "label": "Lecture 6"
+            }
+          ]
         }
       ],
       "bundles": {
+        "sheet-04": {
+          "folder": "week-05-repeating-structures/student",
+          "files": ["guide.html", "guide.pdf", "sheet-04.pdf", "lecture-06.pdf"]
+        },
         "sheet-03": {
           "folder": "week-04-loops/student",
           "files": [

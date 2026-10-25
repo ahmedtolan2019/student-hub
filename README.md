@@ -6,7 +6,7 @@ Lab materials for the first semester of 2026/2027.
 
 - [DSA](https://ahmedtolan2019.github.io/student-hub/dsa/): weeks 1, 2 and 3
 - [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1, 2 and 3
-- [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1–4
+- [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1–5
 
 Students can open slides, guides and sheets online, download individual formats,
 or download a week or whole course as a ZIP. Extract a ZIP and keep its files
@@ -169,3 +169,18 @@ The six-file allowlist is `courses[].bundles.sheet-03.files`, sourced only from
 and Lecture 5 PDFs are included unchanged. The week and course ZIPs keep both HTML
 files and PDFs together. Authoring files, compiler binaries, QA reports and private
 execution records are excluded. Existing week and course URLs remain unchanged.
+
+## GEN241 Sheet 4
+
+Week 5 publishes a newly authored single-page question Guide, its printable PDF,
+and the unchanged Sheet 4 and Lecture 6 PDFs. Each question has its original image,
+background explanation, C++ walkthrough, alternative method, recorded results and
+common mistakes. This week has no slide deck. The four-file allowlist is
+`courses[].bundles.sheet-04.files`, sourced only from
+`GEN241-computer-language-and-applications/week-05-repeating-structures/student`.
+
+The Guide embeds its styles, interactions and question images. Its companion PDF
+links work when the week ZIP stays together. The new guide-only format uses a
+reviewed Playwright print export because the course's older exporter assumes a
+slide deck. Instructor videos, professor solution files, private code and review
+notes are excluded. Worked code inside the student Guide is intentionally included.
