@@ -163,7 +163,7 @@ def build_week(course, week):
     if 'guide' not in names and 'sheet' not in names:
         readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['slides']} in a browser for the complete interactive whiteboard lesson.\nRead START-HERE.txt for setup, worked code and practice instructions.\nThe practice tasks are inside the whiteboard; there is no separate sheet.\n\nExtract the ZIP first and keep code/ and practice/ beside the HTML file.\nNo third-party Python libraries are needed.\nFollow the submission instructions and deadline announced in class.\n"
     elif 'slides' not in names:
-        readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['guide']} for the question-by-question study guide.\nPractice with {names['sheet']}.\n\nThe guide includes the original question images, background, C++ explanations, worked examples and common mistakes.\nHTML contains the interactive steps; the PDF is a reading copy.\nExtract the ZIP first and keep its files together. Follow the submission instructions and deadline announced in class.\n"
+        readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['guide']} for the question-by-question study guide.\nPractice with {names['sheet']}.\n\nThe guide includes the original question images, background, C++ explanations, worked examples and common mistakes.\nRead the PDF or open guide.html as a continuous reading page.\nExtract the ZIP first and keep its files together. Follow the submission instructions and deadline announced in class.\n"
     else:
         readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['slides']} in a browser for the interactive slides.\nRead {names['guide']} for the study guide.\nPractice with {names['sheet']}.\n\nExtract the ZIP first and keep its files together so the slides and guide can link to each other.\nHTML contains the interactive activities. PDFs are reading and printing copies where available.\nThese are teaching materials. Follow the submission instructions and deadline announced in class.\n"
     (directory / 'README.txt').write_text(readme)
@@ -236,7 +236,9 @@ def week_panel(course, week, prefix):
         extras += f'<div class="starter-heading"><span>{icon("folder")} Starter files</span>{starter_zip}</div><div class="starter-files">{starters}</div>'
     for entry, name in week['_extras']:
         path = prefix + week['_directory'] + '/' + name
-        extras += f'<div class="extra-row"><span>{icon("sheet")}{ESC(entry["label"])}</span><div class="resource-actions">{link(path,"Open PDF" + icon("external"),css="pill",aria="Open "+entry["label"])}{link(path,icon("down")+"Get PDF",True,"pill","Download "+entry["label"])}</div></div>'
+        open_label = 'Open web' if name.endswith('.html') else 'Open PDF'
+        save_label = 'Get HTML' if name.endswith('.html') else 'Get PDF'
+        extras += f'<div class="extra-row"><span>{icon("sheet")}{ESC(entry["label"])}</span><div class="resource-actions">{link(path,open_label + icon("external"),css="pill",aria="Open "+entry["label"])}{link(path,icon("down")+save_label,True,"pill","Download "+entry["label"])}</div></div>'
     if extras:
         extras = f'<div class="extras">{extras}</div>'
     return f'''<article class="week-card grid" id="week-{number}" aria-labelledby="title-{number}">
