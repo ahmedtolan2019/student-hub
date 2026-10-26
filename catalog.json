@@ -293,6 +293,10 @@
           },
           "extras": [
             {
+              "source": "gen241-sheet04-students.mp4",
+              "label": "Sheet 4 video for students — 27:08 · 76.7 MB"
+            },
+            {
               "source": "messages.txt",
               "label": "All messages — plain text"
             },
@@ -310,7 +314,7 @@
       "bundles": {
         "sheet-04": {
           "folder": "week-05-repeating-structures/student",
-          "files": ["guide.html", "guide.pdf", "messages.txt", "sheet-04.pdf", "lecture-06.pdf"]
+          "files": ["guide.html", "guide.pdf", "messages.txt", "sheet-04.pdf", "lecture-06.pdf", "gen241-sheet04-students.mp4"]
         },
         "sheet-03": {
           "folder": "week-04-loops/student",

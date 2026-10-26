@@ -240,6 +240,8 @@ def week_panel(course, week, prefix):
         path = prefix + week['_directory'] + '/' + name
         open_label = 'Open web' if name.endswith('.html') else 'Open PDF'
         save_label = 'Get HTML' if name.endswith('.html') else 'Get PDF'
+        if name.endswith('.mp4'):
+            open_label, save_label = 'Watch video', 'Get MP4'
         extras += f'<div class="extra-row"><span>{icon("sheet")}{ESC(entry["label"])}</span><div class="resource-actions">{link(path,open_label + icon("external"),css="pill",aria="Open "+entry["label"])}{link(path,icon("down")+save_label,True,"pill","Download "+entry["label"])}</div></div>'
     if extras:
         extras = f'<div class="extras">{extras}</div>'

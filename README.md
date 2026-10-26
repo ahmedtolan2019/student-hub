@@ -67,7 +67,8 @@ The site repository sits beside these private teaching folders on the maintainer
 `catalog.json` is the explicit source allowlist. The build publishes only those
 student files, generated indexes and ZIPs. Never copy whole course folders into
 this repository. Instructor solutions, presenter scripts, review notes, source
-textbooks, internal plans, recordings and development files are not publication inputs.
+textbooks, internal plans, instructor recordings and development files are not publication inputs.
+Student videos are published only when explicitly authorized and individually allowlisted.
 Worked examples intentionally present in student slides and guides stay intact.
 
 GEN241 source slides contain a Week 1 textbook button. The publisher omits that
@@ -179,7 +180,7 @@ also has its original sheet image. Students can copy one message, selected
 messages in order or the whole collection; `messages.txt` is the plain-text copy.
 The PDF is a secondary print export. This week has no slide deck.
 
-The five-file allowlist is `courses[].bundles.sheet-04.files`, sourced only from
+The six-file allowlist is `courses[].bundles.sheet-04.files`, sourced only from
 `GEN241-computer-language-and-applications/week-05-repeating-structures/student`.
 The original Sheet 4 and Lecture 6 PDFs are unchanged. The standalone HTML embeds
 its content, styles, interactions and question images. Companion links work when
@@ -188,3 +189,9 @@ the ZIP stays together. The browser print export uses the same completed content
 Instructor videos, professor solution files, private code and review notes stay
 excluded. Worked code intentionally explained in the student messages is included.
 Existing week, guide and original PDF URLs are preserved.
+
+On 26 October 2026, Ahmed authorized publishing the completed student video.
+`gen241-sheet04-students.mp4` is the only released video, an unchanged 27:08
+H.264/AAC MP4 with sixteen question chapters, about 76.7 MB. Week 5 offers viewing
+and download links; the week and course ZIPs include it. The instructor video
+and all video project/source files remain private.
