@@ -172,15 +172,19 @@ execution records are excluded. Existing week and course URLs remain unchanged.
 
 ## GEN241 Sheet 4
 
-Week 5 publishes a newly authored single-page question Guide, its printable PDF,
-and the unchanged Sheet 4 and Lecture 6 PDFs. Each question has its original image,
-background explanation, C++ walkthrough, alternative method, recorded results and
-common mistakes. This week has no slide deck. The four-file allowlist is
-`courses[].bundles.sheet-04.files`, sourced only from
-`GEN241-computer-language-and-applications/week-05-repeating-structures/student`.
+Week 5 opens a simple copy-ready message collection. Ten introductory/concept
+messages precede replies covering all sixteen questions, with requirements,
+solution steps, C++ code, recorded examples and concrete mistakes. Each question
+also has its original sheet image. Students can copy one message, selected
+messages in order or the whole collection; `messages.txt` is the plain-text copy.
+The PDF is a secondary print export. This week has no slide deck.
 
-The Guide embeds its styles, interactions and question images. Its companion PDF
-links work when the week ZIP stays together. The new guide-only format uses a
-reviewed Playwright print export because the course's older exporter assumes a
-slide deck. Instructor videos, professor solution files, private code and review
-notes are excluded. Worked code inside the student Guide is intentionally included.
+The five-file allowlist is `courses[].bundles.sheet-04.files`, sourced only from
+`GEN241-computer-language-and-applications/week-05-repeating-structures/student`.
+The original Sheet 4 and Lecture 6 PDFs are unchanged. The standalone HTML embeds
+its content, styles, interactions and question images. Companion links work when
+the ZIP stays together. The browser print export uses the same completed content.
+
+Instructor videos, professor solution files, private code and review notes stay
+excluded. Worked code intentionally explained in the student messages is included.
+Existing week, guide and original PDF URLs are preserved.

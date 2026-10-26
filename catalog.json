@@ -283,18 +283,22 @@
           "number": 5,
           "folder": "week-05-repeating-structures/student",
           "title": "Repeating structures and applications",
-          "description": "Sheet 4 explained question by question: small C++ examples with actual output, concepts, step-by-step solutions, alternatives and common mistakes.",
+          "description": "Copy-ready Egyptian Arabic explanations: concepts first, then all 16 Sheet 4 questions with code, recorded examples and common mistakes. Copy one message, selected messages or the whole sheet.",
           "kind": "bundle",
           "bundle": "sheet-04",
-          "guide": "guide.pdf",
+          "guide": "guide.html",
           "sheet": "sheet-04.pdf",
           "resource_titles": {
-            "guide": "Sheet 4 reading Guide"
+            "guide": "Sheet 4 — read and copy explanations"
           },
           "extras": [
             {
-              "source": "guide.html",
-              "label": "Guide — browser reading copy"
+              "source": "messages.txt",
+              "label": "All messages — plain text"
+            },
+            {
+              "source": "guide.pdf",
+              "label": "Print copy — PDF"
             },
             {
               "source": "lecture-06.pdf",
@@ -306,7 +310,7 @@
       "bundles": {
         "sheet-04": {
           "folder": "week-05-repeating-structures/student",
-          "files": ["guide.html", "guide.pdf", "sheet-04.pdf", "lecture-06.pdf"]
+          "files": ["guide.html", "guide.pdf", "messages.txt", "sheet-04.pdf", "lecture-06.pdf"]
         },
         "sheet-03": {
           "folder": "week-04-loops/student",
