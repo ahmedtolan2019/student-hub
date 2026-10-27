@@ -82,8 +82,34 @@ window.open(urls[name]+frag,'_blank');
     page = page.replace('</body>', opener + '</body>')
     return page.replace('</head>', '<style>/* Student copy */ .kicker > span:not(.pill) { display:none!important; }</style></head>', 1)
 
-def archive(target, files, base, prefix, stored_extensions=()):
+def archive(target, files, base, prefix, stored_extensions=(), online_files=()):
     """Fixed ZIP metadata keeps unchanged publications byte-for-byte stable."""
+    online = {p.resolve(): CATALOG['site_url'].rstrip('/') + '/' + quote(p.relative_to(OUT).as_posix())
+              for p in online_files}
+    def archived_content(file):
+        if not online:
+            return file.read_bytes()
+        if file.suffix == '.html':
+            def rewrite(match):
+                parsed = urlsplit(html.unescape(match[3]))
+                if parsed.scheme or parsed.netloc or not parsed.path:
+                    return match[0]
+                destination = (file.parent / unquote(parsed.path)).resolve()
+                if destination not in online:
+                    return match[0]
+                url = online[destination]
+                if parsed.query: url += '?' + parsed.query
+                if parsed.fragment: url += '#' + parsed.fragment
+                return match[1] + '=' + match[2] + ESC(url, quote=True) + match[2]
+            return re.sub(r'\b(href|src)=([\"\'])(.*?)\2', rewrite, file.read_text()).encode()
+        if file.name == 'README.txt':
+            videos = [(p, url) for p, url in online.items() if p.is_relative_to(file.parent.resolve())]
+            if videos:
+                note = ('VIDEO DOWNLOADS\nThese videos are not embedded in this ZIP. '
+                        'The HTML video links open online. Watch or download the unchanged MP4 files separately:\n')
+                note += ''.join(f'{p.name}\n{url}\n' for p, url in videos)
+                return (note + '\n' + file.read_text()).encode()
+        return file.read_bytes()
     target.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as z:
         for file in sorted(files):
@@ -91,7 +117,7 @@ def archive(target, files, base, prefix, stored_extensions=()):
             entry.compress_type = (zipfile.ZIP_STORED if file.suffix.lower() in stored_extensions
                                    else zipfile.ZIP_DEFLATED)
             entry.external_attr = 0o644 << 16
-            z.writestr(entry, file.read_bytes())
+            z.writestr(entry, archived_content(file))
     with zipfile.ZipFile(target) as z:
         assert z.testzip() is None
 
@@ -132,8 +158,13 @@ def build_week(course, week):
             (directory / name).write_text(public_gen_slides(path, f"GEN241 Week {week['number']:02} - Guide.html", allowed))
         else:
             shutil.copyfile(path, directory / name)
-    for _, path in extras:
-        shutil.copyfile(path, directory / path.name)
+    for entry, path in extras:
+        relative = entry['source'] if week['kind'] == 'bundle' else path.name
+        if week['kind'] == 'bundle' and relative not in bundle['files']:
+            raise ValueError(f'Unlisted bundle extra: {relative}')
+        target = directory / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(path, target)
     for item in week.get('starters', []):
         path = read_source(course, week, item)
         target = directory / 'starter-files' / path.name
@@ -184,14 +215,17 @@ def build_week(course, week):
         if not excluded <= allowed:
             raise ValueError(f'Archive exclusions must be explicitly published bundle files: {excluded - allowed}')
     archive_files = [p for p in files if p.relative_to(directory).as_posix() not in excluded]
+    online_files = [directory / name for name in sorted(excluded)] if week.get('archive_online_links') else []
     bundle = OUT / 'downloads' / f"{course['code']}-Week-{week['number']:02}.zip"
     archive(bundle, archive_files, directory, f"{course['code']}-Week-{week['number']:02}",
-            course.get('archive_stored_extensions', ()))
+            course.get('archive_stored_extensions', ()), online_files)
     week['_archive_files'] = archive_files
+    week['_archive_online_files'] = online_files
     week['_names'] = names
     week['_directory'] = directory.relative_to(OUT).as_posix()
     week['_zip'] = bundle.relative_to(OUT).as_posix()
-    week['_extras'] = [(entry, path.name) for entry, path in extras if not entry.get('hidden')]
+    week['_extras'] = [(entry, entry['source'] if week['kind'] == 'bundle' else path.name)
+                       for entry, path in extras if not entry.get('hidden')]
     if week.get('starters'):
         starter_zip = OUT / 'downloads' / f"{course['code']}-Week-{week['number']:02}-Starter-files.zip"
         archive(starter_zip, list((directory/'starter-files').glob('*')), directory/'starter-files', 'starter-files')
@@ -381,7 +415,8 @@ def main():
         for week in course['weeks']: build_week(course,week)
         base = OUT/'materials'/course['id']
         archive(OUT/'downloads'/f"{course['code']}-All-weeks.zip",[p for week in course['weeks'] for p in week['_archive_files']],base,course['code'],
-                course.get('archive_stored_extensions', ()))
+                course.get('archive_stored_extensions', ()),
+                [p for week in course['weeks'] for p in week['_archive_online_files']])
         dest = OUT/course['id']; dest.mkdir(); (dest/'index.html').write_text(page(course))
     (OUT/'index.html').write_text(page(CATALOG['courses'][0],nested=False))
     build_basics(ROOT, OUT, site_header('../', 'computer-basics'))

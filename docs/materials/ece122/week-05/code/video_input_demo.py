@@ -1,0 +1,6 @@
+raw_a = input("A: ")
+raw_b = input("B: ")
+print(raw_a + raw_b)
+a = int(raw_a)
+b = int(raw_b)
+print(a + b)

@@ -1,0 +1,5 @@
+print(3 ** 3)
+print(7 / 2)
+print(7 // 2)
+print(7 % 2)
+print(4827 // 10, 4827 % 10)

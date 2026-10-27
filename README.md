@@ -5,7 +5,7 @@ Lab materials for the first semester of 2026/2027.
 **Student link:** https://ahmedtolan2019.github.io/student-hub/
 
 - [DSA](https://ahmedtolan2019.github.io/student-hub/dsa/): weeks 1, 2 and 3
-- [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1–4
+- [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1–5
 - [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1–5
 - [DB1](https://ahmedtolan2019.github.io/student-hub/db1/): weeks 1–3
 
@@ -173,6 +173,30 @@ course ZIPs preserve both Guides and their companion files. Source archives,
 instructor reviews, authoring scripts and QA files remain private.
 
 On 27 October 2026, Ahmed authorized the completed Sheet 4 student video. The full 31:54 MP4 and two separate parts are individually allowlisted and copied byte-identically from the finished project. `video.html` provides 24 chapter links. Refresh these five student exports with `python3 ../ECE122-computer-programming-1/week-04-loops/src/export_video.py`. The week and course ZIPs include the full video and subtitles. The redundant part files stay available online and are excluded from ZIPs through `archive_exclude`, keeping both archives below the publication size limit. The watch page uses online links for the separate parts. Already-compressed MP4 files use ZIP storage without recompression. NotebookLM sources, original audio, transcripts, production scripts and QA remain private.
+
+## ECE122 Sheet 5
+
+Week 5 publishes the completed question Guide, Python basics book, original
+Sheet 5 and prerequisite Lecture 5, professor reference code, and student
+worked programs. Both books have PDF and interactive HTML editions. The
+60-file allowlist is `courses[].bundles.sheet-05.files`, sourced only from
+`ECE122-computer-programming-1/sheet-05-functions/student`.
+
+On 27 October 2026, Ahmed authorized publishing both student videos: the
+25:32 question walkthrough and 10:52 Python crash review. Their MP4 files are
+copied byte-identically and individually allowlisted under `videos/`.
+Chapter timestamps are available beside them. The instructor guide,
+NotebookLM sources, audio, transcripts, production files and QA remain private.
+
+The Week 5 ZIP contains the books, code and original materials. Its two MP4s
+are available as separate watch/download links. Including both inside the
+course ZIP would exceed [GitHub's file limit](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github).
+The catalog's `archive_exclude` and `archive_online_links` settings keep those
+videos online while the ZIP's HTML links point to their published URLs.
+Archive README files explain the separate downloads. The online pages and
+original student files are unchanged, and every older week URL and archive
+remains intact. Nested bundle extras retain their source paths, so videos are
+not copied a second time at the week folder root.
 
 ## GEN241 Sheet 3
 

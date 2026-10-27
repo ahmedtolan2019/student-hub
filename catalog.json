@@ -1,4 +1,5 @@
 {
+  "site_url": "https://ahmedtolan2019.github.io/student-hub/",
   "academic_year": "2026 / 2027",
   "semester": 1,
   "courses": [
@@ -120,6 +121,57 @@
             "ECE122-Sheet04-Part01.mp4",
             "ECE122-Sheet04-Part02.mp4"
           ]
+        },
+        {
+          "number": 5,
+          "folder": "sheet-05-functions/student",
+          "title": "Functions and step-by-step solutions",
+          "description": "Sheet 5: all 12 questions, a Python basics book, recorded examples and two Egyptian Arabic videos. Books, code and source PDFs are included in the ZIP. Watch or download the videos separately using the links below.",
+          "kind": "bundle",
+          "bundle": "sheet-05",
+          "guide": "guide.html",
+          "guide_pdf": "guide.pdf",
+          "sheet": "sheet-05.pdf",
+          "readme": "README.txt",
+          "resource_titles": {
+            "guide": "Sheet 5 question guide"
+          },
+          "extras": [
+            {
+              "source": "python-basics.html",
+              "label": "Python basics guide · 10 topics in learning order",
+              "download_bundle": true
+            },
+            {
+              "source": "python-basics.pdf",
+              "label": "Python basics guide · PDF · 13 pages"
+            },
+            {
+              "source": "videos/ece122-sheet05-questions.mp4",
+              "label": "All Sheet 5 questions · 25:32 · 68.4 MB"
+            },
+            {
+              "source": "videos/ece122-sheet05-python-basics.mp4",
+              "label": "Python crash review · 10:52 · 27.1 MB"
+            },
+            {
+              "source": "videos/README.txt",
+              "label": "Video chapters and timestamps"
+            },
+            {
+              "source": "lecture-05.pdf",
+              "label": "Lecture 5 · loops, formatting and random numbers"
+            },
+            {
+              "source": "professor-code.rar",
+              "label": "Professor reference code · original archive"
+            }
+          ],
+          "archive_exclude": [
+            "videos/ece122-sheet05-questions.mp4",
+            "videos/ece122-sheet05-python-basics.mp4"
+          ],
+          "archive_online_links": true
         }
       ],
       "bundles": {
@@ -233,6 +285,71 @@
             "lectures/ECE122-Lecture-04-Selection.pdf",
             "sheet-02/board.js",
             "sheet-03/board.js"
+          ]
+        },
+        "sheet-05": {
+          "folder": "sheet-05-functions/student",
+          "files": [
+            "index.html",
+            "guide.html",
+            "guide.pdf",
+            "python-basics.html",
+            "python-basics.pdf",
+            "sheet-05.pdf",
+            "lecture-05.pdf",
+            "professor-code.rar",
+            "README.txt",
+            "assets/q01.png",
+            "assets/q02.png",
+            "assets/q03.png",
+            "assets/q04.png",
+            "assets/q05.png",
+            "assets/q06.png",
+            "assets/q07.png",
+            "assets/q08.png",
+            "assets/q09.png",
+            "assets/q10.png",
+            "assets/q11.png",
+            "assets/q12.png",
+            "code/Q_0501.py",
+            "code/Q_0502.py",
+            "code/Q_0503.py",
+            "code/Q_0504.py",
+            "code/Q_0505.py",
+            "code/Q_0506.py",
+            "code/Q_0507.py",
+            "code/Q_0508.py",
+            "code/Q_0509.py",
+            "code/Q_0510.py",
+            "code/Q_0511.py",
+            "code/Q_0512.py",
+            "code/basics_01.py",
+            "code/basics_02.py",
+            "code/basics_03.py",
+            "code/basics_04.py",
+            "code/basics_05.py",
+            "code/basics_06.py",
+            "code/basics_07.py",
+            "code/basics_08.py",
+            "code/basics_09.py",
+            "code/basics_10.py",
+            "code/video_input_demo.py",
+            "reference-code/Q_0501.py",
+            "reference-code/Q_0502.py",
+            "reference-code/Q_0503.py",
+            "reference-code/Q_0504.py",
+            "reference-code/Q_0505.py",
+            "reference-code/Q_0506.py",
+            "reference-code/Q_0507.py",
+            "reference-code/Q_0508.py",
+            "reference-code/Q_0509.py",
+            "reference-code/Q_0510.py",
+            "reference-code/Q_0511.py",
+            "reference-code/Q_0512.py",
+            "reference-code/README.txt",
+            "videos/README.txt",
+            "videos/ece122-sheet05-questions.mp4",
+            "videos/ece122-sheet05-python-basics.mp4"
           ]
         }
       },
