@@ -80,16 +80,45 @@
           "number": 4,
           "folder": "week-04-loops/student",
           "title": "Loops and repeated calculations",
-          "description": "Sheet 4: a question-by-question guide with original question images, plus an ordered Python basics guide. Includes PDFs and 15 worked Python files. Examples are expected traces, not recorded runs.",
+          "description": "Sheet 4: both study guides, 15 worked Python files and a 31:54 Egyptian Arabic video with chapter navigation. The complete video is included in ZIP downloads; each part is also available separately. Examples are expected traces, not recorded runs.",
           "kind": "bundle",
           "bundle": "sheet-04",
           "guide": "sheet-04-guide.html",
           "guide_pdf": "ECE122-Sheet04-Student-Guide.pdf",
           "sheet": "sheet-04-original.pdf",
-          "resource_titles": {"guide": "Sheet 4 question guide"},
+          "resource_titles": {
+            "guide": "Sheet 4 question guide"
+          },
           "extras": [
-            {"source": "python-basics.html", "label": "Python basics guide · 16 topics in order"},
-            {"source": "ECE122-Sheet04-Python-Basics.pdf", "label": "Python basics guide · PDF"}
+            {
+              "source": "python-basics.html",
+              "label": "Python basics guide · 16 topics in order"
+            },
+            {
+              "source": "ECE122-Sheet04-Python-Basics.pdf",
+              "label": "Python basics guide · PDF"
+            },
+            {
+              "source": "video.html",
+              "label": "Sheet 4 video · 31:54 · chapter navigation",
+              "download_bundle": true
+            },
+            {
+              "source": "ECE122-Sheet04-Python-Loops.mp4",
+              "label": "Complete Sheet 4 video · 31:54 · 76.2 MB"
+            },
+            {
+              "source": "ECE122-Sheet04-Part01.mp4",
+              "label": "Part 1 · Python basics and Q1–Q8 · 15:13 · 37.1 MB"
+            },
+            {
+              "source": "ECE122-Sheet04-Part02.mp4",
+              "label": "Part 2 · Q9–Q15 · 16:40 · 39.2 MB"
+            }
+          ],
+          "archive_exclude": [
+            "ECE122-Sheet04-Part01.mp4",
+            "ECE122-Sheet04-Part02.mp4"
           ]
         }
       ],
@@ -117,7 +146,12 @@
             "code/Q_0412.py",
             "code/Q_0413.py",
             "code/Q_0414.py",
-            "code/Q_0415.py"
+            "code/Q_0415.py",
+            "video.html",
+            "ECE122-Sheet04-Python-Loops.mp4",
+            "ECE122-Sheet04-Part01.mp4",
+            "ECE122-Sheet04-Part02.mp4",
+            "ECE122-Sheet04-Python-Loops.srt"
           ]
         },
         "sheets-02-03": {
@@ -201,7 +235,10 @@
             "sheet-03/board.js"
           ]
         }
-      }
+      },
+      "archive_stored_extensions": [
+        ".mp4"
+      ]
     },
     {
       "id": "gen241", "code": "GEN241", "title": "Computer Language & Applications", "language": "C++",

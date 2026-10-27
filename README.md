@@ -167,10 +167,12 @@ this edition without individual program execution or testing; Windows/PyCharm
 execution is unverified. Differences from the reference programs are explained
 beside the relevant questions.
 
-The 21-file allowlist is `courses[].bundles.sheet-04.files` for ECE122, sourced
+The 26-file allowlist is `courses[].bundles.sheet-04.files` for ECE122, sourced
 only from `ECE122-computer-programming-1/week-04-loops/student`. The week and
 course ZIPs preserve both Guides and their companion files. Source archives,
 instructor reviews, authoring scripts and QA files remain private.
+
+On 27 October 2026, Ahmed authorized the completed Sheet 4 student video. The full 31:54 MP4 and two separate parts are individually allowlisted and copied byte-identically from the finished project. `video.html` provides 24 chapter links. Refresh these five student exports with `python3 ../ECE122-computer-programming-1/week-04-loops/src/export_video.py`. The week and course ZIPs include the full video and subtitles. The redundant part files stay available online and are excluded from ZIPs through `archive_exclude`, keeping both archives below the publication size limit. The watch page uses online links for the separate parts. Already-compressed MP4 files use ZIP storage without recompression. NotebookLM sources, original audio, transcripts, production scripts and QA remain private.
 
 ## GEN241 Sheet 3
 

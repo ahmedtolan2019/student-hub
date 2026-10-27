@@ -168,7 +168,7 @@ def build_week(course, week):
     elif course['id'] == 'gen241' and week.get('bundle') == 'sheet-04':
         readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen guide.html for the complete copy-ready explanations.\nStart with the concept messages, then read any of the sixteen question replies.\nCopy one message, selected messages or all messages using the page buttons.\nmessages.txt contains the same explanations as plain text, including C++ and output.\nguide.pdf is the optional print copy.\n\nThe unchanged question sheet is sheet-04.pdf and the lecture is lecture-06.pdf.\nExtract the ZIP first and keep its files together. Follow the submission instructions and deadline announced in class.\n"
     elif course['id'] == 'ece122' and week.get('bundle') == 'sheet-04':
-        readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen index.html to choose a guide.\nStart with python-basics.html for 16 Python topics in learning order.\nRead sheet-04-guide.html for all 15 questions, original question images, explanations and worked code.\nBoth guides also have PDF copies. The unchanged original sheet is sheet-04-original.pdf.\nThe code/ folder contains the teaching versions explained in the guide. Differences from the supplied reference code are labelled beside each question.\n\nExamples are expected traces, not recorded execution. The programs have not been individually run or tested for this edition; Windows/PyCharm execution is unverified.\nExtract the ZIP first and keep its files together. Follow the submission instructions and deadline announced in class.\n"
+        readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen index.html to choose a guide or video.\nOpen video.html for the complete 31:54 Egyptian Arabic video and chapter navigation.\nThe complete MP4 is included for offline playback; separate-part links require internet.\nStart with python-basics.html for 16 Python topics in learning order.\nRead sheet-04-guide.html for all 15 questions, original question images, explanations and worked code.\nBoth guides also have PDF copies. The unchanged original sheet is sheet-04-original.pdf.\nThe code/ folder contains the teaching versions explained in the guide. Differences from the supplied reference code are labelled beside each question.\n\nExamples are expected traces, not recorded execution. The programs have not been individually run or tested for this edition; Windows/PyCharm execution is unverified.\nExtract the ZIP first and keep its files together. Follow the submission instructions and deadline announced in class.\n"
     elif 'slides' not in names:
         readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['guide']} for the question-by-question study guide.\nPractice with {names['sheet']}.\n\nThe guide includes the original question images, background, C++ explanations, worked examples and common mistakes.\nRead the PDF or open guide.html as a continuous reading page.\nExtract the ZIP first and keep its files together. Follow the submission instructions and deadline announced in class.\n"
     else:
@@ -178,9 +178,16 @@ def build_week(course, week):
         with (directory / 'README.txt').open('a') as f:
             f.write(f"\nOpen {week['workbook']}-workbook/index.html for illustrated foundations and recorded C++ traces. Keep that folder intact.\n")
     files = [p for p in directory.rglob('*') if p.is_file()]
+    excluded = set(week.get('archive_exclude', ()))
+    if excluded:
+        allowed = set(course.get('bundles', {}).get(week.get('bundle'), {}).get('files', ()))
+        if not excluded <= allowed:
+            raise ValueError(f'Archive exclusions must be explicitly published bundle files: {excluded - allowed}')
+    archive_files = [p for p in files if p.relative_to(directory).as_posix() not in excluded]
     bundle = OUT / 'downloads' / f"{course['code']}-Week-{week['number']:02}.zip"
-    archive(bundle, files, directory, f"{course['code']}-Week-{week['number']:02}",
+    archive(bundle, archive_files, directory, f"{course['code']}-Week-{week['number']:02}",
             course.get('archive_stored_extensions', ()))
+    week['_archive_files'] = archive_files
     week['_names'] = names
     week['_directory'] = directory.relative_to(OUT).as_posix()
     week['_zip'] = bundle.relative_to(OUT).as_posix()
@@ -253,7 +260,10 @@ def week_panel(course, week, prefix):
             '.sql': ('Open SQL', 'Get SQL'),
             '.txt': ('Open text', 'Get TXT'),
         }.get(suffix, ('Open file', 'Get file'))
-        extras += f'<div class="extra-row"><span>{icon("sheet")}{ESC(entry["label"])}</span><div class="resource-actions">{link(path,open_label + icon("external"),css="pill",aria="Open "+entry["label"])}{link(path,icon("down")+save_label,True,"pill","Download "+entry["label"])}</div></div>'
+        download_path = prefix + week['_zip'] if entry.get('download_bundle') else path
+        if entry.get('download_bundle'):
+            save_label = 'Get ZIP'
+        extras += f'<div class="extra-row"><span>{icon("sheet")}{ESC(entry["label"])}</span><div class="resource-actions">{link(path,open_label + icon("external"),css="pill",aria="Open "+entry["label"])}{link(download_path,icon("down")+save_label,True,"pill","Download "+entry["label"])}</div></div>'
     if extras:
         extras = f'<div class="extras">{extras}</div>'
     return f'''<article class="week-card grid" id="week-{number}" aria-labelledby="title-{number}">
@@ -367,7 +377,7 @@ def main():
     for course in CATALOG['courses']:
         for week in course['weeks']: build_week(course,week)
         base = OUT/'materials'/course['id']
-        archive(OUT/'downloads'/f"{course['code']}-All-weeks.zip",[p for p in base.rglob('*') if p.is_file()],base,course['code'],
+        archive(OUT/'downloads'/f"{course['code']}-All-weeks.zip",[p for week in course['weeks'] for p in week['_archive_files']],base,course['code'],
                 course.get('archive_stored_extensions', ()))
         dest = OUT/course['id']; dest.mkdir(); (dest/'index.html').write_text(page(course))
     (OUT/'index.html').write_text(page(CATALOG['courses'][0],nested=False))
