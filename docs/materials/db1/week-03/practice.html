@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar-EG" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Task 1: College Equipment Database</title>
+<style>
+:root{color-scheme:light;--ink:#172c32;--muted:#51656b;--line:#d4dfdc;--accent:#16604d;--paper:#fff;--back:#f3f5f1}
+*{box-sizing:border-box}body{margin:0;background:var(--back);color:var(--ink);font:18px/1.9 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:960px;margin:36px auto;padding:38px 46px;background:var(--paper);border:1px solid var(--line);border-radius:18px}h1{font-size:32px;line-height:1.5;margin:8px 0 18px}h2{font-size:24px;margin:30px 0 12px}.tag{font-size:15px;letter-spacing:.04em;color:var(--accent)}p{margin:10px 0}.lead{font-size:21px}.note{color:var(--muted);font-size:16px;border-right:3px solid var(--line);padding-right:14px}.table-wrap{overflow:auto;direction:ltr}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:16px}th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;white-space:nowrap}th{background:#eaf1ec;font-weight:650}code,bdi{direction:ltr;unicode-bidi:isolate}code{font:0.94em ui-monospace,"SFMono-Regular",Consolas,monospace;background:#edf3ef;padding:2px 5px;border-radius:4px}li{margin:10px 0;padding-right:4px}ol{padding-right:26px}a{color:var(--accent);text-underline-offset:4px}.check{padding:14px 20px;background:#edf3ef;border-radius:10px}.footer{font-size:15px;color:var(--muted);margin-top:30px;border-top:1px solid var(--line);padding-top:16px}@media(max-width:650px){body{font-size:17px}main{margin:12px;padding:22px 18px}h1{font-size:27px}table{table-layout:fixed}th,td{padding:7px 5px;font-size:14px;white-space:normal;overflow-wrap:anywhere}}@media print{body{background:white;font-size:12pt}main{margin:0;padding:0;max-width:none;border:0}h1{font-size:23pt}h2{font-size:16pt;break-after:avoid}table,li,.check{break-inside:avoid}.footer{font-size:10pt}}
+</style>
+</head>
+<body><main>
+<p class="tag" dir="ltr">DATABASE 1 · TASK 1</p>
+<h1 dir="ltr">Task 1: College Equipment Database</h1>
+<p><a href="DB1-Task-1-College-Equipment-Database.pdf">نسخة PDF بالإنجليزي</a></p>
+<p class="lead">مسؤول المعامل محتاج يسجل الأجهزة، ويعرف الأجهزة المتاحة للاستخدام ومكان كل جهاز. اعمل قاعدة بيانات صغيرة تساعده يجاوب على السؤال ده.</p>
+<p>كل صف هيمثل <strong>جهاز واحد فعلي</strong>. ممكن جهازين يبقوا <bdi>Laptop</bdi>، لكن كل واحد ليه رقم مختلف وحالة مختلفة.</p>
+
+<h2>الجدول اللي هتعمله</h2>
+<p>اسم قاعدة البيانات <code>CollegeEquipment</code>، واسم الجدول <code>Equipment</code>.</p>
+<div class="table-wrap"><table dir="ltr">
+<thead><tr><th>Column</th><th>Data type</th><th>Constraint</th></tr></thead>
+<tbody><tr><td>EquipmentId</td><td>INT</td><td>PRIMARY KEY</td></tr><tr><td>EquipmentName</td><td>NVARCHAR(60)</td><td>NOT NULL</td></tr><tr><td>Room</td><td>NVARCHAR(10)</td><td>NOT NULL</td></tr><tr><td>IsAvailable</td><td>BIT</td><td>NOT NULL</td></tr></tbody>
+</table></div>
+<p><code>IsAvailable = 1</code> يعني الجهاز متاح، و<code>0</code> يعني مش متاح دلوقتي.</p>
+
+<h2>البيانات</h2>
+<div class="table-wrap"><table dir="ltr">
+<thead><tr><th>EquipmentId</th><th>EquipmentName</th><th>Room</th><th>IsAvailable</th></tr></thead>
+<tbody><tr><td>1</td><td>Laptop</td><td>Lab1</td><td>1</td></tr><tr><td>2</td><td>Laptop</td><td>Lab1</td><td>0</td></tr><tr><td>3</td><td>Projector</td><td>Lab2</td><td>1</td></tr><tr><td>4</td><td>Router</td><td>Lab2</td><td>0</td></tr><tr><td>5</td><td>Printer</td><td>Lab1</td><td>1</td></tr></tbody>
+</table></div>
+
+<h2>المطلوب بالترتيب</h2>
+<ol>
+<li>اعمل قاعدة البيانات بـ<code>CREATE DATABASE</code>.</li>
+<li>اختارها بـ<code>USE</code>.</li>
+<li>اعمل جدول <code>Equipment</code> بالأعمدة والأنواع والقيود اللي فوق.</li>
+<li>دخل الأجهزة الخمسة بـ<code>INSERT</code>. اكتب أسماء الأعمدة صراحة، وخلي ترتيب القيم مطابق لترتيبها.</li>
+<li>اعرض كل الأعمدة وكل الصفوف.</li>
+<li>اعرض اسم الجهاز ومكانه بس لكل الأجهزة.</li>
+<li>اعرض رقم واسم ومكان كل جهاز متاح.</li>
+<li>اعرض رقم واسم ومكان الأجهزة اللي في <bdi>Lab1</bdi> <strong>ومتاحة</strong> في نفس الوقت.</li>
+</ol>
+<p><strong>لو خلصت:</strong> اعرض كل الأجهزة مرتبة باسم الجهاز، وبعدين برقمه لو الاسم اتكرر.</p>
+<div class="check"><p>قبل ما تشغّل كل استعلام، توقع الصفوف اللي هتظهر من الجدول. بعد التشغيل قارن النتيجة بتوقعك، وفسّر ليه الجهاز رقم <bdi>2</bdi> ما ينفعش يظهر في آخر سؤال أساسي.</p></div>
+<p class="note">نفّذ كل <bdi>INSERT</bdi> مرة واحدة. حدد الأمر اللي عايز تشغّله قبل التنفيذ. لو قاعدة البيانات موجودة على الجهاز، اسأل المعيد قبل ما تكمل، وسيب الشغل الموجود زي ما هو.</p>
+<p>استخدم <a href="Lab03-Equipment-starter.sql">ملف البداية</a> للكتابة. <a href="Equipment.csv">ملف البيانات CSV</a> مجرد نسخة للرجوع للبيانات، فتحه مش بيدخل الصفوف في <bdi>SQL Server</bdi>.</p>
+<p class="footer">تدريب على إنشاء قاعدة بيانات وجدول، إضافة صفوف، وقراءة البيانات. مفيش <bdi>UPDATE</bdi> أو <bdi>DELETE</bdi> في التدريب ده.</p>
+</main></body></html>

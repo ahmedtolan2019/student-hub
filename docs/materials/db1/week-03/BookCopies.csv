@@ -1,0 +1,37 @@
+﻿CopyId,Title,Category,Shelf,IsAvailable
+101,Python Basics,Computing,A1,1
+102,Python Basics,Computing,A1,0
+103,Database Design,Computing,A2,1
+104,Intro to Circuits,Engineering,B1,1
+105,Applied Mathematics,Mathematics,C1,0
+106,Database Design,Computing,A2,0
+107,Data Structures,Computing,A3,1
+108,Data Structures,Computing,A3,0
+109,Computer Networks,Computing,A4,1
+110,Computer Networks,Computing,A4,1
+111,Operating Systems,Computing,A5,0
+112,Operating Systems,Computing,A5,1
+113,Intro to Circuits,Engineering,B1,0
+114,Digital Logic,Engineering,B2,1
+115,Digital Logic,Engineering,B2,0
+116,Signals and Systems,Engineering,B3,1
+117,Signals and Systems,Engineering,B3,0
+118,Electronics Lab,Engineering,B4,1
+119,Applied Mathematics,Mathematics,C1,1
+120,Linear Algebra,Mathematics,C2,1
+121,Linear Algebra,Mathematics,C2,0
+122,Statistics Practice,Mathematics,C3,1
+123,Statistics Practice,Mathematics,C3,0
+124,Discrete Mathematics,Mathematics,C4,1
+125,Physics Fundamentals,Science,D1,1
+126,Physics Fundamentals,Science,D1,0
+127,Chemistry in the Lab,Science,D2,1
+128,Chemistry in the Lab,Science,D2,0
+129,Scientific Writing,Science,D3,1
+130,Scientific Writing,Science,D3,0
+131,SQL Workbook,Computing,A2,1
+132,SQL Workbook,Computing,A2,0
+133,Algorithms in Practice,Computing,A3,1
+134,Algorithms in Practice,Computing,A3,0
+135,Engineering Mechanics,Engineering,B5,1
+136,Engineering Mechanics,Engineering,B5,0

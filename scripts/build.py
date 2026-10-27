@@ -82,13 +82,14 @@ window.open(urls[name]+frag,'_blank');
     page = page.replace('</body>', opener + '</body>')
     return page.replace('</head>', '<style>/* Student copy */ .kicker > span:not(.pill) { display:none!important; }</style></head>', 1)
 
-def archive(target, files, base, prefix):
+def archive(target, files, base, prefix, stored_extensions=()):
     """Fixed ZIP metadata keeps unchanged publications byte-for-byte stable."""
     target.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as z:
         for file in sorted(files):
             entry = zipfile.ZipInfo(prefix + '/' + file.relative_to(base).as_posix(), (2026, 1, 1, 0, 0, 0))
-            entry.compress_type = zipfile.ZIP_DEFLATED
+            entry.compress_type = (zipfile.ZIP_STORED if file.suffix.lower() in stored_extensions
+                                   else zipfile.ZIP_DEFLATED)
             entry.external_attr = 0o644 << 16
             z.writestr(entry, file.read_bytes())
     with zipfile.ZipFile(target) as z:
@@ -109,7 +110,7 @@ def build_week(course, week):
             target = directory / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(path, target)
-        for key in ('slides', 'guide', 'sheet'):
+        for key in ('slides', 'guide', 'sheet', 'readme'):
             if key in week and week[key] not in bundle['files']:
                 raise ValueError(f'Unlisted bundle resource: {week[key]}')
     resolved = {k: read_source(course, week, week[k]) for k in ('slides','guide','guide_pdf','sheet','sheet_pdf') if k in week}
@@ -160,7 +161,9 @@ def build_week(course, week):
                 f"{course['code']}-{key}-Workbook")
         week['_workbook'] = {**workbook, 'path': (workbook_dir/'index.html').relative_to(OUT).as_posix(),
                              'zip': workbook_zip.relative_to(OUT).as_posix()}
-    if 'guide' not in names and 'sheet' not in names:
+    if week.get('readme'):
+        readme = read_source(course, week, week['readme']).read_text()
+    elif 'guide' not in names and 'sheet' not in names:
         readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen {names['slides']} in a browser for the complete interactive whiteboard lesson.\nRead START-HERE.txt for setup, worked code and practice instructions.\nThe practice tasks are inside the whiteboard; there is no separate sheet.\n\nExtract the ZIP first and keep code/ and practice/ beside the HTML file.\nNo third-party Python libraries are needed.\nFollow the submission instructions and deadline announced in class.\n"
     elif course['id'] == 'gen241' and week.get('bundle') == 'sheet-04':
         readme = f"{course['code']} - Week {week['number']:02}: {week['title']}\n\nOpen guide.html for the complete copy-ready explanations.\nStart with the concept messages, then read any of the sixteen question replies.\nCopy one message, selected messages or all messages using the page buttons.\nmessages.txt contains the same explanations as plain text, including C++ and output.\nguide.pdf is the optional print copy.\n\nThe unchanged question sheet is sheet-04.pdf and the lecture is lecture-06.pdf.\nExtract the ZIP first and keep its files together. Follow the submission instructions and deadline announced in class.\n"
@@ -176,7 +179,8 @@ def build_week(course, week):
             f.write(f"\nOpen {week['workbook']}-workbook/index.html for illustrated foundations and recorded C++ traces. Keep that folder intact.\n")
     files = [p for p in directory.rglob('*') if p.is_file()]
     bundle = OUT / 'downloads' / f"{course['code']}-Week-{week['number']:02}.zip"
-    archive(bundle, files, directory, f"{course['code']}-Week-{week['number']:02}")
+    archive(bundle, files, directory, f"{course['code']}-Week-{week['number']:02}",
+            course.get('archive_stored_extensions', ()))
     week['_names'] = names
     week['_directory'] = directory.relative_to(OUT).as_posix()
     week['_zip'] = bundle.relative_to(OUT).as_posix()
@@ -240,10 +244,15 @@ def week_panel(course, week, prefix):
         extras += f'<div class="starter-heading"><span>{icon("folder")} Starter files</span>{starter_zip}</div><div class="starter-files">{starters}</div>'
     for entry, name in week['_extras']:
         path = prefix + week['_directory'] + '/' + name
-        open_label = 'Open web' if name.endswith('.html') else 'Open PDF'
-        save_label = 'Get HTML' if name.endswith('.html') else 'Get PDF'
-        if name.endswith('.mp4'):
-            open_label, save_label = 'Watch video', 'Get MP4'
+        suffix = Path(name).suffix.lower()
+        open_label, save_label = {
+            '.html': ('Open web', 'Get HTML'),
+            '.pdf': ('Open PDF', 'Get PDF'),
+            '.mp4': ('Watch video', 'Get MP4'),
+            '.csv': ('Open data', 'Get CSV'),
+            '.sql': ('Open SQL', 'Get SQL'),
+            '.txt': ('Open text', 'Get TXT'),
+        }.get(suffix, ('Open file', 'Get file'))
         extras += f'<div class="extra-row"><span>{icon("sheet")}{ESC(entry["label"])}</span><div class="resource-actions">{link(path,open_label + icon("external"),css="pill",aria="Open "+entry["label"])}{link(path,icon("down")+save_label,True,"pill","Download "+entry["label"])}</div></div>'
     if extras:
         extras = f'<div class="extras">{extras}</div>'
@@ -358,7 +367,8 @@ def main():
     for course in CATALOG['courses']:
         for week in course['weeks']: build_week(course,week)
         base = OUT/'materials'/course['id']
-        archive(OUT/'downloads'/f"{course['code']}-All-weeks.zip",[p for p in base.rglob('*') if p.is_file()],base,course['code'])
+        archive(OUT/'downloads'/f"{course['code']}-All-weeks.zip",[p for p in base.rglob('*') if p.is_file()],base,course['code'],
+                course.get('archive_stored_extensions', ()))
         dest = OUT/course['id']; dest.mkdir(); (dest/'index.html').write_text(page(course))
     (OUT/'index.html').write_text(page(CATALOG['courses'][0],nested=False))
     build_basics(ROOT, OUT, site_header('../', 'computer-basics'))

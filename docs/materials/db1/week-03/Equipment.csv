@@ -1,0 +1,6 @@
+EquipmentId,EquipmentName,Room,IsAvailable
+1,Laptop,Lab1,1
+2,Laptop,Lab1,0
+3,Projector,Lab2,1
+4,Router,Lab2,0
+5,Printer,Lab1,1

@@ -7,6 +7,7 @@ Lab materials for the first semester of 2026/2027.
 - [DSA](https://ahmedtolan2019.github.io/student-hub/dsa/): weeks 1, 2 and 3
 - [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1–4
 - [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1–5
+- [DB1](https://ahmedtolan2019.github.io/student-hub/db1/): week 3
 
 Students can open slides, guides and sheets online, download individual formats,
 or download a week or whole course as a ZIP. Extract a ZIP and keep its files
@@ -211,3 +212,23 @@ On 26 October 2026, Ahmed authorized publishing the completed student video.
 H.264/AAC MP4 with sixteen question chapters, about 76.7 MB. Week 5 offers viewing
 and download links; the week and course ZIPs include it. The instructor video
 and all video project/source files remain private.
+
+## DB1 Week 3
+
+Week 3 continues from the classroom checkpoint at CREATE TABLE, data types and
+NOT NULL. The student package includes the English academic PDF for Task 1,
+College Equipment Database, its Arabic practice page, a SQL starter and five-row
+CSV. BookCopies worked examples provide the table recap, six initial inserts,
+an optional expansion to 36 fictional physical copies, and useful SELECT queries.
+UPDATE and DELETE remain deferred.
+
+On 27 October 2026, Ahmed authorized publishing these student materials and the
+completed 23:32 Egyptian Arabic video. The 13-file allowlist is
+`courses[].bundles.week-03.files` for DB1. Refresh its export with
+`python3 ../DB1-database-1/week-03-insert-and-query/private/export_student_hub.py`
+before building. Every copied file, including the 58.3 MB MP4, stays byte-identical
+to its completed source. The week and course ZIPs include the video and examples.
+DB1 ZIPs store the already-compressed MP4 without another compression pass, so
+Git can reuse its bytes across the video and both archives during publication.
+The private mobile teaching guide, live instructor SQL, Task 1 answer key,
+NotebookLM sources, recordings and production files are excluded.

@@ -370,6 +370,81 @@
           ]
         }
       }
+    },
+    {
+      "id": "db1",
+      "code": "DB1",
+      "title": "Database 1",
+      "language": "SQL Server",
+      "source": "DB1-database-1",
+      "archive_stored_extensions": [".mp4"],
+      "weeks": [
+        {
+          "number": 3,
+          "folder": "week-03-insert-and-query/exports/student",
+          "title": "INSERT and first useful queries",
+          "description": "Database foundations and SQL Server, followed by INSERT, SELECT, WHERE, AND/OR and ORDER BY. Includes the 23:32 Egyptian Arabic video, 36 BookCopies records and Task 1: College Equipment Database.",
+          "kind": "bundle",
+          "bundle": "week-03",
+          "readme": "README.txt",
+          "guide": "practice.html",
+          "sheet": "DB1-Task-1-College-Equipment-Database.pdf",
+          "resource_titles": {
+            "guide": "Task 1: online instructions",
+            "sheet": "Task 1: English handout"
+          },
+          "extras": [
+            {
+              "source": "DB1-From-Database-to-First-Queries.mp4",
+              "label": "Database foundations and first queries · 23:32 · 58.3 MB"
+            },
+            {
+              "source": "BookCopies-README.txt",
+              "label": "BookCopies: read before running the examples"
+            },
+            {
+              "source": "BookCopies.csv",
+              "label": "BookCopies: 36 fictional physical copies · CSV"
+            },
+            {
+              "source": "01-table-recap.sql",
+              "label": "Example 1: database and table recap · SQL"
+            },
+            {
+              "source": "02-insert-first-six.sql",
+              "label": "Example 2: insert the first six copies · SQL"
+            },
+            {
+              "source": "03-expand-to-36.sql",
+              "label": "Example 3: expand to 36 copies · SQL"
+            },
+            {
+              "source": "04-questions.sql",
+              "label": "Example 4: useful queries · SQL"
+            }
+          ]
+        }
+      ],
+      "bundles": {
+        "week-03": {
+          "folder": "week-03-insert-and-query/exports/student",
+          "files": [
+            "README.txt",
+            "practice.html",
+            "DB1-Task-1-College-Equipment-Database.pdf",
+            "Equipment.csv",
+            "Lab03-Equipment-starter.sql",
+            "Task-1-README.txt",
+            "BookCopies.csv",
+            "01-table-recap.sql",
+            "02-insert-first-six.sql",
+            "03-expand-to-36.sql",
+            "04-questions.sql",
+            "BookCopies-README.txt",
+            "DB1-From-Database-to-First-Queries.mp4"
+          ]
+        }
+      }
     }
   ]
 }
