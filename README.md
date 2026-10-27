@@ -5,7 +5,7 @@ Lab materials for the first semester of 2026/2027.
 **Student link:** https://ahmedtolan2019.github.io/student-hub/
 
 - [DSA](https://ahmedtolan2019.github.io/student-hub/dsa/): weeks 1, 2 and 3
-- [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1, 2 and 3
+- [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1–4
 - [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1–5
 
 Students can open slides, guides and sheets online, download individual formats,
@@ -154,6 +154,22 @@ both weeks. Existing course, week, Guide and slide URLs are preserved.
 The code files under the public kit are the student worked examples linked
 from the Guides. Original reference archives, instructor reviews, presenter
 notes, authoring scripts and QA records are excluded.
+
+## ECE122 Sheet 4
+
+Week 4 publishes two Egyptian-Arabic Guides: a 34-page question guide covering
+all 15 questions with original sheet images, and a 19-page Python basics guide
+with 16 topics in learning order. Both have standalone HTML and PDF copies.
+The unchanged original sheet and 15 teaching Python files are included.
+Expected examples are labelled as hand traces, not recorded runs. Ahmed requested
+this edition without individual program execution or testing; Windows/PyCharm
+execution is unverified. Differences from the reference programs are explained
+beside the relevant questions.
+
+The 21-file allowlist is `courses[].bundles.sheet-04.files` for ECE122, sourced
+only from `ECE122-computer-programming-1/week-04-loops/student`. The week and
+course ZIPs preserve both Guides and their companion files. Source archives,
+instructor reviews, authoring scripts and QA files remain private.
 
 ## GEN241 Sheet 3
 

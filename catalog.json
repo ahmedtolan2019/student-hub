@@ -75,9 +75,51 @@
           "guide": "sheet-03/index.html",
           "sheet": "sheet-03/sheet-03.pdf",
           "extras": []
+        },
+        {
+          "number": 4,
+          "folder": "week-04-loops/student",
+          "title": "Loops and repeated calculations",
+          "description": "Sheet 4: a question-by-question guide with original question images, plus an ordered Python basics guide. Includes PDFs and 15 worked Python files. Examples are expected traces, not recorded runs.",
+          "kind": "bundle",
+          "bundle": "sheet-04",
+          "guide": "sheet-04-guide.html",
+          "guide_pdf": "ECE122-Sheet04-Student-Guide.pdf",
+          "sheet": "sheet-04-original.pdf",
+          "resource_titles": {"guide": "Sheet 4 question guide"},
+          "extras": [
+            {"source": "python-basics.html", "label": "Python basics guide · 16 topics in order"},
+            {"source": "ECE122-Sheet04-Python-Basics.pdf", "label": "Python basics guide · PDF"}
+          ]
         }
       ],
       "bundles": {
+        "sheet-04": {
+          "folder": "week-04-loops/student",
+          "files": [
+            "index.html",
+            "sheet-04-guide.html",
+            "python-basics.html",
+            "ECE122-Sheet04-Student-Guide.pdf",
+            "ECE122-Sheet04-Python-Basics.pdf",
+            "sheet-04-original.pdf",
+            "code/Q_0401.py",
+            "code/Q_0402.py",
+            "code/Q_0403.py",
+            "code/Q_0404.py",
+            "code/Q_0405.py",
+            "code/Q_0406.py",
+            "code/Q_0407.py",
+            "code/Q_0408.py",
+            "code/Q_0409.py",
+            "code/Q_0410.py",
+            "code/Q_0411.py",
+            "code/Q_0412.py",
+            "code/Q_0413.py",
+            "code/Q_0414.py",
+            "code/Q_0415.py"
+          ]
+        },
         "sheets-02-03": {
           "folder": "learning-kit/public",
           "files": [
