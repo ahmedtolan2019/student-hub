@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Database 1 · Week 1 / Lab 1 · Worksheet</title>
+<!-- Printable worksheet. Self-contained, no network, no answers. English with short Egyptian Arabic support lines. -->
+<style>
+:root{--ink:#1c2733;--muted:#58636e;--line:#cfc7b3;--accent:#0d6767;--paper:#fffdf7;--mono:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:#f1ede2;color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Arabic",Tahoma,sans-serif}
+.sheet{max-width:860px;margin:20px auto;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:28px 34px}
+h1{font-size:24px;margin:0 0 2px}
+h2{font-size:18px;margin:26px 0 8px;border-bottom:2px solid var(--ink);padding-bottom:4px}
+.sub{color:var(--muted);margin:0 0 14px}
+.ar{direction:rtl;text-align:right;font-size:15px;color:#33404c;margin:2px 0 6px;line-height:1.7}
+.ar code,.ar bdi{direction:ltr;unicode-bidi:isolate}
+code{font-family:var(--mono);font-size:.92em;background:#efeadc;border-radius:4px;padding:0 .25em;direction:ltr;unicode-bidi:isolate}
+.who{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.who div{border-bottom:1.5px solid var(--ink);padding-top:22px;font-size:13px;color:var(--muted)}
+.table-scroll{overflow-x:auto;max-width:100%}
+table.data{border-collapse:collapse;font-size:14px;margin:8px 0;direction:ltr}
+table.data th,table.data td{border:1px solid #9aa7b1;padding:4px 10px;text-align:left}
+table.data th{font-family:var(--mono);background:#eef1f4}
+table.data td.n{text-align:right;font-family:var(--mono)}
+.rules{font-size:14px;margin:6px 0 0;padding-left:20px}
+.task{border:1.5px solid var(--line);border-radius:10px;padding:12px 16px 14px;margin:14px 0;break-inside:avoid;page-break-inside:avoid}
+.task h3{margin:0 0 4px;font-size:16px}
+.task h3 .n{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:14px;margin-right:6px}
+.task p{margin:4px 0}
+.lbl{font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:10px}
+.line{border-bottom:1.2px dashed #a99f88;height:28px}
+.box{border:1.2px solid #a99f88;border-radius:6px;height:var(--h,96px);background:repeating-linear-gradient(#fffdf7 0 27px,#ece5d3 27px 28px)}
+.ids{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;direction:ltr}
+.ids span{border:1.5px solid #8a8170;border-radius:6px;padding:2px 10px;font-family:var(--mono);font-weight:700}
+.ids small{color:var(--muted);align-self:center}
+pre{font-family:var(--mono);font-size:13.5px;background:#f3f0e6;border:1px solid #ddd5c1;border-radius:6px;padding:8px 10px;margin:6px 0;direction:ltr;text-align:left;white-space:pre-wrap}
+.note{font-size:13.5px;color:var(--muted)}
+.foot{margin-top:24px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+.noprint{text-align:right;margin-bottom:8px}
+.noprint button{font:inherit;font-weight:600;border:1.5px solid var(--accent);color:var(--accent);background:#fff;border-radius:8px;padding:6px 14px;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media(max-width:600px){.sheet{margin:0;border-radius:0;padding:18px 14px}.who{grid-template-columns:1fr}table.data{font-size:12.5px}table.data th,table.data td{padding:3px 6px}}
+@media print{.table-scroll{overflow:visible}body{background:#fff;font-size:11pt}.sheet{margin:0;border:0;padding:0;max-width:none;background:#fff}.noprint{display:none}h2{break-after:avoid}}
+.ar code{display:inline-block;max-width:100%;vertical-align:baseline;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<main class="sheet">
+<p><b>Mac / no SSMS:</b> <a href="playground.html">Open the offline SQL playground</a>. The six rows are ready. <span lang="ar" dir="rtl">على الماك: افتح محاكي <bdi dir="ltr">SQL</bdi> وجرّب أوامرك من غير تثبيت.</span></p>
+  <div class="noprint"><button type="button" onclick="print()">Print this worksheet</button></div>
+  <h1>Database 1 · Week 1 / Lab 1 · Worksheet</h1>
+  <p class="sub">Your first database: the campus book lending desk · fictional teaching data</p>
+  <p class="ar">ورقة الشغل بتاعة الـ <bdi dir="ltr">lab</bdi> الأول. البيانات متألفة للتعليم بس.</p>
+  <div class="who"><div>Name</div><div>Group / PC</div><div>Date</div></div>
+
+  <h2>The table: <code>BookCopies</code> in database <code>Database1Lab01</code></h2>
+  <div class="table-scroll" tabindex="0"><table class="data">
+    <thead><tr><th>CopyId</th><th>Title</th><th>Category</th><th>Shelf</th><th>IsAvailable</th></tr></thead>
+    <tbody>
+      <tr><td class="n">101</td><td>Python Basics</td><td>Computing</td><td>A1</td><td class="n">1</td></tr>
+      <tr><td class="n">102</td><td>Python Basics</td><td>Computing</td><td>A1</td><td class="n">0</td></tr>
+      <tr><td class="n">103</td><td>Database Design</td><td>Computing</td><td>A2</td><td class="n">1</td></tr>
+      <tr><td class="n">104</td><td>Intro to Circuits</td><td>Engineering</td><td>B1</td><td class="n">1</td></tr>
+      <tr><td class="n">105</td><td>Applied Mathematics</td><td>Mathematics</td><td>C1</td><td class="n">0</td></tr>
+      <tr><td class="n">106</td><td>Database Design</td><td>Computing</td><td>A2</td><td class="n">0</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="rules">
+    <li><b>One row = one physical copy.</b> The same title can appear on several rows.</li>
+    <li><code>IsAvailable</code>: 1 = on the shelf now, 0 = lent out. <code>Shelf</code> is the copy's home shelf, kept while it is lent out.</li>
+    <li>Write your prediction <b>before</b> you run a query. Then run it in SSMS and compare.</li>
+  </ul>
+  <p class="ar">الـ <bdi dir="ltr">row</bdi> الواحد = نسخة فعلية واحدة. <bdi>IsAvailable</bdi>: <bdi>1</bdi> يعني على الرف، <bdi>0</bdi> يعني متسلّفة. اكتب توقعك <b>قبل</b> ما تشغّل الـ <bdi dir="ltr">query</bdi>، وبعدين شغّله في <bdi dir="ltr">SSMS</bdi> وقارن.</p>
+
+  <h2>Tasks</h2>
+  <p class="note">The same tasks are in <code>sql/02-your-turn.sql</code>. Write the query here or there, whichever your teacher asks for.</p>
+
+  <section class="task">
+    <h3><span class="n">1</span>Only some columns</h3>
+    <p>Show the <b>Title</b> and <b>Shelf</b> of every copy, in CopyId order.</p>
+    <p class="ar">اعرض الـ <bdi>Title</bdi> والـ <bdi>Shelf</bdi> لكل النسخ، بترتيب الـ <bdi>CopyId</bdi>.</p>
+    <div class="lbl">Prediction: how many rows?</div><div class="line" style="width:120px"></div>
+    <div class="lbl">Your query</div><div class="box" style="--h:96px"></div>
+  </section>
+
+  <section class="task">
+    <h3><span class="n">2</span>Gaps on the shelves</h3>
+    <p>Which home shelves are missing a copy right now? Show <b>Shelf</b> and <b>CopyId</b> for every copy that is lent out, ordered by Shelf.</p>
+    <p class="ar">أنهي رفوف ناقصها نسخة دلوقتي؟ اعرض <bdi>Shelf</bdi> و<bdi>CopyId</bdi> لكل نسخة متسلّفة، مترتبين بالـ <bdi>Shelf</bdi>.</p>
+    <div class="lbl">Prediction: circle the CopyIds, then number them in result order</div>
+    <div class="ids"><span>101</span><span>102</span><span>103</span><span>104</span><span>105</span><span>106</span></div>
+    <div class="lbl">Your query</div><div class="box" style="--h:112px"></div>
+  </section>
+
+  <section class="task">
+    <h3><span class="n">3</span>Two conditions</h3>
+    <p>Show <b>CopyId</b> and <b>Shelf</b> of the <b>Computing</b> copies that are <b>lent out</b>, in CopyId order.</p>
+    <p class="ar">اعرض <bdi>CopyId</bdi> و<bdi>Shelf</bdi> لنسخ <bdi>Computing</bdi> اللي متسلّفة، بترتيب الـ <bdi>CopyId</bdi>.</p>
+    <div class="lbl">Prediction: circle the CopyIds</div>
+    <div class="ids"><span>101</span><span>102</span><span>103</span><span>104</span><span>105</span><span>106</span></div>
+    <div class="lbl">Your query</div><div class="box" style="--h:112px"></div>
+  </section>
+
+  <section class="task">
+    <h3><span class="n">4</span>One title, several copies</h3>
+    <p>Show <b>CopyId</b> and <b>IsAvailable</b> of every physical copy titled <b>Python Basics</b>, in CopyId order.</p>
+    <p class="ar">اعرض <bdi>CopyId</bdi> و<bdi>IsAvailable</bdi> لكل نسخة فعلية اسمها <bdi>Python Basics</bdi>، بترتيب الـ <bdi>CopyId</bdi>.</p>
+    <div class="lbl">Your query</div><div class="box" style="--h:112px"></div>
+    <div class="lbl">How many copies does the desk own? Can a student borrow one now? Which CopyId?</div><div class="line"></div>
+    <div class="lbl">Why does the table need CopyId when the title is already there?</div><div class="line"></div><div class="line"></div>
+  </section>
+
+  <section class="task">
+    <h3><span class="n">5</span>Alphabetical list</h3>
+    <p>Show <b>Title</b> and <b>CopyId</b> of all copies, ordered by Title (A to Z). Copies with the same title should appear in CopyId order.</p>
+    <p class="ar">اعرض <bdi>Title</bdi> و<bdi>CopyId</bdi> لكل النسخ مترتبين بالاسم (من <bdi>A</bdi> لـ <bdi>Z</bdi>)، واللي ليهم نفس الاسم بترتيب الـ <bdi>CopyId</bdi>.</p>
+    <div class="lbl">Prediction: CopyIds in result order</div>
+    <div class="ids"><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;&nbsp;</span></div>
+    <div class="lbl">Your query</div><div class="box" style="--h:96px"></div>
+  </section>
+
+  <section class="task">
+    <h3><span class="n">6</span>Explain a mistaken result</h3>
+    <p>A classmate wanted "Computing copies that are available" and got <b>101, 102, 103, 104, 106</b> from:</p>
+<pre>SELECT CopyId, Title
+FROM BookCopies
+WHERE Category = N'Computing' OR IsAvailable = 1
+ORDER BY CopyId;</pre>
+    <p class="ar">زميلك كان عايز "نسخ <bdi>Computing</bdi> المتاحة" وطلع له <bdi>101, 102, 103, 104, 106</bdi>. اشرح ليه، وصلّح الـ <bdi dir="ltr">query</bdi>.</p>
+    <div class="lbl">a) Why are 102 and 106 in the result?</div><div class="line"></div>
+    <div class="lbl">b) Why is 104 in the result?</div><div class="line"></div>
+    <div class="lbl">c) Corrected query</div><div class="box" style="--h:96px"></div>
+  </section>
+
+  <section class="task">
+    <h3><span class="n">7</span>Empty, but no error</h3>
+    <p>This query shows zero rows and no red error message:</p>
+<pre>SELECT CopyId, Title
+FROM BookCopies
+WHERE Category = N'Maths';</pre>
+    <p class="ar">الـ <bdi dir="ltr">query</bdi> ده بيطلّع صفر صفوف ومفيش <bdi>error</bdi>. ليه؟ وده يعتبر <bdi>error</bdi>؟</p>
+    <div class="lbl">a) Why zero rows? (look at the data)</div><div class="line"></div>
+    <div class="lbl">b) Is zero rows an error?</div><div class="line" style="width:200px"></div>
+    <div class="lbl">c) A query that lists the mathematics copies</div><div class="box" style="--h:84px"></div>
+  </section>
+
+  <section class="task">
+    <h3><span class="n">8</span>Design thinking (no SQL)</h3>
+    <p>The campus equipment room keeps this list. Laptop <b>L-08</b> is moved to <b>Lab 5</b>.</p>
+    <div class="table-scroll" tabindex="0"><table class="data"><thead><tr><th>AssetTag</th><th>Model</th><th>Room</th></tr></thead>
+      <tbody><tr><td>L-07</td><td>NoteBook 14</td><td>Lab 2</td></tr><tr><td>L-08</td><td>NoteBook 14</td><td>Lab 2</td></tr><tr><td>L-12</td><td>NoteBook 15</td><td>Lab 5</td></tr></tbody></table></div>
+    <p class="ar">مخزن الأجهزة عنده القايمة دي. اللابتوب <bdi>L-08</bdi> اتنقل لـ <bdi>Lab 5</bdi>.</p>
+    <div class="lbl">a) What does one row describe?</div><div class="line"></div>
+    <div class="lbl">b) Someone suggests Model as the PRIMARY KEY. What goes wrong?</div><div class="line"></div><div class="line"></div>
+    <div class="lbl">c) Which column should be the key? Which value(s) change when L-08 moves?</div><div class="line"></div><div class="line"></div>
+  </section>
+
+  <section class="task">
+    <h3><span class="n">+</span>If you finish early</h3>
+    <p>Write one question a desk worker might ask that <code>BookCopies</code> <b>can</b> answer, with its query. Then one question it <b>cannot</b> answer, and the information that is missing.</p>
+    <p class="ar">اكتب سؤال الـ <bdi>table</bdi> يقدر يجاوب عليه ومعاه الـ <bdi dir="ltr">query</bdi>، وسؤال مايقدرش يجاوب عليه، وقول المعلومة الناقصة.</p>
+    <div class="box" style="--h:140px"></div>
+  </section>
+
+  <h2>After building <code>ReadingWishlist</code> (lab chapter 8)</h2>
+  <section class="task">
+    <p>1. Which statement did you run only once, which once per row, and which as often as you liked? Why?</p>
+    <div class="line"></div><div class="line"></div>
+    <p>2. You closed the query tab and opened a new one. Were your rows still there? Where do they live?</p>
+    <div class="line"></div>
+    <p>3. What message did you get when you inserted the same WishId again, and which rule caused it?</p>
+    <div class="line"></div><div class="line"></div>
+    <p class="ar"><bdi dir="ltr">1</bdi>) أنهي <bdi dir="ltr">statement</bdi> شغّلته مرة واحدة، وأنهي مرة لكل <bdi dir="ltr">row</bdi>، وأنهي براحتك؟ <bdi dir="ltr">2</bdi>) الصفوف فضلت موجودة بعد ما فتحت <bdi dir="ltr">query</bdi> جديد؟ عايشة فين؟ <bdi dir="ltr">3</bdi>) لما عملت <bdi dir="ltr">INSERT</bdi> لنفس الـ <bdi>WishId</bdi> تاني، ظهر لك إيه، وأنهي قاعدة السبب؟</p>
+  </section>
+
+  <p class="foot">Database 1 · Week 1 / Lab 1 · worksheet · fictional teaching data written for this lab · no answers on this sheet.</p>
+</main>
+</body>
+</html>

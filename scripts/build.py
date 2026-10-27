@@ -207,13 +207,16 @@ def resource(week, kind, title, symbol, prefix):
     names = week['_names']
     path = prefix + week['_directory'] + '/' + names[kind]
     is_pdf = names[kind].endswith('.pdf')
+    is_sql = names[kind].endswith('.sql')
     pdf = names.get(kind + '_pdf')
     context = f"{title}, week {week['number']}"
     format_label = 'PDF document' if is_pdf else ('HTML + PDF' if pdf else 'Interactive HTML')
     open_label = 'Open PDF' if is_pdf else 'Open web'
     save_label = 'Get PDF' if is_pdf else 'Get HTML'
+    if is_sql:
+        format_label, open_label, save_label = 'SQL script', 'Open SQL', 'Get SQL'
     actions = link(path, open_label + icon('external'), css='pill pill-open', aria=f'Open {context}')
-    if week['kind'] == 'bundle' and not is_pdf:
+    if week['kind'] == 'bundle' and not is_pdf and not is_sql:
         actions += link(prefix + week['_zip'], icon('down') + 'Get ZIP', True, 'pill', f'Download {context} with supporting files')
     else:
         actions += link(path, icon('down') + save_label, True, 'pill', f'Download {context}')

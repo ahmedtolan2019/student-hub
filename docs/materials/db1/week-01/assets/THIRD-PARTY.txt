@@ -1,0 +1,14 @@
+SQL playground runtime
+
+sql.js 1.14.2, sql-asm.js distribution. SQLite compiled to JavaScript.
+Upstream: https://github.com/sql-js/sql.js
+Package: https://registry.npmjs.org/sql.js/-/sql.js-1.14.2.tgz
+SHA-256 of the unmodified sql-asm.js:
+82344159a161e30e1c012587a59567adc02f537cd5f376270eff88c564eed0fd
+License: sql-js-LICENSE.txt in this folder. sql.js is MIT licensed;
+SQLite is public domain. No runtime CDN or network connection is required.
+
+lab-sql.js is the course's limited syntax adapter. It tokenizes the accepted
+Lab 1 statements and delegates their execution to SQLite. It is not a
+Microsoft SQL Server implementation. See the playground's support notes.
+playground.js is the local editor, result rendering and browser storage UI.

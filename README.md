@@ -7,7 +7,7 @@ Lab materials for the first semester of 2026/2027.
 - [DSA](https://ahmedtolan2019.github.io/student-hub/dsa/): weeks 1, 2 and 3
 - [ECE122](https://ahmedtolan2019.github.io/student-hub/ece122/): weeks 1–4
 - [GEN241](https://ahmedtolan2019.github.io/student-hub/gen241/): weeks 1–5
-- [DB1](https://ahmedtolan2019.github.io/student-hub/db1/): week 3
+- [DB1](https://ahmedtolan2019.github.io/student-hub/db1/): weeks 1–3
 
 Students can open slides, guides and sheets online, download individual formats,
 or download a week or whole course as a ZIP. Extract a ZIP and keep its files
@@ -215,7 +215,20 @@ H.264/AAC MP4 with sixteen question chapters, about 76.7 MB. Week 5 offers viewi
 and download links; the week and course ZIPs include it. The instructor video
 and all video project/source files remain private.
 
-## DB1 Week 3
+## DB1 student materials
+
+All three prepared DB1 weeks are included. Week 1 has the bilingual interactive
+lab, offline SQL Playground, printable worksheet and three SQL files. Its exact
+13-file allowlist includes the local practice engine and its license. Visible
+examples use short table names such as BookCopies. Week 2 has the class SQL script
+and its execution instructions, including the confirmed classroom checkpoint.
+Its two-file allowlist excludes the private mobile teaching guide. Each week has
+its own ZIP, and the course ZIP contains all three weeks.
+
+Week 1 uses Database1Lab01; Weeks 2 and 3 use CampusLibrary. The Week 1 instructions
+explain how to reuse its queries with the later table. The browser Playground is
+SQLite with a limited Lab 1 syntax adapter, not a SQL Server instance.
+
 
 Week 3 continues from the classroom checkpoint at CREATE TABLE, data types and
 NOT NULL. The student package includes the English academic PDF for Task 1,

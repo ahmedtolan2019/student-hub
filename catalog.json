@@ -414,8 +414,52 @@
       "title": "Database 1",
       "language": "SQL Server",
       "source": "DB1-database-1",
-      "archive_stored_extensions": [".mp4"],
+      "archive_stored_extensions": [
+        ".mp4"
+      ],
       "weeks": [
+        {
+          "number": 1,
+          "folder": "week-01-first-database/student",
+          "title": "Your first database",
+          "description": "Why databases are useful, one row per physical book copy, tables and constraints, and first SQL queries. Includes an English/Egyptian Arabic lesson, an offline SQL Playground and independent practice.",
+          "kind": "bundle",
+          "bundle": "week-01",
+          "slides": "lab.html",
+          "guide": "playground.html",
+          "sheet": "worksheet.html",
+          "readme": "README.txt",
+          "resource_titles": {
+            "slides": "Interactive lab",
+            "guide": "SQL Playground",
+            "sheet": "Practice worksheet"
+          },
+          "extras": [
+            {
+              "source": "README.txt",
+              "label": "Week 1: read before you start"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "folder": "week-02-build-it-in-ssms/student",
+          "title": "Build the library database",
+          "description": "The class SQL script: create and use CampusLibrary, create BookCopies, then continue with INSERT and useful SELECT queries. Read the comments and run one selected statement at a time.",
+          "kind": "bundle",
+          "bundle": "week-02",
+          "sheet": "Lab02.sql",
+          "readme": "README.txt",
+          "resource_titles": {
+            "sheet": "Class SQL script"
+          },
+          "extras": [
+            {
+              "source": "README.txt",
+              "label": "Week 2: execution instructions and classroom checkpoint"
+            }
+          ]
+        },
         {
           "number": 3,
           "folder": "week-03-insert-and-query/exports/student",
@@ -479,6 +523,31 @@
             "04-questions.sql",
             "BookCopies-README.txt",
             "DB1-From-Database-to-First-Queries.mp4"
+          ]
+        },
+        "week-01": {
+          "folder": "week-01-first-database/student",
+          "files": [
+            "lab.html",
+            "playground.html",
+            "worksheet.html",
+            "README.txt",
+            "sql/01-first-queries.sql",
+            "sql/02-your-turn.sql",
+            "sql/03-build-a-table.sql",
+            "assets/sql-js-LICENSE.txt",
+            "assets/sql-js-AUTHORS.txt",
+            "assets/sql-asm.js",
+            "assets/THIRD-PARTY.txt",
+            "assets/lab-sql.js",
+            "assets/playground.js"
+          ]
+        },
+        "week-02": {
+          "folder": "week-02-build-it-in-ssms/student",
+          "files": [
+            "Lab02.sql",
+            "README.txt"
           ]
         }
       }

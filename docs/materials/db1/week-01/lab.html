@@ -1,0 +1,1513 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Database 1 · Week 1 / Lab 1 · Your first database</title>
+<!--
+  Student lab page. One self-contained offline file: inline CSS, JS and SVG, no network.
+  Bilingual by inline pairs: every visible text has <… class="en"> and <… class="ar"> siblings;
+  the language switch only flips <html lang/dir>, so chapter, reveals and answers are never re-rendered.
+  Browser demos on this page are simulations of fixed examples. Real SQL runs only in SSMS.
+-->
+<style>
+:root{
+  --paper:#f6f3ea;--card:#fffdf7;--ink:#1c2733;--muted:#58636e;--line:#dcd5c4;--line2:#ebe5d6;
+  --accent:#0d6767;--accent-ink:#0a5252;--accent-soft:#dcefec;
+  --ok:#2c7443;--ok-bg:#e2f2e6;--bad:#a83c2c;--bad-bg:#f8e3de;--warn:#8d5b0c;--warn-bg:#fbefd6;
+  --comp:#2a63a8;--comp-bg:#e3edf9;--eng:#a86a14;--eng-bg:#fbeedb;--math:#77509c;--math-bg:#efe7f6;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace;
+  --r:14px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:120px}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Noto Sans Arabic","Geeza Pro",Tahoma,sans-serif}
+@media(min-width:1200px){body{font-size:18px}}
+html[lang=en] .ar,html[lang=ar-EG] .en{display:none!important}
+html[lang=ar-EG] body{line-height:1.75}
+html[lang=ar-EG] em{font-style:normal;font-weight:700}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+a{color:var(--accent-ink)}
+code,kbd,pre,.mono{font-family:var(--mono)}
+code{direction:ltr;unicode-bidi:isolate;background:#efeadc;border-radius:5px;padding:0 .3em;font-size:.9em;overflow-wrap:anywhere}
+kbd{direction:ltr;unicode-bidi:isolate;display:inline-block;border:1px solid #bdb5a2;border-bottom-width:2px;border-radius:5px;background:#fff;padding:0 .35em;font-size:.82em;line-height:1.5}
+bdi{unicode-bidi:isolate}
+.ltr{direction:ltr;unicode-bidi:isolate}
+
+/* header */
+header.top{position:sticky;top:0;z-index:10;background:rgba(246,243,234,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(4px)}
+.top-in{max-width:1180px;margin:auto;padding:10px 18px 0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}
+.brand{display:flex;flex-direction:column;line-height:1.2}
+.brand h1{margin:0;font-size:16px;letter-spacing:.01em}
+.brand span{font-size:13.5px;color:var(--muted)}
+.langs{margin-inline-start:auto;display:flex;background:#e8e3d5;border-radius:999px;padding:3px}
+.langs button{border:0;background:none;padding:6px 14px;border-radius:999px;cursor:pointer;font-weight:600;font-size:14px;min-height:34px}
+.langs button[aria-pressed=true]{background:var(--ink);color:#fff}
+nav.chapters{flex-basis:100%;overflow-x:auto;scrollbar-width:thin;-webkit-mask-image:linear-gradient(to right,#000 92%,transparent);mask-image:linear-gradient(to right,#000 92%,transparent)}
+html[dir=rtl] nav.chapters{-webkit-mask-image:linear-gradient(to left,#000 92%,transparent);mask-image:linear-gradient(to left,#000 92%,transparent)}
+nav.chapters ol::after{content:"";flex:0 0 40px}
+nav.chapters ol{list-style:none;margin:0;padding:6px 0 8px;display:flex;gap:6px;min-width:max-content}
+nav.chapters button{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px 5px 6px;cursor:pointer;font-size:14px;white-space:nowrap;min-height:36px}
+html[dir=rtl] nav.chapters button{padding:5px 6px 5px 12px}
+nav.chapters .n{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--line2);font-weight:700;font-size:13px}
+nav.chapters button[aria-current=step]{background:var(--ink);color:#fff;border-color:var(--ink)}
+nav.chapters button[aria-current=step] .n{background:#fff;color:var(--ink)}
+nav.chapters button.seen:not([aria-current]) .n{background:var(--accent-soft);color:var(--accent-ink)}
+
+main{max-width:1180px;margin:auto;padding:22px 18px 40px}
+section.ch[hidden]{display:none}
+.kicker{font-size:13.5px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+html[lang=ar-EG] .kicker{letter-spacing:0;text-transform:none}
+h2{font-size:clamp(26px,3.2vw,36px);line-height:1.2;margin:4px 0 8px;outline:none}
+h3{font-size:21px;margin:34px 0 10px;line-height:1.3}
+h3 .no{color:var(--accent);font-variant-numeric:tabular-nums;margin-inline-end:.35em}
+.goal{display:flex;gap:10px;align-items:flex-start;background:var(--accent-soft);border-radius:var(--r);padding:12px 16px;margin:6px 0 10px;max-width:72ch}
+.goal svg{flex:none;margin-top:3px}
+p{max-width:72ch}
+.lede{font-size:1.06em}
+.muted{color:var(--muted)}
+.small{font-size:.88em}
+.row{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.row>*{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--warn-bg);color:var(--warn)}
+.tag.sim{background:#ece6f6;color:#5a3d86}
+.tag.real{background:var(--ok-bg);color:var(--ok)}
+.tag.preview{background:var(--comp-bg);color:var(--comp)}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--accent);color:var(--accent-ink);background:var(--card);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:15px;min-height:42px}
+.btn.primary{background:var(--accent);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.callout{border-inline-start:5px solid var(--warn);background:var(--warn-bg);border-radius:10px;padding:12px 16px;margin:16px 0;max-width:80ch}
+.callout.fool{border-color:var(--bad);background:var(--bad-bg)}
+.callout.ok{border-color:var(--ok);background:var(--ok-bg)}
+.callout b.h{display:block;margin-bottom:4px}
+.callout ul{margin:4px 0;padding-inline-start:20px}
+.say{border:2px dashed var(--accent);border-radius:12px;padding:12px 16px;margin:16px 0;max-width:80ch}
+.say b.h{color:var(--accent-ink)}
+
+/* quiz */
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;margin:16px 0;max-width:860px}
+.quiz .qh{font-size:13px;font-weight:700;color:var(--accent-ink);letter-spacing:.04em;text-transform:uppercase}
+html[lang=ar-EG] .quiz .qh{letter-spacing:0;text-transform:none}
+.quiz .q{margin:4px 0 10px;font-weight:600}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opts button{text-align:start;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;cursor:pointer;min-height:44px}
+.opts button:hover{border-color:var(--accent)}
+.opts button[aria-pressed=true].is-yes{border-color:var(--ok);background:var(--ok-bg)}
+.opts button[aria-pressed=true].is-no{border-color:var(--bad);background:var(--bad-bg)}
+.fb>div{margin-top:10px;border-radius:10px;padding:10px 14px}
+.fb .yes{background:var(--ok-bg);border-inline-start:5px solid var(--ok)}
+.fb .no{background:var(--bad-bg);border-inline-start:5px solid var(--bad)}
+.fb .yes::before{content:"✓ ";font-weight:800;color:var(--ok)}
+.fb .no::before{content:"✕ ";font-weight:800;color:var(--bad)}
+details{margin:8px 0}
+details>summary{cursor:pointer;font-weight:600;color:var(--accent-ink);min-height:30px}
+details.hint>summary::marker{color:var(--warn)}
+details .inner{padding:8px 0 4px}
+
+/* ladders (step reveal) */
+.ladder{list-style:none;margin:10px 0;padding:0;border-inline-start:3px solid var(--accent-soft);margin-inline-start:14px;max-width:900px}
+.ladder>li{position:relative;padding-block:2px 16px;padding-inline:26px 0}
+.ladder>li::before{content:attr(data-n);position:absolute;inset-inline-start:-15px;top:2px;width:27px;height:27px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center}
+.ladder .why{color:var(--muted);font-size:.93em}
+
+/* code */
+pre.code{direction:ltr;text-align:left;background:#1e2a35;color:#e9eef2;border-radius:12px;padding:14px 16px;overflow-x:auto;font-size:15px;line-height:1.55;margin:10px 0;max-width:100%}
+pre.code .kw{color:#7fd1c7;font-weight:600}
+pre.code .str{color:#f3c983}
+pre.code .num{color:#f2a2a2}
+pre.code .cm{color:#95a5b3;font-style:italic}
+pre.code .new{background:rgba(127,209,199,.18);display:inline-block;width:100%;border-radius:4px;box-shadow:-6px 0 0 rgba(127,209,199,.18),6px 0 0 rgba(127,209,199,.18)}
+pre.code .err{color:#ff9d8c}
+pre.code mark{background:rgba(243,201,131,.25);color:inherit;border-radius:3px;outline:1.5px solid #f3c983}
+
+/* result grids: SQL results are always left-to-right */
+.gridwrap{overflow-x:auto;max-width:100%;direction:ltr}
+table.grid{border-collapse:collapse;font-size:15px;background:#fff;direction:ltr;text-align:left}
+table.grid caption{caption-side:top;text-align:left;font-size:13px;color:var(--muted);padding-bottom:4px}
+table.grid th,table.grid td{border:1px solid #cfd6dc;padding:5px 12px;white-space:nowrap}
+table.grid th{background:#eef1f4;font-weight:600;font-family:var(--mono);font-size:14px}
+table.grid td.n{text-align:right;font-variant-numeric:tabular-nums}
+table.grid td.rn{color:#8a949c;background:#f6f7f8;font-size:13px;text-align:right}
+table.grid .hlc{background:#fff4cc}
+table.grid th.hlc{background:#f8e7a6}
+table.grid tr.drop td{color:#9aa3aa;background:#f4f4f2;text-decoration:line-through;text-decoration-color:#c6ccd0}
+table.grid tr.keep td{background:#eaf6ee}
+table.grid .dimc{opacity:.28}
+table.grid td.why bdi[dir=ltr]{white-space:nowrap}
+table.grid tr.whyrow td.why{min-width:0;font-size:13.5px;color:var(--muted);border-top:0}
+table.grid td.why{font-family:inherit;white-space:normal;min-width:220px;font-size:14px;text-decoration:none!important;color:var(--ink);background:#fff}
+html[lang=ar-EG] table.grid td.why,html[lang=ar-EG] table.grid th.whyh{direction:rtl;text-align:right}
+table.grid th.whyh{font-family:inherit}
+.rows-note{font-size:13px;color:var(--muted);direction:ltr;text-align:left;font-family:var(--mono)}
+
+/* chapter 1 */
+.scene{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:22px;align-items:center;margin:14px 0}
+.bubble{position:relative;background:#fff;border:2px solid var(--ink);border-radius:20px;padding:16px 20px;font-size:1.2em;font-weight:600;max-width:560px}
+.bubble::before{content:"";position:absolute;inset-inline-start:-14px;top:38px;border:12px solid transparent;border-inline-end-color:var(--ink);border-inline-start:0}
+.bubble small{display:block;font-size:.66em;font-weight:500;color:var(--muted);margin-top:6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:12px;margin:12px 0;max-width:1100px}
+.copy{position:relative;text-align:start;border:1.5px solid #cdc4ae;background:#fffef9;border-radius:12px;padding:10px 12px 10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-height:150px;box-shadow:0 1px 0 #e3dccb,0 3px 0 -1px #fffef9,0 4px 0 -1px #d8d0bd;overflow:hidden}
+.copy::after{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:6px;background:var(--cat)}
+.copy[data-cat=Computing]{--cat:var(--comp)}.copy[data-cat=Engineering]{--cat:var(--eng)}.copy[data-cat=Mathematics]{--cat:var(--math)}
+.copy .stk{align-self:flex-start;font:700 20px/1 var(--mono);background:#fff;border:2px solid var(--ink);border-radius:8px;padding:4px 8px;direction:ltr}
+.copy .ttl{font-weight:700;line-height:1.25;margin-top:4px;direction:ltr;text-align:left}
+.copy .meta{font-size:13.5px;color:var(--muted);direction:ltr;text-align:left}
+.copy .st{font-size:13.5px;font-weight:700;margin-top:auto}
+.copy .st.on{color:var(--ok)}.copy .st.off{color:var(--bad)}
+.copy[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent)}
+.copy[aria-pressed=true] .stk{background:var(--accent);color:#fff;border-color:var(--accent)}
+.copy .pick{position:absolute;top:8px;inset-inline-end:8px;width:24px;height:24px;border-radius:50%;border:2px solid #bdb5a2;display:grid;place-items:center;font-weight:800;font-size:14px;color:#fff}
+.copy[aria-pressed=true] .pick{background:var(--accent);border-color:var(--accent)}
+.copy[aria-pressed=true] .pick::after{content:"✓"}
+.copy.static{cursor:default}
+.mapping{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0;max-width:1000px}
+.mapping>div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.mapping b{display:block;font-size:1.05em}
+.mapping .eq{color:var(--accent-ink);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--muted);margin:6px 0}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-inline-end:6px}
+svg{max-width:100%}
+svg.art{display:block;height:auto}
+svg text{font-family:var(--mono)}
+
+/* chapter 2 simulation */
+.sim{border:2px solid #c9bde0;background:#fbf9ff;border-radius:16px;padding:14px 16px;margin:14px 0}
+.simhead{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;flex-wrap:wrap;background:#ebe5f5;border-radius:12px;padding:3px;gap:3px}
+.seg button{border:0;background:none;border-radius:9px;padding:7px 12px;cursor:pointer;font-weight:600;font-size:14.5px;min-height:38px}
+.seg button[aria-pressed=true]{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15);color:#4b2f7a}
+.simgrid{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(0,1fr);gap:12px;margin-top:12px}
+.simgrid .panel:first-child{grid-row:span 2}
+.panel{margin:0;background:#fff;border:1px solid #ddd5ea;border-radius:12px;padding:10px 12px;min-width:0}
+.panel figcaption{font-size:13.5px;font-weight:700;color:#4b2f7a;margin-bottom:6px}
+.panel pre.code{font-size:13px;margin:0}
+.flags{display:flex;flex-direction:column;gap:6px;direction:ltr}
+.flag{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line2);border-radius:8px;padding:6px 10px;font-family:var(--mono);font-size:15px;transition:background .4s}
+.flag b{font-weight:700}
+.flag .T{color:var(--ok)}.flag .F{color:var(--bad)}
+.flash{animation:flash 1s}
+@keyframes flash{0%{background:#fff1b8}100%{background:transparent}}
+.runstate{margin-top:8px;font-size:14px;font-weight:600}
+.runstate.on{color:var(--ok)}.runstate.off{color:var(--muted)}
+.filebox{font-family:var(--mono);font-size:15px;direction:ltr;text-align:left;background:#f7f5ef;border:1px dashed #bdb5a2;border-radius:8px;padding:8px 10px;white-space:pre;min-height:60px}
+.filebox.none{white-space:normal;font-family:inherit;color:var(--muted);font-size:14px;direction:inherit;text-align:start}
+.readout{background:#fff;border-radius:10px;border:1px solid #ddd5ea;padding:10px 14px;margin:10px 0 0;min-height:52px;max-width:none}
+.resp{width:100%;border-collapse:separate;border-spacing:0 8px;max-width:1040px}
+.resp th{font-size:13.5px;color:var(--muted);text-align:start;font-weight:700;padding:0 12px}
+.resp td{background:var(--card);border-block:1px solid var(--line);padding:10px 12px;vertical-align:top}
+.resp td:first-child{border-inline-start:1px solid var(--line);border-start-start-radius:12px;border-end-start-radius:12px;font-weight:700;width:22%}
+.resp td:last-child{border-inline-end:1px solid var(--line);border-start-end-radius:12px;border-end-end-radius:12px}
+.resp td.you{background:#fff7ea}
+.resp td.dbms{background:#eef7f5}
+
+/* chapter 3 architecture */
+.arch{display:grid;grid-template-columns:minmax(0,.8fr) 70px minmax(0,1fr) 70px minmax(0,1.1fr) 70px minmax(0,1.25fr);grid-template-areas:"you a1 ssms a2 eng a3 db" "file . . . eng a3 db" "staff a4 app a5 eng a3 db";gap:12px 0;align-items:stretch;margin:14px 0}
+.node{background:#fff;border:2px solid #b9c3cb;border-radius:14px;padding:10px 12px;transition:opacity .25s,border-color .25s,box-shadow .25s;min-width:0}
+.node .nt{font-weight:800;display:flex;align-items:center;gap:8px;line-height:1.2}
+.node .ns{font-size:14px;color:var(--muted);margin-top:4px}
+.node.n-you{grid-area:you}.node.n-ssms{grid-area:ssms}.node.n-file{grid-area:file;grid-column:3;border-style:dashed}.node.n-eng{grid-area:eng;background:#f2f7fb;border-color:#6d8fb0}
+.node.n-db{grid-area:db;background:#f3faf6;border-color:#6aa483}.node.n-staff{grid-area:staff;border-style:dashed;opacity:.85}.node.n-app{grid-area:app;border-style:dashed;opacity:.85}
+.arr{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11.5px;color:var(--muted);text-align:center;gap:2px;transition:opacity .25s}
+.arr svg{width:40px;height:20px}
+html[dir=rtl] .arr svg{transform:scaleX(-1)}
+.arr.a1{grid-area:a1}.arr.a2{grid-area:a2}.arr.a3{grid-area:a3}.arr.a4{grid-area:a4}.arr.a5{grid-area:a5}
+.arr.dashed svg path{stroke-dasharray:4 4}
+.arch.active .node:not(.hl),.arch.active .arr:not(.hl){opacity:.28}
+.arch .node.hl{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.arch .node.closed{opacity:.45;border-style:dashed;filter:grayscale(1)}
+.minitable{margin-top:8px;border:1.5px solid #6aa483;border-radius:8px;background:#fff;font-size:13px;overflow:hidden;direction:ltr;text-align:left}
+.minitable div{padding:3px 8px;border-top:1px solid #d8eadf;font-family:var(--mono)}
+.minitable div:first-child{border-top:0;background:#e3f1e8;font-weight:700}
+.disk{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13.5px;color:var(--muted)}
+.sc{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.sc button,.terms button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:600;font-size:15px;min-height:40px}
+.sc button[aria-pressed=true],.terms button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.story{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;min-height:120px;max-width:900px}
+.story ol{margin:6px 0 0;padding-inline-start:22px}
+.story li{margin:4px 0}
+.terms{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.termdef{max-width:820px;min-height:56px}
+
+/* chapter 4 */
+.link{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px;align-items:start;margin:12px 0}
+.bigcard{background:#fffef9;border:1.5px solid #cdc4ae;border-radius:14px;padding:14px;position:relative;overflow:hidden;box-shadow:0 3px 0 -1px #fffef9,0 4px 0 -1px #d8d0bd}
+.bigcard::after{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:7px;background:var(--comp)}
+.bigcard .f{display:block;width:100%;text-align:left;direction:ltr;border:1.5px dashed transparent;background:none;border-radius:8px;padding:5px 8px;cursor:pointer;margin:2px 0}
+.bigcard .f:hover{border-color:#bdb5a2}
+.bigcard .f[aria-pressed=true]{border:1.5px solid #c9a227;background:#fff4cc}
+.bigcard .f small{display:block;font-size:12px;color:var(--muted);font-family:inherit}
+.bigcard .f.stk>span{font:700 24px/1 var(--mono);border:2px solid var(--ink);border-radius:8px;padding:4px 9px;display:inline-block;background:#fff}
+.bigcard .f.ttl>span{font-weight:700;font-size:1.1em}
+.typeread{margin-top:10px;min-height:96px}
+.typeread .col{font-family:var(--mono);font-weight:700;direction:ltr;unicode-bidi:isolate}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:12px 0}
+.pk{list-style:none;padding:0;margin:6px 0}
+.pk li{display:flex;gap:10px;align-items:flex-start;margin:7px 0}
+.pk .y,.pk .x{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;font-size:14px}
+.pk .y{background:var(--ok)}.pk .x{background:var(--bad)}
+.blank{font-family:var(--mono);direction:ltr;text-align:left;font-size:14px;background:#fff;border:1.5px dashed #bdb5a2;border-radius:10px;padding:10px}
+.blank div{display:flex;justify-content:space-between;border-bottom:1px dotted #d6cfbe;padding:3px 0;gap:10px}
+.blank div span:last-child{color:#c0b8a5}
+
+/* chapter 5 */
+.sketch{direction:ltr;text-align:left;background:#fff;border:1.5px solid #9aa7b1;border-radius:10px;max-width:520px;font-size:14px;font-family:"Segoe UI",system-ui,sans-serif;overflow:hidden}
+.sketch .bar{background:#e9edf1;padding:6px 10px;font-weight:700;border-bottom:1px solid #c7d0d7}
+.sketch .body{padding:10px 12px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px 12px;align-items:center}
+.sketch .fld{border:1px solid #9aa7b1;border-radius:4px;padding:3px 8px;background:#fbfcfd;font-family:var(--mono);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sketch .fld.hot{outline:2.5px solid var(--accent);outline-offset:1px}
+.sketch .chk{grid-column:1/-1;display:flex;gap:8px;align-items:center}
+.sketch .box{width:16px;height:16px;border:1.5px solid #5d6b75;border-radius:3px;display:grid;place-items:center;font-size:12px;font-weight:800;background:#fff}
+.sketch .go{grid-column:1/-1;justify-self:end;border:1px solid #5d6b75;border-radius:4px;padding:3px 16px;background:#e9edf1}
+.capnote{font-size:13px;color:var(--muted);margin-top:6px;max-width:560px}
+.ssms{direction:ltr;text-align:left;border:1.5px solid #9aa7b1;border-radius:10px;background:#fff;overflow:hidden;font-family:"Segoe UI",system-ui,sans-serif;font-size:13.5px;max-width:900px}
+.ssms .tb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#e9edf1;padding:6px 10px;border-bottom:1px solid #c7d0d7}
+.ssms .tbb{border:1px solid #9aa7b1;border-radius:4px;padding:2px 9px;background:#fff;white-space:nowrap}
+.ssms .main{display:grid;grid-template-columns:200px minmax(0,1fr)}
+.ssms .oe{border-right:1px solid #c7d0d7;padding:8px;font-size:13px;line-height:1.7;background:#fafbfc;min-width:0;overflow:hidden}
+.ssms .oe div{white-space:nowrap}
+.ssms .ed{padding:8px 10px;font-family:var(--mono);font-size:13.5px;border-bottom:1px solid #c7d0d7;min-height:70px}
+.ssms .tabs{display:flex;gap:2px;padding:4px 8px 0;background:#f3f5f7;border-bottom:1px solid #c7d0d7}
+.ssms .tabs>span{padding:2px 10px;border:1px solid #c7d0d7;border-bottom:0;border-radius:4px 4px 0 0;background:#fff}
+.ssms .tabs>span.dim{background:#eef1f4;color:#6b7680}
+.ssms .res{padding:6px 8px;overflow:auto}
+.mk{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:12px;margin-inline-end:4px;vertical-align:1px;font-family:system-ui,sans-serif}
+.mklist{list-style:none;padding:0;margin:10px 0;max-width:900px}
+.mklist li{margin:6px 0;display:flex;gap:6px;align-items:flex-start}
+.ask{font-size:1.15em;font-weight:600;line-height:2.1}
+.ask button{font:inherit;border:0;border-bottom:3px solid #d8cfb8;background:#fff8e3;border-radius:6px;padding:0 6px;cursor:pointer}
+.ask button.done{border-bottom-color:var(--ok);background:var(--ok-bg)}
+.ask button[aria-pressed=true]{background:#f8e7a6;border-bottom-color:#b58b0c}
+.ask .chk{font-size:.8em;color:var(--ok);margin-inline-start:2px}
+.vstep{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.vstep .dot{min-width:38px;height:38px;border-radius:999px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-weight:700;padding:0 10px}
+.vstep .dot[aria-current=step]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.builder{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+.order{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px;margin:12px 0}
+.order>div{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:8px 12px;min-width:150px;flex:1}
+.order b{font-family:var(--mono);display:block;direction:ltr;unicode-bidi:isolate}
+.order .arr2{flex:0 0 auto;min-width:0;border:0;background:none;padding:0;display:grid;place-items:center}
+html[dir=rtl] .order .arr2 svg{transform:scaleX(-1)}
+.trouble dt{font-weight:700;margin-top:10px}
+.trouble dd{margin-inline-start:0;margin-top:2px}
+
+/* chapter 6 visualiser */
+.presets{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin:10px 0;max-width:1100px}
+.presets button{text-align:start;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;cursor:pointer;min-height:56px}
+.presets button b{display:block}
+.presets button code{font-size:13px;background:none;padding:0}
+.presets button[aria-pressed=true]{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink)}
+.predict{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;direction:ltr}
+.predict button{font:700 17px var(--mono);border:2px solid #bdb5a2;background:#fff;border-radius:10px;min-width:64px;min-height:44px;cursor:pointer}
+.predict button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.predict button:disabled{cursor:default}
+.stages{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.stages span{border:1.5px solid var(--line);border-radius:999px;padding:4px 12px;font-size:14px;color:var(--muted);background:#fff}
+.stages span.on{border-color:var(--accent);color:var(--accent-ink);font-weight:700;background:var(--accent-soft)}
+.stages span.past{color:var(--ink)}
+.cmp{margin-top:10px}
+
+/* chapter 7 tasks */
+.tasks{grid-template-columns:minmax(0,1fr);counter-reset:t;list-style:none;padding:0;margin:12px 0;display:grid;gap:12px;max-width:980px}
+.tasks>li{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px 10px;position:relative}
+.tasks>li .tn{font-weight:800;color:var(--accent-ink)}
+.tasks .kind{font-size:12.5px;font-weight:700;border-radius:999px;padding:1px 8px;background:var(--line2);color:var(--muted);margin-inline-start:6px;white-space:nowrap}
+.mini{font-size:14px;direction:ltr}
+.mini table{border-collapse:collapse}
+.mini td,.mini th{border:1px solid #cfd6dc;padding:3px 10px;font-family:var(--mono);font-size:13.5px}
+.mini th{background:#eef1f4}
+
+/* chapter 8 */
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0;max-width:1060px}
+.trio>div{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;border-top:6px solid var(--c)}
+.trio b.k{font-family:var(--mono);font-size:1.15em;direction:ltr;unicode-bidi:isolate;display:block}
+.trio dl{margin:6px 0 0;font-size:.93em}
+.trio dt{color:var(--muted);font-size:.85em;margin-top:6px}
+.trio dd{margin:0}
+.msg{direction:ltr;text-align:left;font-family:var(--mono);font-size:14px;background:#fff;border:1px solid #d6dbe0;border-radius:8px;padding:8px 12px;white-space:pre-wrap;margin:6px 0}
+.msg.red{color:#b3261e}
+
+/* chapter 9 */
+.split{display:grid;grid-template-columns:minmax(0,1fr) 70px minmax(0,1.25fr);gap:0;align-items:start;margin:12px 0;max-width:1060px}
+.split .mid{display:grid;place-items:center;align-self:stretch}
+.split .mid svg{width:60px}
+html[dir=rtl] .split .mid svg{transform:scaleX(-1)}
+table.grid tr.lit td{background:#fff4cc}
+table.grid tr.lit td.key{background:#f8e0a0;font-weight:700}
+.rowbtn{font:inherit;font-weight:700;border:1.5px solid #bdb5a2;background:#fff;border-radius:6px;padding:0 10px;cursor:pointer;min-width:36px;min-height:28px}
+.rowbtn[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.checklist{list-style:none;padding:0;margin:10px 0;max-width:860px}
+.checklist li{margin:6px 0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer}
+.checklist input{width:20px;height:20px;margin-top:3px;flex:none;accent-color:var(--accent)}
+.later{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0;max-width:1060px}
+.later>div{border:1.5px dashed #b9c3cb;border-radius:12px;padding:10px 14px;background:#fff}
+.later b{display:block}
+
+/* chapter footer */
+.chfoot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:44px;padding-top:16px;border-top:1px solid var(--line)}
+.chfoot .btn{max-width:100%}
+footer.page{max-width:1180px;margin:0 auto;padding:0 18px 30px;font-size:13px;color:var(--muted)}
+
+@media(max-width:980px){
+  .simgrid{grid-template-columns:minmax(0,1fr)}
+  .builder{grid-template-columns:minmax(0,1fr)}
+  .arch{grid-template-columns:minmax(0,1fr);grid-template-areas:"you" "a1" "ssms" "file" "a2" "eng" "a3" "db" "a4" "app" "staff";gap:6px}
+  .node.n-file{grid-column:auto}
+  .arr{flex-direction:row;gap:8px}
+  .arr svg{transform:rotate(90deg)}
+  html[dir=rtl] .arr svg{transform:rotate(90deg)}
+  .arr.a5{display:none}
+  .arr.a4 svg{transform:rotate(-90deg)}
+  html[dir=rtl] .arr.a4 svg{transform:rotate(-90deg)}
+}
+@media(max-width:760px){
+  main{padding:16px 12px 30px}
+  .top-in{padding:6px 12px 0;flex-wrap:nowrap}
+  .top-in{flex-wrap:wrap}
+  .brand>span{display:none}
+  .brand h1{font-size:14.5px}
+  .langs button{padding:4px 11px;min-height:32px}
+  nav.chapters ol{padding:4px 0 6px}
+  .scene{grid-template-columns:minmax(0,1fr)}
+  .scene svg{max-width:260px;margin:auto}
+  .bubble::before{display:none}
+  .link,.two{grid-template-columns:minmax(0,1fr)}
+  .trio{grid-template-columns:minmax(0,1fr)}
+  .split{grid-template-columns:minmax(0,1fr)}
+  .split .mid svg{transform:rotate(90deg);width:44px}
+  html[dir=rtl] .split .mid svg{transform:rotate(90deg)}
+  .resp,.resp tbody,.resp tr,.resp td{display:block;width:auto!important}
+  .resp thead{display:none}
+  .resp tr{margin-bottom:10px}
+  .resp td{border:1px solid var(--line)!important;border-radius:0!important;border-top:0!important}
+  .resp td:first-child{border-top:1px solid var(--line)!important;border-radius:12px 12px 0 0!important}
+  .resp td:last-child{border-radius:0 0 12px 12px!important}
+  .resp td[data-h]::before{content:attr(data-h);display:block;font-size:12.5px;color:var(--muted);font-weight:700}
+  .ssms .main{grid-template-columns:minmax(0,1fr)}
+  .ssms .oe{border-right:0;border-bottom:1px solid #c7d0d7}
+  pre.code{font-size:13.5px}
+  table.grid{font-size:14px}
+  table.grid th,table.grid td{padding:4px 7px}
+  table.grid th{font-size:12.5px}
+  h3{font-size:19px}
+  .order .arr2 svg{transform:rotate(90deg)}
+  html[dir=rtl] .order .arr2 svg{transform:rotate(90deg)}
+  .order{flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media print{
+  header.top{position:static}
+  nav.chapters,.langs,.chfoot,.btns,.btn,.sc,.terms,.seg,.vstep,.presets,.predict,.noprint{display:none!important}
+  section.ch[hidden]{display:block!important}
+  section.ch{break-before:page}
+  section.ch:first-of-type{break-before:auto}
+  .ladder>li[hidden],.reveal[hidden]{display:block!important}
+  .ladder>li[hidden]{display:list-item!important}
+  body{background:#fff;font-size:12.5pt}
+  pre.code{background:#f3f3f3;color:#111;border:1px solid #ccc;white-space:pre-wrap}
+  pre.code .kw{color:#00507a}pre.code .str{color:#7a4a00}pre.code .cm{color:#555}
+  .arch.active .node,.arch.active .arr{opacity:1!important}
+  .quiz,.card,.tasks>li,.sim{break-inside:avoid}
+}
+html[dir=rtl] :not(pre)>code{display:inline-block;max-width:100%;vertical-align:baseline;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <h1><span class="en">Database 1 · Week 1 / Lab 1</span><span class="ar"><bdi>Database 1</bdi> · الأسبوع الأول · <bdi>Lab 1</bdi></span></h1>
+      <span><span class="en">Your first database: a campus book lending desk</span><span class="ar">أول <bdi dir="ltr">database</bdi> ليك: مكتب استعارة كتب في الكلية</span></span>
+    </div>
+    <div class="langs" role="group" aria-label="Language · اللغة">
+      <button type="button" data-lang="en" lang="en" aria-pressed="true">English</button>
+      <button type="button" data-lang="ar" lang="ar-EG" dir="rtl" aria-pressed="false">عربي</button>
+    </div>
+    <nav class="chapters" aria-label="Chapters" data-label-ar="الأجزاء"><ol id="chnav"></ol></nav>
+  </div>
+<p style="padding:0 18px"><a href="playground.html" target="db1-sql-playground"><span class="en">Open SQL playground · Mac / no installation</span><span class="ar">افتح محاكي <bdi dir="ltr">SQL</bdi> · للماك ومن غير تثبيت</span></a></p>
+</header>
+
+<main id="main">
+
+<!-- ===================================================== 1 -->
+<section class="ch" id="ch1" data-short-en="The desk question" data-short-ar="سؤال المكتب">
+  <div class="kicker"><span class="en">Chapter 1 of 9</span><span class="ar">الجزء <bdi dir="ltr">1</bdi> من <bdi dir="ltr">9</bdi></span></div>
+  <h2 tabindex="-1"><span class="en">The desk question</span><span class="ar">السؤال اللي على المكتب</span></h2>
+  <div class="goal"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#0d6767" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="#0d6767"/></svg>
+    <div><span class="en">After this chapter you can say what one card describes, and why a book's title is not enough to find a copy to lend.</span><span class="ar">في آخر الجزء ده هتقدر تقول الكارت الواحد بيوصف إيه بالظبط، وليه اسم الكتاب لوحده مش كفاية عشان تلاقي نسخة تسلّفها.</span></div></div>
+
+  <div class="scene">
+    <svg class="art" viewBox="0 0 300 220" role="img" aria-label="A student at the lending desk; behind the desk, a box of index cards">
+      <rect x="0" y="196" width="300" height="24" fill="#e6dfcd"/>
+      <!-- student -->
+      <circle cx="70" cy="62" r="24" fill="#d9b48f" stroke="#1c2733" stroke-width="2"/>
+      <path d="M40 196 V126 q0-34 30-34 q30 0 30 34 V196" fill="#2a63a8" stroke="#1c2733" stroke-width="2"/>
+      <rect x="86" y="128" width="26" height="34" rx="3" fill="#f3c983" stroke="#1c2733" stroke-width="2" transform="rotate(-8 99 145)"/>
+      <!-- desk -->
+      <rect x="132" y="128" width="160" height="68" rx="4" fill="#b98a5a" stroke="#1c2733" stroke-width="2"/>
+      <rect x="132" y="120" width="164" height="12" rx="3" fill="#d4a774" stroke="#1c2733" stroke-width="2"/>
+      <!-- card box -->
+      <rect x="196" y="78" width="74" height="44" rx="4" fill="#fffdf7" stroke="#1c2733" stroke-width="2"/>
+      <rect x="204" y="62" width="56" height="30" rx="2" fill="#fff" stroke="#1c2733" stroke-width="1.5"/>
+      <rect x="210" y="56" width="56" height="30" rx="2" fill="#fff" stroke="#1c2733" stroke-width="1.5"/>
+      <rect x="215" y="62" width="20" height="10" fill="none" stroke="#1c2733" stroke-width="1.2"/>
+      <text x="225" y="70.5" font-size="8" text-anchor="middle" fill="#1c2733">101</text>
+      <line x1="215" y1="78" x2="258" y2="78" stroke="#bdb5a2"/>
+      <rect x="196" y="98" width="74" height="24" fill="#e9dfc6" stroke="#1c2733" stroke-width="2"/>
+    </svg>
+    <div>
+      <div class="bubble"><span class="en">"Is there a Computing book I can borrow right now? Which shelf is it on?"</span><span class="ar">"فيه كتاب <bdi dir="ltr">Computing</bdi> أقدر أستلفه دلوقتي؟ وعلى أنهي رف؟"</span>
+        <small><span class="en">A student at the campus lending desk</span><span class="ar">طالب واقف قدام مكتب الاستعارة في الكلية</span></small></div>
+      <p><span class="en">The desk keeps a box of small cards: <b>one card for every physical book copy</b> it owns. You are sitting at the desk today. Here are the cards.</span><span class="ar">المكتب عنده علبة فيها كروت صغيرة: <b>كارت لكل نسخة كتاب موجودة فعلًا</b>. إنت اللي قاعد على المكتب النهارده، ودي الكروت.</span></p>
+      <p class="small muted"><span class="en">The desk, its books and these cards are fictional teaching data written for this lab.</span><span class="ar">المكتب والكتب والكروت دي بيانات تعليمية متألفة للـ <bdi dir="ltr">lab</bdi> ده، مش بيانات حقيقية.</span></p>
+    </div>
+  </div>
+
+  <h3><span class="no">1.1</span><span class="en">Your move: pick the copies you could hand over</span><span class="ar">دورك: اختار النسخ اللي تقدر تسلّمها</span></h3>
+  <p><span class="en">Tap every card whose copy you could give this student <b>right now</b>. Then press <b>Check</b>.</span><span class="ar">دوس على كل كارت تقدر تدي نسخته للطالب ده <b>دلوقتي حالًا</b>، وبعدين دوس <b>اتأكد</b>.</span></p>
+  <div class="cards" id="deskCards" role="group" aria-label="Copy cards" data-label-ar="كروت النسخ"></div>
+  <div class="legend"><span><i style="background:var(--comp)"></i>Computing</span><span><i style="background:var(--eng)"></i>Engineering</span><span><i style="background:var(--math)"></i>Mathematics</span></div>
+  <div class="btns"><button class="btn primary" id="deskCheck" type="button"><span class="en">Check</span><span class="ar">اتأكد</span></button>
+    <button class="btn" id="deskShow" type="button"><span class="en">Show me the answer</span><span class="ar">وريني الإجابة</span></button></div>
+  <div class="fb" id="deskFb" aria-live="polite"></div>
+
+  <div class="reveal" id="shelfReveal" hidden>
+    <h3><span class="en">Walk to the shelves and this is what you find</span><span class="ar">لو مشيت للرفوف، ده اللي هتلاقيه</span></h3>
+    <svg class="art" viewBox="0 0 640 230" role="img" aria-label="Bookcase with shelves A1, A2, B1 and C1. Copies 101, 103 and 104 stand on their shelves. Copies 102, 106 and 105 are lent out: only their home spot is marked." style="max-width:760px">
+      <rect x="10" y="20" width="620" height="190" rx="6" fill="#c89a68" stroke="#1c2733" stroke-width="2"/>
+      <g fill="#f6eedc" stroke="#1c2733" stroke-width="1.5">
+        <rect x="22" y="48" width="140" height="150"/><rect x="172" y="48" width="140" height="150"/>
+        <rect x="322" y="48" width="140" height="150"/><rect x="472" y="48" width="146" height="150"/>
+      </g>
+      <g font-size="15" font-weight="700" text-anchor="middle" fill="#1c2733">
+        <text x="92" y="40">A1</text><text x="242" y="40">A2</text><text x="392" y="40">B1</text><text x="545" y="40">C1</text>
+      </g>
+      <!-- A1: 101 on shelf, 102 out -->
+      <rect x="44" y="76" width="40" height="122" rx="3" fill="#2a63a8" stroke="#1c2733" stroke-width="1.5"/>
+      <text x="64" y="146" font-size="14" font-weight="700" text-anchor="middle" fill="#fff">101</text>
+      <rect x="96" y="76" width="40" height="122" rx="3" fill="none" stroke="#a83c2c" stroke-width="2" stroke-dasharray="6 5"/>
+      <text x="116" y="146" font-size="14" font-weight="700" text-anchor="middle" fill="#a83c2c">102</text>
+      <!-- A2: 103 on shelf, 106 out -->
+      <rect x="194" y="76" width="40" height="122" rx="3" fill="#2a63a8" stroke="#1c2733" stroke-width="1.5"/>
+      <text x="214" y="146" font-size="14" font-weight="700" text-anchor="middle" fill="#fff">103</text>
+      <rect x="246" y="76" width="40" height="122" rx="3" fill="none" stroke="#a83c2c" stroke-width="2" stroke-dasharray="6 5"/>
+      <text x="266" y="146" font-size="14" font-weight="700" text-anchor="middle" fill="#a83c2c">106</text>
+      <!-- B1: 104 -->
+      <rect x="372" y="76" width="40" height="122" rx="3" fill="#a86a14" stroke="#1c2733" stroke-width="1.5"/>
+      <text x="392" y="146" font-size="14" font-weight="700" text-anchor="middle" fill="#fff">104</text>
+      <!-- C1: 105 out -->
+      <rect x="525" y="76" width="40" height="122" rx="3" fill="none" stroke="#a83c2c" stroke-width="2" stroke-dasharray="6 5"/>
+      <text x="545" y="146" font-size="14" font-weight="700" text-anchor="middle" fill="#a83c2c">105</text>
+    </svg>
+    <div class="legend"><span><i style="background:var(--comp)"></i><span class="en">solid spine: the copy is on its shelf</span><span class="ar">كعب مليان: النسخة على الرف بتاعها</span></span>
+      <span><i style="border:2px dashed var(--bad)"></i><span class="en">dashed outline: the copy's home spot while it is lent out</span><span class="ar">خط متقطع: مكان النسخة الأصلي وهي متسلّفة</span></span></div>
+    <p><span class="en">Notice: copy 102 is lent out, yet its card still says <b>Shelf A1</b>. A card keeps the copy's <em>home</em> shelf. Whether the copy is there right now is a separate fact: lent out or on the shelf.</span><span class="ar">خد بالك: النسخة <bdi dir="ltr">102</bdi> متسلّفة، ومع ذلك الكارت بتاعها لسه مكتوب عليه <b><bdi dir="ltr">Shelf A1</bdi></b>. الكارت بيحتفظ بالرف <em>الأصلي</em> للنسخة. أما هي موجودة عليه دلوقتي ولا لأ فدي معلومة تانية لوحدها: متسلّفة ولا على الرف.</span></p>
+  </div>
+
+  <h3><span class="no">1.2</span><span class="en">A puzzle with two identical titles</span><span class="ar">لغز: كتابين بنفس الاسم</span></h3>
+  <div class="quiz" data-quiz>
+    <div class="qh"><span class="en">Decide</span><span class="ar">قرّر</span></div>
+    <p class="q"><span class="en">Another student asks for <i>Python Basics</i>. Your colleague picks up card 102, sees "lent out", and says: "Sorry, Python Basics is out." Is that right?</span><span class="ar">طالب تاني بيسأل على <i><bdi dir="ltr">Python Basics</bdi></i>. زميلك مسك كارت <bdi dir="ltr">102</bdi>، لقاه "متسلّف"، فقال: "معلش، <bdi dir="ltr">Python Basics</bdi> مش موجود." كلامه صح؟</span></p>
+    <div class="opts">
+      <button type="button" data-opt="a"><span class="en">Yes. The card says it is lent out.</span><span class="ar">أيوه. الكارت مكتوب عليه إنه متسلّف.</span></button>
+      <button type="button" data-opt="b"><span class="en">No. Card 101 has the same title and is on the shelf.</span><span class="ar">لأ. كارت <bdi dir="ltr">101</bdi> عليه نفس الاسم، والنسخة دي على الرف.</span></button>
+      <button type="button" data-opt="c"><span class="en">We can't tell without walking to the shelf.</span><span class="ar">مش هنعرف غير لما نروح للرف بنفسنا.</span></button>
+    </div>
+    <div class="fb" aria-live="polite">
+      <div data-fb="a" class="no" hidden><span class="en">Card 102 describes one physical copy. Card 101 has the same title and says "on the shelf", shelf A1. "Python Basics" names a book; 101 and 102 are two copies of it.</span><span class="ar">كارت <bdi dir="ltr">102</bdi> بيوصف نسخة واحدة بس. كارت <bdi dir="ltr">101</bdi> عليه نفس الاسم ومكتوب "على الرف"، رف <bdi dir="ltr">A1</bdi>. "<bdi dir="ltr">Python Basics</bdi>" ده اسم كتاب؛ و<bdi dir="ltr">101</bdi> و<bdi dir="ltr">102</bdi> نسختين منه.</span></div>
+      <div data-fb="b" class="yes" hidden><span class="en">Exactly. Same title, two different physical objects. The desk lends <b>copies</b>, not titles, so every copy needs its own number that tells it apart from the others.</span><span class="ar">بالظبط. نفس الاسم، بس دول حاجتين مختلفين فعلًا. المكتب بيسلّف <b>نسخ</b> مش أسماء كتب، فكل نسخة محتاجة رقم خاص بيها يفرّقها عن الباقيين.</span></div>
+      <div data-fb="c" class="no" hidden><span class="en">The cards already answer it: card 101 says Python Basics, on the shelf, A1. The cards are the desk's record of every copy; that is the point of keeping them.</span><span class="ar">الكروت نفسها بتجاوب: كارت <bdi dir="ltr">101</bdi> مكتوب عليه <bdi dir="ltr">Python Basics</bdi>، على الرف، <bdi dir="ltr">A1</bdi>. الكروت هي سجل المكتب لكل نسخة، وده أصلًا السبب إننا محتفظين بيها.</span></div>
+    </div>
+  </div>
+
+  <h3><span class="no">1.3</span><span class="en">You just used a table, without the words</span><span class="ar">إنت لسه مستخدم <bdi dir="ltr">table</bdi> من غير ما تعرف اسمه</span></h3>
+  <div class="btns"><button class="btn" type="button" data-reveal="names1"><span class="en">Show the names</span><span class="ar">وريني الأسامي</span></button></div>
+  <div class="reveal" id="names1" hidden>
+    <div class="mapping">
+      <div><span class="en">The box of cards</span><span class="ar">علبة الكروت</span> <span class="eq">=</span> <b><span class="en">a table</span><span class="ar"><bdi dir="ltr">table</bdi> (جدول)</span></b></div>
+      <div><span class="en">One card</span><span class="ar">كارت واحد</span> <span class="eq">=</span> <b><span class="en">one row</span><span class="ar"><bdi dir="ltr">row</bdi> (صف) واحد</span></b></div>
+      <div><span class="en">The printed fields on every card</span><span class="ar">الخانات المطبوعة على كل كارت</span> <span class="eq">=</span> <b><span class="en">the columns</span><span class="ar">الـ <bdi dir="ltr">columns</bdi> (الأعمدة)</span></b></div>
+      <div><span class="en">The sticker number</span><span class="ar">رقم الاستيكر</span> <span class="eq">=</span> <b><span class="en">the key that tells rows apart</span><span class="ar">الـ <bdi dir="ltr">key</bdi> اللي بيفرّق الصفوف عن بعض</span></b></div>
+    </div>
+    <div class="callout ok"><b class="h"><span class="en">The rule for today's table</span><span class="ar">قاعدة الـ <bdi dir="ltr">table</bdi> بتاع النهارده</span></b><span class="en"><b>One row = one physical copy.</b> That is why the same title can appear on two rows, and why each row still needs its own number.</span><span class="ar"><b><bdi dir="ltr">row</bdi> واحد = نسخة فعلية واحدة.</b> عشان كده نفس اسم الكتاب ممكن يظهر في صفّين، وعشان كده برضه كل صف محتاج رقم خاص بيه.</span></div>
+  </div>
+</section>
+
+<!-- ===================================================== 2 -->
+<section class="ch" id="ch2" data-short-en="Program, file or DBMS?" data-short-ar="برنامج، file، ولا DBMS؟" hidden>
+  <div class="kicker"><span class="en">Chapter 2 of 9</span><span class="ar">الجزء <bdi dir="ltr">2</bdi> من <bdi dir="ltr">9</bdi></span></div>
+  <h2 tabindex="-1"><span class="en">Why not keep it in a program?</span><span class="ar">طب ليه ما نحطهاش في برنامج وخلاص؟</span></h2>
+  <div class="goal"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#0d6767" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="#0d6767"/></svg>
+    <div><span class="en">After this chapter you can explain where a changed value goes when a program stops, and what a database system takes off your program's hands.</span><span class="ar">في آخر الجزء ده هتقدر تشرح القيمة اللي اتغيرت بتروح فين لما البرنامج يقفل، والـ <bdi dir="ltr">database system</bdi> بيشيل عن برنامجك إيه.</span></div></div>
+
+  <p class="lede"><span class="en">You already know variables, conditions and functions. So write the desk as a tiny Python program. Lend copy 101, restart the program, and watch what happens to the value.</span><span class="ar">إنت عارف <bdi dir="ltr">variables</bdi> و<bdi dir="ltr">conditions</bdi> و<bdi dir="ltr">functions</bdi>. يبقى تعالى نكتب المكتب كبرنامج <bdi dir="ltr">Python</bdi> صغير. سلّف النسخة <bdi dir="ltr">101</bdi>، وبعدين اقفل البرنامج وشغّله تاني، وشوف القيمة بيحصلها إيه.</span></p>
+
+  <p class="small"><span class="en">Read this code as a sketch: <code>copies[101]</code> means the status of copy 101. Follow how the value changes; you do not need to learn Python file syntax here.</span><span class="ar">اقرا الكود كرسمة للفكرة: <code>copies[101]</code> معناها حالة النسخة <bdi dir="ltr">101</bdi>. تابع القيمة بتتغيّر إزاي؛ مش مطلوب تتعلّم <bdi dir="ltr">syntax</bdi> التعامل مع الملفات في <bdi dir="ltr">Python</bdi> هنا.</span></p>
+  <div class="sim" id="progSim">
+    <div class="simhead">
+      <span class="tag sim">◇ <span class="en">Simulation in this page only. It runs no Python, opens no file and does not touch SQL Server.</span><span class="ar"><bdi dir="ltr">simulation</bdi> جوه الصفحة دي بس. مفيش <bdi dir="ltr">Python</bdi> بيشتغل، ولا <bdi dir="ltr">file</bdi> بيتفتح، ولا <bdi dir="ltr">SQL Server</bdi> بيتلمس.</span></span>
+      <div class="seg" role="group" aria-label="Program version" data-label-ar="نسخة البرنامج">
+        <button type="button" data-ver="1" aria-pressed="true"><span class="en">Version 1: values in the code</span><span class="ar">نسخة <bdi dir="ltr">1</bdi>: القيم جوه الكود</span></button>
+        <button type="button" data-ver="2" aria-pressed="false"><span class="en">Version 2: values in a file</span><span class="ar">نسخة <bdi dir="ltr">2</bdi>: القيم في <bdi dir="ltr">file</bdi></span></button>
+      </div>
+    </div>
+    <div class="simgrid">
+      <figure class="panel"><figcaption><span class="en">Source code · desk.py (saved on disk)</span><span class="ar">الكود · <bdi dir="ltr">desk.py</bdi> (متسيّف على الهارد)</span></figcaption>
+<pre class="code py" id="srcV1">copies = {101: True, 102: False}   # True = on the shelf
+
+def lend(copy_id):
+    copies[copy_id] = False
+
+# while the program runs, the desk calls lend(...)</pre>
+<pre class="code py" id="srcV2" hidden>def load():
+    copies = {}
+    with open("copies.txt") as f:
+        for line in f:
+            copy_id, flag = line.strip().split(",")
+            copies[int(copy_id)] = (flag == "1")
+    return copies
+
+def save(copies):
+    with open("copies.txt", "w") as f:
+        for copy_id, on_shelf in copies.items():
+            f.write(f"{copy_id},{1 if on_shelf else 0}\n")
+
+copies = load()          # read the file when the program starts
+
+def lend(copy_id):
+    copies[copy_id] = False
+    save(copies)         # write the change to disk right away</pre>
+      </figure>
+      <figure class="panel"><figcaption><span class="en">Memory (RAM) of the running program</span><span class="ar">الـ <bdi dir="ltr">memory</bdi> (<bdi dir="ltr">RAM</bdi>) بتاعة البرنامج وهو شغال</span></figcaption>
+        <div class="flags" id="memFlags"></div>
+        <div class="runstate on" id="runState"></div>
+      </figure>
+      <figure class="panel"><figcaption><span class="en">File on disk · copies.txt</span><span class="ar"><bdi dir="ltr">file</bdi> على الهارد · <bdi dir="ltr">copies.txt</bdi></span></figcaption>
+        <div class="filebox" id="fileBox"></div>
+      </figure>
+    </div>
+    <div class="btns">
+      <button class="btn primary" type="button" id="simLend"><span class="en">Run lend(101)</span><span class="ar">شغّل <bdi dir="ltr">lend</bdi>(<bdi dir="ltr">101</bdi>)</span></button>
+      <button class="btn" type="button" id="simRestart"><span class="en">Stop the program and start it again</span><span class="ar">اقفل البرنامج وشغّله تاني</span></button>
+      <button class="btn" type="button" id="simReset"><span class="en">Reset this simulation</span><span class="ar">رجّع الـ <bdi dir="ltr">simulation</bdi> من الأول</span></button>
+    </div>
+    <p class="readout" id="simRead" aria-live="polite"></p>
+  </div>
+
+  <div class="callout"><b class="h"><span class="en">What the two versions show</span><span class="ar">النسختين بيورّونا إيه</span></b>
+    <span class="en">Saving <code>desk.py</code> saves the <em>code</em>. A value that changes while the program runs lives in memory and disappears when the program stops, unless the program writes it somewhere on purpose. Version 2 does exactly that: <b>a file can keep data</b> after the program stops.</span>
+    <span class="ar">لما تسيّف <code>desk.py</code> إنت بتسيّف <em>الكود</em>. أي قيمة بتتغير والبرنامج شغال بتبقى في الـ <bdi dir="ltr">memory</bdi>، وبتضيع أول ما البرنامج يقفل، إلا لو البرنامج كتبها في حتة بقصد. نسخة <bdi dir="ltr">2</bdi> بتعمل كده بالظبط: <b>الـ <bdi dir="ltr">file</bdi> يقدر يحتفظ بالبيانات</b> بعد ما البرنامج يقفل.</span></div>
+
+  <h3><span class="no">2.1</span><span class="en">So a file works. What is still your job?</span><span class="ar">يبقى الـ <bdi dir="ltr">file</bdi> شغال. طب إيه اللي لسه عليك؟</span></h3>
+  <p><span class="en">Imagine the desk grows: two staff computers, hundreds of copies, new questions every week. Here is who has to do the hard parts.</span><span class="ar">تخيّل المكتب كبر: جهازين للموظفين، مئات النسخ، وأسئلة جديدة كل أسبوع. بص مين اللي لازم يعمل الحاجات الصعبة.</span></p>
+  <table class="resp">
+    <thead><tr><th><span class="en">Job</span><span class="ar">المهمة</span></th><th><span class="en">With your own file, your program must…</span><span class="ar">لو <bdi dir="ltr">file</bdi> بتاعك، برنامجك لازم…</span></th><th><span class="en">A DBMS such as SQL Server offers…</span><span class="ar">الـ <bdi dir="ltr">DBMS</bdi> زي <bdi dir="ltr">SQL Server</bdi> بيقدّم…</span></th></tr></thead>
+    <tbody>
+      <tr><td><span class="en">Keep values valid</span><span class="ar">القيم تفضل سليمة</span></td>
+        <td class="you" data-h="Your program" ><span class="en">check every line itself. What if a line says <code>101,yes</code>, or 101 appears twice?</span><span class="ar">يراجع كل سطر بنفسه. طب لو سطر مكتوب فيه <code>101,yes</code>، أو <bdi dir="ltr">101</bdi> متكرر مرتين؟</span></td>
+        <td class="dbms" data-h="DBMS"><span class="en">column types and rules such as <code>NOT NULL</code> and <code>PRIMARY KEY</code>, checked on every change, <b>if you declare them</b>.</span><span class="ar">أنواع للأعمدة وقواعد زي <code>NOT NULL</code> و<code>PRIMARY KEY</code>، بتتراجع مع كل تغيير، <b>بشرط إنك تعلنها</b>.</span></td></tr>
+      <tr><td><span class="en">Two desks at once</span><span class="ar">مكتبين في نفس الوقت</span></td>
+        <td class="you" data-h="Your program"><span class="en">stop two copies of the program from overwriting each other's changes in the same file.</span><span class="ar">يمنع نسختين من البرنامج إنهم يكتبوا فوق تعديلات بعض في نفس الـ <bdi dir="ltr">file</bdi>.</span></td>
+        <td class="dbms" data-h="DBMS"><span class="en">locking and transactions that let many users share the same data, <b>if they are used correctly</b>.</span><span class="ar"><bdi dir="ltr">locking</bdi> و<bdi dir="ltr">transactions</bdi> بيخلّوا مستخدمين كتير يشتغلوا على نفس البيانات، <b>بشرط إنها تتستخدم صح</b>.</span></td></tr>
+      <tr><td><span class="en">Ask a new question</span><span class="ar">سؤال جديد</span></td>
+        <td class="you" data-h="Your program"><span class="en">provide and test filtering or reporting logic for the questions you want to ask.</span><span class="ar">يوفّر ويجرّب كود الفلترة أو التقارير اللي يجاوب على أسئلتك.</span></td>
+        <td class="dbms" data-h="DBMS"><span class="en">one language, SQL, to ask new questions without changing a program.</span><span class="ar">لغة واحدة، <bdi dir="ltr">SQL</bdi>، تسأل بيها أسئلة جديدة من غير ما تغيّر برنامج.</span></td></tr>
+      <tr><td><span class="en">Crash halfway</span><span class="ar">الجهاز وقع في النص</span></td>
+        <td class="you" data-h="Your program"><span class="en">make sure a half-written file is never left behind.</span><span class="ar">يضمن إن مفيش <bdi dir="ltr">file</bdi> يتساب نصّه مكتوب ونصّه لأ.</span></td>
+        <td class="dbms" data-h="DBMS"><span class="en">a transaction log it uses to recover to a consistent state after a crash.</span><span class="ar"><bdi dir="ltr">transaction log</bdi> بيستخدمه عشان يرجع لحالة سليمة بعد الـ <bdi dir="ltr">crash</bdi>.</span></td></tr>
+    </tbody>
+  </table>
+  <div class="callout fool"><b class="h"><span class="en">What could fool you</span><span class="ar">حاجات ممكن تضحك عليك</span></b>
+    <ul>
+      <li><span class="en">"Only databases can save data." Files save data too. The difference is how much work your program must do around the data.</span><span class="ar">"الـ <bdi dir="ltr">database</bdi> بس هي اللي بتحفظ البيانات." الـ <bdi dir="ltr">files</bdi> كمان بتحفظ. الفرق في حجم الشغل اللي برنامجك لازم يعمله حوالين البيانات.</span></li>
+      <li><span class="en">"A database makes my data correct." It offers mechanisms. People still choose the design, declare the rules and type the facts.</span><span class="ar">"الـ <bdi dir="ltr">database</bdi> بتخلّي بياناتي صح." هي بتدّيك أدوات. البني آدمين لسه هما اللي بيختاروا التصميم ويعلنوا القواعد ويكتبوا المعلومات.</span></li>
+      <li><span class="en">"Every program needs a database." A small personal program can be perfectly fine with a file.</span><span class="ar">"أي برنامج لازم له <bdi dir="ltr">database</bdi>." برنامج صغير لاستخدامك الشخصي ممكن يبقى تمام جدًا بـ <bdi dir="ltr">file</bdi>.</span></li>
+    </ul></div>
+
+  <div class="quiz" data-quiz>
+    <div class="qh"><span class="en">Check yourself</span><span class="ar">اختبر نفسك</span></div>
+    <p class="q"><span class="en">A classmate's Python program writes loans to <code>copies.txt</code>, like version 2. The laptop restarts. Is the loan of copy 101 still recorded?</span><span class="ar">برنامج <bdi dir="ltr">Python</bdi> بتاع زميلك بيكتب الاستعارات في <code>copies.txt</code>، زي نسخة <bdi dir="ltr">2</bdi>. اللابتوب عمل <bdi dir="ltr">restart</bdi>. استعارة النسخة <bdi dir="ltr">101</bdi> لسه متسجلة؟</span></p>
+    <div class="opts">
+      <button type="button" data-opt="a"><span class="en">Yes, it is in the file on disk.</span><span class="ar">أيوه، هي في الـ <bdi dir="ltr">file</bdi> اللي على الهارد.</span></button>
+      <button type="button" data-opt="b"><span class="en">No, only a database keeps data after a restart.</span><span class="ar">لأ، الـ <bdi dir="ltr">database</bdi> بس هي اللي بتحتفظ بالبيانات بعد الـ <bdi dir="ltr">restart</bdi>.</span></button>
+      <button type="button" data-opt="c"><span class="en">Only if the classmate also saved desk.py.</span><span class="ar">بس لو زميلك كمان سيّف <bdi dir="ltr">desk.py</bdi>.</span></button>
+    </div>
+    <div class="fb" aria-live="polite">
+      <div data-fb="a" class="yes" hidden><span class="en">Right. A file persists. Persistence alone is not why we use a DBMS today; checking, sharing, asking and recovering are.</span><span class="ar">صح. الـ <bdi dir="ltr">file</bdi> بيفضل موجود. الحفظ لوحده مش هو السبب إننا بنستخدم <bdi dir="ltr">DBMS</bdi> النهارده؛ السبب هو المراجعة والمشاركة والأسئلة والرجوع بعد المشاكل.</span></div>
+      <div data-fb="b" class="no" hidden><span class="en">Files keep data too; version 2 just showed it. The difference is the work around the data: checking, sharing, asking, recovering.</span><span class="ar">الـ <bdi dir="ltr">files</bdi> كمان بتحتفظ بالبيانات؛ نسخة <bdi dir="ltr">2</bdi> لسه موريّاك ده. الفرق في الشغل اللي حوالين البيانات: المراجعة والمشاركة والأسئلة والرجوع بعد المشاكل.</span></div>
+      <div data-fb="c" class="no" hidden><span class="en">Saving desk.py saves the code, not values that changed while it ran. The loan is in copies.txt because <code>save()</code> wrote it there.</span><span class="ar">تسييف <bdi dir="ltr">desk.py</bdi> بيحفظ الكود، مش القيم اللي اتغيرت وهو شغال. الاستعارة موجودة في <bdi dir="ltr">copies.txt</bdi> عشان <code>save()</code> كتبتها هناك.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== 3 -->
+<section class="ch" id="ch3" data-short-en="Who does what" data-short-ar="مين بيعمل إيه" hidden>
+  <div class="kicker"><span class="en">Chapter 3 of 9</span><span class="ar">الجزء <bdi dir="ltr">3</bdi> من <bdi dir="ltr">9</bdi></span></div>
+  <h2 tabindex="-1"><span class="en">Who does what: SSMS, SQL Server, the database</span><span class="ar">مين بيعمل إيه: <bdi dir="ltr">SSMS</bdi> و<bdi dir="ltr">SQL Server</bdi> والـ <bdi dir="ltr">database</bdi></span></h2>
+  <div class="goal"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#0d6767" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="#0d6767"/></svg>
+    <div><span class="en">After this chapter you can point at where the rows live, and say what SSMS, SQL Server, SQL and T-SQL each are.</span><span class="ar">في آخر الجزء ده هتقدر تشاور الصفوف عايشة فين، وتقول كل واحد من <bdi dir="ltr">SSMS</bdi> و<bdi dir="ltr">SQL Server</bdi> و<bdi dir="ltr">SQL</bdi> و<bdi dir="ltr">T-SQL</bdi> يبقى إيه.</span></div></div>
+
+  <p class="lede"><span class="en">In the lab you will type SQL into a window called SSMS. That window is <em>not</em> where the data lives. Pick a situation and follow it through the drawing.</span><span class="ar">في الـ <bdi dir="ltr">lab</bdi> هتكتب <bdi dir="ltr">SQL</bdi> في شباك اسمه <bdi dir="ltr">SSMS</bdi>. الشباك ده <em>مش</em> المكان اللي البيانات عايشة فيه. اختار موقف وتابعه على الرسمة.</span></p>
+
+  <div class="sc" id="archSc" role="group" aria-label="Situations" data-label-ar="مواقف">
+    <button type="button" data-sc="run" aria-pressed="false"><span class="en">Run a SELECT</span><span class="ar">شغّل <bdi dir="ltr">SELECT</bdi></span></button>
+    <button type="button" data-sc="close" aria-pressed="false"><span class="en">Close SSMS</span><span class="ar">اقفل <bdi dir="ltr">SSMS</bdi></span></button>
+    <button type="button" data-sc="save" aria-pressed="false"><span class="en">Save the .sql file</span><span class="ar">سيّف الـ <bdi dir="ltr">file</bdi> بتاع .<bdi dir="ltr">sql</bdi></span></button>
+    <button type="button" data-sc="app" aria-pressed="false"><span class="en">A future desk app asks</span><span class="ar"><bdi dir="ltr">app</bdi> للمكتب بعدين بيسأل</span></button>
+  </div>
+
+  <div class="arch" id="arch">
+    <div class="node n-you" data-node="you"><div class="nt"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 21c0-5 3.5-8 8-8s8 3 8 8" fill="none" stroke="currentColor" stroke-width="2"/></svg><span class="en">You</span><span class="ar">إنت</span></div><div class="ns"><span class="en">at a lab PC</span><span class="ar">على جهاز في الـ <bdi dir="ltr">lab</bdi></span></div></div>
+    <div class="arr a1" data-node="a1"><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 10h32m-6-6 6 6-6 6" fill="none" stroke="#58636e" stroke-width="2"/></svg><span class="en">type</span><span class="ar">بتكتب</span></div>
+    <div class="node n-ssms" data-node="ssms"><div class="nt"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="2" y="3" width="18" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2 7h18M6 11h7M6 14h4" stroke="currentColor" stroke-width="2"/></svg>SSMS</div><div class="ns"><span class="en">client tool: a window where you type SQL and read results</span><span class="ar"><bdi dir="ltr">client tool</bdi>: شباك بتكتب فيه <bdi dir="ltr">SQL</bdi> وتقرا النتايج</span></div></div>
+    <div class="node n-file" data-node="file"><div class="nt"><svg width="20" height="22" viewBox="0 0 20 22" aria-hidden="true"><path d="M3 2h9l5 5v13H3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v5h5" fill="none" stroke="currentColor" stroke-width="2"/></svg><span class="ltr">01-first-queries.sql</span></div><div class="ns"><span class="en">a text file of SQL instructions, saved with Ctrl+S</span><span class="ar"><bdi dir="ltr">file</bdi> نص فيه أوامر <bdi dir="ltr">SQL</bdi>، بيتسيّف بـ <bdi dir="ltr">Ctrl+S</bdi></span></div></div>
+    <div class="arr a2" data-node="a2"><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 10h32m-6-6 6 6-6 6" fill="none" stroke="#58636e" stroke-width="2"/></svg><span class="en">SQL text, rows back</span><span class="ar">نص <bdi dir="ltr">SQL</bdi>، والصفوف بترجع</span></div>
+    <div class="node n-eng" data-node="eng"><div class="nt"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 1v4M11 17v4M1 11h4M17 11h4M3.9 3.9l2.8 2.8M15.3 15.3l2.8 2.8M3.9 18.1l2.8-2.8M15.3 6.7l2.8-2.8" stroke="currentColor" stroke-width="2"/></svg>SQL Server</div>
+      <div class="ns"><span class="en">the DBMS (database engine). Documented lab setup: instance <code>.\SQLEXPRESS</code>. Runs as a Windows service in the background, with or without SSMS.</span><span class="ar">ده الـ <bdi dir="ltr">DBMS</bdi> (الـ <bdi dir="ltr">database engine</bdi>). في تجهيز الـ <bdi dir="ltr">lab</bdi> الموثّق: الـ <bdi dir="ltr">instance</bdi> اسمه <code>.\SQLEXPRESS</code>. شغال كـ <bdi dir="ltr">Windows service</bdi> في الخلفية، سواء <bdi dir="ltr">SSMS</bdi> مفتوح ولا لأ.</span></div></div>
+    <div class="arr a3" data-node="a3"><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 10h32m-6-6 6 6-6 6" fill="none" stroke="#58636e" stroke-width="2"/></svg><span class="en">reads, writes</span><span class="ar">بيقرا وبيكتب</span></div>
+    <div class="node n-db" data-node="db"><div class="nt"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><ellipse cx="11" cy="5" rx="8" ry="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 5v12c0 1.7 3.6 3 8 3s8-1.3 8-3V5M3 11c0 1.7 3.6 3 8 3s8-1.3 8-3" fill="none" stroke="currentColor" stroke-width="2"/></svg><span class="ltr">Database1Lab01</span></div>
+      <div class="ns"><span class="en">the database: organized data</span><span class="ar">الـ <bdi dir="ltr">database</bdi>: بيانات متنظمة</span></div>
+      <div class="minitable"><div>BookCopies</div><div>101 · Python Basics · A1</div><div>102 · Python Basics · A1</div><div>… 6 rows</div></div>
+      <div class="disk"><svg width="22" height="16" viewBox="0 0 22 16" aria-hidden="true"><rect x="1" y="2" width="20" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="8" r="1.6" fill="currentColor"/></svg><span><span class="en">stored on disk: data <code>.mdf</code> and transaction log <code>.ldf</code></span><span class="ar">محفوظة على الهارد: البيانات في <code>.mdf</code> والـ <bdi dir="ltr">transaction log</bdi> في <code>.ldf</code></span></span></div></div>
+    <div class="node n-staff" data-node="staff"><div class="nt"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 21c0-5 3.5-8 8-8s8 3 8 8" fill="none" stroke="currentColor" stroke-width="2"/></svg><span class="en">Desk staff</span><span class="ar">موظفين المكتب</span></div><div class="ns"><span class="en">later, not today</span><span class="ar">بعدين، مش النهارده</span></div></div>
+    <div class="arr a4 dashed" data-node="a4"><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 10h32m-6-6 6 6-6 6" fill="none" stroke="#58636e" stroke-width="2"/></svg><span class="en">click</span><span class="ar">بيدوسوا</span></div>
+    <div class="node n-app" data-node="app"><div class="nt"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="3" y="2" width="16" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 7h8M7 11h8M7 15h5" stroke="currentColor" stroke-width="2"/></svg><span class="en">A desk app</span><span class="ar"><bdi dir="ltr">app</bdi> للمكتب</span></div><div class="ns"><span class="en">another client, built in a later course</span><span class="ar"><bdi dir="ltr">client</bdi> تاني، هيتعمل في مادة بعدين</span></div></div>
+    <div class="arr a5 dashed" data-node="a5"><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 10h32m-6-6 6 6-6 6" fill="none" stroke="#58636e" stroke-width="2"/></svg><span class="en">same SQL</span><span class="ar">نفس الـ <bdi dir="ltr">SQL</bdi></span></div>
+  </div>
+
+  <div class="story" id="archStory" aria-live="polite">
+    <p class="muted"><span class="en">Pick a situation above. The parts involved light up, and the steps appear here.</span><span class="ar">اختار موقف من فوق. الأجزاء اللي ليها دعوة هتنوّر، والخطوات هتظهر هنا.</span></p>
+  </div>
+  <div id="archSteps" hidden>
+    <div data-st="run"><b><span class="en">Run a SELECT</span><span class="ar">تشغيل <bdi dir="ltr">SELECT</bdi></span></b><ol>
+      <li><span class="en">You type a <code>SELECT</code> in SSMS and press Execute.</span><span class="ar">بتكتب <code>SELECT</code> في <bdi dir="ltr">SSMS</bdi> وتدوس <bdi dir="ltr">Execute</bdi>.</span></li>
+      <li><span class="en">SSMS sends the SQL text to SQL Server. SSMS itself does not search any data.</span><span class="ar"><bdi dir="ltr">SSMS</bdi> بيبعت نص الـ <bdi dir="ltr">SQL</bdi> لـ <bdi dir="ltr">SQL Server</bdi>. <bdi dir="ltr">SSMS</bdi> نفسه مش بيدوّر في أي بيانات.</span></li>
+      <li><span class="en">SQL Server reads the rows of <code>BookCopies</code> from the database Database1Lab01.</span><span class="ar"><bdi dir="ltr">SQL Server</bdi> بيقرا صفوف <code>BookCopies</code> من الـ <bdi dir="ltr">database</bdi> اللي اسمها <bdi dir="ltr">Database1Lab01</bdi>.</span></li>
+      <li><span class="en">The matching rows travel back, and SSMS draws them in its Results grid.</span><span class="ar">الصفوف اللي طلعت بترجع، و<bdi dir="ltr">SSMS</bdi> بيرسمها في الـ <bdi dir="ltr">Results grid</bdi> بتاعه.</span></li></ol></div>
+    <div data-st="close"><b><span class="en">Close SSMS</span><span class="ar">قفل <bdi dir="ltr">SSMS</bdi></span></b><ol>
+      <li><span class="en">The SSMS window closes; its Results grid is gone.</span><span class="ar">شباك <bdi dir="ltr">SSMS</bdi> بيتقفل، والـ <bdi dir="ltr">Results grid</bdi> بتاعه بيختفي.</span></li>
+      <li><span class="en">SQL Server is a separate program. It keeps running as a Windows service.</span><span class="ar"><bdi dir="ltr">SQL Server</bdi> برنامج منفصل، وبيفضل شغال كـ <bdi dir="ltr">Windows service</bdi>.</span></li>
+      <li><span class="en">Saved (committed) rows stay in the database files. Open SSMS tomorrow and query them again.</span><span class="ar">الصفوف اللي اتحفظت (<bdi dir="ltr">committed</bdi>) بتفضل في الـ <bdi dir="ltr">database files</bdi>. افتح <bdi dir="ltr">SSMS</bdi> بكرة واسألها تاني.</span></li></ol></div>
+    <div data-st="save"><b><span class="en">Save the .sql file</span><span class="ar">تسييف الـ <bdi dir="ltr">file</bdi> بتاع .<bdi dir="ltr">sql</bdi></span></b><ol>
+      <li><span class="en"><kbd>Ctrl</kbd>+<kbd>S</kbd> writes the text in the editor to a <code>.sql</code> file.</span><span class="ar"><kbd>Ctrl</kbd>+<kbd>S</kbd> بيكتب النص اللي في الـ <bdi dir="ltr">editor</bdi> في <bdi dir="ltr">file</bdi> امتداده <code>.sql</code>.</span></li>
+      <li><span class="en">Nothing in the database changes. The engine is not even asked.</span><span class="ar">مفيش أي حاجة في الـ <bdi dir="ltr">database</bdi> بتتغير. الـ <bdi dir="ltr">engine</bdi> أصلًا ما حدش سأله.</span></li>
+      <li><span class="en">A <code>.sql</code> file is a recipe, not a backup. Deleting it does not delete a single row.</span><span class="ar">الـ <code>.sql</code> <bdi dir="ltr">file</bdi> ده وصفة، مش <bdi dir="ltr">backup</bdi>. لو مسحته مش هيتمسح ولا صف.</span></li></ol></div>
+    <div data-st="app"><b><span class="en">A future desk app asks</span><span class="ar"><bdi dir="ltr">app</bdi> للمكتب بعدين بيسأل</span></b><ol>
+      <li><span class="en">Later, staff could click a button in a desk app instead of typing SQL.</span><span class="ar">بعدين، الموظفين ممكن يدوسوا زرار في <bdi dir="ltr">app</bdi> للمكتب بدل ما يكتبوا <bdi dir="ltr">SQL</bdi>.</span></li>
+      <li><span class="en">The app is just another client: it sends SQL to the same engine, the way SSMS does.</span><span class="ar">الـ <bdi dir="ltr">app</bdi> ده <bdi dir="ltr">client</bdi> تاني وبس: بيبعت <bdi dir="ltr">SQL</bdi> لنفس الـ <bdi dir="ltr">engine</bdi>، زي ما <bdi dir="ltr">SSMS</bdi> بيعمل بالظبط.</span></li>
+      <li><span class="en">Today we skip the app and ask the database directly. That is enough to learn how the data is designed and queried.</span><span class="ar">النهارده هنسيب الـ <bdi dir="ltr">app</bdi> ونسأل الـ <bdi dir="ltr">database</bdi> على طول. ده كفاية عشان نتعلم البيانات بتتصمم وبتتسأل إزاي.</span></li></ol></div>
+  </div>
+
+  <h3><span class="no">3.1</span><span class="en">Five names, five different things</span><span class="ar">خمس أسامي، خمس حاجات مختلفة</span></h3>
+  <p><span class="en">Tap a name: its part of the drawing lights up.</span><span class="ar">دوس على اسم، وجزؤه في الرسمة هينوّر.</span></p>
+  <div class="terms" id="terms" role="group" aria-label="Terms" data-label-ar="المصطلحات">
+    <button type="button" data-term="db" aria-pressed="false">Database</button>
+    <button type="button" data-term="dbms" aria-pressed="false">DBMS</button>
+    <button type="button" data-term="sql" aria-pressed="false">SQL</button>
+    <button type="button" data-term="tsql" aria-pressed="false">T-SQL</button>
+    <button type="button" data-term="ssms" aria-pressed="false">SSMS</button>
+  </div>
+  <div class="story termdef" id="termDef" aria-live="polite"><p class="muted"><span class="en">No name selected yet.</span><span class="ar">لسه ما اخترتش اسم.</span></p></div>
+  <div id="termTexts" hidden>
+    <div data-tt="db"><span class="en"><b>Database</b>: organized data that a DBMS keeps for you. Here: the database Database1Lab01, with its table <code>BookCopies</code> and its rows.</span><span class="ar"><b><bdi dir="ltr">Database</bdi></b>: بيانات متنظمة الـ <bdi dir="ltr">DBMS</bdi> بيحتفظ بيها عشانك. هنا: الـ <bdi dir="ltr">database</bdi> اللي اسمها <bdi dir="ltr">Database1Lab01</bdi>، وفيها الـ <bdi dir="ltr">table</bdi> <code>BookCopies</code> وصفوفه.</span></div>
+    <div data-tt="dbms"><span class="en"><b>DBMS</b> (database management system): the software that stores the data, checks the rules you declared, lets many users share it, and answers queries. Ours is SQL Server.</span><span class="ar"><b><bdi dir="ltr">DBMS</bdi></b> (<bdi dir="ltr">database management system</bdi>): السوفتوير اللي بيخزّن البيانات، ويراجع القواعد اللي إنت أعلنتها، ويخلّي ناس كتير تشتغل عليها، ويرد على الـ <bdi dir="ltr">queries</bdi>. عندنا هو <bdi dir="ltr">SQL Server</bdi>.</span></div>
+    <div data-tt="sql"><span class="en"><b>SQL</b>: the language you send to the DBMS to ask questions and change data. It is not a program you install and not a place where data lives.</span><span class="ar"><b><bdi dir="ltr">SQL</bdi></b>: اللغة اللي بتبعتها للـ <bdi dir="ltr">DBMS</bdi> عشان تسأل أسئلة وتغيّر بيانات. مش برنامج بتنزّله، ومش مكان البيانات عايشة فيه.</span></div>
+    <div data-tt="tsql"><span class="en"><b>T-SQL</b> (Transact-SQL): SQL Server's dialect of SQL, standard SQL plus Microsoft's additions. Everything you type today is T-SQL.</span><span class="ar"><b><bdi dir="ltr">T-SQL</bdi></b> (<bdi dir="ltr">Transact-SQL</bdi>): اللهجة بتاعة <bdi dir="ltr">SQL Server</bdi> من <bdi dir="ltr">SQL</bdi>، يعني <bdi dir="ltr">SQL</bdi> العادي وزيادات من <bdi dir="ltr">Microsoft</bdi>. كل اللي هتكتبه النهارده <bdi dir="ltr">T-SQL</bdi>.</span></div>
+    <div data-tt="ssms"><span class="en"><b>SSMS</b> (SQL Server Management Studio): a client window for typing SQL and reading results. Closing it does not stop or delete the database.</span><span class="ar"><b><bdi dir="ltr">SSMS</bdi></b> (<bdi dir="ltr">SQL Server Management Studio</bdi>): شباك <bdi dir="ltr">client</bdi> بتكتب فيه <bdi dir="ltr">SQL</bdi> وتقرا النتايج. لو قفلته مش بيوقّف الـ <bdi dir="ltr">database</bdi> ولا بيمسحها.</span></div>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <div class="qh"><span class="en">Check yourself</span><span class="ar">اختبر نفسك</span></div>
+    <p class="q"><span class="en">Which one actually holds the six rows of <code>BookCopies</code>?</span><span class="ar">مين فيهم اللي فعلًا شايل الست صفوف بتوع <code>BookCopies</code>؟</span></p>
+    <div class="opts">
+      <button type="button" data-opt="a"><span class="en">SSMS</span><span class="ar"><bdi dir="ltr">SSMS</bdi></span></button>
+      <button type="button" data-opt="b"><span class="en">The database Database1Lab01, kept by SQL Server in its data files</span><span class="ar">الـ <bdi dir="ltr">database</bdi> اللي اسمها <bdi dir="ltr">Database1Lab01</bdi>، اللي <bdi dir="ltr">SQL Server</bdi> محتفظ بيها في الـ <bdi dir="ltr">data files</bdi> بتاعته</span></button>
+      <button type="button" data-opt="c"><span class="en">The file 01-first-queries.sql</span><span class="ar">الـ <bdi dir="ltr">file</bdi> اللي اسمه <bdi dir="ltr">01-first-queries.sql</bdi></span></button>
+    </div>
+    <div class="fb" aria-live="polite">
+      <div data-fb="a" class="no" hidden><span class="en">SSMS only shows a copy of the answer in its grid. Close it and the rows are still in the database.</span><span class="ar"><bdi dir="ltr">SSMS</bdi> بيعرض نسخة من الإجابة في الـ <bdi dir="ltr">grid</bdi> بتاعه وبس. اقفله والصفوف لسه في الـ <bdi dir="ltr">database</bdi>.</span></div>
+      <div data-fb="b" class="yes" hidden><span class="en">Yes. The rows are in the database; SQL Server manages it and stores it in its data files on disk.</span><span class="ar">أيوه. الصفوف في الـ <bdi dir="ltr">database</bdi>، و<bdi dir="ltr">SQL Server</bdi> هو اللي بيديرها وبيخزّنها في الـ <bdi dir="ltr">data files</bdi> على الهارد.</span></div>
+      <div data-fb="c" class="no" hidden><span class="en">The .sql file holds the text of questions, not the data. You can delete it and every row stays.</span><span class="ar">الـ .<bdi dir="ltr">sql file</bdi> فيه نص الأسئلة، مش البيانات. ممكن تمسحه وكل الصفوف تفضل زي ما هي.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== 4 -->
+<section class="ch" id="ch4" data-short-en="Design before SQL" data-short-ar="التصميم قبل الـ SQL" hidden>
+  <div class="kicker"><span class="en">Chapter 4 of 9</span><span class="ar">الجزء <bdi dir="ltr">4</bdi> من <bdi dir="ltr">9</bdi></span></div>
+  <h2 tabindex="-1"><span class="en">Design before syntax</span><span class="ar">التصميم قبل الـ <bdi dir="ltr">syntax</bdi></span></h2>
+  <div class="goal"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#0d6767" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="#0d6767"/></svg>
+    <div><span class="en">After this chapter you can say what one row means, which column identifies it, which type fits each column, and what a PRIMARY KEY does and does not promise.</span><span class="ar">في آخر الجزء ده هتقدر تقول الـ <bdi dir="ltr">row</bdi> الواحد معناه إيه، وأنهي <bdi dir="ltr">column</bdi> بيميّزه، وكل <bdi dir="ltr">column</bdi> يناسبه أنهي <bdi dir="ltr">type</bdi>، والـ <bdi dir="ltr">PRIMARY KEY</bdi> بيضمن إيه وما بيضمنش إيه.</span></div></div>
+
+  <h3><span class="no">4.1</span><span class="en">From card 101 to row 101</span><span class="ar">من كارت <bdi dir="ltr">101</bdi> لـ <bdi dir="ltr">row 101</bdi></span></h3>
+  <p><span class="en">Every printed field on the card becomes a column. Tap a field on the card to find its column and its type.</span><span class="ar">كل خانة مطبوعة على الكارت بتبقى <bdi dir="ltr">column</bdi>. دوس على أي خانة في الكارت عشان تلاقي الـ <bdi dir="ltr">column</bdi> بتاعها والـ <bdi dir="ltr">type</bdi> بتاعه.</span></p>
+  <div class="link">
+    <div class="bigcard" id="bigCard" role="group" aria-label="Card 101" data-label-ar="كارت 101">
+      <button type="button" class="f stk" data-col="CopyId" aria-pressed="false"><small><span class="en">sticker number</span><span class="ar">رقم الاستيكر</span></small><span>101</span></button>
+      <button type="button" class="f ttl" data-col="Title" aria-pressed="false"><small><span class="en">title</span><span class="ar">اسم الكتاب</span></small><span>Python Basics</span></button>
+      <button type="button" class="f" data-col="Category" aria-pressed="false"><small><span class="en">subject</span><span class="ar">المجال</span></small><span>Computing</span></button>
+      <button type="button" class="f" data-col="Shelf" aria-pressed="false"><small><span class="en">home shelf</span><span class="ar">الرف الأصلي</span></small><span>A1</span></button>
+      <button type="button" class="f" data-col="IsAvailable" aria-pressed="false"><small><span class="en">status now</span><span class="ar">حالتها دلوقتي</span></small><span><span class="en">on the shelf</span><span class="ar">على الرف</span></span></button>
+    </div>
+    <div>
+      <div class="gridwrap" tabindex="0" id="linkGrid"></div>
+      <div class="story typeread" id="typeRead" aria-live="polite"><p class="muted"><span class="en">Tap a field on the card.</span><span class="ar">دوس على خانة في الكارت.</span></p></div>
+    </div>
+  </div>
+  <div id="typeTexts" hidden>
+    <div data-tt="CopyId"><p><span class="col">CopyId INT PRIMARY KEY</span></p><span class="en">A whole number (<code>INT</code>). It is the sticker: every copy gets its own number, and the table refuses a second row with the same one.</span><span class="ar">رقم صحيح (<code>INT</code>). ده الاستيكر: كل نسخة ليها رقمها، والـ <bdi dir="ltr">table</bdi> بيرفض أي <bdi dir="ltr">row</bdi> تاني بنفس الرقم.</span></div>
+    <div data-tt="Title"><p><span class="col">Title NVARCHAR(100) NOT NULL</span></p><span class="en">Text, up to 100 characters. <code>NVARCHAR</code> stores Unicode text, so an Arabic title fits as well as an English one. <code>NOT NULL</code>: every copy must have a title. Titles may repeat.</span><span class="ar">نص، لحد <bdi dir="ltr">100</bdi> حرف. <code>NVARCHAR</code> بيخزّن نص <bdi dir="ltr">Unicode</bdi>، فاسم كتاب بالعربي ينفع زي الإنجليزي بالظبط. <code>NOT NULL</code>: كل نسخة لازم يبقى ليها اسم. والأسامي ممكن تتكرر عادي.</span></div>
+    <div data-tt="Category"><p><span class="col">Category NVARCHAR(40) NOT NULL</span></p><span class="en">Shorter text, up to 40 characters: a subject such as Computing.</span><span class="ar">نص أقصر، لحد <bdi dir="ltr">40</bdi> حرف: مجال زي <bdi dir="ltr">Computing</bdi>.</span></div>
+    <div data-tt="Shelf"><p><span class="col">Shelf NVARCHAR(10) NOT NULL</span></p><span class="en">A code like A1 mixes a letter and a digit, so it is text, not a number. It is the copy's home shelf and stays the same while the copy is lent out.</span><span class="ar">كود زي <bdi dir="ltr">A1</bdi> فيه حرف ورقم، يبقى نص مش رقم. ده الرف الأصلي للنسخة، وبيفضل زي ما هو وهي متسلّفة.</span></div>
+    <div data-tt="IsAvailable"><p><span class="col">IsAvailable BIT NOT NULL</span></p><span class="en"><code>BIT</code> holds 1 or 0. Here 1 means "on the shelf right now" and 0 means "lent out". It says nothing about who has the copy or since when.</span><span class="ar"><code>BIT</code> بيشيل <bdi dir="ltr">1</bdi> أو <bdi dir="ltr">0</bdi>. هنا <bdi dir="ltr">1</bdi> معناها "على الرف دلوقتي" و<bdi dir="ltr">0</bdi> معناها "متسلّفة". ما بيقولش أي حاجة عن مين واخدها ولا من إمتى.</span></div>
+  </div>
+
+  <h3><span class="no">4.2</span><span class="en">Two design decisions</span><span class="ar">قرارين في التصميم</span></h3>
+  <div class="quiz" data-quiz>
+    <div class="qh"><span class="en">Decide 1</span><span class="ar">قرار <bdi dir="ltr">1</bdi></span></div>
+    <p class="q"><span class="en">What should one row of this table describe?</span><span class="ar">الـ <bdi dir="ltr">row</bdi> الواحد في الـ <bdi dir="ltr">table</bdi> ده المفروض يوصف إيه؟</span></p>
+    <div class="opts">
+      <button type="button" data-opt="a"><span class="en">A title, such as Python Basics</span><span class="ar">اسم كتاب، زي <bdi dir="ltr">Python Basics</bdi></span></button>
+      <button type="button" data-opt="b"><span class="en">One physical copy</span><span class="ar">نسخة فعلية واحدة</span></button>
+      <button type="button" data-opt="c"><span class="en">A shelf, such as A1</span><span class="ar">رف، زي <bdi dir="ltr">A1</bdi></span></button>
+      <button type="button" data-opt="d"><span class="en">A loan: who borrowed what</span><span class="ar">استعارة: مين استلف إيه</span></button>
+    </div>
+    <div class="fb" aria-live="polite">
+      <div data-fb="a" class="no" hidden><span class="en">Then Python Basics would be one row, and you could not say that 101 is on the shelf while 102 is out. Availability belongs to a copy, not to a title.</span><span class="ar">ساعتها <bdi dir="ltr">Python Basics</bdi> هيبقى <bdi dir="ltr">row</bdi> واحد، ومش هتقدر تقول إن <bdi dir="ltr">101</bdi> على الرف و<bdi dir="ltr">102</bdi> متسلّفة. الحالة دي بتاعة النسخة، مش بتاعة اسم الكتاب.</span></div>
+      <div data-fb="b" class="yes" hidden><span class="en">One row = one physical copy. That is why Python Basics appears on two rows, and why each row still needs its own number.</span><span class="ar"><bdi dir="ltr">row</bdi> واحد = نسخة فعلية واحدة. عشان كده <bdi dir="ltr">Python Basics</bdi> ظاهر في صفّين، وعشان كده كل <bdi dir="ltr">row</bdi> لسه محتاج رقم خاص بيه.</span></div>
+      <div data-fb="c" class="no" hidden><span class="en">Shelf A1 holds two copies. One row per shelf could not say which of them is out.</span><span class="ar">رف <bdi dir="ltr">A1</bdi> عليه نسختين. لو <bdi dir="ltr">row</bdi> لكل رف مش هتعرف مين فيهم المتسلّفة.</span></div>
+      <div data-fb="d" class="no" hidden><span class="en">There is no borrower and no date in this table. Loans are a different thing and will get their own table later in the course.</span><span class="ar">مفيش في الـ <bdi dir="ltr">table</bdi> ده اسم حد استلف ولا تاريخ. الاستعارة حاجة تانية، وهيبقى ليها <bdi dir="ltr">table</bdi> لوحدها بعدين في المادة.</span></div>
+    </div>
+  </div>
+  <div class="quiz" data-quiz>
+    <div class="qh"><span class="en">Decide 2</span><span class="ar">قرار <bdi dir="ltr">2</bdi></span></div>
+    <p class="q"><span class="en">Which value can tell any two copies apart, now and later?</span><span class="ar">أنهي قيمة تقدر تفرّق بين أي نسختين، دلوقتي وبعدين؟</span></p>
+    <div class="opts">
+      <button type="button" data-opt="a"><span class="en">Title</span><span class="ar"><bdi dir="ltr">Title</bdi></span></button>
+      <button type="button" data-opt="b"><span class="en">Shelf</span><span class="ar"><bdi dir="ltr">Shelf</bdi></span></button>
+      <button type="button" data-opt="c"><span class="en">CopyId</span><span class="ar"><bdi dir="ltr">CopyId</bdi></span></button>
+      <button type="button" data-opt="d"><span class="en">The row's position in the result grid (1st, 2nd, …)</span><span class="ar">مكان الـ <bdi dir="ltr">row</bdi> في الـ <bdi dir="ltr">result grid</bdi> (الأول، التاني، …)</span></button>
+    </div>
+    <div class="fb" aria-live="polite">
+      <div data-fb="a" class="no" hidden><span class="en">Title repeats: 101 and 102 are both Python Basics.</span><span class="ar">الـ <bdi dir="ltr">Title</bdi> بيتكرر: <bdi dir="ltr">101</bdi> و<bdi dir="ltr">102</bdi> الاتنين <bdi dir="ltr">Python Basics</bdi>.</span></div>
+      <div data-fb="b" class="no" hidden><span class="en">Shelf repeats: A1 is home to both 101 and 102.</span><span class="ar">الـ <bdi dir="ltr">Shelf</bdi> بيتكرر: <bdi dir="ltr">A1</bdi> هو الرف الأصلي لـ <bdi dir="ltr">101</bdi> و<bdi dir="ltr">102</bdi> مع بعض.</span></div>
+      <div data-fb="c" class="yes" hidden><span class="en">The sticker number is given to one copy and never reused for another. That is exactly what a key needs. Note: 101 is a label, not "the 101st row".</span><span class="ar">رقم الاستيكر بيتدّى لنسخة واحدة وعمره ما بيتعاد لنسخة تانية. وده بالظبط اللي الـ <bdi dir="ltr">key</bdi> محتاجه. وخد بالك: <bdi dir="ltr">101</bdi> ده اسم، مش "الـ <bdi dir="ltr">row</bdi> رقم <bdi dir="ltr">101</bdi>".</span></div>
+      <div data-fb="d" class="no" hidden><span class="en">Position depends on the query. Sort by Title and copy 105 comes first. CopyId stays 101 whatever the order.</span><span class="ar">المكان بيتغير حسب الـ <bdi dir="ltr">query</bdi>. رتّب بالـ <bdi dir="ltr">Title</bdi> والنسخة <bdi dir="ltr">105</bdi> هتطلع الأولى. أما الـ <bdi dir="ltr">CopyId</bdi> فهيفضل <bdi dir="ltr">101</bdi> مهما كان الترتيب.</span></div>
+    </div>
+  </div>
+
+  <h3><span class="no">4.3</span><span class="en">Schema and rows: the form and the filled cards</span><span class="ar">الـ <bdi dir="ltr">schema</bdi> والـ <bdi dir="ltr">rows</bdi>: الفورمة والكروت المتملية</span></h3>
+  <div class="two">
+    <div class="card">
+      <b><span class="en">Schema: the shape, made once</span><span class="ar">الـ <bdi dir="ltr">schema</bdi>: الشكل، بيتعمل مرة واحدة</span></b>
+      <p class="small muted"><span class="en">Like printing a blank card design. Nothing about any copy yet.</span><span class="ar">زي ما تطبع تصميم كارت فاضي. لسه مفيش أي معلومة عن أي نسخة.</span></p>
+<pre class="code sql">CREATE TABLE BookCopies (
+    CopyId      INT            PRIMARY KEY,
+    Title       NVARCHAR(100)  NOT NULL,
+    Category    NVARCHAR(40)   NOT NULL,
+    Shelf       NVARCHAR(10)   NOT NULL,
+    IsAvailable BIT            NOT NULL
+);</pre>
+      <div class="blank"><div><span>CopyId</span><span>____</span></div><div><span>Title</span><span>__________</span></div><div><span>Category</span><span>______</span></div><div><span>Shelf</span><span>__</span></div><div><span>IsAvailable</span><span>_</span></div></div>
+    </div>
+    <div class="card">
+      <b><span class="en">Rows: the facts, added and read</span><span class="ar">الـ <bdi dir="ltr">rows</bdi>: المعلومات، بتتضاف وبتتقرا</span></b>
+      <p class="small muted"><span class="en">Filled cards. Rows are added with <code>INSERT</code> and read with <code>SELECT</code>.</span><span class="ar">كروت متملية. الصفوف بتتضاف بـ <code>INSERT</code> وبتتقرا بـ <code>SELECT</code>.</span></p>
+      <div class="gridwrap" tabindex="0" data-grid data-cols="CopyId,Title,Category,Shelf,IsAvailable" data-ids="101,102,103,104,105,106"></div>
+      <p class="small"><span class="en">Your teacher already created this table and added these six rows on your PC before the lab. You will write your own <code>CREATE TABLE</code> in chapter 8.</span><span class="ar">المدرّس عمل الـ <bdi dir="ltr">table</bdi> ده وضاف الست صفوف دول على جهازك قبل الـ <bdi dir="ltr">lab</bdi>. إنت هتكتب <code>CREATE TABLE</code> بتاعك في الجزء <bdi dir="ltr">8</bdi>.</span></p>
+    </div>
+  </div>
+
+  <h3><span class="no">4.4</span><span class="en">What the PRIMARY KEY promises, and what it does not</span><span class="ar">الـ <bdi dir="ltr">PRIMARY KEY</bdi> بيضمن إيه، وما بيضمنش إيه</span></h3>
+  <ul class="pk">
+    <li><span class="y" aria-hidden="true">✓</span><span><span class="en">No two rows can have the same CopyId. SQL Server refuses the second one.</span><span class="ar">مينفعش صفّين يبقى ليهم نفس الـ <bdi dir="ltr">CopyId</bdi>. <bdi dir="ltr">SQL Server</bdi> بيرفض التاني.</span></span></li>
+    <li><span class="y" aria-hidden="true">✓</span><span><span class="en">CopyId can never be empty (<code>NULL</code>).</span><span class="ar">الـ <bdi dir="ltr">CopyId</bdi> عمره ما يبقى فاضي (<code>NULL</code>).</span></span></li>
+    <li><span class="x" aria-hidden="true">✕</span><span><span class="en">It does not know whether copy 101 really stands on A1. A wrong but unique number, or a wrong shelf, is accepted. The database stores what people tell it.</span><span class="ar">ما يعرفش إذا كانت النسخة <bdi dir="ltr">101</bdi> فعلًا على <bdi dir="ltr">A1</bdi>. رقم غلط بس مش متكرر، أو رف غلط، هيتقبل عادي. الـ <bdi dir="ltr">database</bdi> بتخزّن اللي الناس بتقوله لها.</span></span></li>
+    <li><span class="x" aria-hidden="true">✕</span><span><span class="en">It is not automatic. Only what you declare is checked: Title has no such rule, so titles may repeat, on purpose.</span><span class="ar">مش بيحصل لوحده. اللي إنت بتعلنه بس هو اللي بيتراجع: الـ <bdi dir="ltr">Title</bdi> مالوش القاعدة دي، فالأسامي ممكن تتكرر، وده مقصود.</span></span></li>
+  </ul>
+  <div class="callout"><b class="h"><span class="en">NOT NULL means "a value must be there"</span><span class="ar"><bdi dir="ltr">NOT NULL</bdi> معناها "لازم يبقى فيه قيمة"</span></b>
+    <span class="en"><code>NULL</code> means "no value / unknown". An empty text <code>N''</code> is a value: zero characters, but present. So <code>NOT NULL</code> alone does not stop an empty title.</span><span class="ar"><code>NULL</code> معناها "مفيش قيمة / مش معروف". النص الفاضي <code>N''</code> ده قيمة: صفر حروف، بس موجود. فـ <code>NOT NULL</code> لوحدها مش بتمنع اسم كتاب فاضي.</span></div>
+
+  <div class="quiz" data-quiz>
+    <div class="qh"><span class="en">Check yourself</span><span class="ar">اختبر نفسك</span></div>
+    <p class="q"><span class="en">A staff member adds a new copy as 107 with Shelf A2, but the book is really on B1. What does SQL Server do?</span><span class="ar">موظف ضاف نسخة جديدة رقمها <bdi dir="ltr">107</bdi> وكتب <bdi dir="ltr">Shelf A2</bdi>، بس الكتاب في الحقيقة على <bdi dir="ltr">B1</bdi>. <bdi dir="ltr">SQL Server</bdi> هيعمل إيه؟</span></p>
+    <div class="opts">
+      <button type="button" data-opt="a"><span class="en">Rejects the row: wrong shelf.</span><span class="ar">يرفض الـ <bdi dir="ltr">row</bdi>: الرف غلط.</span></button>
+      <button type="button" data-opt="b"><span class="en">Accepts the row.</span><span class="ar">يقبل الـ <bdi dir="ltr">row</bdi>.</span></button>
+      <button type="button" data-opt="c"><span class="en">Changes the shelf to B1 by itself.</span><span class="ar">يغيّر الرف لـ <bdi dir="ltr">B1</bdi> لوحده.</span></button>
+    </div>
+    <div class="fb" aria-live="polite">
+      <div data-fb="a" class="no" hidden><span class="en">No declared rule says where a book really is. SQL Server cannot see the shelves.</span><span class="ar">مفيش قاعدة معلنة بتقول الكتاب فين في الحقيقة. <bdi dir="ltr">SQL Server</bdi> مش شايف الرفوف.</span></div>
+      <div data-fb="b" class="yes" hidden><span class="en">107 is new and every column has a value of the right type, so the row passes every declared rule. Correctness of facts is the people's job.</span><span class="ar"><bdi dir="ltr">107</bdi> رقم جديد، وكل <bdi dir="ltr">column</bdi> فيه قيمة من الـ <bdi dir="ltr">type</bdi> الصح، فالـ <bdi dir="ltr">row</bdi> عدّى كل القواعد المعلنة. صحة المعلومات دي مسؤولية البني آدمين.</span></div>
+      <div data-fb="c" class="no" hidden><span class="en">SQL Server never invents data. It stores what it is told, if the declared rules allow it.</span><span class="ar"><bdi dir="ltr">SQL Server</bdi> عمره ما بيألّف بيانات. بيخزّن اللي اتقال له، طالما القواعد المعلنة بتسمح.</span></div>
+    </div>
+  </div>
+  <div class="quiz" data-quiz>
+    <div class="qh"><span class="en">Check yourself</span><span class="ar">اختبر نفسك</span></div>
+    <p class="q"><span class="en">Can a row in this table have <code>Title = N''</code> (empty text)?</span><span class="ar">ينفع <bdi dir="ltr">row</bdi> في الـ <bdi dir="ltr">table</bdi> ده يبقى فيه <code>Title = N''</code> (نص فاضي)؟</span></p>
+    <div class="opts">
+      <button type="button" data-opt="a"><span class="en">Yes</span><span class="ar">أيوه</span></button>
+      <button type="button" data-opt="b"><span class="en">No, NOT NULL forbids it</span><span class="ar">لأ، <bdi dir="ltr">NOT NULL</bdi> بتمنعه</span></button>
+    </div>
+    <div class="fb" aria-live="polite">
+      <div data-fb="a" class="yes" hidden><span class="en">Yes. Empty text is a value, so NOT NULL is satisfied. Blocking empty titles would need another rule, which is a later topic.</span><span class="ar">أيوه. النص الفاضي قيمة، فـ <bdi dir="ltr">NOT NULL</bdi> متحققة. لو عايز تمنع الأسامي الفاضية محتاج قاعدة تانية، ودي حاجة هناخدها بعدين.</span></div>
+      <div data-fb="b" class="no" hidden><span class="en">NOT NULL forbids a missing value (NULL). <code>N''</code> is present, just zero characters long, so it is allowed.</span><span class="ar"><bdi dir="ltr">NOT NULL</bdi> بتمنع إن القيمة تبقى مش موجودة (<bdi dir="ltr">NULL</bdi>). <code>N''</code> موجودة، بس طولها صفر حروف، فمسموحة.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== 5 -->
+<section class="ch" id="ch5" data-short-en="Ask in SSMS" data-short-ar="اسأل من SSMS" hidden>
+  <div class="kicker"><span class="en">Chapter 5 of 9</span><span class="ar">الجزء <bdi dir="ltr">5</bdi> من <bdi dir="ltr">9</bdi></span></div>
+  <h2 tabindex="-1"><span class="en">Ask SQL Server, for real, in SSMS</span><span class="ar">اسأل <bdi dir="ltr">SQL Server</bdi> بجد من <bdi dir="ltr">SSMS</bdi></span></h2>
+  <div class="goal"><div><span class="en"><b>On a Mac, or no SSMS?</b> <a href="playground.html" target="db1-sql-playground">Open the SQL playground</a>. The six rows are ready. Type your queries and press Run or Cmd/Ctrl + Enter. It runs offline in the browser using a limited SQLite-based practice engine; SQL Server details can differ.</span><span class="ar"><b>على الماك أو معندكش <bdi dir="ltr">SSMS</bdi>؟</b> <a href="playground.html" target="db1-sql-playground">افتح محاكي <bdi dir="ltr">SQL</bdi></a>. الصفوف الستة جاهزة. اكتب الاستعلام واضغط تشغيل أو <bdi dir="ltr">Cmd/Ctrl + Enter</bdi>. بيشتغل من غير إنترنت بمحرك تدريب مبني على <bdi dir="ltr">SQLite</bdi>؛ بعض تفاصيل <bdi dir="ltr">SQL Server</bdi> بتختلف.</span></div></div>
+
+  <div class="goal"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#0d6767" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="#0d6767"/></svg>
+    <div><span class="en">After this chapter you can connect, open a .sql file, run one statement, and turn the desk question into a SELECT clause by clause.</span><span class="ar">في آخر الجزء ده هتقدر تعمل <bdi dir="ltr">connect</bdi>، وتفتح .<bdi dir="ltr">sql file</bdi>، وتشغّل <bdi dir="ltr">statement</bdi> واحد، وتحوّل سؤال المكتب لـ <bdi dir="ltr">SELECT</bdi> حتة حتة.</span></div></div>
+  <p><span class="tag real">▶ <span class="en">Windows lab route: run SQL Server queries in SSMS</span><span class="ar">مسار أجهزة <bdi dir="ltr">Windows</bdi> في المعمل: شغّل استعلامات <bdi dir="ltr">SQL Server</bdi> من <bdi dir="ltr">SSMS</bdi></span></span></p>
+
+  <h3><span class="no">5.1</span><span class="en">Connect</span><span class="ar">اعمل <bdi dir="ltr">connect</bdi></span></h3>
+  <div class="row">
+    <ol class="ladder" style="flex:1 1 380px">
+      <li data-n="1"><span class="en">Open <b>SQL Server Management Studio</b> from the Start menu.</span><span class="ar">افتح <b><bdi dir="ltr">SQL Server Management Studio</bdi></b> من الـ <bdi dir="ltr">Start menu</bdi>.</span></li>
+      <li data-n="2"><span class="en">The <b>Connect to Server</b> window opens. If it does not: <b>Object Explorer</b> &gt; <b>Connect</b> &gt; <b>Database Engine</b>.</span><span class="ar">هيفتح شباك <b><bdi dir="ltr">Connect to Server</bdi></b>. لو ما فتحش: <b><bdi dir="ltr">Object Explorer</bdi></b> ثم <b><bdi dir="ltr">Connect</bdi></b> ثم <b><bdi dir="ltr">Database Engine</bdi></b>.</span></li>
+      <li data-n="3"><span class="en">Server type: <b>Database Engine</b>. Server name: <code>.\SQLEXPRESS</code> (the dot means "this PC", SQLEXPRESS is the instance name). Authentication: <b>Windows Authentication</b>.</span><span class="ar"><bdi dir="ltr">Server type</bdi>: <b><bdi dir="ltr">Database Engine</bdi></b>. <bdi dir="ltr">Server name</bdi>: <code>.\SQLEXPRESS</code> (النقطة معناها "الجهاز ده"، و<bdi dir="ltr">SQLEXPRESS</bdi> اسم الـ <bdi dir="ltr">instance</bdi>). <bdi dir="ltr">Authentication</bdi>: <b><bdi dir="ltr">Windows Authentication</bdi></b>.</span></li>
+      <li data-n="4"><span class="en">In SSMS 20, tick <b>Trust server certificate</b>. This is for the lab PC's own local server only. Older PCs with SSMS 17.9.1 may not show this box.</span><span class="ar">في <bdi dir="ltr">SSMS 20</bdi> علّم على <b><bdi dir="ltr">Trust server certificate</bdi></b>. ده عشان الـ <bdi dir="ltr">server</bdi> المحلي اللي على جهاز الـ <bdi dir="ltr">lab</bdi> بس. الأجهزة القديمة اللي عليها <bdi dir="ltr">SSMS 17.9.1</bdi> ممكن ما يظهرش فيها المربع ده.</span></li>
+      <li data-n="5"><span class="en">Press <b>Connect</b>. In Object Explorer expand <b>Databases</b> &gt; <b>Database1Lab01</b> &gt; <b>Tables</b>: you should see <code>BookCopies</code>.</span><span class="ar">دوس <b><bdi dir="ltr">Connect</bdi></b>. في الـ <bdi dir="ltr">Object Explorer</bdi> افتح <b><bdi dir="ltr">Databases</bdi></b> ثم <b><bdi dir="ltr">Database1Lab01</bdi></b> ثم <b><bdi dir="ltr">Tables</bdi></b>: المفروض تشوف <code>BookCopies</code>.</span></li>
+    </ol>
+    <div style="flex:1 1 320px">
+      <div class="sketch" role="img" aria-label="Sketch of the Connect to Server window with the values to use">
+        <div class="bar">Connect to Server</div>
+        <div class="body">
+          <span>Server type</span><span class="fld">Database Engine ▾</span>
+          <span>Server name</span><span class="fld hot">.\SQLEXPRESS</span>
+          <span>Authentication</span><span class="fld hot">Windows Authentication ▾</span>
+          <span>Encryption</span><span class="fld">Mandatory ▾</span>
+          <span class="chk"><span class="box">✓</span> Trust server certificate</span>
+          <span class="go">Connect</span>
+        </div>
+      </div>
+      <p class="capnote"><span class="en">A sketch drawn for this page, not a screenshot. Field names follow SSMS 20; your version may look a little different.</span><span class="ar">رسمة معمولة للصفحة دي، مش <bdi dir="ltr">screenshot</bdi>. أسامي الخانات زي <bdi dir="ltr">SSMS 20</bdi>، ونسختك ممكن تبان مختلفة شوية.</span></p>
+    </div>
+  </div>
+  <p class="small"><span class="en">If your teacher gives you a different server name, use that one. Plain <code>localhost</code> does not reach a named instance such as SQLEXPRESS.</span><span class="ar">لو المدرّس إدّاك اسم <bdi dir="ltr">server</bdi> تاني، استخدمه. <code>localhost</code> لوحدها مش بتوصل لـ <bdi dir="ltr">named instance</bdi> زي <bdi dir="ltr">SQLEXPRESS</bdi>.</span></p>
+
+  <h3><span class="no">5.2</span><span class="en">Open the file and run one statement</span><span class="ar">افتح الـ <bdi dir="ltr">file</bdi> وشغّل <bdi dir="ltr">statement</bdi> واحد</span></h3>
+  <div class="ssms" role="img" aria-label="Sketch of the SSMS window: toolbar, Object Explorer, query editor, Results and Messages tabs">
+    <div class="tb"><span class="tbb"><span class="mk">1</span>New Query</span><span class="tbb"><span class="mk">2</span>Database1Lab01 ▾</span><span class="tbb"><span class="mk">3</span>▶ Execute</span></div>
+    <div class="main">
+      <div class="oe"><span class="mk">4</span><b>Object Explorer</b><div>▾ .\SQLEXPRESS</div><div>&nbsp;&nbsp;▾ Databases</div><div>&nbsp;&nbsp;&nbsp;&nbsp;▾ Database1Lab01</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▾ Tables</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▸ BookCopies</div></div>
+      <div style="min-width:0">
+        <div class="ed"><span class="mk">5</span><span style="background:#cfe3ff">SELECT * FROM BookCopies ORDER BY CopyId;</span><br><span style="color:#888">SELECT CopyId, Title, Shelf FROM BookCopies …</span></div>
+        <div class="tabs"><span><span class="mk">6</span>Results</span><span class="dim">Messages</span></div>
+        <div class="res"><div class="gridwrap" tabindex="0" data-grid data-cols="CopyId,Title,Category,Shelf,IsAvailable" data-ids="101,102,103"></div><div class="rows-note">…</div></div>
+      </div>
+    </div>
+  </div>
+  <p class="capnote"><span class="en">A sketch of the SSMS layout, drawn for this page. Not a screenshot.</span><span class="ar">رسمة لشكل <bdi dir="ltr">SSMS</bdi> معمولة للصفحة دي. مش <bdi dir="ltr">screenshot</bdi>.</span></p>
+  <ul class="mklist">
+    <li><span class="mk">1</span><span><span class="en"><b>New Query</b> opens an empty editor tab. To open our file instead: <b>File</b> &gt; <b>Open</b> &gt; <b>File</b> (<kbd>Ctrl</kbd>+<kbd>O</kbd>) and choose <code>sql/01-first-queries.sql</code>.</span><span class="ar"><b><bdi dir="ltr">New Query</bdi></b> بيفتح <bdi dir="ltr">tab</bdi> فاضية. عشان تفتح الـ <bdi dir="ltr">file</bdi> بتاعنا: <b><bdi dir="ltr">File</bdi></b> ثم <b><bdi dir="ltr">Open</bdi></b> ثم <b><bdi dir="ltr">File</bdi></b> (<kbd>Ctrl</kbd>+<kbd>O</kbd>) واختار <code>sql/01-first-queries.sql</code>.</span></span></li>
+    <li><span class="mk">2</span><span><span class="en">The <b>database dropdown</b> must show <b>Database1Lab01</b>. If it shows <b>master</b>, pick Database1Lab01 there, or run <code>USE Database1Lab01;</code> once.</span><span class="ar">الـ <b><bdi dir="ltr">database dropdown</bdi></b> لازم يكون مكتوب فيه <b><bdi dir="ltr">Database1Lab01</bdi></b>. لو مكتوب <b><bdi dir="ltr">master</bdi></b>، اختار <bdi dir="ltr">Database1Lab01</bdi> منه، أو شغّل <code>USE Database1Lab01;</code> مرة واحدة.</span></span></li>
+    <li><span class="mk">3</span><span><span class="en">Select one whole statement with the mouse, then <b>Execute</b> (or <kbd>F5</kbd>). With nothing selected, SSMS runs <em>everything</em> in the editor.</span><span class="ar">علّم على <bdi dir="ltr">statement</bdi> واحد كامل بالماوس، وبعدين <b><bdi dir="ltr">Execute</bdi></b> (أو <kbd>F5</kbd>). لو مش معلّم على حاجة، <bdi dir="ltr">SSMS</bdi> هيشغّل <em>كل</em> اللي في الـ <bdi dir="ltr">editor</bdi>.</span></span></li>
+    <li><span class="mk">4</span><span><span class="en"><b>Object Explorer</b> shows what exists on the server. After you create something, right-click the folder and choose <b>Refresh</b>.</span><span class="ar"><b><bdi dir="ltr">Object Explorer</bdi></b> بيوريك الموجود على الـ <bdi dir="ltr">server</bdi>. بعد ما تعمل حاجة جديدة، كليك يمين على الفولدر واختار <b><bdi dir="ltr">Refresh</bdi></b>.</span></span></li>
+    <li><span class="mk">5</span><span><span class="en">The editor is plain text. Save it with <b>File</b> &gt; <b>Save</b> (<kbd>Ctrl</kbd>+<kbd>S</kbd>): that saves your SQL, not the data.</span><span class="ar">الـ <bdi dir="ltr">editor</bdi> ده نص عادي. سيّفه بـ <b><bdi dir="ltr">File</bdi></b> ثم <b><bdi dir="ltr">Save</bdi></b> (<kbd>Ctrl</kbd>+<kbd>S</kbd>): كده بتسيّف الـ <bdi dir="ltr">SQL</bdi> بتاعك، مش البيانات.</span></span></li>
+    <li><span class="mk">6</span><span><span class="en"><b>Results</b> shows the rows. <b>Messages</b> shows counts such as <code>(6 rows affected)</code> and errors in red. Check both.</span><span class="ar"><b><bdi dir="ltr">Results</bdi></b> بيعرض الصفوف. <b><bdi dir="ltr">Messages</bdi></b> بيعرض أعداد زي <code>(6 rows affected)</code> والأخطاء بالأحمر. بص على الاتنين.</span></span></li>
+  </ul>
+  <p class="small"><span class="en">You will see lines with only <code>GO</code> in our files. <code>GO</code> is not T-SQL: SSMS uses it to split the file into batches and never sends it to SQL Server.</span><span class="ar">هتلاقي في الـ <bdi dir="ltr">files</bdi> بتاعتنا سطور فيها <code>GO</code> بس. <code>GO</code> مش <bdi dir="ltr">T-SQL</bdi>: <bdi dir="ltr">SSMS</bdi> بيستخدمها عشان يقسّم الـ <bdi dir="ltr">file</bdi> لـ <bdi dir="ltr">batches</bdi>، وعمره ما بيبعتها لـ <bdi dir="ltr">SQL Server</bdi>.</span></p>
+
+  <h3><span class="no">5.3</span><span class="en">Turn the question into SQL, one clause at a time</span><span class="ar">حوّل السؤال لـ <bdi dir="ltr">SQL</bdi>، <bdi dir="ltr">clause</bdi> ورا <bdi dir="ltr">clause</bdi></span></h3>
+  <p><span class="en">Each step adds one piece. The underlined parts of the question turn green once the query answers them. Tap a part to see its clause.</span><span class="ar">كل خطوة بتزوّد حتة. الأجزاء اللي تحتها خط في السؤال بتخضرّ لما الـ <bdi dir="ltr">query</bdi> يجاوب عليها. دوس على أي جزء عشان تشوف الـ <bdi dir="ltr">clause</bdi> بتاعه.</span></p>
+  <p class="ask" id="ask"><span class="en">"Is there a <button type="button" data-ph="cat">Computing</button> book <button type="button" data-ph="avail">I can borrow right now</button>? <button type="button" data-ph="cols">Which copy, which shelf</button>?" <span class="muted small">(<button type="button" data-ph="from">the desk's copies</button>)</span></span><span class="ar">"فيه كتاب <button type="button" data-ph="cat"><bdi dir="ltr">Computing</bdi></button> <button type="button" data-ph="avail">أقدر أستلفه دلوقتي</button>؟ <button type="button" data-ph="cols">أنهي نسخة، وعلى أنهي رف</button>؟" <span class="muted small">(<button type="button" data-ph="from">نسخ المكتب</button>)</span></span></p>
+  <div class="vstep" id="qbDots" role="group" aria-label="Query steps" data-label-ar="خطوات الـ query"></div>
+  <div class="builder">
+    <div><pre class="code sql" id="qbCode"></pre><div id="qbWhy" class="story" aria-live="polite"></div></div>
+    <div><div class="gridwrap" tabindex="0" id="qbGrid"></div><div class="rows-note" id="qbCount"></div></div>
+  </div>
+  <div class="btns"><button class="btn" type="button" id="qbPrev"><span class="en">Previous step</span><span class="ar">الخطوة اللي فاتت</span></button><button class="btn primary" type="button" id="qbNext"><span class="en">Next step</span><span class="ar">الخطوة اللي بعدها</span></button></div>
+  <p class="small muted"><span class="en">The grids on this page show what SQL Server returns for these exact queries on the lab data. Run them yourself in SSMS: they are steps 1 to 4 in <code>01-first-queries.sql</code>.</span><span class="ar">الـ <bdi dir="ltr">grids</bdi> اللي في الصفحة دي بتوريك <bdi dir="ltr">SQL Server</bdi> بيرجّع إيه للـ <bdi dir="ltr">queries</bdi> دي بالظبط على بيانات الـ <bdi dir="ltr">lab</bdi>. شغّلهم بنفسك في <bdi dir="ltr">SSMS</bdi>: هما الخطوات من <bdi dir="ltr">1</bdi> لـ <bdi dir="ltr">4</bdi> في <code>01-first-queries.sql</code>.</span></p>
+
+  <h3><span class="no">5.4</span><span class="en">A way to read any SELECT</span><span class="ar">طريقة تقرا بيها أي <bdi dir="ltr">SELECT</bdi></span></h3>
+  <div class="order">
+    <div><b>FROM</b><span class="en">which table: start with all its rows</span><span class="ar">أنهي <bdi dir="ltr">table</bdi>: ابدأ بكل صفوفه</span></div>
+    <div class="arr2"><svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><path d="M2 10h26m-6-6 6 6-6 6" fill="none" stroke="#58636e" stroke-width="2"/></svg></div>
+    <div><b>WHERE</b><span class="en">keep only the rows that pass</span><span class="ar">سيب بس الصفوف اللي بتعدّي الشرط</span></div>
+    <div class="arr2"><svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><path d="M2 10h26m-6-6 6 6-6 6" fill="none" stroke="#58636e" stroke-width="2"/></svg></div>
+    <div><b>SELECT</b><span class="en">show only these columns</span><span class="ar">اعرض الأعمدة دي بس</span></div>
+    <div class="arr2"><svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><path d="M2 10h26m-6-6 6 6-6 6" fill="none" stroke="#58636e" stroke-width="2"/></svg></div>
+    <div><b>ORDER BY</b><span class="en">sort what is left for display</span><span class="ar">رتّب الناتج للعرض</span></div>
+  </div>
+  <p class="small"><span class="en">This order is a reading aid for people. SQL Server is free to plan the actual work differently; it only promises the result.</span><span class="ar">الترتيب ده عشان إحنا نفهم ونقرا. <bdi dir="ltr">SQL Server</bdi> حر يخطط الشغل الفعلي بطريقة تانية؛ هو بيضمن النتيجة بس.</span></p>
+
+  <div class="callout fool"><b class="h"><span class="en">What could fool you</span><span class="ar">حاجات ممكن تضحك عليك</span></b><ul>
+    <li><span class="en"><b>SELECT changes nothing.</b> Run step 1 again after step 4: still six rows. The Results grid shows an answer; it is not a new table saved anywhere.</span><span class="ar"><b>الـ <bdi dir="ltr">SELECT</bdi> ما بيغيّرش حاجة.</b> شغّل خطوة <bdi dir="ltr">1</bdi> تاني بعد خطوة <bdi dir="ltr">4</bdi>: لسه ست صفوف. الـ <bdi dir="ltr">Results grid</bdi> بيعرض إجابة، مش <bdi dir="ltr">table</bdi> جديد اتسيّف في أي حتة.</span></li>
+    <li><span class="en"><b>No ORDER BY, no promised order.</b> Rows may come back in any order. If the order matters, ask for it.</span><span class="ar"><b>من غير <bdi dir="ltr">ORDER BY</bdi> مفيش ترتيب مضمون.</b> الصفوف ممكن ترجع بأي ترتيب. لو الترتيب يهمك، اطلبه.</span></li>
+    <li><span class="en"><b><code>N'Computing'</code></b>: the N makes a Unicode string, the same kind of text as an NVARCHAR column. It matters for Arabic text. For plain English the query also works without N; we write it to match the column.</span><span class="ar"><b><code>N'Computing'</code></b>: الـ <bdi dir="ltr">N</bdi> بتخلّي النص <bdi dir="ltr">Unicode</bdi>، نفس نوع النص اللي في <bdi dir="ltr">column</bdi> من نوع <bdi dir="ltr">NVARCHAR</bdi>. ده مهم للنص العربي. للإنجليزي العادي الـ <bdi dir="ltr">query</bdi> هيشتغل من غير <bdi dir="ltr">N</bdi> برضه، بس إحنا بنكتبها عشان تبقى زي الـ <bdi dir="ltr">column</bdi>.</span></li>
+    <li><span class="en"><b><code>IsAvailable = 1</code></b>, not <code>= 'yes'</code>: the column is a BIT, so compare it with 1 or 0.</span><span class="ar"><b><code>IsAvailable = 1</code></b> مش <code>= 'yes'</code>: الـ <bdi dir="ltr">column</bdi> ده <bdi dir="ltr">BIT</bdi>، فقارنه بـ <bdi dir="ltr">1</bdi> أو <bdi dir="ltr">0</bdi>.</span></li>
+  </ul></div>
+
+  <h3><span class="no">5.5</span><span class="en">When something goes wrong</span><span class="ar">لما حاجة تبوظ</span></h3>
+  <dl class="trouble">
+    <dt><span class="en">An error appears before any SQL runs (cannot connect)</span><span class="ar">ظهر <bdi dir="ltr">error</bdi> قبل ما أي <bdi dir="ltr">SQL</bdi> يشتغل (مش عارف يعمل <bdi dir="ltr">connect</bdi>)</span></dt>
+    <dd><span class="en">The problem is the service, the server/instance name or the login, not your SQL. Check <code>.\SQLEXPRESS</code> and Windows Authentication, then ask your teacher.</span><span class="ar">المشكلة في الـ <bdi dir="ltr">service</bdi> أو اسم الـ <bdi dir="ltr">server/instance</bdi> أو الـ <bdi dir="ltr">login</bdi>، مش في الـ <bdi dir="ltr">SQL</bdi> بتاعك. اتأكد من <code>.\SQLEXPRESS</code> ومن <bdi dir="ltr">Windows Authentication</bdi>، وبعدين اسأل المدرّس.</span></dd>
+    <dt class="ltr" style="text-align:start"><code>Invalid object name 'BookCopies'.</code></dt>
+    <dd><span class="en">SQL Server cannot find the table in the current database. Usually the dropdown says <b>master</b>: switch to Database1Lab01. If it already does, the table was not set up on this PC: tell your teacher.</span><span class="ar"><bdi dir="ltr">SQL Server</bdi> مش لاقي الـ <bdi dir="ltr">table</bdi> في الـ <bdi dir="ltr">database</bdi> الحالية. غالبًا الـ <bdi dir="ltr">dropdown</bdi> مكتوب فيه <b><bdi dir="ltr">master</bdi></b>: غيّره لـ <bdi dir="ltr">Database1Lab01</bdi>. لو هو أصلًا عليها، يبقى الـ <bdi dir="ltr">table</bdi> ما اتعملش على الجهاز ده: قول للمدرّس.</span></dd>
+    <dt><span class="en">Zero rows, no red message</span><span class="ar">صفر صفوف، ومفيش رسالة حمرا</span></dt>
+    <dd><span class="en">Not an error: the query ran and nothing matched. Check the exact values you compared with.</span><span class="ar">ده مش <bdi dir="ltr">error</bdi>: الـ <bdi dir="ltr">query</bdi> اشتغل وما لقاش حاجة مطابقة. راجع القيم اللي قارنت بيها بالظبط.</span></dd>
+    <dt><span class="en">A new table does not appear in Object Explorer</span><span class="ar"><bdi dir="ltr">table</bdi> جديد مش ظاهر في <bdi dir="ltr">Object Explorer</bdi></span></dt>
+    <dd><span class="en">Object Explorer does not update by itself. Right-click <b>Tables</b> &gt; <b>Refresh</b>.</span><span class="ar"><bdi dir="ltr">Object Explorer</bdi> مش بيحدّث نفسه لوحده. كليك يمين على <b><bdi dir="ltr">Tables</bdi></b> ثم <b><bdi dir="ltr">Refresh</bdi></b>.</span></dd>
+  </dl>
+</section>
+
+<!-- ===================================================== 6 -->
+<section class="ch" id="ch6" data-short-en="Predict the rows" data-short-ar="توقّع الصفوف" hidden>
+  <div class="kicker"><span class="en">Chapter 6 of 9</span><span class="ar">الجزء <bdi dir="ltr">6</bdi> من <bdi dir="ltr">9</bdi></span></div>
+  <h2 tabindex="-1"><span class="en">Predict the rows, then run</span><span class="ar">توقّع الصفوف، وبعدين شغّل</span></h2>
+  <div class="goal"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#0d6767" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="#0d6767"/></svg>
+    <div><span class="en">After this chapter you can predict which CopyIds a WHERE keeps, and say why each other row is dropped, before you run the query.</span><span class="ar">في آخر الجزء ده هتقدر تتوقع الـ <bdi dir="ltr">WHERE</bdi> هيسيب أنهي <bdi dir="ltr">CopyIds</bdi>، وتقول كل <bdi dir="ltr">row</bdi> تاني اتشال ليه، قبل ما تشغّل الـ <bdi dir="ltr">query</bdi>.</span></div></div>
+  <p><span class="tag sim">◇ <span class="en">Simulation of four fixed queries on the six lab rows. It is not SQL Server and cannot run other SQL. Check each one for real in SSMS: they are queries A to D in <code>01-first-queries.sql</code>.</span><span class="ar"><bdi dir="ltr">simulation</bdi> لأربع <bdi dir="ltr">queries</bdi> ثابتين على الست صفوف بتوع الـ <bdi dir="ltr">lab</bdi>. ده مش <bdi dir="ltr">SQL Server</bdi>، ومينفعش يشغّل أي <bdi dir="ltr">SQL</bdi> تاني. جرّب كل واحد بجد في <bdi dir="ltr">SSMS</bdi>: هما الـ <bdi dir="ltr">queries</bdi> من <bdi dir="ltr">A</bdi> لـ <bdi dir="ltr">D</bdi> في <code>01-first-queries.sql</code>.</span></span></p>
+
+  <div class="presets" id="presets" role="group" aria-label="Queries" data-label-ar="الـ queries"></div>
+  <pre class="code sql" id="vizCode"></pre>
+
+  <div class="card" style="max-width:1100px">
+    <b><span class="en">1. Your prediction: which CopyIds will be in the result?</span><span class="ar"><bdi dir="ltr">1</bdi>. توقّعك: أنهي <bdi dir="ltr">CopyIds</bdi> هيبقوا في النتيجة؟</span></b>
+    <div class="predict" id="predict" role="group" aria-label="Predicted CopyIds" data-label-ar="الـ CopyIds المتوقعة"></div>
+    <div class="btns"><button class="btn primary" type="button" id="vizGo"><span class="en">Lock my prediction and reveal step by step</span><span class="ar">ثبّت توقعي واكشف خطوة خطوة</span></button></div>
+    <div class="stages" id="vizStages" aria-hidden="true"><span>FROM</span><span>WHERE</span><span>SELECT</span><span>ORDER BY</span></div>
+    <div id="vizNote" class="story" aria-live="polite" hidden style="min-height:0;margin-bottom:10px"></div>
+    <div class="gridwrap" tabindex="0" id="vizGrid"></div>
+    <div class="btns"><button class="btn" type="button" id="vizNext" hidden><span class="en">Next step</span><span class="ar">الخطوة اللي بعدها</span></button><button class="btn" type="button" id="vizAgain" hidden><span class="en">Try this query again</span><span class="ar">جرّب الـ <bdi dir="ltr">query</bdi> ده تاني</span></button></div>
+    <div id="vizCmp" class="cmp" aria-live="polite"></div>
+  </div>
+  <div class="say"><b class="h"><span class="en">Say it aloud</span><span class="ar">قولها بصوت عالي</span></b><br><span class="en">For query C, explain to your neighbour why copy 102 still shows Shelf A1 although it is lent out. For query D, explain why one title gives two rows.</span><span class="ar">في <bdi dir="ltr">query C</bdi>، اشرح لزميلك ليه النسخة <bdi dir="ltr">102</bdi> لسه ظاهر قدامها <bdi dir="ltr">Shelf A1</bdi> مع إنها متسلّفة. وفي <bdi dir="ltr">query D</bdi>، اشرح ليه اسم كتاب واحد طلّع صفّين.</span></div>
+</section>
+
+<!-- ===================================================== 7 -->
+<section class="ch" id="ch7" data-short-en="Your turn" data-short-ar="دورك" hidden>
+  <div class="kicker"><span class="en">Chapter 7 of 9</span><span class="ar">الجزء <bdi dir="ltr">7</bdi> من <bdi dir="ltr">9</bdi></span></div>
+  <h2 tabindex="-1"><span class="en">Your turn</span><span class="ar">دورك</span></h2>
+  <div class="goal"><div><span class="en"><b>On a Mac, or no SSMS?</b> <a href="playground.html" target="db1-sql-playground">Open the SQL playground</a>. The six rows are ready. Type your queries and press Run or Cmd/Ctrl + Enter. It runs offline in the browser using a limited SQLite-based practice engine; SQL Server details can differ.</span><span class="ar"><b>على الماك أو معندكش <bdi dir="ltr">SSMS</bdi>؟</b> <a href="playground.html" target="db1-sql-playground">افتح محاكي <bdi dir="ltr">SQL</bdi></a>. الصفوف الستة جاهزة. اكتب الاستعلام واضغط تشغيل أو <bdi dir="ltr">Cmd/Ctrl + Enter</bdi>. بيشتغل من غير إنترنت بمحرك تدريب مبني على <bdi dir="ltr">SQLite</bdi>؛ بعض تفاصيل <bdi dir="ltr">SQL Server</bdi> بتختلف.</span></div></div>
+
+  <div class="goal"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#0d6767" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="#0d6767"/></svg>
+    <div><span class="en">After this chapter you can write a SELECT on your own for a new question, and explain a wrong result instead of guessing.</span><span class="ar">في آخر الجزء ده هتقدر تكتب <bdi dir="ltr">SELECT</bdi> لوحدك لسؤال جديد، وتشرح نتيجة غلط بدل ما تخمّن.</span></div></div>
+  <p><span class="en">Open <a href="sql/02-your-turn.sql"><code>sql/02-your-turn.sql</code></a> in SSMS (<kbd>Ctrl</kbd>+<kbd>O</kbd>), or use the printable <a href="worksheet.html">worksheet</a>. For every task: <b>write your prediction first</b>, then the query, then run it and compare. The hints are here if you are stuck; the answers are not.</span><span class="ar">افتح <a href="sql/02-your-turn.sql"><code>sql/02-your-turn.sql</code></a> في <bdi dir="ltr">SSMS</bdi> (<kbd>Ctrl</kbd>+<kbd>O</kbd>)، أو استخدم الـ <a href="worksheet.html"><bdi dir="ltr">worksheet</bdi></a> اللي بتتطبع. في كل <bdi dir="ltr">task</bdi>: <b>اكتب توقعك الأول</b>، وبعدين الـ <bdi dir="ltr">query</bdi>، وبعدين شغّله وقارن. التلميحات موجودة هنا لو وقفت؛ الإجابات لأ.</span></p>
+
+  <ol class="tasks">
+    <li><span class="tn">1</span> <span class="kind">SELECT</span>
+      <p><span class="en">Show the <b>Title</b> and <b>Shelf</b> of every copy, in CopyId order.</span><span class="ar">اعرض الـ <b><bdi dir="ltr">Title</bdi></b> والـ <b><bdi dir="ltr">Shelf</bdi></b> لكل النسخ، بترتيب الـ <bdi dir="ltr">CopyId</bdi>.</span></p>
+      <details class="hint"><summary><span class="en">Hint</span><span class="ar">تلميح</span></summary><div class="inner"><span class="en">Step 2 of chapter 5 had three columns. You need two. Can you ORDER BY a column you do not show? Try it.</span><span class="ar">الخطوة <bdi dir="ltr">2</bdi> في الجزء <bdi dir="ltr">5</bdi> كان فيها تلات أعمدة. إنت محتاج اتنين. ينفع تعمل <bdi dir="ltr">ORDER BY</bdi> بـ <bdi dir="ltr">column</bdi> مش معروض؟ جرّب.</span></div></details></li>
+    <li><span class="tn">2</span> <span class="kind">WHERE · ORDER BY</span>
+      <p><span class="en">Which home shelves are missing a copy right now? Show <b>Shelf</b> and <b>CopyId</b> for every lent-out copy, ordered by Shelf.</span><span class="ar">أنهي رفوف ناقصها نسخة دلوقتي؟ اعرض <b><bdi dir="ltr">Shelf</bdi></b> و<b><bdi dir="ltr">CopyId</bdi></b> لكل نسخة متسلّفة، مترتبين بالـ <bdi dir="ltr">Shelf</bdi>.</span></p>
+      <details class="hint"><summary><span class="en">Hint</span><span class="ar">تلميح</span></summary><div class="inner"><span class="en">"Lent out" is one value of IsAvailable. Which one?</span><span class="ar">"متسلّفة" دي قيمة من قيم <bdi dir="ltr">IsAvailable</bdi>. أنهي واحدة؟</span></div></details></li>
+    <li><span class="tn">3</span> <span class="kind">AND</span>
+      <p><span class="en">Show <b>CopyId</b> and <b>Shelf</b> of the <b>Computing</b> copies that are <b>lent out</b>, in CopyId order.</span><span class="ar">اعرض <b><bdi dir="ltr">CopyId</bdi></b> و<b><bdi dir="ltr">Shelf</bdi></b> للنسخ اللي من <b><bdi dir="ltr">Computing</bdi></b> و<b>متسلّفة</b>، بترتيب الـ <bdi dir="ltr">CopyId</bdi>.</span></p>
+      <details class="hint"><summary><span class="en">Hint</span><span class="ar">تلميح</span></summary><div class="inner"><span class="en">Two conditions that must both be true. Start from query B in chapter 6 and change one thing.</span><span class="ar">شرطين لازم الاتنين يبقوا صح. ابدأ من <bdi dir="ltr">query B</bdi> في الجزء <bdi dir="ltr">6</bdi> وغيّر حاجة واحدة.</span></div></details></li>
+    <li><span class="tn">4</span> <span class="kind">WHERE Title</span>
+      <p><span class="en">Show <b>CopyId</b> and <b>IsAvailable</b> of every physical copy titled <b>Python Basics</b>. Then answer: how many copies does the desk own, can a student borrow one now, and why does the table need CopyId when the title is already there?</span><span class="ar">اعرض <b><bdi dir="ltr">CopyId</bdi></b> و<b><bdi dir="ltr">IsAvailable</bdi></b> لكل نسخة فعلية اسمها <b><bdi dir="ltr">Python Basics</bdi></b>. وبعدين جاوب: المكتب عنده كام نسخة، والطالب يقدر يستلف واحدة دلوقتي ولا لأ، وليه الـ <bdi dir="ltr">table</bdi> محتاج <bdi dir="ltr">CopyId</bdi> طالما الاسم موجود أصلًا؟</span></p>
+      <details class="hint"><summary><span class="en">Hint</span><span class="ar">تلميح</span></summary><div class="inner"><span class="en">Text values go in quotes with N in front, exactly as stored, like query D.</span><span class="ar">القيم النصية بتتكتب بين <bdi dir="ltr">quotes</bdi> وقبلها <bdi dir="ltr">N</bdi>، بالظبط زي ما هي متخزنة، زي <bdi dir="ltr">query D</bdi>.</span></div></details></li>
+    <li><span class="tn">5</span> <span class="kind">ORDER BY</span>
+      <p><span class="en">Show <b>Title</b> and <b>CopyId</b> of all copies, ordered by Title (A to Z). Copies with the same title should appear in CopyId order.</span><span class="ar">اعرض <b><bdi dir="ltr">Title</bdi></b> و<b><bdi dir="ltr">CopyId</bdi></b> لكل النسخ، مترتبين بالـ <bdi dir="ltr">Title</bdi> (من <bdi dir="ltr">A</bdi> لـ <bdi dir="ltr">Z</bdi>). النسخ اللي ليها نفس الاسم تطلع بترتيب الـ <bdi dir="ltr">CopyId</bdi>.</span></p>
+      <details class="hint"><summary><span class="en">Hint</span><span class="ar">تلميح</span></summary><div class="inner"><span class="en">ORDER BY accepts more than one column, separated by a comma. The second one only matters when the first one ties.</span><span class="ar">الـ <bdi dir="ltr">ORDER BY</bdi> بيقبل أكتر من <bdi dir="ltr">column</bdi>، بينهم <bdi dir="ltr">comma</bdi>. التاني بيفرق بس لما الأول يتساوى.</span></div></details></li>
+    <li><span class="tn">6</span> <span class="kind"><span class="en">explain</span><span class="ar">اشرح</span></span>
+      <p><span class="en">A classmate wanted "Computing copies that are available" and got 101, 102, 103, 104, 106 from:</span><span class="ar">زميلك كان عايز "نسخ <bdi dir="ltr">Computing</bdi> اللي متاحة" وطلع له <bdi dir="ltr">101</bdi> و<bdi dir="ltr">102</bdi> و<bdi dir="ltr">103</bdi> و<bdi dir="ltr">104</bdi> و<bdi dir="ltr">106</bdi> من الـ <bdi dir="ltr">query</bdi> ده:</span></p>
+<pre class="code sql">SELECT CopyId, Title
+FROM BookCopies
+WHERE Category = N'Computing' OR IsAvailable = 1
+ORDER BY CopyId;</pre>
+      <p><span class="en">Explain why 102, 104 and 106 are there. Then fix the query.</span><span class="ar">اشرح ليه <bdi dir="ltr">102</bdi> و<bdi dir="ltr">104</bdi> و<bdi dir="ltr">106</bdi> موجودين. وبعدين صلّح الـ <bdi dir="ltr">query</bdi>.</span></p>
+      <details class="hint"><summary><span class="en">Hint</span><span class="ar">تلميح</span></summary><div class="inner"><span class="en">For each of those three rows, check the two conditions one by one. How many of them must be true for OR to keep the row?</span><span class="ar">لكل <bdi dir="ltr">row</bdi> من التلاتة دول، راجع الشرطين واحد واحد. كام شرط لازم يبقى صح عشان الـ <bdi dir="ltr">OR</bdi> يسيب الـ <bdi dir="ltr">row</bdi>؟</span></div></details></li>
+    <li><span class="tn">7</span> <span class="kind"><span class="en">explain</span><span class="ar">اشرح</span></span>
+      <p><span class="en">This query shows zero rows and no red error. Why? Is that an error? Write a query that lists the mathematics copies.</span><span class="ar">الـ <bdi dir="ltr">query</bdi> ده بيطلّع صفر صفوف ومفيش <bdi dir="ltr">error</bdi> أحمر. ليه؟ وده يعتبر <bdi dir="ltr">error</bdi>؟ اكتب <bdi dir="ltr">query</bdi> يطلّع نسخ الرياضيات.</span></p>
+<pre class="code sql">SELECT CopyId, Title
+FROM BookCopies
+WHERE Category = N'Maths';</pre>
+      <details class="hint"><summary><span class="en">Hint</span><span class="ar">تلميح</span></summary><div class="inner"><span class="en">Look at the data, not the syntax. Run step 1 of chapter 5 and read the Category column letter by letter.</span><span class="ar">بص على البيانات، مش على الـ <bdi dir="ltr">syntax</bdi>. شغّل خطوة <bdi dir="ltr">1</bdi> من الجزء <bdi dir="ltr">5</bdi> واقرا الـ <bdi dir="ltr">Category</bdi> حرف حرف.</span></div></details></li>
+    <li><span class="tn">8</span> <span class="kind"><span class="en">design, no SQL</span><span class="ar">تصميم، من غير <bdi dir="ltr">SQL</bdi></span></span>
+      <p><span class="en">The campus equipment room keeps this list. Laptop L-08 is moved to Lab 5.</span><span class="ar">مخزن الأجهزة في الكلية عنده القايمة دي. اللابتوب <bdi dir="ltr">L-08</bdi> اتنقل لـ <bdi dir="ltr">Lab 5</bdi>.</span></p>
+      <div class="mini gridwrap"><table><tr><th>AssetTag</th><th>Model</th><th>Room</th></tr><tr><td>L-07</td><td>NoteBook 14</td><td>Lab 2</td></tr><tr><td>L-08</td><td>NoteBook 14</td><td>Lab 2</td></tr><tr><td>L-12</td><td>NoteBook 15</td><td>Lab 5</td></tr></table></div>
+      <p><span class="en">(a) What does one row describe? (b) Someone suggests <b>Model</b> as the PRIMARY KEY: what goes wrong? (c) Which column should be the key, and which value(s) change when L-08 moves?</span><span class="ar">(<bdi dir="ltr">a</bdi>) الـ <bdi dir="ltr">row</bdi> الواحد بيوصف إيه؟ (<bdi dir="ltr">b</bdi>) حد اقترح إن <b><bdi dir="ltr">Model</bdi></b> يبقى الـ <bdi dir="ltr">PRIMARY KEY</bdi>: إيه اللي هيبوظ؟ (<bdi dir="ltr">c</bdi>) أنهي <bdi dir="ltr">column</bdi> المفروض يبقى الـ <bdi dir="ltr">key</bdi>، وأنهي قيمة (أو قيم) هتتغير لما <bdi dir="ltr">L-08</bdi> يتنقل؟</span></p>
+      <details class="hint"><summary><span class="en">Hint</span><span class="ar">تلميح</span></summary><div class="inner"><span class="en">Replace "laptop" with "book copy" and "Model" with "Title". You have seen this table before.</span><span class="ar">بدّل "لابتوب" بـ "نسخة كتاب" و"<bdi dir="ltr">Model</bdi>" بـ "<bdi dir="ltr">Title</bdi>". إنت شفت الـ <bdi dir="ltr">table</bdi> ده قبل كده.</span></div></details></li>
+  </ol>
+  <div class="say"><b class="h"><span class="en">If you finish early</span><span class="ar">لو خلّصت بدري</span></b><br><span class="en">Write one question a desk worker might ask that <code>BookCopies</code> can answer, with its query. Then one question it cannot answer, and say what information is missing.</span><span class="ar">اكتب سؤال ممكن موظف المكتب يسأله و<code>BookCopies</code> يقدر يجاوب عليه، ومعاه الـ <bdi dir="ltr">query</bdi>. وبعدين سؤال مايقدرش يجاوب عليه، وقول المعلومة الناقصة إيه.</span></div>
+</section>
+
+<!-- ===================================================== 8 -->
+<section class="ch" id="ch8" data-short-en="Build a table" data-short-ar="اعمل table بنفسك" hidden>
+  <div class="kicker"><span class="en">Chapter 8 of 9</span><span class="ar">الجزء <bdi dir="ltr">8</bdi> من <bdi dir="ltr">9</bdi></span></div>
+  <h2 tabindex="-1"><span class="en">Build your own small table</span><span class="ar">اعمل <bdi dir="ltr">table</bdi> صغير بنفسك</span></h2>
+  <div class="goal"><div><span class="en"><b>On a Mac, or no SSMS?</b> <a href="playground.html" target="db1-sql-playground">Open the SQL playground</a>. The six rows are ready. Type your queries and press Run or Cmd/Ctrl + Enter. It runs offline in the browser using a limited SQLite-based practice engine; SQL Server details can differ.</span><span class="ar"><b>على الماك أو معندكش <bdi dir="ltr">SSMS</bdi>؟</b> <a href="playground.html" target="db1-sql-playground">افتح محاكي <bdi dir="ltr">SQL</bdi></a>. الصفوف الستة جاهزة. اكتب الاستعلام واضغط تشغيل أو <bdi dir="ltr">Cmd/Ctrl + Enter</bdi>. بيشتغل من غير إنترنت بمحرك تدريب مبني على <bdi dir="ltr">SQLite</bdi>؛ بعض تفاصيل <bdi dir="ltr">SQL Server</bdi> بتختلف.</span></div></div>
+
+  <div class="goal"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#0d6767" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="#0d6767"/></svg>
+    <div><span class="en">After this chapter you can create a table, add rows, read them back, and explain why the rows are still there after you close the query.</span><span class="ar">في آخر الجزء ده هتقدر تعمل <bdi dir="ltr">table</bdi>، وتضيف صفوف، وتقراها تاني، وتشرح ليه الصفوف لسه موجودة بعد ما تقفل الـ <bdi dir="ltr">query</bdi>.</span></div></div>
+  <p><span class="en">You will make a reading wishlist: <b>one row = one title you want to read</b>. It is a separate table; <code>BookCopies</code> is not touched. Open <a href="sql/03-build-a-table.sql"><code>sql/03-build-a-table.sql</code></a> and follow it step by step.</span><span class="ar">هتعمل قايمة كتب نفسك تقراها: <b><bdi dir="ltr">row</bdi> واحد = اسم كتاب واحد عايز تقراه</b>. ده <bdi dir="ltr">table</bdi> منفصل، و<code>BookCopies</code> مش هيتلمس. افتح <a href="sql/03-build-a-table.sql"><code>sql/03-build-a-table.sql</code></a> وامشي معاه خطوة خطوة.</span></p>
+
+  <div class="trio">
+    <div style="--c:#6d8fb0"><b class="k">CREATE TABLE</b><dl>
+      <dt><span class="en">does</span><span class="ar">بيعمل إيه</span></dt><dd><span class="en">makes the empty shape (schema)</span><span class="ar">بيعمل الشكل الفاضي (الـ <bdi dir="ltr">schema</bdi>)</span></dd>
+      <dt><span class="en">run it</span><span class="ar">تشغّله</span></dt><dd><span class="en"><b>once</b></span><span class="ar"><b>مرة واحدة</b></span></dd>
+      <dt>Messages</dt><dd class="ltr"><code>Commands completed successfully.</code></dd></dl></div>
+    <div style="--c:#0d6767"><b class="k">INSERT</b><dl>
+      <dt><span class="en">does</span><span class="ar">بيعمل إيه</span></dt><dd><span class="en">adds new rows</span><span class="ar">بيضيف صفوف جديدة</span></dd>
+      <dt><span class="en">run it</span><span class="ar">تشغّله</span></dt><dd><span class="en"><b>once per new row</b></span><span class="ar"><b>مرة لكل <bdi dir="ltr">row</bdi> جديد</b></span></dd>
+      <dt>Messages</dt><dd class="ltr"><code>(1 row affected)</code></dd></dl></div>
+    <div style="--c:#a86a14"><b class="k">SELECT</b><dl>
+      <dt><span class="en">does</span><span class="ar">بيعمل إيه</span></dt><dd><span class="en">reads rows, changes nothing</span><span class="ar">بيقرا صفوف، وما بيغيّرش حاجة</span></dd>
+      <dt><span class="en">run it</span><span class="ar">تشغّله</span></dt><dd><span class="en"><b>as often as you like</b></span><span class="ar"><b>براحتك، كل ما تحب</b></span></dd>
+      <dt>Results</dt><dd><span class="en">the rows</span><span class="ar">الصفوف</span></dd></dl></div>
+  </div>
+
+  <ol class="ladder" id="buildLadder">
+    <li data-n="0"><b><span class="en">Where am I?</span><span class="ar">أنا فين؟</span></b>
+      <p><span class="en">Run step 0 of the file. The result must say <b>Database1Lab01</b>. If it says master, stop and switch first: otherwise your table lands in the wrong database.</span><span class="ar">شغّل خطوة <bdi dir="ltr">0</bdi> في الـ <bdi dir="ltr">file</bdi>. النتيجة لازم تقول <b><bdi dir="ltr">Database1Lab01</bdi></b>. لو قالت <bdi dir="ltr">master</bdi>، اقف وغيّر الأول، وإلا الـ <bdi dir="ltr">table</bdi> بتاعك هيتعمل في <bdi dir="ltr">database</bdi> غلط.</span></p>
+<pre class="code sql">USE Database1Lab01;
+SELECT DB_NAME() AS CurrentDatabase;</pre></li>
+    <li data-n="1" hidden><b><span class="en">CREATE the table (once)</span><span class="ar">اعمل <bdi dir="ltr">CREATE</bdi> للـ <bdi dir="ltr">table</bdi> (مرة واحدة)</span></b>
+      <p><span class="en">Try first: <code>WishId</code> is a whole number that identifies each wish, never repeated, never empty. <code>Title</code> is text up to 100 characters, English or Arabic, and must be present. Fill the blanks in the file.</span><span class="ar">جرّب الأول: <code>WishId</code> رقم صحيح بيميّز كل أمنية، عمره ما يتكرر ولا يبقى فاضي. <code>Title</code> نص لحد <bdi dir="ltr">100</bdi> حرف، إنجليزي أو عربي، ولازم يبقى موجود. املا الفراغات في الـ <bdi dir="ltr">file</bdi>.</span></p>
+      <details class="hint"><summary><span class="en">Hint</span><span class="ar">تلميح</span></summary><div class="inner"><span class="en">Look at how CopyId and Title are declared in chapter 4.3. You need the same two ideas.</span><span class="ar">بص <bdi dir="ltr">CopyId</bdi> و<bdi dir="ltr">Title</bdi> متعرّفين إزاي في الجزء <bdi dir="ltr">4.3</bdi>. إنت محتاج نفس الفكرتين.</span></div></details>
+      <details><summary><span class="en">Show the statement</span><span class="ar">وريني الـ <bdi dir="ltr">statement</bdi></span></summary>
+<pre class="code sql">CREATE TABLE ReadingWishlist (
+    WishId  INT            PRIMARY KEY,
+    Title   NVARCHAR(100)  NOT NULL
+);</pre></details>
+      <p class="why"><span class="en">Why once: the second time, SQL Server answers <code>There is already an object named 'ReadingWishlist' in the database.</code> The table is already there; just go on. Then right-click <b>Tables</b> &gt; <b>Refresh</b> in Object Explorer to see it.</span><span class="ar">ليه مرة واحدة: في المرة التانية <bdi dir="ltr">SQL Server</bdi> هيرد بـ <code>There is already an object named 'ReadingWishlist' in the database.</code> الـ <bdi dir="ltr">table</bdi> موجود خلاص؛ كمّل عادي. وبعدين كليك يمين على <b><bdi dir="ltr">Tables</bdi></b> ثم <b><bdi dir="ltr">Refresh</bdi></b> في <bdi dir="ltr">Object Explorer</bdi> عشان تشوفه.</span></p></li>
+    <li data-n="2" hidden><b><span class="en">INSERT two rows (each once)</span><span class="ar">اعمل <bdi dir="ltr">INSERT</bdi> لصفّين (كل واحد مرة)</span></b>
+      <p><span class="en">Use titles you actually want to read. One statement per row; run each once.</span><span class="ar">استخدم أسامي كتب إنت فعلًا عايز تقراها. <bdi dir="ltr">statement</bdi> لكل <bdi dir="ltr">row</bdi>، وكل واحد تشغّله مرة.</span></p>
+<pre class="code sql">INSERT INTO ReadingWishlist (WishId, Title)
+VALUES (1, N'Database Design');
+
+INSERT INTO ReadingWishlist (WishId, Title)
+VALUES (2, N'مقدمة في قواعد البيانات');</pre>
+      <p class="why"><span class="en">The column list <code>(WishId, Title)</code> says which value goes where. The N in front of the Arabic title keeps its letters intact. Each INSERT is saved as soon as it succeeds.</span><span class="ar">قايمة الأعمدة <code>(WishId, Title)</code> بتقول كل قيمة رايحة فين. والـ <bdi dir="ltr">N</bdi> اللي قبل الاسم العربي بتحافظ على حروفه سليمة. وكل <bdi dir="ltr">INSERT</bdi> بيتحفظ أول ما ينجح.</span></p></li>
+    <li data-n="3" hidden><b><span class="en">SELECT them back (as often as you like)</span><span class="ar">اعمل <bdi dir="ltr">SELECT</bdi> ليهم تاني (براحتك)</span></b>
+<pre class="code sql">SELECT WishId, Title
+FROM ReadingWishlist
+ORDER BY WishId;</pre>
+      <p class="why"><span class="en">Predict the number of rows before you run it.</span><span class="ar">اتوقع عدد الصفوف قبل ما تشغّله.</span></p></li>
+    <li data-n="4" hidden><b><span class="en">Do the rows survive?</span><span class="ar">الصفوف هتفضل موجودة؟</span></b>
+      <p><span class="en">Save the file (<kbd>Ctrl</kbd>+<kbd>S</kbd>) and close the query tab. Click <b>New Query</b>, check the dropdown says Database1Lab01, type the SELECT again and run it.</span><span class="ar">سيّف الـ <bdi dir="ltr">file</bdi> (<kbd>Ctrl</kbd>+<kbd>S</kbd>) واقفل الـ <bdi dir="ltr">tab</bdi> بتاعة الـ <bdi dir="ltr">query</bdi>. دوس <b><bdi dir="ltr">New Query</bdi></b>، اتأكد إن الـ <bdi dir="ltr">dropdown</bdi> مكتوب فيه <bdi dir="ltr">Database1Lab01</bdi>، اكتب الـ <bdi dir="ltr">SELECT</bdi> تاني وشغّله.</span></p>
+      <p class="why"><span class="en">The rows are still there: they live in the database, not in the tab that showed them. The <code>.sql</code> file you saved holds your statements, not the rows. It is not a backup.</span><span class="ar">الصفوف لسه موجودة: هي عايشة في الـ <bdi dir="ltr">database</bdi>، مش في الـ <bdi dir="ltr">tab</bdi> اللي كانت بتعرضها. والـ <code>.sql</code> <bdi dir="ltr">file</bdi> اللي سيّفته فيه الـ <bdi dir="ltr">statements</bdi> بتاعتك، مش الصفوف. وهو مش <bdi dir="ltr">backup</bdi>.</span></p></li>
+    <li data-n="5" hidden><b><span class="en">Predict, then try: the same key twice</span><span class="ar">اتوقع، وبعدين جرّب: نفس الـ <bdi dir="ltr">key</bdi> مرتين</span></b>
+      <p><span class="en">What will SQL Server do if you run the first INSERT again, unchanged? Decide, then select only that INSERT and run it.</span><span class="ar"><bdi dir="ltr">SQL Server</bdi> هيعمل إيه لو شغّلت أول <bdi dir="ltr">INSERT</bdi> تاني زي ما هو؟ قرّر، وبعدين علّم على الـ <bdi dir="ltr">INSERT</bdi> ده بس وشغّله.</span></p>
+      <details><summary><span class="en">What you should see</span><span class="ar">المفروض تشوف إيه</span></summary>
+        <div class="msg red">Msg 2627, Level 14, State 1, Line …
+Violation of PRIMARY KEY constraint 'PK__ReadingW__…'. Cannot insert duplicate key in object 'ReadingWishlist'. The duplicate key value is (1).
+The statement has been terminated.</div>
+        <p class="why"><span class="en">The PRIMARY KEY you declared refused a second WishId 1. Run the SELECT again: still the same rows. The part after <code>PK__</code> is a name SQL Server generated; yours will differ.</span><span class="ar">الـ <bdi dir="ltr">PRIMARY KEY</bdi> اللي إنت أعلنته رفض <bdi dir="ltr">WishId 1</bdi> تاني. شغّل الـ <bdi dir="ltr">SELECT</bdi> تاني: نفس الصفوف زي ما هي. الجزء اللي بعد <code>PK__</code> اسم <bdi dir="ltr">SQL Server</bdi> عمله لوحده؛ عندك هيبقى مختلف.</span></p></details></li>
+    <li data-n="6" hidden><b><span class="en">Your own row</span><span class="ar"><bdi dir="ltr">row</bdi> بتاعك إنت</span></b>
+      <p><span class="en">Write one more INSERT with a new WishId and a title of your choice. Run it once, then SELECT again.</span><span class="ar">اكتب <bdi dir="ltr">INSERT</bdi> كمان بـ <bdi dir="ltr">WishId</bdi> جديد واسم كتاب من اختيارك. شغّله مرة، وبعدين اعمل <bdi dir="ltr">SELECT</bdi> تاني.</span></p></li>
+  </ol>
+  <div class="btns"><button class="btn primary" type="button" data-next="buildLadder"><span class="en">Next step</span><span class="ar">الخطوة اللي بعدها</span></button></div>
+
+  <div class="callout fool"><b class="h"><span class="en">What could fool you</span><span class="ar">حاجات ممكن تضحك عليك</span></b><ul>
+    <li><span class="en">Pressing <kbd>F5</kbd> with nothing selected runs the whole file, including CREATE and both INSERTs again. Select one statement first.</span><span class="ar">لو دوست <kbd>F5</kbd> ومش معلّم على حاجة، الـ <bdi dir="ltr">file</bdi> كله هيشتغل، ومعاه الـ <bdi dir="ltr">CREATE</bdi> والـ <bdi dir="ltr">INSERTs</bdi> تاني. علّم على <bdi dir="ltr">statement</bdi> واحد الأول.</span></li>
+    <li><span class="en">If something went wrong, do not delete the table to "start over". Read the message and ask your teacher.</span><span class="ar">لو حاجة باظت، ما تمسحش الـ <bdi dir="ltr">table</bdi> عشان "تبدأ من الأول". اقرا الرسالة واسأل المدرّس.</span></li>
+    <li><span class="en">Your table lives in the SQL Server on <b>your</b> PC. If your class uses one shared server instead, use the database your teacher gives you, so two students never create the same table in the same place.</span><span class="ar">الـ <bdi dir="ltr">table</bdi> بتاعك عايش في الـ <bdi dir="ltr">SQL Server</bdi> اللي على جهاز<b>ك</b>. لو الفصل بيستخدم <bdi dir="ltr">server</bdi> واحد مشترك، استخدم الـ <bdi dir="ltr">database</bdi> اللي المدرّس يديهالك، عشان مايحصلش إن اتنين طلبة يعملوا نفس الـ <bdi dir="ltr">table</bdi> في نفس المكان.</span></li>
+  </ul></div>
+</section>
+
+<!-- ===================================================== 9 -->
+<section class="ch" id="ch9" data-short-en="What comes next" data-short-ar="اللي جاي" hidden>
+  <div class="kicker"><span class="en">Chapter 9 of 9</span><span class="ar">الجزء <bdi dir="ltr">9</bdi> من <bdi dir="ltr">9</bdi></span></div>
+  <h2 tabindex="-1"><span class="en">Where today's table starts to strain</span><span class="ar">الـ <bdi dir="ltr">table</bdi> بتاع النهارده بيبدأ يتعب فين</span></h2>
+  <div class="goal"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="#0d6767" stroke-width="2"/><circle cx="10" cy="10" r="3" fill="#0d6767"/></svg>
+    <div><span class="en">After this chapter you can explain the difference between a CopyId and a BookId, and name what today's table cannot answer.</span><span class="ar">في آخر الجزء ده هتقدر تشرح الفرق بين <bdi dir="ltr">CopyId</bdi> و<bdi dir="ltr">BookId</bdi>، وتقول الـ <bdi dir="ltr">table</bdi> بتاع النهارده مش قادر يجاوب على إيه.</span></div></div>
+
+  <h3><span class="no">9.1</span><span class="en">Repeated facts</span><span class="ar">معلومات متكررة</span></h3>
+  <div class="gridwrap" tabindex="0" data-grid data-cols="CopyId,Title,Category,Shelf,IsAvailable" data-ids="101,102,103,104,105,106" data-mark="Database Design"></div>
+  <div class="quiz" data-quiz>
+    <div class="qh"><span class="en">Predict</span><span class="ar">اتوقع</span></div>
+    <p class="q"><span class="en">The publisher renames <i>Database Design</i> to <i>Database Design Basics</i>. In today's table, how many rows must be changed so the desk stays consistent?</span><span class="ar">دار النشر غيّرت اسم <i><bdi dir="ltr">Database Design</bdi></i> لـ <i><bdi dir="ltr">Database Design Basics</bdi></i>. في الـ <bdi dir="ltr">table</bdi> بتاع النهارده، كام <bdi dir="ltr">row</bdi> لازم يتغير عشان المكتب يفضل متسق مع نفسه؟</span></p>
+    <div class="opts">
+      <button type="button" data-opt="a">1</button><button type="button" data-opt="b">2</button><button type="button" data-opt="c">6</button>
+    </div>
+    <div class="fb" aria-live="polite">
+      <div data-fb="a" class="no" hidden><span class="en">Change only one, and the table disagrees with itself: 103 and 106 are the same book with two different titles.</span><span class="ar">لو غيّرت واحد بس، الـ <bdi dir="ltr">table</bdi> هيناقض نفسه: <bdi dir="ltr">103</bdi> و<bdi dir="ltr">106</bdi> نفس الكتاب بس باسمين مختلفين.</span></div>
+      <div data-fb="b" class="yes" hidden><span class="en">Two: 103 and 106. The title is stored once per copy. With ten copies it would be ten rows, and missing one leaves the table contradicting itself.</span><span class="ar">اتنين: <bdi dir="ltr">103</bdi> و<bdi dir="ltr">106</bdi>. الاسم متخزّن مرة مع كل نسخة. لو عندك عشر نسخ يبقى عشر صفوف، ولو نسيت واحد الـ <bdi dir="ltr">table</bdi> هيناقض نفسه.</span></div>
+      <div data-fb="c" class="no" hidden><span class="en">Only rows whose title is Database Design are affected: 103 and 106.</span><span class="ar">الصفوف اللي اسمها <bdi dir="ltr">Database Design</bdi> بس هي اللي ليها دعوة: <bdi dir="ltr">103</bdi> و<bdi dir="ltr">106</bdi>.</span></div>
+    </div>
+  </div>
+
+  <h3><span class="no">9.2</span><span class="en">A possible next design</span><span class="ar">تصميم ممكن نروح له بعدين</span></h3>
+  <p><span class="tag preview">◇ <span class="en">Preview only. These tables are not in your database, and you do not need their SQL today.</span><span class="ar">معاينة بس. الـ <bdi dir="ltr">tables</bdi> دي مش موجودة في الـ <bdi dir="ltr">database</bdi> بتاعتك، ومش محتاج الـ <bdi dir="ltr">SQL</bdi> بتاعها النهارده.</span></span></p>
+  <p><span class="en">Split "what book is it" from "which physical copy is it". Tap a book to find its copies, or tap a copy to find its book.</span><span class="ar">افصل "الكتاب ده إيه" عن "أنهي نسخة فعلية". دوس على كتاب عشان تلاقي نسخه، أو على نسخة عشان تلاقي الكتاب بتاعها.</span></p>
+  <div class="split">
+    <div><div class="gridwrap" tabindex="0" id="booksGrid"></div></div>
+    <div class="mid" aria-hidden="true"><svg viewBox="0 0 60 40"><path d="M56 20H8m8-8-8 8 8 8" fill="none" stroke="#58636e" stroke-width="2.5"/></svg></div>
+    <div><div class="gridwrap" tabindex="0" id="copiesGrid"></div></div>
+  </div>
+  <div class="story" id="splitRead" aria-live="polite"><p class="muted"><span class="en">Tap a row in either table.</span><span class="ar">دوس على أي <bdi dir="ltr">row</bdi> في أي <bdi dir="ltr">table</bdi>.</span></p></div>
+  <ul class="pk">
+    <li><span class="y" aria-hidden="true">✓</span><span><span class="en"><b>BookId</b> says <i>which book</i> (title and category, stored once). <b>CopyId</b> says <i>which physical object</i>. Several copies can point to the same BookId.</span><span class="ar"><b><bdi dir="ltr">BookId</bdi></b> بيقول <i>أنهي كتاب</i> (الاسم والمجال، متخزنين مرة واحدة). <b><bdi dir="ltr">CopyId</bdi></b> بيقول <i>أنهي حاجة فعلية</i>. كذا نسخة ممكن تشاور على نفس الـ <bdi dir="ltr">BookId</bdi>.</span></span></li>
+    <li><span class="y" aria-hidden="true">✓</span><span><span class="en">Renaming Database Design now changes <b>one</b> row in Books.</span><span class="ar">تغيير اسم <bdi dir="ltr">Database Design</bdi> دلوقتي بيغيّر <bdi dir="ltr">row</bdi> <b>واحد</b> في <bdi dir="ltr">Books</bdi>.</span></span></li>
+    <li><span class="x" aria-hidden="true">✕</span><span><span class="en">The arrow and the tables sitting side by side do not link anything. The link is the matching <b>BookId value</b>. Later, a FOREIGN KEY will let SQL Server check that every Copies.BookId exists in Books.</span><span class="ar">السهم وإن الـ <bdi dir="ltr">tables</bdi> جنب بعض مش بيربطوا أي حاجة. الربط هو إن <b>قيمة الـ <bdi dir="ltr">BookId</bdi></b> متطابقة. بعدين، الـ <bdi dir="ltr">FOREIGN KEY</bdi> هيخلّي <bdi dir="ltr">SQL Server</bdi> يتأكد إن كل <bdi dir="ltr">Copies.BookId</bdi> موجود في <bdi dir="ltr">Books</bdi>.</span></span></li>
+    <li><span class="x" aria-hidden="true">✕</span><span><span class="en">One table is not "less relational": today's table is already a relational table. Splitting is a design choice you will learn to make, not a requirement.</span><span class="ar">الـ <bdi dir="ltr">table</bdi> الواحد مش "<bdi dir="ltr">relational</bdi> أقل": الـ <bdi dir="ltr">table</bdi> بتاع النهارده <bdi dir="ltr">relational table</bdi> أصلًا. التقسيم ده قرار تصميم هتتعلم تاخده، مش شرط.</span></span></li>
+  </ul>
+  <div class="callout"><b class="h"><span class="en">A question no table here can answer yet</span><span class="ar">سؤال مفيش <bdi dir="ltr">table</bdi> هنا يقدر يجاوبه لسه</span></b><span class="en">"Who borrowed copy 102, and when is it due back?" IsAvailable only says the current status. There is no borrower, no date and no history. That needs more tables, such as Students and Loans, later in the course.</span><span class="ar">"مين استلف النسخة <bdi dir="ltr">102</bdi>، وإمتى المفروض ترجع؟" الـ <bdi dir="ltr">IsAvailable</bdi> بيقول الحالة الحالية بس. مفيش اسم حد، ولا تاريخ، ولا <bdi dir="ltr">history</bdi>. ده محتاج <bdi dir="ltr">tables</bdi> تانية، زي <bdi dir="ltr">Students</bdi> و<bdi dir="ltr">Loans</bdi>، بعدين في المادة.</span></div>
+
+  <h3><span class="no">9.3</span><span class="en">You are done today when you can…</span><span class="ar">إنت خلّصت النهارده لما تقدر…</span></h3>
+  <p class="small muted"><span class="en">Ticks are for you only. They are not saved or sent anywhere.</span><span class="ar">العلامات دي ليك إنت بس. مش بتتسيّف ولا بتتبعت لأي حتة.</span></p>
+  <ul class="checklist">
+    <li><label><input type="checkbox"><span><span class="en">say what one row of <code>BookCopies</code> means, and why CopyId (not Title) is the key</span><span class="ar">تقول الـ <bdi dir="ltr">row</bdi> الواحد في <code>BookCopies</code> معناه إيه، وليه <bdi dir="ltr">CopyId</bdi> (مش <bdi dir="ltr">Title</bdi>) هو الـ <bdi dir="ltr">key</bdi></span></span></label></li>
+    <li><label><input type="checkbox"><span><span class="en">point at SSMS, SQL Server and the database in the drawing, and say which one holds the rows</span><span class="ar">تشاور على <bdi dir="ltr">SSMS</bdi> و<bdi dir="ltr">SQL Server</bdi> والـ <bdi dir="ltr">database</bdi> في الرسمة، وتقول مين فيهم شايل الصفوف</span></span></label></li>
+    <li><label><input type="checkbox"><span><span class="en">predict the CopyIds of a SELECT with WHERE, run it, and change it to answer a new question</span><span class="ar">تتوقع الـ <bdi dir="ltr">CopyIds</bdi> بتوع <bdi dir="ltr">SELECT</bdi> فيه <bdi dir="ltr">WHERE</bdi>، وتشغّله، وتعدّله عشان يجاوب سؤال جديد</span></span></label></li>
+    <li><label><input type="checkbox"><span><span class="en">create a tiny table, insert into it, read it back after reopening the query, and explain the duplicate-key error</span><span class="ar">تعمل <bdi dir="ltr">table</bdi> صغير، وتعمل <bdi dir="ltr">INSERT</bdi> فيه، وتقراه تاني بعد ما تفتح <bdi dir="ltr">query</bdi> جديد، وتشرح <bdi dir="ltr">error</bdi> الـ <bdi dir="ltr">duplicate key</bdi></span></span></label></li>
+  </ul>
+
+  <h3><span class="no">9.4</span><span class="en">Later in the course</span><span class="ar">بعدين في المادة</span></h3>
+  <div class="later">
+    <div><b>JOIN</b><span class="en">answer one question from Books and Copies together</span><span class="ar">تجاوب سؤال واحد من <bdi dir="ltr">Books</bdi> و<bdi dir="ltr">Copies</bdi> مع بعض</span></div>
+    <div><b>FOREIGN KEY</b><span class="en">let SQL Server check that a BookId really exists</span><span class="ar">تخلّي <bdi dir="ltr">SQL Server</bdi> يتأكد إن الـ <bdi dir="ltr">BookId</bdi> موجود فعلًا</span></div>
+    <div><b><span class="en">Normalization</span><span class="ar"><bdi dir="ltr">Normalization</bdi></span></b><span class="en">a method for deciding when and how to split tables</span><span class="ar">طريقة تقرر بيها إمتى وإزاي تقسّم الـ <bdi dir="ltr">tables</bdi></span></div>
+    <div><b><span class="en">Transactions</span><span class="ar"><bdi dir="ltr">Transactions</bdi></span></b><span class="en">two staff lending copy 101 at the same moment: today's PRIMARY KEY and BIT alone do not prevent that</span><span class="ar">موظفين بيسلّفوا النسخة <bdi dir="ltr">101</bdi> في نفس اللحظة: الـ <bdi dir="ltr">PRIMARY KEY</bdi> والـ <bdi dir="ltr">BIT</bdi> بتوع النهارده لوحدهم مش بيمنعوا ده</span></div>
+    <div><b>UPDATE · DELETE</b><span class="en">changing and removing rows safely</span><span class="ar">تغيير الصفوف ومسحها بأمان</span></div>
+    <div><b><span class="en">Indexes</span><span class="ar"><bdi dir="ltr">Indexes</bdi></span></b><span class="en">finding rows fast in big tables</span><span class="ar">تلاقي الصفوف بسرعة في الـ <bdi dir="ltr">tables</bdi> الكبيرة</span></div>
+    <div><b><span class="en">Application code</span><span class="ar">كود الـ <bdi dir="ltr">application</bdi></span></b><span class="en">a program that sends SQL for its users</span><span class="ar">برنامج بيبعت <bdi dir="ltr">SQL</bdi> بدل المستخدمين بتوعه</span></div>
+  </div>
+</section>
+
+</main>
+<footer class="page"><span class="en">Database 1 · Week 1 / Lab 1 · page snapshot 2026-10-13 · fictional teaching data · works offline</span><span class="ar"><bdi>Database 1</bdi> · الأسبوع الأول · <bdi>Lab 1</bdi> · <bdi dir="ltr">snapshot</bdi> للصفحة بتاريخ <bdi>2026-10-13</bdi> · بيانات تعليمية متألفة · بتشتغل من غير إنترنت</span></footer>
+
+<script>
+'use strict';
+/* ---------- the one fixture: BookCopies (fictional teaching data) ---------- */
+const COPIES=[
+  {CopyId:101,Title:'Python Basics',Category:'Computing',Shelf:'A1',IsAvailable:1},
+  {CopyId:102,Title:'Python Basics',Category:'Computing',Shelf:'A1',IsAvailable:0},
+  {CopyId:103,Title:'Database Design',Category:'Computing',Shelf:'A2',IsAvailable:1},
+  {CopyId:104,Title:'Intro to Circuits',Category:'Engineering',Shelf:'B1',IsAvailable:1},
+  {CopyId:105,Title:'Applied Mathematics',Category:'Mathematics',Shelf:'C1',IsAvailable:0},
+  {CopyId:106,Title:'Database Design',Category:'Computing',Shelf:'A2',IsAvailable:0}];
+const ALLCOLS=['CopyId','Title','Category','Shelf','IsAvailable'];
+const byId=id=>COPIES.find(c=>c.CopyId===id);
+
+const $=id=>document.getElementById(id);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+// Keep Latin terms independent of Arabic sentence punctuation in generated feedback.
+function isolateArabicHTML(html){
+  const template=document.createElement('template');template.innerHTML=html;
+  const walker=document.createTreeWalker(template.content,NodeFilter.SHOW_TEXT),nodes=[];
+  while(walker.nextNode())nodes.push(walker.currentNode);
+  const latin=/[A-Za-z0-9]+(?:[._/+\-–][A-Za-z0-9]+)*(?:(?:[ \t]+|[ \t]*[+=<>][ \t]*)[A-Za-z0-9]+(?:[._/+\-–][A-Za-z0-9]+)*)*/g;
+  nodes.forEach(node=>{
+    if(node.parentElement?.closest('bdi,code,kbd,pre,svg,.ltr,.mono'))return;
+    const text=node.data,fragment=document.createDocumentFragment();let start=0;
+    for(const match of text.matchAll(latin)){
+      fragment.append(text.slice(start,match.index));const bdi=document.createElement('bdi');
+      bdi.dir='ltr';bdi.textContent=match[0];fragment.append(bdi);start=match.index+match[0].length;
+    }
+    if(start){fragment.append(text.slice(start));node.replaceWith(fragment);}
+  });
+  return template.innerHTML;
+}
+const B=(en,ar)=>`<span class="en">${en}</span><span class="ar" lang="ar-EG">${isolateArabicHTML(ar)}</span>`;
+const list=(a,ar)=>a.length<2?String(a[0]??''):a.slice(0,-1).join(', ')+(ar?' و':' and ')+a[a.length-1];
+
+/* ---------- language: flips html lang/dir only, so no state is ever lost ---------- */
+function setLang(l){
+  const ar=l==='ar',h=document.documentElement;
+  h.lang=ar?'ar-EG':'en';h.dir=ar?'rtl':'ltr';
+  try{localStorage.setItem('db1-lab-language',l);}catch(e){}
+  $$('.langs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===l)));
+  $$('[data-label-ar]').forEach(el=>el.setAttribute('aria-label',ar?el.dataset.labelAr:el.dataset.labelEn));
+  $$('td[data-h-en]').forEach(td=>td.dataset.h=ar?td.dataset.hAr:td.dataset.hEn);
+  document.title=ar?'Database 1 · الأسبوع الأول · Lab 1 · أول database ليك':'Database 1 · Week 1 / Lab 1 · Your first database';
+}
+$$('[data-label-ar]').forEach(el=>el.dataset.labelEn=el.getAttribute('aria-label')||'');
+$$('td[data-h]').forEach(td=>{td.dataset.hEn=td.dataset.h;td.dataset.hAr=td.dataset.h==='DBMS'?'الـ DBMS':'برنامجك';});
+$$('.ar').forEach(el=>el.setAttribute('lang','ar-EG'));
+$$('.en').forEach(el=>el.setAttribute('lang','en'));
+$$('.langs button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+
+/* ---------- chapters ---------- */
+const CH=$$('section.ch');
+$('chnav').innerHTML=CH.map((s,i)=>`<li><button type="button" data-go="${i}"><span class="n">${i+1}</span>${B(s.dataset.shortEn,s.dataset.shortAr)}</button></li>`).join('');
+CH.forEach((s,i)=>{
+  const f=document.createElement('div');f.className='chfoot';
+  const p=CH[i-1],n=CH[i+1];
+  f.innerHTML=(p?`<button class="btn" type="button" data-go="${i-1}">${B('Back: '+(i)+' · '+p.dataset.shortEn,'رجوع: '+(i)+' · '+p.dataset.shortAr)}</button>`:'<span></span>')
+   +(n?`<button class="btn primary" type="button" data-go="${i+1}">${B('Next: '+(i+2)+' · '+n.dataset.shortEn,'اللي بعده: '+(i+2)+' · '+n.dataset.shortAr)}</button>`:'');
+  s.appendChild(f);
+});
+let cur=0;
+function go(i,focus){
+  i=Math.max(0,Math.min(CH.length-1,i));cur=i;
+  CH.forEach((s,k)=>s.hidden=k!==i);
+  $$('#chnav button').forEach((b,k)=>{if(k===i){b.setAttribute('aria-current','step');b.classList.add('seen');b.scrollIntoView({block:'nearest',inline:'nearest'});}else b.removeAttribute('aria-current');});
+  if(location.hash!=='#ch'+(i+1))history.replaceState(null,'','#ch'+(i+1));
+  if(focus){scrollTo(0,0);CH[i].querySelector('h2').focus({preventScroll:true});}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(+b.dataset.go,true);});
+addEventListener('hashchange',()=>{const m=/^#ch(\d)$/.exec(location.hash);if(m&&+m[1]-1!==cur)go(+m[1]-1,true);});
+
+/* ---------- code highlighting (display only) ---------- */
+const SQLKW=new Set('SELECT FROM WHERE AND OR ORDER BY CREATE TABLE INSERT INTO VALUES PRIMARY KEY NOT NULL INT NVARCHAR BIT USE GO AS ASC DESC'.split(' '));
+function hiSQL(t){return t.replace(/(--[^\n]*)|(N?'(?:[^']|'')*')|(\b\d+\b)|([A-Za-z_]+)|([^]+?)/g,(m,cm,str,num,w)=>{
+  if(cm)return`<span class="cm">${esc(cm)}</span>`;if(str)return`<span class="str">${esc(str)}</span>`;if(num)return`<span class="num">${num}</span>`;
+  if(w)return SQLKW.has(w)?`<span class="kw">${w}</span>`:w;return esc(m);});}
+const PYKW=new Set('def with as for in return import if else open True False'.split(' '));
+function hiPy(t){return t.replace(/(#[^\n]*)|(f?"(?:[^"\\]|\\.)*")|(\b\d+\b)|([A-Za-z_]+)|([^]+?)/g,(m,cm,str,num,w)=>{
+  if(cm)return`<span class="cm">${esc(cm)}</span>`;if(str)return`<span class="str">${esc(str)}</span>`;if(num)return`<span class="num">${num}</span>`;
+  if(w)return PYKW.has(w)?`<span class="kw">${w}</span>`:w;return esc(m);});}
+$$('pre.code.sql').forEach(p=>{if(p.textContent.trim())p.innerHTML=hiSQL(p.textContent);});
+$$('pre.code.py').forEach(p=>p.innerHTML=hiPy(p.textContent));
+
+/* ---------- result grids, always computed from COPIES ---------- */
+const cellVal=v=>esc(v);
+function gridHTML(cols,rows,o={}){
+  return `<table class="grid">${o.caption?`<caption>${o.caption}</caption>`:''}<thead><tr><th scope="col">#</th>${cols.map(c=>`<th class="${o.colClass?o.colClass(c):''}" data-col="${c}">${c}</th>`).join('')}${o.extraHead&&!o.below?`<th class="whyh">${o.extraHead}</th>`:''}</tr></thead><tbody>${
+    rows.map((r,i)=>`<tr class="${o.rowClass?o.rowClass(r):''}">${`<td class="rn">${i+1}</td>`}${cols.map(c=>`<td class="${typeof r[c]==='number'?'n ':''}${o.cellClass?o.cellClass(r,c):''}" data-col="${c}">${o.cell?o.cell(r,c):cellVal(r[c])}</td>`).join('')}${o.extra&&!o.below?`<td class="why">${o.extra(r)}</td>`:''}</tr>${
+      o.extra&&o.below?`<tr class="whyrow"><td class="why" colspan="${cols.length+1}">${o.extra(r)}</td></tr>`:''}`).join('')}</tbody></table>`;
+}
+$$('[data-grid]').forEach(el=>{
+  const cols=el.dataset.cols.split(','),rows=el.dataset.ids.split(',').map(Number).map(byId),mark=el.dataset.mark;
+  el.innerHTML=gridHTML(cols,rows,{cellClass:(r,c)=>mark&&r[c]===mark?'hlc':''});
+});
+
+/* ---------- quizzes: feedback appears only after a choice ---------- */
+$$('[data-quiz]').forEach(q=>q.addEventListener('click',e=>{
+  const b=e.target.closest('[data-opt]');if(!b)return;
+  const fb=q.querySelector(`[data-fb="${b.dataset.opt}"]`);
+  $$('[data-opt]',q).forEach(x=>{x.setAttribute('aria-pressed',String(x===b));x.classList.remove('is-yes','is-no');});
+  b.classList.add(fb.classList.contains('yes')?'is-yes':'is-no');
+  $$('[data-fb]',q).forEach(x=>x.hidden=x!==fb);
+}));
+$$('[data-quiz] [data-opt]').forEach(b=>b.setAttribute('aria-pressed','false'));
+
+/* ---------- reveals and step ladders ---------- */
+document.addEventListener('click',e=>{
+  const r=e.target.closest('[data-reveal]');
+  if(r){const t=$(r.dataset.reveal);t.hidden=false;r.hidden=true;t.querySelector('h3,b,div')?.scrollIntoView({block:'nearest'});}
+  const n=e.target.closest('[data-next]');
+  if(n){const lad=$(n.dataset.next),h=lad.querySelector(':scope>li[hidden]');if(h){h.hidden=false;h.scrollIntoView({block:'nearest',behavior:'smooth'});}
+    if(!lad.querySelector(':scope>li[hidden]'))n.disabled=true;}
+});
+
+/* ---------- chapter 1: the desk cards ---------- */
+const CATAR={Computing:'Computing',Engineering:'Engineering',Mathematics:'Mathematics'};
+$('deskCards').innerHTML=COPIES.map(c=>`<button type="button" class="copy" data-cat="${c.Category}" data-id="${c.CopyId}" aria-pressed="false">
+  <span class="pick" aria-hidden="true"></span><span class="stk">${c.CopyId}</span><span class="ttl">${c.Title}</span>
+  <span class="meta">${c.Category} · Shelf ${c.Shelf}</span>
+  <span class="st ${c.IsAvailable?'on':'off'}">${c.IsAvailable?'● '+B('on the shelf','على الرف'):'○ '+B('lent out','متسلّفة')}</span></button>`).join('');
+$('deskCards').addEventListener('click',e=>{const b=e.target.closest('.copy');if(b)b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));});
+const DESK_OK=[101,103];
+function deskVerdict(show){
+  if(show)$$('#deskCards .copy').forEach(b=>b.setAttribute('aria-pressed',String(DESK_OK.includes(+b.dataset.id))));
+  const sel=$$('#deskCards .copy[aria-pressed=true]').map(b=>+b.dataset.id);
+  const fb=$('deskFb');
+  if(!sel.length){fb.innerHTML=`<div class="no">${B('Pick at least one card first.','اختار كارت واحد على الأقل الأول.')}</div>`;return;}
+  const wrong=sel.filter(i=>!DESK_OK.includes(i)),missing=DESK_OK.filter(i=>!sel.includes(i));
+  if(!wrong.length&&!missing.length){
+    fb.innerHTML=`<div class="yes">${B('Right: <b>101 on shelf A1</b> and <b>103 on shelf A2</b>. Both are Computing and on the shelf. 102 and 106 are Computing too, but lent out.','صح: <b>101 على رف A1</b> و<b>103 على رف A2</b>. الاتنين Computing وعلى الرف. 102 و106 Computing برضه، بس متسلّفين.')}</div>`;
+    $('shelfReveal').hidden=false;return;}
+  const lines=wrong.map(i=>{const c=byId(i);
+    if(c.IsAvailable)return B(`<b>${i}</b> is on the shelf, but it is ${c.Category}. The student asked for Computing.`,`<b>${i}</b> على الرف، بس مجالها ${CATAR[c.Category]}. الطالب طالب Computing.`);
+    if(c.Category==='Computing')return B(`<b>${i}</b> is Computing, but its card says lent out. Its home shelf is ${c.Shelf}, yet the copy is not there now.`,`<b>${i}</b> من Computing، بس الكارت بتاعها مكتوب عليه متسلّفة. رفها الأصلي ${c.Shelf}، بس النسخة مش هناك دلوقتي.`);
+    return B(`<b>${i}</b> is ${c.Category}, and it is lent out.`,`<b>${i}</b> مجالها ${CATAR[c.Category]}، وكمان متسلّفة.`);});
+  if(missing.length)lines.push(missing.length===1?B('One more card fits the request. Look again.','فيه كارت كمان ينفع للطلب ده. بص تاني.'):B(`${missing.length} cards fit the request. Look again.`,`فيه ${missing.length} كروت بتنفع للطلب ده. بص تاني.`));
+  fb.innerHTML=`<div class="no">${lines.join('<br>')}</div>`;
+}
+$('deskCheck').addEventListener('click',()=>deskVerdict(false));
+$('deskShow').addEventListener('click',()=>deskVerdict(true));
+
+/* ---------- chapter 2: program / file simulation (nothing real happens) ---------- */
+const SIM={ver:1,run:1,mem:{101:true,102:false},file:{101:true,102:false},msg:'start1',changed:null};
+const SIMMSG={
+  start1:['Version 1 is running. Memory was filled from the values written in the code. Press <b>Run lend(101)</b>.','نسخة 1 شغالة. الـ memory اتملت من القيم المكتوبة في الكود. دوس <b>شغّل lend(101)</b>.'],
+  lend1:['<code>lend(101)</code> changed memory: 101 is now <b>False</b> (lent out). The source code still says True: running code does not rewrite the code file. Now restart the program.','<code>lend(101)</code> غيّرت الـ memory: 101 بقت <b>False</b> (متسلّفة). الكود لسه مكتوب فيه True: الكود وهو شغال مش بيعدّل الـ file بتاعه. اقفل البرنامج وشغّله تاني دلوقتي.'],
+  restart1:['The program stopped and started again from its source code, so 101 is <b>True</b> (on the shelf) again. The loan was lost when the program stopped.','البرنامج اتقفل واشتغل تاني من الكود، فـ 101 رجعت <b>True</b> (على الرف) تاني. الاستعارة ضاعت لما البرنامج اتقفل.'],
+  again:['101 is already False in memory. Try restarting the program.','101 أصلًا False في الـ memory. جرّب تقفل البرنامج وتشغّله تاني.'],
+  start2:['Version 2 is running. <code>load()</code> filled memory from copies.txt. Press <b>Run lend(101)</b>.','نسخة 2 شغالة. <code>load()</code> ملت الـ memory من copies.txt. دوس <b>شغّل lend(101)</b>.'],
+  lend2:['<code>lend(101)</code> changed memory, then <code>save()</code> wrote <code>101,0</code> into copies.txt on disk. Now restart the program.','<code>lend(101)</code> غيّرت الـ memory، وبعدين <code>save()</code> كتبت <code>101,0</code> في copies.txt على الهارد. اقفل البرنامج وشغّله تاني دلوقتي.'],
+  restart2:['The program stopped and started again. <code>load()</code> read copies.txt, so 101 is still <b>False</b>: the loan survived the restart. A file can keep data.','البرنامج اتقفل واشتغل تاني. <code>load()</code> قرت copies.txt، فـ 101 لسه <b>False</b>: الاستعارة عاشت بعد الـ restart. الـ file يقدر يحتفظ بالبيانات.'],
+  restart2same:['Restarted. <code>load()</code> read the same file again; nothing in it had changed.','اشتغل تاني. <code>load()</code> قرت نفس الـ file تاني، ومفيش حاجة فيه كانت اتغيرت.']};
+function simRender(){
+  $('srcV1').hidden=SIM.ver!==1;$('srcV2').hidden=SIM.ver!==2;
+  $$('#progSim .seg button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.ver===SIM.ver)));
+  $('memFlags').innerHTML=[101,102].map(k=>`<div class="flag${SIM.changed==='m'+k?' flash':''}"><span>copies[${k}]</span><b class="${SIM.mem[k]?'T':'F'}">${SIM.mem[k]?'True':'False'}</b></div>`).join('');
+  $('runState').innerHTML='● '+B(`running · run #${SIM.run}`,`شغال · مرة رقم ${SIM.run}`);
+  const fb=$('fileBox');
+  if(SIM.ver===1){fb.className='filebox none';fb.innerHTML=B('No file: version 1 never writes one.','مفيش file: نسخة 1 عمرها ما بتكتب file.');}
+  else{fb.className='filebox'+(SIM.changed==='f'?' flash':'');fb.textContent=[101,102].map(k=>`${k},${SIM.file[k]?1:0}`).join('\n');}
+  const m=SIMMSG[SIM.msg];$('simRead').innerHTML=B(m[0],m[1]);SIM.changed=null;
+}
+function simStart(ver){SIM.ver=ver;SIM.run=1;SIM.file={101:true,102:false};SIM.mem={...SIM.file};SIM.msg='start'+ver;simRender();}
+$$('#progSim .seg button').forEach(b=>b.addEventListener('click',()=>simStart(+b.dataset.ver)));
+$('simLend').addEventListener('click',()=>{
+  if(!SIM.mem[101]){SIM.msg='again';return simRender();}
+  SIM.mem[101]=false;SIM.changed='m101';
+  if(SIM.ver===2){SIM.file[101]=false;SIM.msg='lend2';simRender();SIM.changed='f';$('fileBox').classList.add('flash');SIM.changed=null;}
+  else{SIM.msg='lend1';simRender();}
+});
+$('simRestart').addEventListener('click',()=>{
+  SIM.run++;const before=SIM.mem[101];
+  SIM.mem=SIM.ver===1?{101:true,102:false}:{...SIM.file};
+  SIM.msg=SIM.ver===1?'restart1':(SIM.file[101]?'restart2same':'restart2');
+  if(before!==SIM.mem[101])SIM.changed='m101';simRender();
+});
+$('simReset').addEventListener('click',()=>simStart(SIM.ver));
+simStart(1);
+
+/* ---------- chapter 3: architecture situations and terms ---------- */
+const ARCH={run:['you','a1','ssms','a2','eng','a3','db'],close:['eng','a3','db','ssms'],save:['you','ssms','file'],app:['staff','a4','app','a5','eng','a3','db'],
+  db:['db'],dbms:['eng'],sql:['a2','a5'],tsql:['a2','a5'],ssms:['ssms']};
+function archLight(k,closed){
+  $('arch').classList.add('active');
+  $$('#arch [data-node]').forEach(n=>{n.classList.toggle('hl',ARCH[k].includes(n.dataset.node));n.classList.toggle('closed',closed&&n.dataset.node==='ssms');});
+}
+$('archSc').addEventListener('click',e=>{const b=e.target.closest('[data-sc]');if(!b)return;const k=b.dataset.sc;
+  $$('#archSc button,#terms button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  archLight(k,k==='close');$('archStory').innerHTML=document.querySelector(`#archSteps [data-st="${k}"]`).innerHTML;});
+$('terms').addEventListener('click',e=>{const b=e.target.closest('[data-term]');if(!b)return;const k=b.dataset.term;
+  $$('#archSc button,#terms button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  archLight(k,false);$('termDef').innerHTML=document.querySelector(`#termTexts [data-tt="${k}"]`).innerHTML;});
+
+/* ---------- chapter 4: card fields to columns ---------- */
+let linkCol=null;
+function linkRender(){
+  $('linkGrid').innerHTML=gridHTML(ALLCOLS,COPIES,{rowClass:r=>r.CopyId===101?'keep':'',colClass:c=>c===linkCol?'hlc':'',cellClass:(r,c)=>c===linkCol?'hlc':''});
+}
+$('bigCard').addEventListener('click',e=>{const f=e.target.closest('[data-col]');if(!f)return;linkCol=f.dataset.col;
+  $$('#bigCard [data-col]').forEach(x=>x.setAttribute('aria-pressed',String(x===f)));linkRender();
+  $('typeRead').innerHTML=document.querySelector(`#typeTexts [data-tt="${linkCol}"]`).innerHTML;});
+linkRender();
+
+/* ---------- chapter 5: the query, one clause at a time ---------- */
+const QB=[
+  {lines:[['SELECT *',1],['FROM BookCopies',1],['ORDER BY CopyId;',1]],cols:ALLCOLS,keep:()=>true,covers:['from'],
+   why:['Look before you filter. <code>*</code> means every column; <code>ORDER BY CopyId</code> makes the order predictable.','بص قبل ما تفلتر. <code>*</code> معناها كل الأعمدة، و<code>ORDER BY CopyId</code> بتخلّي الترتيب مضمون.']},
+  {lines:[['SELECT CopyId, Title, Shelf',1],['FROM BookCopies',0],['ORDER BY CopyId;',0]],cols:['CopyId','Title','Shelf'],keep:()=>true,covers:['from','cols'],
+   why:['The question asks which copy and which shelf: three columns. The table still has five; SELECT only chooses what to show.','السؤال عايز أنهي نسخة وأنهي رف: تلات أعمدة. الـ table لسه فيه خمسة؛ الـ SELECT بيختار بس هيعرض إيه.']},
+  {lines:[['SELECT CopyId, Title, Shelf',0],['FROM BookCopies',0],["WHERE Category = N'Computing'",1],['ORDER BY CopyId;',0]],cols:['CopyId','Title','Shelf'],keep:r=>r.Category==='Computing',covers:['from','cols','cat'],
+   why:['WHERE keeps only the rows whose Category is Computing: 101, 102, 103, 106. But 102 and 106 are lent out, so we are not done yet.','الـ WHERE بيسيب بس الصفوف اللي الـ Category بتاعها Computing: 101 و102 و103 و106. بس 102 و106 متسلّفين، فلسه ما خلصناش.']},
+  {lines:[['SELECT CopyId, Title, Shelf',0],['FROM BookCopies',0],["WHERE Category = N'Computing'",0],['  AND IsAvailable = 1',1],['ORDER BY CopyId;',0]],cols:['CopyId','Title','Shelf'],keep:r=>r.Category==='Computing'&&r.IsAvailable===1,covers:['from','cols','cat','avail'],
+   why:['AND keeps a row only when both conditions are true. The answer to the desk question: copy 101 on shelf A1, or copy 103 on shelf A2.','الـ AND بيسيب الـ row بس لما الشرطين الاتنين يبقوا صح. ودي إجابة سؤال المكتب: النسخة 101 على رف A1، أو النسخة 103 على رف A2.']}];
+const PH={from:['FROM',0,'FROM','FROM'],cols:['SELECT',1,'SELECT','SELECT'],cat:['WHERE',2,'WHERE','WHERE'],avail:['  AND',3,'AND','AND']};
+let qb=0,qbPh=null;
+$('qbDots').innerHTML=QB.map((_,i)=>`<button type="button" class="dot" data-qb="${i}">${B('Step '+(i+1),'خطوة '+(i+1))}</button>`).join('');
+function qbRender(){
+  const v=QB[qb];
+  $('qbCode').innerHTML=v.lines.map(([t,isNew])=>{let h=hiSQL(t);if(qbPh&&t.startsWith(PH[qbPh][0]))h=`<mark>${h}</mark>`;return isNew&&qb>0?`<span class="new">${h}</span>`:h;}).join('\n');
+  const rows=COPIES.filter(v.keep);
+  $('qbGrid').innerHTML=gridHTML(v.cols,rows);
+  $('qbCount').textContent=`(${rows.length} rows affected)`;
+  let ph='';
+  if(qbPh&&!v.covers.includes(qbPh)){const s=PH[qbPh][1]+1;ph=`<p class="small">${B(`That part is not in the query yet: step ${s} adds it.`,`الجزء ده لسه مش في الـ query: خطوة ${s} هي اللي بتضيفه.`)}</p>`;}
+  else if(qbPh)ph=`<p class="small">${B(`That part of the question is answered by the highlighted <code>${PH[qbPh][2]}</code> line.`,`الجزء ده من السؤال بيجاوب عليه السطر المعلّم بتاع <code>${PH[qbPh][3]}</code>.`)}</p>`;
+  $('qbWhy').innerHTML=`<b>${B('Step '+(qb+1)+' of 4','خطوة '+(qb+1)+' من 4')}</b><p>${B(v.why[0],v.why[1])}</p>${ph}`;
+  $$('#ask [data-ph]').forEach(b=>{b.classList.toggle('done',v.covers.includes(b.dataset.ph));b.setAttribute('aria-pressed',String(b.dataset.ph===qbPh));});
+  $$('#qbDots .dot').forEach((d,i)=>i===qb?d.setAttribute('aria-current','step'):d.removeAttribute('aria-current'));
+  $('qbPrev').disabled=qb===0;$('qbNext').disabled=qb===QB.length-1;
+}
+$('qbDots').addEventListener('click',e=>{const d=e.target.closest('[data-qb]');if(d){qb=+d.dataset.qb;qbRender();}});
+$('qbPrev').addEventListener('click',()=>{qb=Math.max(0,qb-1);qbRender();});
+$('qbNext').addEventListener('click',()=>{qb=Math.min(QB.length-1,qb+1);qbRender();});
+$('ask').addEventListener('click',e=>{const b=e.target.closest('[data-ph]');if(!b)return;qbPh=qbPh===b.dataset.ph?null:b.dataset.ph;qbRender();});
+qbRender();
+
+/* ---------- chapter 6: predict-then-reveal for four fixed queries ---------- */
+const PRE=[
+  {k:'A',en:'A · on the shelf now',ar:'A · على الرف دلوقتي',cols:['CopyId','Title','Shelf'],conds:[['IsAvailable',1]]},
+  {k:'B',en:'B · Computing and on the shelf',ar:'B · Computing وعلى الرف',cols:['CopyId','Title','Shelf'],conds:[['Category','Computing'],['IsAvailable',1]]},
+  {k:'C',en:'C · lent out',ar:'C · متسلّفة',cols:['CopyId','Title','Shelf'],conds:[['IsAvailable',0]]},
+  {k:'D',en:'D · every copy of Database Design',ar:'D · كل نسخ Database Design',cols:['CopyId','Shelf','IsAvailable'],conds:[['Title','Database Design']]}];
+const lit=v=>typeof v==='number'?String(v):`N'${v}'`;
+const sqlOf=p=>`SELECT ${p.cols.join(', ')}\nFROM BookCopies\nWHERE ${p.conds.map(([c,v])=>`${c} = ${lit(v)}`).join('\n  AND ')}\nORDER BY CopyId;`;
+const passes=(p,r)=>p.conds.every(([c,v])=>r[c]===v);
+const VZ={};PRE.forEach(p=>VZ[p.k]={pred:new Set(),stage:-1});
+let pk='A';
+const NARROW=matchMedia('(max-width:760px)');
+$('presets').innerHTML=PRE.map(p=>`<button type="button" data-pk="${p.k}" aria-pressed="false"><b>${B(p.en,p.ar)}</b><code class="ltr">WHERE ${esc(p.conds.map(([c,v])=>`${c} = ${lit(v)}`).join(' AND '))}</code></button>`).join('');
+$('predict').innerHTML=COPIES.map(c=>`<button type="button" data-p="${c.CopyId}" aria-pressed="false">${c.CopyId}</button>`).join('');
+function reason(p,r){
+  return p.conds.map(([c,v])=>r[c]===v?`<bdi dir="ltr">✓ ${c} = ${esc(String(r[c]))}</bdi>`:B(`<bdi dir="ltr">✕ ${c} is ${esc(String(r[c]))}, not ${esc(String(v))}</bdi>`,`<bdi dir="rtl">✕ <bdi dir="ltr">${c}</bdi> قيمته <bdi dir="ltr">${esc(String(r[c]))}</bdi> مش <bdi dir="ltr">${esc(String(v))}</bdi></bdi>`)).join(' · ');
+}
+const STAGE=[
+  ['<b>FROM BookCopies</b>: start with all 6 rows and all 5 columns.','<b>FROM BookCopies</b>: ابدأ بالست صفوف والخمس أعمدة كلهم.'],
+  ['<b>WHERE</b> tests every row on its own. Green rows pass; struck-through rows fail. Each row shows the reason.','الـ <b>WHERE</b> بيختبر كل row لوحده. الصفوف الخضرا بتعدّي، والمشطوبة بتقع. وكل row مكتوب جنبه السبب.'],
+  ['<b>SELECT</b> keeps only the listed columns. The faded columns are still in the table; they are just not shown.','الـ <b>SELECT</b> بيسيب بس الأعمدة اللي في القايمة. الأعمدة الباهتة لسه في الـ table، بس مش هتتعرض.'],
+  ['<b>ORDER BY CopyId</b> sorts what is left. This is the grid SSMS should show you.','الـ <b>ORDER BY CopyId</b> بيرتّب اللي فاضل. ده الـ grid اللي المفروض SSMS يوريهولك.']];
+function vzRender(){
+  const p=PRE.find(x=>x.k===pk),st=VZ[pk];
+  $$('#presets button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pk===pk)));
+  $('vizCode').innerHTML=hiSQL(sqlOf(p));
+  $$('#predict button').forEach(b=>{b.setAttribute('aria-pressed',String(st.pred.has(+b.dataset.p)));b.disabled=st.stage>=0;});
+  $('vizGo').hidden=st.stage>=0;
+  $$('#vizStages span').forEach((s,i)=>{s.classList.toggle('on',i===st.stage);s.classList.toggle('past',i<st.stage);});
+  $('vizStages').hidden=st.stage<0;
+  $('vizNext').hidden=st.stage<0||st.stage>=3;$('vizAgain').hidden=st.stage<0;
+  $('vizNote').hidden=st.stage<0;
+  if(st.stage<0){$('vizGrid').innerHTML='';$('vizCmp').innerHTML='';return;}
+  $('vizNote').innerHTML=B(STAGE[st.stage][0],STAGE[st.stage][1]);
+  if(st.stage<3){
+    /* phones: at the WHERE stage keep only CopyId and the tested columns, so each reason stays on screen */
+    const narrowWhere=NARROW.matches&&st.stage===1;
+    const showWhy=st.stage===1||(st.stage===2&&!NARROW.matches);
+    const cols=narrowWhere?ALLCOLS.filter(c=>c==='CopyId'||p.conds.some(([k])=>k===c)):ALLCOLS;
+    $('vizGrid').innerHTML=gridHTML(cols,COPIES,{
+      rowClass:r=>showWhy?(passes(p,r)?'keep':'drop'):'',
+      colClass:c=>st.stage>=2&&!p.cols.includes(c)?'dimc':'',
+      cellClass:(r,c)=>st.stage>=2&&!p.cols.includes(c)?'dimc':'',
+      below:narrowWhere,extraHead:showWhy?B('WHERE says','الـ WHERE بيقول'):'',extra:showWhy?r=>(passes(p,r)?B('<b>kept</b>','<b>فضل</b>'):B('<b>dropped</b>','<b>اتشال</b>'))+' · '+reason(p,r):null});
+    $('vizCmp').innerHTML='';
+  }else{
+    const res=COPIES.filter(r=>passes(p,r)).sort((a,b)=>a.CopyId-b.CopyId);
+    $('vizGrid').innerHTML=gridHTML(p.cols,res)+`<div class="rows-note">(${res.length} rows affected)</div>`;
+    const ids=res.map(r=>r.CopyId),pred=[...st.pred].sort();
+    const extra=pred.filter(i=>!ids.includes(i)),miss=ids.filter(i=>!st.pred.has(i));
+    let h;
+    if(!extra.length&&!miss.length)h=`<div class="fb"><div class="yes">${B(`Your prediction matched: ${list(ids)}.`,`توقعك طلع مظبوط: ${list(ids,1)}.`)}</div></div>`;
+    else h=`<div class="fb"><div class="no">${B(`You predicted ${pred.length?list(pred):'no rows'}. The result is ${list(ids)}.`,`إنت توقعت ${pred.length?list(pred,1):'مفيش صفوف'}. النتيجة ${list(ids,1)}.`)}<br>${
+      extra.map(i=>B(`<b>${i}</b> was dropped: `,`<b>${i}</b> اتشال: `)+reason(p,byId(i))).concat(miss.map(i=>B(`<b>${i}</b> passes: `,`<b>${i}</b> بيعدّي: `)+reason(p,byId(i)))).join('<br>')}</div></div>`;
+    $('vizCmp').innerHTML=h;
+  }
+}
+$('presets').addEventListener('click',e=>{const b=e.target.closest('[data-pk]');if(b){pk=b.dataset.pk;vzRender();}});
+$('predict').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(!b||VZ[pk].stage>=0)return;const s=VZ[pk].pred,i=+b.dataset.p;s.has(i)?s.delete(i):s.add(i);vzRender();});
+$('vizGo').addEventListener('click',()=>{VZ[pk].stage=0;vzRender();$('vizNext').focus();});
+$('vizNext').addEventListener('click',()=>{VZ[pk].stage=Math.min(3,VZ[pk].stage+1);vzRender();if(VZ[pk].stage===3)$('vizAgain').focus();});
+$('vizAgain').addEventListener('click',()=>{VZ[pk]={pred:new Set(),stage:-1};vzRender();$$('#predict button')[0].focus();});
+vzRender();
+NARROW.addEventListener('change',vzRender);
+
+/* ---------- chapter 9: preview of Books and Copies (not in the database) ---------- */
+const BOOKS=[{BookId:1,Title:'Python Basics',Category:'Computing'},{BookId:2,Title:'Database Design',Category:'Computing'},
+  {BookId:3,Title:'Intro to Circuits',Category:'Engineering'},{BookId:4,Title:'Applied Mathematics',Category:'Mathematics'}];
+const CP=COPIES.map(c=>({CopyId:c.CopyId,BookId:BOOKS.find(b=>b.Title===c.Title).BookId,Shelf:c.Shelf,IsAvailable:c.IsAvailable}));
+let litB=null,litC=null;
+function splitRender(){
+  const hitB=b=>litB===b.BookId||(litC&&CP.find(c=>c.CopyId===litC).BookId===b.BookId);
+  const hitC=c=>litC===c.CopyId||litB===c.BookId;
+  $('booksGrid').innerHTML=gridHTML(['BookId','Title','Category'],BOOKS,{caption:'Books',rowClass:b=>hitB(b)?'lit':'',
+    cell:(r,c)=>c==='BookId'?`<button type="button" class="rowbtn" data-b="${r.BookId}" aria-pressed="${litB===r.BookId}">${r.BookId}</button>`:esc(r[c]),cellClass:(r,c)=>c==='BookId'?'key':''});
+  $('copiesGrid').innerHTML=gridHTML(['CopyId','BookId','Shelf','IsAvailable'],CP,{caption:'Copies',rowClass:c=>hitC(c)?'lit':'',
+    cell:(r,c)=>c==='CopyId'?`<button type="button" class="rowbtn" data-c="${r.CopyId}" aria-pressed="${litC===r.CopyId}">${r.CopyId}</button>`:esc(r[c]),cellClass:(r,c)=>c==='BookId'?'key':''});
+  let t='';
+  if(litB){const b=BOOKS.find(x=>x.BookId===litB),cs=CP.filter(c=>c.BookId===litB);
+    t=B(`BookId <b>${litB}</b> is <i>${b.Title}</i>. ${cs.length} cop${cs.length>1?'ies point':'y points'} to it: ${list(cs.map(c=>`${c.CopyId} (${c.Shelf}, ${c.IsAvailable?'on the shelf':'lent out'})`))}.`,
+      `الـ BookId رقم <b>${litB}</b> هو <i>${b.Title}</i>. ${cs.length>1?`فيه ${cs.length} نسخ بتشاور عليه`:'فيه نسخة واحدة بتشاور عليه'}: ${list(cs.map(c=>`${c.CopyId} (${c.Shelf}، ${c.IsAvailable?'على الرف':'متسلّفة'})`),1)}.`);}
+  else if(litC){const c=CP.find(x=>x.CopyId===litC),b=BOOKS.find(x=>x.BookId===c.BookId);
+    t=B(`Copy <b>${litC}</b> has BookId ${c.BookId}, so it is a copy of <i>${b.Title}</i>. Its title is not stored on the copy row any more.`,`النسخة <b>${litC}</b> الـ BookId بتاعها ${c.BookId}، يعني هي نسخة من <i>${b.Title}</i>. اسم الكتاب مبقاش متخزّن في row النسخة خلاص.`);}
+  if(t)$('splitRead').innerHTML=`<p>${t}</p>`;
+}
+document.addEventListener('click',e=>{const b=e.target.closest('.rowbtn');if(!b)return;
+  if(b.dataset.b){litB=+b.dataset.b;litC=null;}else{litC=+b.dataset.c;litB=null;}splitRender();
+  document.querySelector(b.dataset.b?`[data-b="${b.dataset.b}"]`:`[data-c="${b.dataset.c}"]`).focus();});
+splitRender();
+
+/* ---------- start: English first, chapter from the URL hash if any ---------- */
+addEventListener('beforeprint',()=>$$('details').forEach(d=>d.open=true));
+let initialLang='en';
+try{if(localStorage.getItem('db1-lab-language')==='ar')initialLang='ar';}catch(e){}
+setLang(initialLang);
+const m=/^#ch(\d)$/.exec(location.hash);
+go(m?+m[1]-1:0,false);
+</script>
+</body>
+</html>
