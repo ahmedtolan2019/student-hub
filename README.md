@@ -17,11 +17,26 @@ available. DSA Week 2 includes starter files, individually and as a ZIP.
 DSA Week 3 uses one interactive whiteboard as the lesson and practice guide. In the
 offline classroom, students create one Python file and type the displayed code and
 tests; no ZIP or supplied files are required. The downloadable kit is for later review.
-Its reviewed eleven-file bundle contains the whiteboard, a minimal Python readiness
+Its reviewed bundle contains the whiteboard, a minimal Python readiness
 check, setup instructions, worked Python examples and incomplete practice tasks. The week/course ZIPs
 keep `code/` and `practice/` beside the HTML so the links work offline. There
 is no separate Week 3 sheet. Private presenter notes, solutions, book sources
 and QA files are excluded. The existing DSA course link stays the same.
+
+On 28 October 2026, Ahmed authorized publishing the completed 14:58 Egyptian Arabic
+video, Python basics, lists and linear search. The unchanged 56.8 MB MP4 is
+individually allowlisted in the Week 3 bundle. The DSA page offers watch/download
+links, and both the week and course ZIPs include the video for offline playback.
+MP4 files use ZIP storage without recompression. Refresh this student export from
+the finished video before building:
+
+```sh
+cp ../DSA-data-structures-and-algorithms/lab-videos/lab-python-arrays-linear-search/lab-python-arrays-linear-search.mp4 \
+  ../DSA-data-structures-and-algorithms/week-03-lists-and-search/student/lab-python-arrays-linear-search.mp4
+```
+
+NotebookLM sources, original audio, transcripts, production scripts and QA files
+remain private. Week 4 materials are not part of this video publication.
 
 ## Update the student link
 

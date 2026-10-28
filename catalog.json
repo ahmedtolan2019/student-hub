@@ -6,6 +6,7 @@
     {
       "id": "dsa", "code": "DSA", "title": "Data Structures & Algorithms", "language": "Python",
       "source": "DSA-data-structures-and-algorithms",
+      "archive_stored_extensions": [".mp4"],
       "weeks": [
         {"number": 1, "folder": "week-01-why-data-structures", "title": "Why data structures?", "description": "Lists, loops, functions and linear search.", "kind": "student",
           "slides": "student/DSA-Lab-01-Slides.html", "guide": "student/DSA-Lab-01-Guide.html", "sheet": "student/sheet-01.html", "sheet_pdf": "student/sheet-01.pdf", "extras": []},
@@ -13,14 +14,16 @@
           "slides": "student/DSA-Lab-02-Slides.html", "guide": "student/DSA-Lab-02-Guide.html", "guide_pdf": "student/DSA-Lab-02-Guide.pdf", "sheet": "student/sheet-02.html", "sheet_pdf": "student/sheet-02.pdf",
           "extras": [{"source": "student/FONT-LICENSES.txt", "label": "Font licenses", "hidden": true}],
           "starters": ["student/starter-files/q00_ready.py", "student/starter-files/q02_larger.py", "student/starter-files/q04_count.py", "student/starter-files/q05_below.py", "student/starter-files/README.txt"]},
-        {"number": 3, "folder": "week-03-lists-and-search/student", "title": "Lists and search", "description": "Whiteboard lesson: list operations, algorithm design with pseudocode, a focused Python brief, linear search, time and space complexity. Includes code and practice, with an optional binary-search extension.", "kind": "bundle", "bundle": "week-03-lists-and-search",
-          "slides": "DSA-Lab-03-Whiteboard.html", "resource_titles": {"slides": "Interactive whiteboard"}, "extras": []}
+        {"number": 3, "folder": "week-03-lists-and-search/student", "title": "Lists and search", "description": "Whiteboard lesson: list operations, algorithm design with pseudocode, a focused Python brief, linear search, time and space complexity. Includes code and practice, with an optional binary-search extension. A 14:58 Egyptian Arabic video reviews Python basics, lists and linear search.", "kind": "bundle", "bundle": "week-03-lists-and-search",
+          "slides": "DSA-Lab-03-Whiteboard.html", "resource_titles": {"slides": "Interactive whiteboard"},
+          "extras": [{"source": "lab-python-arrays-linear-search.mp4", "label": "Python basics, lists and linear search · Egyptian Arabic · 14:58 · 56.8 MB"}]}
       ],
       "bundles": {
         "week-03-lists-and-search": {
           "folder": "week-03-lists-and-search/student",
           "files": [
             "DSA-Lab-03-Whiteboard.html",
+            "lab-python-arrays-linear-search.mp4",
             "START-HERE.txt",
             "code/searches.py",
             "code/00_ready.py",
